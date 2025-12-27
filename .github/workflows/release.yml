@@ -544,7 +544,7 @@ jobs:
           \`\`\`
 
           ### Documentation
-          - [Documentation](https://labb.io/docs)
+          - [Documentation](https://labb.io/)
           - [GitHub Repository](https://github.com/labbhq/labb)" \
             $PRERELEASE_FLAG
 

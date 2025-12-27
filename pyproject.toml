@@ -42,7 +42,7 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://labb.io/docs"
+Documentation = "https://labb.io/"
 Source = "https://github.com/labbhq/labb"
 Discussions = "https://github.com/labbhq/labb/discussions"
 

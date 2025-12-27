@@ -1,6 +1,6 @@
 # labbdocs
 
-The documentation is available online at [https://labb.io/docs](https://labb.io/docs).
+The documentation is available online at [https://labb.io/](https://labb.io/).
 
 This documentation is installed as a django app in the django project that powers the [labb.io](https://labb.io) website.
 

@@ -13,7 +13,7 @@ pip install labbui[icons]
 
 ## Documentation
 
-Full documentation is available at [https://labb.io/docs](https://labb.io/docs).
+Full documentation is available at [https://labb.io/](https://labb.io/).
 
 ## License
 
