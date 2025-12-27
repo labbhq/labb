@@ -257,64 +257,65 @@ def robots_txt_view(request):
 def load_icon_categories(request):
     """
     Lazy load icon categories as rendered components.
-    
+
     Accepts GET parameters:
     - offset: Starting index for categories (default: 0)
     - limit: Number of categories to load (default: 3)
     - icon_size: Size of icons (default: 24)
-    
+
     Returns rendered HTML for the requested category sections.
     """
     from collections import defaultdict
+
     from django.core.cache import cache
-    
+
     # Get parameters from request
     offset = int(request.GET.get("offset", 0))
     limit = int(request.GET.get("limit", 3))
     icon_size = request.GET.get("icon_size", "24")
-    
+
     # Load icon metadata with caching
-    cache_key = 'labbicons_remix_metadata'
+    cache_key = "labbicons_remix_metadata"
     icons_data = cache.get(cache_key)
-    
+
     if icons_data is None:
         icons_data = remix()
         cache.set(cache_key, icons_data, 3600)
-    
+
     icons = icons_data.get("icons", [])
-    
+
     # Group icons by category (cache this too)
-    categories_cache_key = 'labbicons_categories_dict'
+    categories_cache_key = "labbicons_categories_dict"
     categories_dict = cache.get(categories_cache_key)
-    
+
     if categories_dict is None:
         categories_dict = defaultdict(list)
         for icon in icons:
             categories_dict[icon["category"]].append(icon)
         cache.set(categories_cache_key, dict(categories_dict), 3600)
-    
+
     # Get sorted list of category names
     category_names = sorted(categories_dict.keys())
-    
+
     # Slice categories based on offset and limit
-    categories_to_load = category_names[offset:offset + limit]
-    
+    categories_to_load = category_names[offset : offset + limit]
+
     # Render each category component
     rendered_categories = []
     for idx, category_name in enumerate(categories_to_load):
         category_icons = categories_dict[category_name]
         start_index = offset + idx
-        
+
         # Render the category section component
         rendered = render_component(
             request,
-            "icon_category_section", # TODO: Change to lbdocs.icon.category_section (seems to be a bug in cotton)
+            "icon_category_section",  # TODO: Change to lbdocs.icon.category_section (seems to be a bug in cotton)
             category=category_name,
             icons=category_icons,
             icon_size=icon_size,
             start_index=str(start_index),
         )
         rendered_categories.append(rendered)
-    
+
     # Concatenate all rendered categories
     return HttpResponse("".join(rendered_categories), content_type="text/html")

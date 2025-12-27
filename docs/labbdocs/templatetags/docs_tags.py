@@ -79,15 +79,15 @@ def load_icon_metadata():
     Usage: {% load_icon_metadata as icons_data %}
     """
     from django.core.cache import cache
-    
-    cache_key = 'labbicons_remix_metadata'
+
+    cache_key = "labbicons_remix_metadata"
     icons_data = cache.get(cache_key)
-    
+
     if icons_data is None:
         icons_data = remix()
         # Cache for 1 hour (or longer in production)
         cache.set(cache_key, icons_data, 3600)
-    
+
     return icons_data
 
 
@@ -231,7 +231,6 @@ def get_seo_metadata(context, doc_info=None):
     # Make canonical URL absolute
     if metadata.get("canonical_url"):
         metadata["canonical_url"] = site_url + metadata["canonical_url"]
-
 
     # Add site-level twitter handles if not set
     if not metadata.get("twitter_site"):

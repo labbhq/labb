@@ -10,7 +10,11 @@ urlpatterns = [
         name="ui_docs_detail",
     ),
     path("docs/icons/", views.icons_docs, name="icons_docs"),
-    path("docs/icons/packs/remix/load/", views.load_icon_categories, name="load_icon_categories"),
+    path(
+        "docs/icons/packs/remix/load/",
+        views.load_icon_categories,
+        name="load_icon_categories",
+    ),
     path(
         "docs/icons/<path:path>/",
         views.icons_docs,

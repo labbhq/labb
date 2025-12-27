@@ -90,15 +90,15 @@ class SEOMetadata:
         # Check pre-computed SEO data first (from YAML)
         seo_data = self.doc_info.get("seo", {})
         og_image = seo_data.get("og_image")
-        
+
         # Fall back to frontmatter if not in SEO data
         if not og_image:
             og_image = self.frontmatter.get("og_image")
-        
+
         # Fall back to default image if still not found
         if not og_image:
             og_image = self.default_image
-        
+
         return og_image or ""
 
     def get_og_type(self) -> str:
@@ -246,7 +246,7 @@ def generate_article_schema(
             except Exception:
                 # Fallback: construct URL manually using STATIC_URL setting
                 static_url = urljoin(settings.STATIC_URL, og_image)
-            
+
             if site_url:
                 schema["image"] = urljoin(site_url, static_url)
             else:
