@@ -1,0 +1,16 @@
+<!-- Open the modal using ID.showModal() method -->
+<c-lb.button variant="secondary" onclick="custom_box_modal.showModal()">Open Custom Box Modal</c-lb.button>
+
+<c-lb.modal id="custom_box_modal" boxClass="shadow border">
+  <c-slot name="box">
+    <c-lb.modal.box size="lg" class="bg-gradient-to-br from-primary to-secondary text-primary-content" boxClass="shadow border">
+      <h2 class="text-2xl font-bold mb-4">Custom Box Modal</h2>
+      <p class="mb-4">This modal uses a custom box slot with a gradient background and larger size.</p>
+      <c-lb.modal.action>
+        <form method="dialog">
+          <c-lb.button variant="accent">Close</c-lb.button>
+        </form>
+      </c-lb.modal.action>
+    </c-lb.modal.box>
+  </c-slot>
+</c-lb.modal>

@@ -1,0 +1,51 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    as="span"
+    variant=""
+    size="md"
+    underline
+    icon=""
+    iconFill
+    iconEnd
+    iconClass=""
+    :variantClasses="{
+        'neutral': 'text-neutral',
+        'primary': 'text-primary',
+        'secondary': 'text-secondary',
+        'accent': 'text-accent',
+        'info': 'text-info',
+        'success': 'text-success',
+        'warning': 'text-warning',
+        'error': 'text-error'
+    }"
+    :sizeClasses="{
+        'xs': 'text-xs',
+        'sm': 'text-sm',
+        'md': 'text-base',
+        'lg': 'text-lg',
+        'xl': 'text-xl',
+        '2xl': 'text-2xl',
+        '3xl': 'text-3xl',
+        '4xl': 'text-4xl'
+    }"
+/>
+
+<{{ as }}
+    class="
+        {% if icon %}flex items-center gap-2{% endif %}
+        {{ variantClasses|get_dict_item:variant }}
+        {{ sizeClasses|get_dict_item:size }}
+        {% if underline %}underline{% endif %}
+        {{ class }}
+    "
+    {{ attrs }}
+>
+    {% if icon and not iconEnd %}
+        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% endif %}
+    {{ slot }}
+    {% if icon and iconEnd %}
+        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% endif %}
+</{{ as }}>

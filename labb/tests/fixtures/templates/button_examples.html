@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Examples</title>
+</head>
+<body>
+    <!-- Simple button -->
+    <c-lb.button>Click me</c-lb.button>
+
+    <!-- Primary button with large size -->
+    <c-lb.button variant="primary" size="lg">Large Primary</c-lb.button>
+
+    <!-- Secondary outline button -->
+    <c-lb.button variant="secondary" btnStyle="outline" size="sm">Small Outline</c-lb.button>
+
+    <!-- Disabled button -->
+    <c-lb.button variant="warning" disabled="true">Disabled Warning</c-lb.button>
+
+    <!-- Ghost button with custom classes -->
+    <c-lb.button variant="accent" btnStyle="ghost" classNames="my-custom-class">Ghost Accent</c-lb.button>
+
+    <!-- Button as link -->
+    <c-lb.button as="a" variant="info" btnStyle="link">Link Button</c-lb.button>
+
+    <!-- Wide button -->
+    <c-lb.button variant="success" modifier="wide">Wide Success</c-lb.button>
+
+    <!-- Block button with ID -->
+    <c-lb.button id="submit-btn" variant="primary" modifier="block" type="submit">Submit</c-lb.button>
+</body>
+</html>

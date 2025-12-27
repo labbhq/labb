@@ -1,0 +1,69 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    as="button"
+    variant=""
+    btnStyle=""
+    behavior=""
+    size="md"
+    modifier=""
+    icon=""
+    iconFill
+    iconEnd
+    iconClass=""
+    :variantClasses="{
+        'neutral': 'btn-neutral',
+        'primary': 'btn-primary',
+        'secondary': 'btn-secondary',
+        'accent': 'btn-accent',
+        'info': 'btn-info',
+        'success': 'btn-success',
+        'warning': 'btn-warning',
+        'error': 'btn-error'
+    }"
+    :btnStyleClasses="{
+        'outline': 'btn-outline',
+        'dash': 'btn-dash',
+        'soft': 'btn-soft',
+        'ghost': 'btn-ghost',
+        'link': 'btn-link'
+    }"
+    :behaviorClasses="{
+        'active': 'btn-active',
+        'disabled': 'btn-disabled'
+    }"
+    :sizeClasses="{
+        'xs': 'btn-xs',
+        'sm': 'btn-sm',
+        'md': 'btn-md',
+        'lg': 'btn-lg',
+        'xl': 'btn-xl'
+    }"
+    :modifierClasses="{
+        'wide': 'btn-wide',
+        'block': 'btn-block',
+        'square': 'btn-square',
+        'circle': 'btn-circle'
+    }"
+/>
+
+<{{ as }}
+    class="
+        btn
+        {{ variantClasses|get_dict_item:variant }}
+        {{ btnStyleClasses|get_dict_item:btnStyle }}
+        {{ behaviorClasses|get_dict_item:behavior }}
+        {{ sizeClasses|get_dict_item:size }}
+        {{ modifierClasses|get_dict_item:modifier }}
+        {{ class }}
+    "
+    {{ attrs }}
+>
+    {% if icon and not iconEnd %}
+        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% endif %}
+    {{ slot }}
+    {% if icon and iconEnd %}
+        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% endif %}
+</{{ as }}>

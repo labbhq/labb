@@ -1,0 +1,26 @@
+<c-lb.button variant="primary" onclick="combined_modal.showModal()">Open Combined Features Modal</c-lb.button>
+
+<c-lb.modal
+    id="combined_modal"
+    placement="top"
+    withBackdrop
+    withCloseBtn
+    closeBtnPosition="top-left"
+    boxClass="shadow border"
+>
+    <div class="text-right">
+        <h3 class="font-bold text-lg">Combined Features Modal</h3>
+        <p class="py-4">This modal demonstrates multiple features combined:</p>
+        <ul class="list-disc list-inside space-y-2">
+            <li>Top placement</li>
+            <li>Backdrop overlay</li>
+            <li>Close button at top-left</li>
+            <li>Default slot content</li>
+        </ul>
+    </div>
+    <c-lb.modal.action class="justify-start">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>

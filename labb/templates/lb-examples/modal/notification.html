@@ -1,0 +1,19 @@
+<c-lb.button variant="info" onclick="notification_modal.showModal()">Show Notification</c-lb.button>
+
+<c-lb.modal id="notification_modal" withCloseBtn withBackdrop boxClass="shadow border">
+    <div class="text-center">
+        <div class="flex justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+        <h3 class="font-bold text-xl mb-2">Success!</h3>
+        <p class="py-4 text-base-content/70">Your action has been completed successfully.</p>
+    </div>
+
+    <c-lb.modal.action class="justify-center">
+        <form method="dialog">
+            <c-lb.button variant="success">Got it</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>

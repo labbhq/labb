@@ -1,0 +1,714 @@
+{% load cotton %}
+{% load_icon_metadata as icons_data %}
+
+<c-vars
+    class=""
+    search_placeholder="Search 1600 icons..."
+    show_search="true"
+    show_categories="true"
+    icon_size="24"
+/>
+
+<div class="not-prose relative {{ class }}" id="icon-browser">
+    <!-- Search and Filter Bar -->
+    <div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+     <div class="flex flex-col gap-3 mb-4 p-3 bg-base-100 rounded-lg border border-base-300 sm:flex-row sm:gap-4 sm:p-4 sm:items-center">
+        <!-- Category Filter -->
+        {% if show_categories %}
+            <div class="flex-shrink-0 w-full sm:w-auto">
+                <select id="category-filter" class="text-sm">
+                    <option value="">All Categories</option>
+                    {% for category in icons_data.categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+
+        <!-- Search Bar -->
+        {% if show_search %}
+            <div class="flex-1 relative w-full min-w-0">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="{{ search_placeholder }}"
+                    class="input input-sm input-bordered w-full pl-10"
+                />
+                <c-lbi n="rmx.search" w="16" h="16" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50 z-10" />
+            </div>
+        {% endif %}
+
+        <!-- Controls Row -->
+        <div class="flex items-center justify-between w-full sm:w-auto sm:justify-start gap-3 flex-shrink-0">
+            <!-- Fill/Line Toggle -->
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-base-content/70 inline">Line</span>
+                <c-lb.toggle id="variant-toggle" size="sm" />
+                <span class="text-sm text-base-content/70 inline">Fill</span>
+            </div>
+
+            <!-- Icon Count -->
+            <div class="flex items-center">
+                <span id="icon-count" class="badge badge-primary badge-sm">{{ icons_data.icons|length }}</span>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Icon Grid -->
+    <div id="icon-grid" class="flex flex-col gap-y-10">
+        {% regroup icons_data.icons by category as category_list %}
+        {% for category in category_list|slice:":1" %}
+            <c-lbdocs.icon.category_section 
+                category="{{ category.grouper }}" 
+                :icons="category.list"
+                icon_size="{{ icon_size }}"
+                start_index="{{ forloop.counter0 }}"
+            />
+        {% endfor %}
+    </div>
+
+    <!-- No Results -->
+    <div id="no-results" class="text-center py-12 hidden">
+        <div class="text-base-content/50">
+            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <p class="text-lg font-medium">No icons found</p>
+            <p class="text-sm">Try adjusting your search or category filter</p>
+        </div>
+    </div>
+</div>
+
+<!-- Icon Details Modal -->
+<c-lb.modal id="icon-modal" withBackdrop withCloseBtn size="lg" class="not-prose" boxClass="border border-base-200 shadow-lg">
+    <div class="space-y-4 sm:space-y-6">
+        <!-- Icon Header -->
+        <div class="flex flex-col justify-between sm:flex-row sm:items-center gap-3 sm:gap-4 pb-4 border-b border-base-300">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="flex-shrink-0">
+                    <div id="modal-icon-display" class="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center">
+                        <!-- Icon will be inserted here -->
+                    </div>
+                </div>
+                <div class="flex-1 flex flex-col gap-1 sm:gap-2 min-w-0">
+                    <div class="flex items-center gap-3 sm:gap-6 flex-wrap">
+                        <div id="modal-icon-category" class="text-xs sm:text-sm text-base-content/60"></div>
+                        <div id="icon-code-copied" class="text-xs text-success/75 hidden">Copied!</div>
+                    </div>
+                    <div id="modal-icon-name" class="text-base sm:text-lg font-semibold break-words"></div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <code id="modal-icon-path" class="text-xs bg-base-200 py-1 px-2 rounded font-mono text-base-content/70 break-all"></code>
+                        <button onclick="copyIconPath()" class="btn btn-xs btn-ghost flex-shrink-0" title="Copy icon path">
+                            <c-lbi n="rmx.file_copy" w="12" h="12" class="text-base-content/70" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-2">
+                <span class="text-xs sm:text-sm text-base-content/70">Line</span>
+                <c-lb.toggle id="modal-variant-toggle" size="sm" />
+                <span class="text-xs sm:text-sm text-base-content/70">Fill</span>
+            </div>
+        </div>
+
+        <!-- Code Snippets -->
+        <div class="space-y-3 sm:space-y-4">
+
+            <!-- Direct Reference -->
+            <div class="space-y-1">
+                <div class="text-xs sm:text-sm font-small text-base-content/70">Direct Reference</div>
+                <c-lbdocs.codeblock id="direct-reference-code" language="html" code="" class="px-2 py-2 sm:px-3 sm:py-3 border border-base-200 rounded-lg text-xs sm:text-sm" />
+            </div>
+
+            <!-- Index Reference -->
+            <div class="space-y-1">
+                <div class="text-xs sm:text-sm font-small text-base-content/70">Index Reference</div>
+                <c-lbdocs.codeblock id="index-reference-code" language="html" code="" class="px-2 py-2 sm:px-3 sm:py-3 border border-base-200 rounded-lg text-xs sm:text-sm" />
+            </div>
+
+        </div>
+    </div>
+</c-lb.modal>
+
+<script>
+    (function() {
+        let allIcons = [];
+        let loadedCategories = new Set(); // Track which categories have been loaded
+        // Store all icon metadata from server (for searching unloaded icons)
+        const allIconsMetadata = [
+            {% for icon in icons_data.icons %}
+            {
+                name: "{{ icon.name|lower }}",
+                category: "{{ icon.category }}",
+                component: "{{ icon.component_name }}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Initialize icon data from DOM
+        function initializeIconData() {
+            const iconItems = document.querySelectorAll('.icon-item');
+            allIcons = Array.from(iconItems).map(item => ({
+                element: item,
+                name: item.dataset.name,
+                category: item.dataset.category,
+                component: item.dataset.component,
+                variants: item.dataset.variants.split(',')
+            }));
+            
+            // Update loaded categories set
+            const categorySections = document.querySelectorAll('.category-section');
+            categorySections.forEach(section => {
+                loadedCategories.add(section.dataset.category);
+            });
+
+            // Check if all categories are now loaded
+            if (loadedCategories.size >= totalCategories) {
+                allCategoriesLoaded = true;
+            }
+        }
+
+        // Show hidden categories
+        function showCategory(categoryName) {
+            const section = document.querySelector(`.category-section[data-category="${categoryName}"]`);
+            if (section && section.style.display === 'none') {
+                section.style.display = '';
+            }
+        }
+
+        // Track loading state and current offset
+        let isLoadingCategories = false;
+        let currentOffset = 1; // Start after first category
+        const CATEGORIES_PER_LOAD = 3;
+        let totalCategories = {{ icons_data.categories|length }};
+        let allCategoriesLoaded = false;
+        let loadingCategoriesSet = new Set(); // Track categories currently being loaded
+        let searchTimeout = null; // For debouncing search
+
+        // Get all category names
+        const allCategoryNames = [
+            {% for category in icons_data.categories %}
+            "{{ category }}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Load specific categories by name
+        async function loadCategoriesByName(categoryNames) {
+            const categoriesToLoad = categoryNames.filter(cat => 
+                !loadedCategories.has(cat) && !loadingCategoriesSet.has(cat)
+            );
+            
+            if (categoriesToLoad.length === 0) {
+                return Promise.resolve();
+            }
+
+            // Mark categories as being loaded
+            categoriesToLoad.forEach(cat => loadingCategoriesSet.add(cat));
+
+            // Find indices of categories to load
+            const indicesToLoad = categoriesToLoad
+                .map(catName => allCategoryNames.indexOf(catName))
+                .filter(idx => idx !== -1);
+            
+            // Load categories in batches
+            const loadPromises = [];
+            for (const idx of indicesToLoad) {
+                loadPromises.push(loadCategoryByIndex(idx));
+            }
+
+            try {
+                await Promise.all(loadPromises);
+            } finally {
+                // Remove from loading set
+                categoriesToLoad.forEach(cat => loadingCategoriesSet.delete(cat));
+            }
+        }
+
+        // Load a single category by index
+        async function loadCategoryByIndex(index) {
+            const categoryName = allCategoryNames[index];
+            if (!categoryName || loadedCategories.has(categoryName) || loadingCategoriesSet.has(categoryName)) {
+                return Promise.resolve();
+            }
+
+            const url = `/docs/icons/packs/remix/load/?offset=${index}&limit=1&icon_size={{ icon_size }}`;
+            
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                
+                if (html.trim()) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    const categorySections = tempDiv.querySelectorAll('.category-section');
+                    const iconGrid = document.getElementById('icon-grid');
+                    
+                    categorySections.forEach(section => {
+                        // Check if category is already in the DOM before appending
+                        const existingSection = document.querySelector(`.category-section[data-category="${section.dataset.category}"]`);
+                        if (!existingSection) {
+                            iconGrid.appendChild(section);
+                        }
+                    });
+
+                    initializeIconData();
+                }
+            } catch (error) {
+                console.error(`Error loading category at index ${index}:`, error);
+            }
+        }
+
+        // Filter icons (simplified - only filters loaded icons)
+        function filterIconsSync() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const selectedCategory = document.getElementById('category-filter').value;
+            const count = document.getElementById('icon-count');
+            const noResults = document.getElementById('no-results');
+
+            let visibleCount = 0;
+
+            // Filter loaded icons
+            allIcons.forEach(icon => {
+                const matchesSearch = !searchTerm ||
+                    icon.name.includes(searchTerm) ||
+                    icon.category.toLowerCase().includes(searchTerm);
+                const matchesCategory = !selectedCategory || icon.category === selectedCategory;
+
+                if (matchesSearch && matchesCategory) {
+                    icon.element.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    icon.element.classList.add('hidden');
+                }
+            });
+
+            // Show/hide category sections and update counts
+            const categorySections = document.querySelectorAll('.category-section');
+            categorySections.forEach(section => {
+                const categoryName = section.dataset.category;
+                const categoryBadge = section.querySelector('.badge');
+
+                // Count visible icons in this category
+                const visibleIconsInCategory = Array.from(allIcons).filter(icon =>
+                    icon.category === categoryName &&
+                    !icon.element.classList.contains('hidden')
+                ).length;
+
+                if (visibleIconsInCategory > 0) {
+                    section.style.display = '';
+                    if (categoryBadge) {
+                        categoryBadge.textContent = visibleIconsInCategory;
+                    }
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+
+            // Count total matching icons from metadata
+            let totalMatchingCount = 0;
+            if (selectedCategory) {
+                totalMatchingCount = allIconsMetadata.filter(icon => icon.category === selectedCategory).length;
+            } else if (searchTerm) {
+                totalMatchingCount = allIconsMetadata.filter(icon => 
+                    icon.name.includes(searchTerm) || icon.category.toLowerCase().includes(searchTerm)
+                ).length;
+            } else {
+                totalMatchingCount = allIconsMetadata.length;
+            }
+
+            // Show count
+            if (visibleCount < totalMatchingCount && (searchTerm || selectedCategory)) {
+                count.textContent = `${visibleCount} / ${totalMatchingCount}`;
+            } else {
+                count.textContent = visibleCount;
+            }
+
+            if (visibleCount === 0 && totalMatchingCount === 0) {
+                document.getElementById('icon-grid').classList.add('hidden');
+                noResults.classList.remove('hidden');
+            } else {
+                document.getElementById('icon-grid').classList.remove('hidden');
+                noResults.classList.add('hidden');
+            }
+        }
+
+        // Debounced filter with category loading
+        async function filterIcons() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const selectedCategory = document.getElementById('category-filter').value;
+
+            // If user is searching/filtering and not all categories are loaded, load ALL remaining categories
+            if ((searchTerm || selectedCategory) && !allCategoriesLoaded) {
+                await loadAllRemainingCategories();
+            }
+
+            // Filter the icons
+            filterIconsSync();
+        }
+
+        // Load all remaining categories at once
+        async function loadAllRemainingCategories() {
+            if (isLoadingCategories || allCategoriesLoaded) {
+                return;
+            }
+
+            isLoadingCategories = true;
+
+            // Calculate how many categories remain
+            const remainingCount = totalCategories - currentOffset;
+            if (remainingCount <= 0) {
+                allCategoriesLoaded = true;
+                isLoadingCategories = false;
+                return;
+            }
+
+            // Load all remaining categories
+            const url = `/docs/icons/packs/remix/load/?offset=${currentOffset}&limit=${remainingCount}&icon_size={{ icon_size }}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const html = await response.text();
+                if (html.trim()) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    const categorySections = tempDiv.querySelectorAll('.category-section');
+                    const iconGrid = document.getElementById('icon-grid');
+
+                    categorySections.forEach(section => {
+                        iconGrid.appendChild(section);
+                        const categoryName = section.dataset.category;
+                        if (categoryName) {
+                            loadedCategories.add(categoryName);
+                        }
+                    });
+
+                    currentOffset += categorySections.length;
+                    initializeIconData();
+                    allCategoriesLoaded = true; // Mark as complete
+                }
+            } catch (error) {
+                console.error('Error loading remaining categories:', error);
+            } finally {
+                isLoadingCategories = false;
+            }
+        }
+
+        // Load more categories via AJAX
+        function loadMoreCategories() {
+            if (isLoadingCategories) {
+                return; // Already loading
+            }
+
+            // Check if we've loaded all categories
+            if (allCategoriesLoaded || (totalCategories > 0 && currentOffset >= totalCategories)) {
+                allCategoriesLoaded = true;
+                return; // No more categories to load
+            }
+
+            isLoadingCategories = true;
+
+            // Build the URL with parameters
+            const url = `/docs/icons/packs/remix/load/?offset=${currentOffset}&limit=${CATEGORIES_PER_LOAD}&icon_size={{ icon_size }}`;
+
+            // Make AJAX request
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    if (html.trim()) {
+                        // Create a temporary container to parse the HTML
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+
+                        // Append each category section to the grid
+                        const categorySections = tempDiv.querySelectorAll('.category-section');
+                        const iconGrid = document.getElementById('icon-grid');
+                        
+                        categorySections.forEach(section => {
+                            iconGrid.appendChild(section);
+                        });
+
+                        // Reinitialize icon data after appending
+                        initializeIconData();
+
+                        // Update offset for next load
+                        currentOffset += categorySections.length;
+
+                        // If we got fewer categories than requested, we've reached the end
+                        if (categorySections.length < CATEGORIES_PER_LOAD) {
+                            totalCategories = currentOffset;
+                            allCategoriesLoaded = true;
+                        }
+
+                        // Check if all categories are now loaded
+                        if (currentOffset >= totalCategories) {
+                            allCategoriesLoaded = true;
+                        }
+
+                        // Only set up observer if there are more categories to load
+                        if (!allCategoriesLoaded) {
+                            setupScrollLoading();
+                        }
+                    } else {
+                        // No more categories
+                        totalCategories = currentOffset;
+                        allCategoriesLoaded = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading categories:', error);
+                })
+                .finally(() => {
+                    isLoadingCategories = false;
+                });
+        }
+
+        // Lazy load on scroll - load next categories via AJAX
+        function setupScrollLoading() {
+            // Don't set up observer if all categories are already loaded
+            if (allCategoriesLoaded) {
+                return;
+            }
+
+            let currentObserver = null;
+
+            function observeLastSection() {
+                // Don't observe if all categories are loaded
+                if (allCategoriesLoaded) {
+                    if (currentObserver) {
+                        currentObserver.disconnect();
+                    }
+                    return;
+                }
+
+                // Disconnect previous observer if exists
+                if (currentObserver) {
+                    currentObserver.disconnect();
+                }
+
+                // Find the last visible category section
+                const allSections = Array.from(document.querySelectorAll('.category-section'));
+                const visibleSections = allSections.filter(
+                    section => section.style.display !== 'none'
+                );
+
+                if (visibleSections.length === 0) {
+                    return;
+                }
+
+                const lastVisibleSection = visibleSections[visibleSections.length - 1];
+
+                // Create new observer
+                currentObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !isLoadingCategories && !allCategoriesLoaded) {
+                            loadMoreCategories();
+                        }
+                    });
+                }, {
+                    rootMargin: '300px' // Start loading 300px before reaching bottom
+                });
+
+                currentObserver.observe(lastVisibleSection);
+            }
+
+            // Start observing
+            observeLastSection();
+        }
+
+        // Open icon modal
+        window.openIconModal = function(componentName, iconName, category, iconElement) {
+            // Update modal content
+            document.getElementById('modal-icon-name').textContent = iconName;
+            document.getElementById('modal-icon-category').textContent = category;
+            document.getElementById('modal-icon-path').textContent = componentName;
+
+            // Detect if fill variant was clicked by checking which variant is currently visible
+            const globalToggle = document.getElementById('variant-toggle');
+            const isGlobalFillMode = globalToggle ? globalToggle.checked : false;
+
+            // Set modal toggle to match the currently visible variant
+            const modalToggle = document.getElementById('modal-variant-toggle');
+            if (modalToggle) {
+                modalToggle.checked = isGlobalFillMode;
+            }
+
+            // Update the icon display by copying the actual SVG from the grid
+            const iconDisplay = document.getElementById('modal-icon-display');
+            // Find the currently visible SVG element (line or fill based on global toggle)
+            const variantSelector = isGlobalFillMode ? '.fill-variant svg' : '.line-variant svg';
+            const svgElement = iconElement.querySelector(variantSelector);
+
+            if (svgElement) {
+                // Clone the SVG and resize it
+                const clonedSvg = svgElement.cloneNode(true);
+                clonedSvg.setAttribute('width', '48');
+                clonedSvg.setAttribute('height', '48');
+                clonedSvg.classList.add('w-12', 'h-12', 'text-base-content');
+                iconDisplay.innerHTML = '';
+                iconDisplay.appendChild(clonedSvg);
+            } else {
+                // Fallback to placeholder if no SVG found
+                const iconShortName = componentName.split('.').pop();
+                iconDisplay.innerHTML = `<svg class="w-12 h-12 text-base-content" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <text x="12" y="14" text-anchor="middle" font-size="8" fill="currentColor" font-family="monospace">${iconShortName}</text>
+                </svg>`;
+            }
+
+            // Update code snippets to match the current variant
+            updateCodeSnippets(componentName, isGlobalFillMode);
+
+            // Open modal
+            const modal = document.getElementById('icon-modal');
+            modal.showModal();
+        };
+
+        // Copy code to clipboard
+        window.copyCode = function(elementId) {
+            const element = document.getElementById(elementId);
+            const codeElement = element ? element.querySelector('code') : null;
+            const text = codeElement ? codeElement.textContent : '';
+
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification();
+            });
+        };
+
+        // Copy icon path to clipboard
+        window.copyIconPath = function() {
+            const iconPathElement = document.getElementById('modal-icon-path');
+            const text = iconPathElement ? iconPathElement.textContent : '';
+
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification();
+            });
+        };
+
+        // Show copy notification
+        function showCopyNotification() {
+            const notification = document.getElementById('icon-code-copied');
+            notification.classList.remove('hidden');
+
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 2000);
+        }
+
+        // Toggle variant display globally
+        function toggleGlobalVariant(showFill) {
+            const iconItems = document.querySelectorAll('.icon-item');
+            iconItems.forEach(item => {
+                const lineVariant = item.querySelector('.line-variant');
+                const fillVariant = item.querySelector('.fill-variant');
+
+                if (lineVariant && fillVariant) {
+                    if (showFill) {
+                        lineVariant.classList.add('hidden');
+                        fillVariant.classList.remove('hidden');
+                    } else {
+                        lineVariant.classList.remove('hidden');
+                        fillVariant.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        // Update modal icon display based on variant
+        function updateModalIconDisplay(componentName, showFill) {
+            const iconDisplay = document.getElementById('modal-icon-display');
+            const iconShortName = componentName.split('.').pop();
+
+            // Create the icon HTML with the appropriate variant
+            const fillAttribute = showFill ? 'fill="true"' : '';
+            const iconHtml = {% cotton:verbatim %} `<c-lbi n="${componentName}" w="48" h="48" class="w-12 h-12 text-base-content" ${fillAttribute} />`; {% endcotton:verbatim %}
+
+            // For now, we'll use the same approach as the existing code but track the variant
+            // We need to find the current icon element to get the SVG
+            const currentIconName = document.getElementById('modal-icon-name').textContent;
+            const iconElement = document.querySelector(`[data-name="${currentIconName.toLowerCase()}"]`);
+
+            if (iconElement) {
+                const variantSelector = showFill ? '.fill-variant svg' : '.line-variant svg';
+                const svgElement = iconElement.querySelector(variantSelector);
+
+                if (svgElement) {
+                    const clonedSvg = svgElement.cloneNode(true);
+                    clonedSvg.setAttribute('width', '48');
+                    clonedSvg.setAttribute('height', '48');
+                    clonedSvg.classList.add('w-12', 'h-12', 'text-base-content');
+                    iconDisplay.innerHTML = '';
+                    iconDisplay.appendChild(clonedSvg);
+                }
+            }
+        }
+
+        // Update code snippets based on variant
+        function updateCodeSnippets(componentName, showFill) {
+            const fillAttribute = showFill ? ' fill' : '';
+
+            const directRefElement = document.getElementById('direct-reference-code');
+            const indexRefElement = document.getElementById('index-reference-code');
+
+            if (directRefElement) {
+                const codeElement = directRefElement.querySelector('code');
+                if (codeElement) {
+                    codeElement.textContent = {% cotton:verbatim %} `<c-lbi.${componentName} w="24" h="24"${fillAttribute} />`; {% endcotton:verbatim %}
+                }
+            }
+            if (indexRefElement) {
+                const codeElement = indexRefElement.querySelector('code');
+                if (codeElement) {
+                    codeElement.textContent = {% cotton:verbatim %} `<c-lbi n="${componentName}" w="24" h="24"${fillAttribute} />`; {% endcotton:verbatim %}
+                }
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeIconData();
+            setupScrollLoading();
+            
+            // Debounced search input
+            document.getElementById('search-input').addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                // Immediately filter loaded icons
+                filterIconsSync();
+                // Debounce the category loading
+                searchTimeout = setTimeout(() => {
+                    filterIcons();
+                }, 500); // Wait 500ms after user stops typing
+            });
+            
+            // Category filter - immediate
+            document.getElementById('category-filter').addEventListener('change', () => filterIcons());
+
+            // Global variant toggle
+            const globalToggle = document.getElementById('variant-toggle');
+            if (globalToggle) {
+                globalToggle.addEventListener('change', function() {
+                    toggleGlobalVariant(this.checked);
+                });
+            }
+
+            // Modal variant toggle
+            const modalToggle = document.getElementById('modal-variant-toggle');
+            if (modalToggle) {
+                modalToggle.addEventListener('change', function() {
+                    const componentName = document.getElementById('modal-icon-path').textContent;
+                    updateModalIconDisplay(componentName, this.checked);
+                    updateCodeSnippets(componentName, this.checked);
+                });
+            }
+        });
+    })();
+</script>

@@ -1,0 +1,64 @@
+<div class="w-full">
+    <c-lb.navbar class="bg-base-100 border border-base-200 rounded-box">
+        <c-lb.navbar.start>
+            <c-lb.button btnStyle="ghost" size="lg">
+                <c-lbi n="rmx.apps" w="1em" h="1em" />
+                My App
+            </c-lb.button>
+        </c-lb.navbar.start>
+        <c-lb.navbar.center class="hidden lg:flex">
+            <c-lb.menu direction="horizontal">
+                <c-lb.menu.item href="/" title="Home">
+                    <c-lbi n="rmx.home" w="1em" h="1em" />
+                    Home
+                </c-lb.menu.item>
+                <c-lb.menu.item href="/about" title="About">
+                    <c-lbi n="rmx.info-i" w="1em" h="1em" />
+                    About
+                </c-lb.menu.item>
+                <c-lb.menu.item href="/services" title="Services">
+                    <c-lbi n="rmx.settings" w="1em" h="1em" />
+                    Services
+                </c-lb.menu.item>
+                <c-lb.menu.item href="/contact" title="Contact">
+                    <c-lbi n="rmx.mail" w="1em" h="1em" />
+                    Contact
+                </c-lb.menu.item>
+            </c-lb.menu>
+        </c-lb.navbar.center>
+        <c-lb.navbar.end>
+            <c-lb.dropdown class="lg:hidden" alignment="end">
+                <c-lb.dropdown.trigger>
+                    <c-lb.button btnStyle="ghost" size="sm">
+                        <c-lbi n="rmx.menu" w="1em" h="1em" />
+                        Menu
+                    </c-lb.button>
+                </c-lb.dropdown.trigger>
+                <c-lb.dropdown.content class="bg-base-100 border border-base-200 w-48">
+                    <c-lb.menu class="w-full">
+                        <c-lb.menu.item href="/" title="Home">
+                            <c-lbi n="rmx.home" w="1em" h="1em" />
+                            Home
+                        </c-lb.menu.item>
+                        <c-lb.menu.item href="/about" title="About">
+                            <c-lbi n="rmx.info-i" w="1em" h="1em" />
+                            About
+                        </c-lb.menu.item>
+                        <c-lb.menu.item href="/services" title="Services">
+                            <c-lbi n="rmx.settings" w="1em" h="1em" />
+                            Services
+                        </c-lb.menu.item>
+                        <c-lb.menu.item href="/contact" title="Contact">
+                            <c-lbi n="rmx.mail" w="1em" h="1em" />
+                            Contact
+                        </c-lb.menu.item>
+                    </c-lb.menu>
+                </c-lb.dropdown.content>
+            </c-lb.dropdown>
+            <c-lb.button variant="primary" size="sm" class="hidden lg:flex">
+                <c-lbi n="rmx.rocket" w="1em" h="1em" />
+                Get Started
+            </c-lb.button>
+        </c-lb.navbar.end>
+    </c-lb.navbar>
+</div>

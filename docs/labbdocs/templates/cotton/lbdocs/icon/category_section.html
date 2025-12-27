@@ -1,0 +1,52 @@
+{% load cotton %}
+
+<c-vars
+    category
+    icons
+    icon_size="24"
+    start_index="0"
+/>
+
+<div class="category-section" data-category="{{ category }}">
+    <!-- Category Heading -->
+    <div class="mb-6">
+        <h3 class="font-semibold text-sm text-base-content/70 uppercase tracking-wider pb-2 flex items-center gap-2">
+            {{ category }}
+            <span class="badge badge-outline badge-xs">{{ icons|length }}</span>
+        </h3>
+    </div>
+
+    <!-- Icons in this category -->
+    <div class="flex flex-wrap gap-y-6 justify-between sm:justify-start">
+        {% for icon in icons %}
+        <div class="icon-item group relative flex flex-col items-center p-3 rounded-lg hover:bg-base-200/50 transition-all cursor-pointer w-28 flex-shrink-0"
+                 id="icon-{{ start_index }}-{{ forloop.counter }}"
+                 data-name="{{ icon.name|lower }}"
+                 data-category="{{ icon.category }}"
+                 data-component="{{ icon.component_name }}"
+                 data-variants="{{ icon.variants|join:',' }}"
+                 onclick="openIconModal('{{ icon.component_name }}', '{{ icon.name }}', '{{ icon.category }}', this)"
+                 title="Click to view details: {{ icon.component_name }}"
+             >
+
+             <!-- Icon Display with explicit dimensions - Fixed position -->
+             <div class="flex items-center justify-center w-16 h-12 flex-shrink-0 p-2 rounded-lg transition-all bg-transparent">
+               <!-- Line variant (default, visible) -->
+               <div class="icon-variant line-variant">
+                 <c-lbi n="{{ icon.component_name }}" w="{{ icon_size }}" h="{{ icon_size }}" class="text-base-content group-hover:text-primary transition-colors" />
+               </div>
+               <!-- Fill variant (hidden by default) -->
+               <div class="icon-variant fill-variant hidden">
+                 <c-lbi n="{{ icon.component_name }}" w="{{ icon_size }}" h="{{ icon_size }}" class="text-base-content group-hover:text-primary transition-colors" fill="true" />
+               </div>
+             </div>
+
+             <!-- Icon Name - Fixed position at bottom -->
+             <div class="text-xs text-center text-base-content/70 leading-tight mt-2 break-words w-full group-hover:text-base-content transition-colors">
+                 {{ icon.name }}
+             </div>
+         </div>
+        {% endfor %}
+    </div>
+</div>
+

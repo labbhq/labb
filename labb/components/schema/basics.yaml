@@ -1,0 +1,1763 @@
+# Component Schema Documentation
+#
+# Each component can have:
+# - base_classes: CSS classes that are always applied when the component renders
+# - optional_base_classes: CSS classes that are conditionally applied based on component state/slots
+#   These classes are not required to be present in all renderings and won't cause test failures
+#
+components:
+  button:
+    template: "lb/button/index.html"
+    description: "Button component with different styles and sizes"
+    base_classes: ["btn"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [button, a, input, div]
+        default: button
+        description: "HTML tag to use for the button element"
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: ""
+        description: "Button color variant"
+        css_mapping:
+          neutral: "btn-neutral"
+          primary: "btn-primary"
+          secondary: "btn-secondary"
+          accent: "btn-accent"
+          info: "btn-info"
+          success: "btn-success"
+          warning: "btn-warning"
+          error: "btn-error"
+      btnStyle:
+        type: enum
+        values: ["", outline, dash, soft, ghost, link]
+        default: ""
+        description: "Button style variant"
+        css_mapping:
+          outline: "btn-outline"
+          dash: "btn-dash"
+          soft: "btn-soft"
+          ghost: "btn-ghost"
+          link: "btn-link"
+      behavior:
+        type: enum
+        values: ["", active, disabled]
+        default: ""
+        description: "Button behavior state"
+        css_mapping:
+          active: "btn-active"
+          disabled: "btn-disabled"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Button size"
+        css_mapping:
+          xs: "btn-xs"
+          sm: "btn-sm"
+          md: "btn-md"
+          lg: "btn-lg"
+          xl: "btn-xl"
+      modifier:
+        type: enum
+        values: ["", wide, block, square, circle]
+        default: ""
+        description: "Button layout modifier"
+        css_mapping:
+          wide: "btn-wide"
+          block: "btn-block"
+          square: "btn-square"
+          circle: "btn-circle"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library to display with the button text"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconEnd:
+        type: boolean
+        default: false
+        description: "Place icon at the end of the button text instead of the beginning"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+
+  drawer:
+    template: "lb/drawer/index.html"
+    description: "Main drawer wrapper component - use with drawer sub-components for full functionality"
+    base_classes: ["drawer", "drawer-toggle", "drawer-content"]
+    optional_base_classes: ["drawer-side", "drawer-overlay"]
+    variables:
+      drawerId:
+        type: string
+        default: "drawer"
+        description: "Drawer ID for checkbox linking"
+        required: false
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      end:
+        type: boolean
+        default: false
+        description: "Position drawer on the right side"
+        css_mapping:
+          true: "drawer-end"
+      open:
+        type: boolean
+        default: false
+        description: "Whether the drawer is initially open"
+        css_mapping:
+          true: "drawer-open"
+      sideClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply to the drawer side"
+        required: false
+      overlayClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply to the drawer overlay"
+        required: false
+    slots:
+      default:
+        description: "Main drawer content that gets wrapped in <c-lb.drawer.content> when content slot is not used"
+      checkbox:
+        description: "Custom drawer toggle checkbox. Defaults to <c-lb.drawer.checkbox> if not provided"
+      content:
+        description: "Complete custom drawer content area. Defaults to <c-lb.drawer.content> wrapping the default slot"
+      sideContent:
+        description: "Sidebar content that gets wrapped in <c-lb.drawer.side> with overlay automatically added"
+      side:
+        description: "For custom sidebar component as alternative to sideContent slot"
+
+  drawer.checkbox:
+    template: "lb/drawer/checkbox.html"
+    description: "Drawer toggle checkbox input - controls drawer open/close state"
+    base_classes: ["drawer-toggle"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  drawer.content:
+    template: "lb/drawer/content.html"
+    description: "Drawer main content area - contains the primary page content"
+    base_classes: ["drawer-content"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [div, main, section, article]
+        default: div
+        description: "HTML element to render as"
+
+  drawer.side:
+    template: "lb/drawer/side.html"
+    description: "Drawer sidebar container - wraps the sidebar content and overlay"
+    base_classes: ["drawer-side"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  drawer.overlay:
+    template: "lb/drawer/overlay.html"
+    description: "Drawer overlay label - provides backdrop for closing the drawer"
+    base_classes: ["drawer-overlay"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  drawer.toggle:
+    template: "lb/drawer/toggle.html"
+    description: "Drawer toggle label - provides a clickable label for the drawer checkbox"
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      for:
+        type: string
+        default: ""
+        description: "ID of the drawer checkbox to control (for label elements)"
+        required: false
+
+  menu:
+    template: "lb/menu/index.html"
+    description: "Flexible navigation menu component with support for horizontal/vertical layout and sizes"
+    base_classes: ["menu"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      direction:
+        type: enum
+        values: [vertical, horizontal]
+        default: vertical
+        description: "Menu direction - vertical (default) or horizontal"
+        css_mapping:
+          horizontal: "menu-horizontal"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Menu size"
+        css_mapping:
+          xs: "menu-xs"
+          sm: "menu-sm"
+          md: "menu-md"
+          lg: "menu-lg"
+          xl: "menu-xl"
+
+  menu.item:
+    template: "lb/menu/item.html"
+    description: "Unified menu item supporting links, titles, and submenus with choice of details/summary or ul/li"
+    base_classes: []
+    slots:
+      default:
+        description: "Default slot content for menu item"
+        required: false
+      titleSlot:
+        description: "Custom title slot for submenu items (overrides title attribute)"
+        required: false
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      type:
+        type: enum
+        values: [link, title, submenu-details, submenu-toggle]
+        default: link
+        description: "Type of menu item"
+        css_mapping:
+          title: "menu-title"
+          submenu-details: "menu-dropdown"
+          submenu-toggle: "menu-dropdown-toggle"
+      title:
+        type: string
+        default: ""
+        description: "Text for the menu item (required for submenu types, alternative to slot for link/title types)"
+        required: false
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: ""
+        description: "Menu item size"
+        css_mapping:
+          xs: "menu-xs"
+          sm: "menu-sm"
+          md: "menu-md"
+          lg: "menu-lg"
+          xl: "menu-xl"
+      disabled:
+        type: boolean
+        default: false
+        description: "Whether the item is disabled"
+        css_mapping:
+          true: "menu-disabled"
+      active:
+        type: boolean
+        default: false
+        description: "Whether the item appears active/selected"
+        css_mapping:
+          true: "menu-active"
+      href:
+        type: string
+        default: ""
+        description: "Link URL for link-type items"
+        required: false
+      open:
+        type: boolean
+        default: false
+        description: "Whether submenu is initially open/expanded"
+        css_mapping:
+          true: "menu-dropdown-show"
+
+  navbar:
+    template: "lb/navbar/index.html"
+    description: "Responsive navigation bar component with support for brand, menu items, search, and profile sections"
+    base_classes: ["navbar"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [div, nav, header]
+        default: div
+        description: "HTML tag to use for the navbar container"
+
+  navbar.start:
+    template: "lb/navbar/start.html"
+    description: "Left section of the navbar - typically contains brand and mobile menu toggle (works within navbar context)"
+    base_classes: ["navbar-start"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [div, section, aside]
+        default: div
+        description: "HTML tag to use for the navbar start section"
+
+  navbar.center:
+    template: "lb/navbar/center.html"
+    description: "Center section of the navbar - typically contains main navigation links (works within navbar context)"
+    base_classes: ["navbar-center"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [div, section, nav]
+        default: div
+        description: "HTML tag to use for the navbar center section"
+
+  navbar.end:
+    template: "lb/navbar/end.html"
+    description: "Right section of the navbar - typically contains search, notifications, and profile (works within navbar context)"
+    base_classes: ["navbar-end"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [div, section, aside]
+        default: div
+        description: "HTML tag to use for the navbar end section"
+
+  table:
+    template: "lb/table/index.html"
+    description: "DaisyUI Table component with support for zebra, pinning, and sizes."
+    base_classes: ["table"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Table size"
+        css_mapping:
+          xs: "table-xs"
+          sm: "table-sm"
+          md: "table-md"
+          lg: "table-lg"
+          xl: "table-xl"
+      zebra:
+        type: boolean
+        default: false
+        description: "Enable zebra striping"
+        css_mapping:
+          true: "table-zebra"
+      pinRows:
+        type: boolean
+        default: false
+        description: "Pin thead/tfoot rows"
+        css_mapping:
+          true: "table-pin-rows"
+      pinCols:
+        type: boolean
+        default: false
+        description: "Pin th columns"
+        css_mapping:
+          true: "table-pin-cols"
+    slots:
+      default:
+        description: "Table content using standard HTML table elements (thead, tbody, tr, th, td)"
+
+
+  tabs:
+    template: "lb/tabs/index.html"
+    description: "Main tabs wrapper component - use with tabs.content for full functionality"
+    base_classes: ["tabs"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      style:
+        type: enum
+        values: ["", border, lift, box]
+        default: ""
+        description: "Tab style variant"
+        css_mapping:
+          border: "tabs-border"
+          lift: "tabs-lift"
+          box: "tabs-box"
+      placement:
+        type: enum
+        values: [top, bottom]
+        default: top
+        description: "Tab placement - top or bottom"
+        css_mapping:
+          bottom: "tabs-bottom"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Tab size"
+        css_mapping:
+          xs: "tabs-xs"
+          sm: "tabs-sm"
+          md: "tabs-md"
+          lg: "tabs-lg"
+          xl: "tabs-xl"
+      name:
+        type: string
+        default: "tabs"
+        description: "Unique name for the tab group (used for radio inputs)"
+        required: false
+    slots:
+      default:
+        description: "Tab content items using <c-lb.tabs.content> components"
+      content:
+        description: "Custom tab content area. Defaults to rendering the default slot"
+
+  tabs.content:
+    template: "lb/tabs/content.html"
+    description: "Individual tab content with radio input and content area"
+    base_classes: ["tab-content"]
+    optional_base_classes: ["size-4", "me-2"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      name:
+        type: string
+        default: ""
+        description: "Tab name for the radio input (required)"
+        required: true
+      checked:
+        type: boolean
+        default: false
+        description: "Whether this tab is initially selected"
+        css_mapping:
+          true: "tab-active"
+      disabled:
+        type: boolean
+        default: false
+        description: "Whether this tab is disabled"
+        css_mapping:
+          true: "tab-disabled"
+      title:
+        type: string
+        default: ""
+        description: "Tab title text (alternative to slot for simple text)"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library to display before the tab title"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: "me-2 size-4"
+        description: "CSS classes to apply to the icon (overrides default classes)"
+        required: false
+    slots:
+      default:
+        description: "Tab content (main content area)"
+      input:
+        description: "Custom tab input/label area. Defaults to <label class='tab' />"
+
+  card:
+    template: "lb/card/index.html"
+    description: "Main card container component with support for various layouts and styles"
+    base_classes: ["card"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: [default, primary, secondary, accent, neutral, info, success, warning, error]
+        default: default
+        description: "Card color variant"
+        css_mapping:
+          primary: "bg-primary text-primary-content"
+          secondary: "bg-secondary text-secondary-content"
+          accent: "bg-accent text-accent-content"
+          neutral: "bg-neutral text-neutral-content"
+          info: "bg-info text-info-content"
+          success: "bg-success text-success-content"
+          warning: "bg-warning text-warning-content"
+          error: "bg-error text-error-content"
+      border:
+        type: boolean
+        default: false
+        description: "Add a border to the card"
+        css_mapping:
+          true: "card-border"
+      dash:
+        type: boolean
+        default: false
+        description: "Apply a dashed style to the card"
+        css_mapping:
+          true: "card-dash"
+      side:
+        type: boolean
+        default: false
+        description: "Position the image in figure to the side of the card"
+        css_mapping:
+          true: "card-side"
+      imageFull:
+        type: boolean
+        default: false
+        description: "Make the image in figure element fill the background of the card"
+        css_mapping:
+          true: "image-full"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Card size"
+        css_mapping:
+          xs: "card-xs"
+          sm: "card-sm"
+          md: "card-md"
+          lg: "card-lg"
+          xl: "card-xl"
+    slots:
+      default:
+        description: "Card content using card.body, card.title, card.actions, and card.figure components"
+
+  card.body:
+    template: "lb/card/body.html"
+    description: "Main content area of the card"
+    base_classes: ["card-body"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  card.title:
+    template: "lb/card/title.html"
+    description: "Title section within the card body"
+    base_classes: ["card-title"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [h1, h2, h3, h4, h5, h6, div, span]
+        default: h2
+        description: "HTML tag to use for the title element"
+
+  card.actions:
+    template: "lb/card/actions.html"
+    description: "Container for action elements (e.g., buttons)"
+    base_classes: ["card-actions"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      justify:
+        type: enum
+        values: [start, center, end, between, around, evenly]
+        default: ""
+        description: "Justify content alignment"
+        css_mapping:
+          start: "justify-start"
+          center: "justify-center"
+          end: "justify-end"
+          between: "justify-between"
+          around: "justify-around"
+          evenly: "justify-evenly"
+
+  card.figure:
+    template: "lb/card/figure.html"
+    description: "Image container within the card"
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  modal:
+    template: "lb/modal/index.html"
+    description: "Modal dialog component using HTML dialog element for better accessibility"
+    base_classes: ["modal"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      id:
+        type: string
+        default: ""
+        description: "Unique ID for the modal dialog (required for showModal/close methods)"
+        required: true
+      placement:
+        type: enum
+        values: ["", top, middle, bottom, start, end]
+        default: middle
+        description: "Modal position on screen"
+        css_mapping:
+          top: "modal-top"
+          middle: "modal-middle"
+          bottom: "modal-bottom"
+          start: "modal-start"
+          end: "modal-end"
+      open:
+        type: boolean
+        default: false
+        description: "Whether modal is initially open"
+        css_mapping:
+          true: "modal-open"
+      size:
+        type: map
+        variable: "modal.box:size"
+        description: "Modal box size (for default box)"
+      boxClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply to the default modal box"
+        required: false
+      withBackdrop:
+        type: map
+        variable: "modal.backdrop"
+        description: "Add a backdrop overlay for closing when clicked outside"
+      withCloseBtn:
+        type: map
+        variable: "modal.close"
+        description: "Add a close button to the modal"
+      closeBtnPosition:
+        type: map
+        variable: "modal.close:position"
+        description: "Position of the close button"
+    slots:
+      default:
+        description: "Modal content (automatically wrapped in modal.box)"
+      box:
+        description: "Custom modal box content (overrides default slot)"
+
+  modal.box:
+    template: "lb/modal/box.html"
+    description: "Main content container for the modal"
+    base_classes: ["modal-box"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      size:
+        type: enum
+        values: ["", xs, sm, md, lg, xl, screen]
+        default: ""
+        description: "Modal box size"
+        css_mapping:
+          xs: "w-11/12 sm:w-72 max-w-xs"
+          sm: "w-11/12 sm:w-80 max-w-sm"
+          md: "w-11/12 sm:w-96 max-w-md"
+          lg: "w-11/12 sm:w-[32rem] max-w-lg"
+          xl: "w-11/12 sm:w-[36rem] max-w-xl"
+          screen: "w-11/12 max-w-5xl"
+
+  modal.action:
+    template: "lb/modal/action.html"
+    description: "Container for modal action buttons"
+    base_classes: ["modal-action"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  modal.backdrop:
+    template: "lb/modal/backdrop.html"
+    description: "Backdrop overlay for closing modal when clicked outside"
+    base_classes: ["modal-backdrop"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  modal.close:
+    template: "lb/modal/close.html"
+    description: "Close button for modal"
+    base_classes: ["btn", "btn-sm", "btn-circle", "btn-ghost"]
+    optional_base_classes: ["absolute"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: ""
+        description: "Button color variant"
+        css_mapping:
+          neutral: "btn-neutral"
+          primary: "btn-primary"
+          secondary: "btn-secondary"
+          accent: "btn-accent"
+          info: "btn-info"
+          success: "btn-success"
+          warning: "btn-warning"
+          error: "btn-error"
+      position:
+        type: enum
+        values: ["", "top-right", "top-left", "bottom-right", "bottom-left"]
+        default: "top-right"
+        description: "Position of the close button"
+        css_mapping:
+          "top-right": "right-2 top-2"
+          "top-left": "left-2 top-2"
+          "bottom-right": "right-2 bottom-2"
+          "bottom-left": "left-2 bottom-2"
+
+  toggle:
+    template: "lb/toggle/index.html"
+    description: "Toggle switch component for boolean input"
+    base_classes: ["toggle"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", primary, secondary, accent, neutral, info, success, warning, error]
+        default: ""
+        description: "Toggle color variant"
+        css_mapping:
+          primary: "toggle-primary"
+          secondary: "toggle-secondary"
+          accent: "toggle-accent"
+          neutral: "toggle-neutral"
+          info: "toggle-info"
+          success: "toggle-success"
+          warning: "toggle-warning"
+          error: "toggle-error"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Toggle size"
+        css_mapping:
+          xs: "toggle-xs"
+          sm: "toggle-sm"
+          md: "toggle-md"
+          lg: "toggle-lg"
+          xl: "toggle-xl"
+      checked:
+        type: boolean
+        default: false
+        description: "Whether the toggle is initially checked"
+        css_mapping:
+          true: "checked"
+      disabled:
+        type: boolean
+        default: false
+        description: "Whether the toggle is disabled"
+        css_mapping:
+          true: "disabled"
+
+  badge:
+    template: "lb/badge/index.html"
+    description: "Badge component for displaying status, counts, or labels"
+    base_classes: ["badge"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: ""
+        description: "Badge color variant"
+        css_mapping:
+          neutral: "badge-neutral"
+          primary: "badge-primary"
+          secondary: "badge-secondary"
+          accent: "badge-accent"
+          info: "badge-info"
+          success: "badge-success"
+          warning: "badge-warning"
+          error: "badge-error"
+      style:
+        type: enum
+        values: ["", outline, dash, soft, ghost]
+        default: ""
+        description: "Badge style variant"
+        css_mapping:
+          outline: "badge-outline"
+          dash: "badge-dash"
+          soft: "badge-soft"
+          ghost: "badge-ghost"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Badge size"
+        css_mapping:
+          xs: "badge-xs"
+          sm: "badge-sm"
+          md: "badge-md"
+          lg: "badge-lg"
+          xl: "badge-xl"
+      icon:
+        type: string
+        default: ""
+        description: "Icon to display in the badge (e.g., 'rmx.check', 'rmx.arrow-down')"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether to use filled version of the icon"
+        required: false
+      iconEnd:
+        type: boolean
+        default: false
+        description: "Place icon at the end of the badge text instead of the beginning"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+
+  checkbox:
+    template: "lb/checkbox/index.html"
+    description: "Checkbox input component with various styles and states"
+    base_classes: ["checkbox"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: [primary, secondary, accent, neutral, info, success, warning, error]
+        default: ""
+        description: "Color variant of the checkbox"
+        css_mapping:
+          primary: "checkbox-primary"
+          secondary: "checkbox-secondary"
+          accent: "checkbox-accent"
+          neutral: "checkbox-neutral"
+          info: "checkbox-info"
+          success: "checkbox-success"
+          warning: "checkbox-warning"
+          error: "checkbox-error"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Size of the checkbox"
+        css_mapping:
+          xs: "checkbox-xs"
+          sm: "checkbox-sm"
+          md: "checkbox-md"
+          lg: "checkbox-lg"
+          xl: "checkbox-xl"
+
+  dropdown:
+    template: "lb/dropdown/index.html"
+    description: "Dropdown component that shows content when focused or clicked"
+    base_classes: ["dropdown"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      placement:
+        type: enum
+        values: [bottom, top, left, right]
+        default: bottom
+        description: "Dropdown placement relative to trigger"
+        css_mapping:
+          top: "dropdown-top"
+          left: "dropdown-left"
+          right: "dropdown-right"
+      alignment:
+        type: enum
+        values: [start, center, end]
+        default: ""
+        description: "Horizontal alignment of dropdown content"
+        css_mapping:
+          start: "dropdown-start"
+          center: "dropdown-center"
+          end: "dropdown-end"
+      hover:
+        type: boolean
+        default: false
+        description: "Enable hover activation instead of focus"
+        css_mapping:
+          true: "dropdown-hover"
+      open:
+        type: boolean
+        default: false
+        description: "Force dropdown to be open"
+        css_mapping:
+          true: "dropdown-open"
+    slots:
+      default:
+        description: "Dropdown content using dropdown.trigger and dropdown.content components"
+
+  dropdown.trigger:
+    template: "lb/dropdown/trigger.html"
+    description: "Dropdown trigger button that controls the dropdown visibility"
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [div, button, label]
+        default: div
+        description: "HTML element to render as"
+
+  dropdown.content:
+    template: "lb/dropdown/content.html"
+    description: "Dropdown content container that appears when dropdown is active"
+    base_classes: ["dropdown-content"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  swap:
+    template: "lb/swap/index.html"
+    description: "Swap component for toggling between two elements with smooth transitions"
+    base_classes: ["swap"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      effect:
+        type: enum
+        values: ["", rotate, flip]
+        default: ""
+        description: "Animation effect for the swap transition"
+        css_mapping:
+          rotate: "swap-rotate"
+          flip: "swap-flip"
+      checked:
+        type: boolean
+        default: false
+        description: "Whether the checkbox is initially checked"
+        css_mapping:
+          true: "checked"
+      disabled:
+        type: boolean
+        default: false
+        description: "Whether the swap is disabled"
+        css_mapping:
+          true: "disabled"
+      inputClass:
+        type: string
+        default: ""
+        description: "CSS classes to apply to the checkbox input element"
+        required: false
+      name:
+        type: string
+        default: ""
+        description: "Name attribute for the checkbox input"
+        required: false
+      value:
+        type: string
+        default: ""
+        description: "Value attribute for the checkbox input"
+        required: false
+
+  swap.on:
+    template: "lb/swap/on.html"
+    description: "Content shown when swap is active"
+    base_classes: ["swap-on"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  swap.off:
+    template: "lb/swap/off.html"
+    description: "Content shown when swap is inactive"
+    base_classes: ["swap-off"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  swap.indeterminate:
+    template: "lb/swap/indeterminate.html"
+    description: "Content shown when checkbox is in indeterminate state"
+    base_classes: ["swap-indeterminate"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  fab:
+    template: "lb/fab/index.html"
+    description: "FAB (Floating Action Button) with Speed Dial functionality"
+    base_classes: ["fab"]
+    slots:
+      default:
+        description: "Speed dial action buttons (main slot content)"
+      label:
+        description: "Custom HTML content for the main button label (goes inside the existing button div - for rich text, icons, etc.)"
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: ""
+        description: "FAB color variant"
+        css_mapping:
+          neutral: "btn-neutral"
+          primary: "btn-primary"
+          secondary: "btn-secondary"
+          accent: "btn-accent"
+          info: "btn-info"
+          success: "btn-success"
+          warning: "btn-warning"
+          error: "btn-error"
+      size:
+        type: enum
+        values: ["", xs, sm, md, lg, xl]
+        default: lg
+        description: "FAB button size"
+        css_mapping:
+          xs: "btn-xs"
+          sm: "btn-sm"
+          md: "btn-md"
+          lg: "btn-lg"
+          xl: "btn-xl"
+      flower:
+        type: boolean
+        default: false
+        description: "Enable flower (quarter circle) arrangement instead of vertical"
+        css_mapping:
+          true: "fab-flower"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name (e.g., 'rmx.plus', 'rmx.add')"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether to use filled version of the icon"
+        required: false
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+      label:
+        type: string
+        default: ""
+        description: "Text label for the main button (alternative to icon)"
+        required: false
+
+  fab.close:
+    template: "lb/fab/close.html"
+    description: "FAB close button sub-component"
+    base_classes: ["fab-close"]
+    slots:
+      default:
+        description: "Custom content for the close button (defaults to ✕ if not provided)"
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: error
+        description: "Close button color variant"
+        css_mapping:
+          neutral: "btn-neutral"
+          primary: "btn-primary"
+          secondary: "btn-secondary"
+          accent: "btn-accent"
+          info: "btn-info"
+          success: "btn-success"
+          warning: "btn-warning"
+          error: "btn-error"
+      size:
+        type: enum
+        values: ["", xs, sm, md, lg, xl]
+        default: lg
+        description: "Close button size"
+        css_mapping:
+          xs: "btn-xs"
+          sm: "btn-sm"
+          md: "btn-md"
+          lg: "btn-lg"
+          xl: "btn-xl"
+
+  fab.main-action:
+    template: "lb/fab/main_action.html"
+    description: "FAB main action button sub-component"
+    base_classes: ["fab-main-action"]
+    slots:
+      default:
+        description: "Custom content for the main action button"
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: secondary
+        description: "Main action button color variant"
+        css_mapping:
+          neutral: "btn-neutral"
+          primary: "btn-primary"
+          secondary: "btn-secondary"
+          accent: "btn-accent"
+          info: "btn-info"
+          success: "btn-success"
+          warning: "btn-warning"
+          error: "btn-error"
+      size:
+        type: enum
+        values: ["", xs, sm, md, lg, xl]
+        default: lg
+        description: "Main action button size"
+        css_mapping:
+          xs: "btn-xs"
+          sm: "btn-sm"
+          md: "btn-md"
+          lg: "btn-lg"
+          xl: "btn-xl"
+
+  accordion:
+    template: "lb/accordion/index.html"
+    description: "Accordion component for displaying collapsible content sections"
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      join:
+        type: boolean
+        default: false
+        description: "Use joined accordion layout with seamless borders"
+        css_mapping:
+          true: "join join-vertical"
+    slots:
+      default:
+        description: "Accordion content using accordion.item components"
+
+  accordion.item:
+    template: "lb/accordion/item.html"
+    description: "Individual accordion item with collapsible content"
+    base_classes: ["collapse"]
+    optional_base_classes: ["collapse-arrow", "collapse-plus", "collapse-title", "collapse-content", "join-item", "border", "border-base-300"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      name:
+        type: string
+        default: ""
+        description: "Name for the radio input (should match parent accordion name)"
+        required: true
+      checked:
+        type: boolean
+        default: false
+        description: "Whether this accordion item is initially open"
+        css_mapping:
+          true: "checked"
+      title:
+        type: string
+        default: ""
+        description: "Title text for the accordion item"
+        required: false
+      style:
+        type: enum
+        values: ["", arrow, plus]
+        default: ""
+        description: "Accordion item style variant"
+        css_mapping:
+          arrow: "collapse-arrow"
+          plus: "collapse-plus"
+      join:
+        type: boolean
+        default: false
+        description: "Use joined accordion item layout"
+        css_mapping:
+          true: "join-item"
+      border:
+        type: boolean
+        default: false
+        description: "Add border styling to accordion item"
+        css_mapping:
+          true: "border border-base-300"
+    slots:
+      default:
+        description: "Accordion item content"
+      titleSlot:
+        description: "Custom title content (overrides title attribute)"
+
+  alert:
+    template: "lb/alert/index.html"
+    description: "Alert component for displaying important messages with various styles and colors"
+    base_classes: ["alert"]
+    optional_base_classes: ["text-lg"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", info, success, warning, error]
+        default: ""
+        description: "Alert color variant"
+        css_mapping:
+          info: "alert-info"
+          success: "alert-success"
+          warning: "alert-warning"
+          error: "alert-error"
+      style:
+        type: enum
+        values: ["", outline, dash, soft]
+        default: ""
+        description: "Alert style variant"
+        css_mapping:
+          outline: "alert-outline"
+          dash: "alert-dash"
+          soft: "alert-soft"
+      direction:
+        type: enum
+        values: ["", vertical, horizontal]
+        default: ""
+        description: "Alert layout direction"
+        css_mapping:
+          vertical: "alert-vertical"
+          horizontal: "alert-horizontal"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library to display in the alert"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: "text-lg"
+        description: "CSS classes to apply to the icon"
+        required: false
+    slots:
+      default:
+        description: "Alert content"
+      actions:
+        description: "Action buttons or elements for the alert (rendered in a div wrapper)"
+
+  avatar:
+    template: "lb/avatar/index.html"
+    description: "Avatar component for displaying user thumbnails or profile pictures"
+    base_classes: ["avatar"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Avatar size"
+        css_mapping:
+          xs: "w-8 text-xs"
+          sm: "w-12 text-md"
+          md: "w-16 text-lg"
+          lg: "w-24 text-xl"
+          xl: "w-32 text-2xl"
+      rounded:
+        type: enum
+        values: ["", xs, sm, md, lg, xl, full]
+        default: ""
+        description: "Avatar border radius size"
+        css_mapping:
+          xs: "rounded-xs"
+          sm: "rounded-sm"
+          md: "rounded-md"
+          lg: "rounded-lg"
+          xl: "rounded-xl"
+          full: "rounded-full"
+      mask:
+        type: enum
+        values: ["", heart, squircle, "hexagon-2", triangle, pentagon, diamond, star]
+        default: ""
+        description: "Avatar mask shape"
+        css_mapping:
+          heart: "mask mask-heart"
+          squircle: "mask mask-squircle"
+          "hexagon-2": "mask mask-hexagon-2"
+          triangle: "mask mask-triangle"
+          pentagon: "mask mask-pentagon"
+          diamond: "mask mask-diamond"
+          star: "mask mask-star"
+      status:
+        type: enum
+        values: ["", online, offline]
+        default: ""
+        description: "Avatar online/offline status"
+        css_mapping:
+          online: "avatar-online"
+          offline: "avatar-offline"
+      placeholder:
+        type: boolean
+        default: false
+        description: "Whether this is a placeholder avatar"
+        css_mapping:
+          true: "avatar-placeholder"
+      ring:
+        type: boolean
+        default: false
+        description: "Add a ring around the avatar"
+        css_mapping:
+          true: "ring-2 ring-offset-2"
+      ringColor:
+        type: enum
+        values: ["", primary, secondary, accent, neutral, info, success, warning, error]
+        default: ""
+        description: "Ring color variant (only applies if ring is true)"
+        css_mapping:
+          primary: "ring-primary ring-offset-base-100"
+          secondary: "ring-secondary ring-offset-base-100"
+          accent: "ring-accent ring-offset-base-100"
+          neutral: "ring-neutral ring-offset-base-100"
+          info: "ring-info ring-offset-base-100"
+          success: "ring-success ring-offset-base-100"
+          warning: "ring-warning ring-offset-base-100"
+          error: "ring-error ring-offset-base-100"
+      src:
+        type: string
+        default: ""
+        description: "Image source URL (for image avatars)"
+        required: false
+      alt:
+        type: string
+        default: "Avatar"
+        description: "Alt text for the image"
+        required: false
+      initials:
+        type: string
+        default: ""
+        description: "Initials text for placeholder avatars"
+        required: false
+      bgColor:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: "neutral"
+        description: "Background color for placeholder avatars"
+        css_mapping:
+          neutral: "bg-neutral text-neutral-content"
+          primary: "bg-primary text-primary-content"
+          secondary: "bg-secondary text-secondary-content"
+          accent: "bg-accent text-accent-content"
+          info: "bg-info text-info-content"
+          success: "bg-success text-success-content"
+          warning: "bg-warning text-warning-content"
+          error: "bg-error text-error-content"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name for placeholder avatars (alternative to initials)"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether to use filled version of the icon"
+        required: false
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+    slots:
+      default:
+        description: "Custom avatar content (overrides automatic image/placeholder rendering)"
+
+  avatar.group:
+    template: "lb/avatar/group.html"
+    description: "Group wrapper for multiple avatars with overlapping layout"
+    base_classes: ["avatar-group"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      spacing:
+        type: enum
+        values: [wide, normal, tight, tighter, tightest]
+        default: tight
+        description: "Spacing between avatars in the group"
+        css_mapping:
+          wide: ""
+          normal: "-space-x-2"
+          tight: "-space-x-6"
+          tighter: "-space-x-8"
+          tightest: "-space-x-12"
+    slots:
+      default:
+        description: "Avatar components to display in the group"
+
+  diff:
+    template: "lb/diff/index.html"
+    description: "Image comparison component with draggable resizer for before/after views"
+    base_classes: ["diff"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      aspectRatio:
+        type: enum
+        values: ["", "16/9", "4/3", "1/1", "3/4", "9/16"]
+        default: ""
+        description: "Aspect ratio of the diff container"
+        css_mapping:
+          "16/9": "aspect-[16/9]"
+          "4/3": "aspect-[4/3]"
+          "1/1": "aspect-square"
+          "3/4": "aspect-[3/4]"
+          "9/16": "aspect-[9/16]"
+    slots:
+      default:
+        description: "Diff content using diff.item-1, diff.item-2, and diff.resizer components"
+
+  diff.item-1:
+    template: "lb/diff/item_1.html"
+    description: "First item in the diff comparison (typically the 'before' image)"
+    base_classes: ["diff-item-1"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      src:
+        type: string
+        default: ""
+        description: "Image source URL"
+        required: false
+      alt:
+        type: string
+        default: "First comparison image"
+        description: "Alt text for the image"
+        required: false
+    slots:
+      default:
+        description: "Custom content (overrides automatic image rendering)"
+
+  diff.item-2:
+    template: "lb/diff/item_2.html"
+    description: "Second item in the diff comparison (typically the 'after' image)"
+    base_classes: ["diff-item-2"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      src:
+        type: string
+        default: ""
+        description: "Image source URL"
+        required: false
+      alt:
+        type: string
+        default: "Second comparison image"
+        description: "Alt text for the image"
+        required: false
+    slots:
+      default:
+        description: "Custom content (overrides automatic image rendering)"
+
+  diff.resizer:
+    template: "lb/diff/resizer.html"
+    description: "Draggable resizer control for adjusting the comparison view"
+    base_classes: ["diff-resizer"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  footer:
+    template: "lb/footer/index.html"
+    description: "Footer component for displaying site footer content with optional centered layout"
+    base_classes: ["footer"]
+    optional_base_classes: ["footer-center", "footer-horizontal", "footer-vertical"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [footer, div, section]
+        default: footer
+        description: "HTML tag to use for the footer element"
+      center:
+        type: boolean
+        default: false
+        description: "Center the footer content"
+        css_mapping:
+          true: "footer-center"
+      direction:
+        type: enum
+        values: [horizontal, vertical]
+        default: horizontal
+        description: "Layout direction for footer sections - horizontal (side-by-side) or vertical (stacked)"
+        css_mapping:
+          horizontal: "footer-horizontal"
+          vertical: "footer-vertical"
+    slots:
+      default:
+        description: "Footer content - typically contains navigation sections, social links, and copyright info"
+
+  footer.title:
+    template: "lb/footer/title.html"
+    description: "Footer section title component - applies footer-title styling"
+    base_classes: ["footer-title"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [span, h2, h3, h4, h5, h6, div, p]
+        default: span
+        description: "HTML tag to use for the title element"
+    slots:
+      default:
+        description: "Title text content"
+
+  text:
+    template: "lb/text/index.html"
+    description: "Text component with support for variants, sizes, underline, and icons"
+    base_classes: []
+    optional_base_classes: ["flex", "items-center", "gap-2"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [span, p, div, h1, h2, h3, h4, h5, h6]
+        default: span
+        description: "HTML tag to use for the text element"
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: ""
+        description: "Text color variant"
+        css_mapping:
+          neutral: "text-neutral"
+          primary: "text-primary"
+          secondary: "text-secondary"
+          accent: "text-accent"
+          info: "text-info"
+          success: "text-success"
+          warning: "text-warning"
+          error: "text-error"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl, "2xl", "3xl", "4xl"]
+        default: md
+        description: "Text size"
+        css_mapping:
+          xs: "text-xs"
+          sm: "text-sm"
+          md: "text-base"
+          lg: "text-lg"
+          xl: "text-xl"
+          "2xl": "text-2xl"
+          "3xl": "text-3xl"
+          "4xl": "text-4xl"
+      underline:
+        type: boolean
+        default: false
+        description: "Whether to underline the text"
+        css_mapping:
+          true: "underline"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library to display with the text"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconEnd:
+        type: boolean
+        default: false
+        description: "Place icon at the end of the text instead of the beginning"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+    slots:
+      default:
+        description: "Text content"
+
+  link:
+    template: "lb/link/index.html"
+    description: "Link component with support for href, Django view name resolution, DaisyUI styling, and l: prefixed URL arguments"
+    base_classes: ["link"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [a, button, span, div]
+        default: a
+        description: "HTML tag to use for the link element"
+      href:
+        type: string
+        default: ""
+        description: "Direct URL for the link (alternative to viewname)"
+        required: false
+      viewname:
+        type: string
+        default: ""
+        description: "Django view name to resolve (e.g., 'blog:post'). Use l: prefixed attributes for URL arguments"
+        required: false
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: ""
+        description: "Link color variant"
+        css_mapping:
+          neutral: "link-neutral"
+          primary: "link-primary"
+          secondary: "link-secondary"
+          accent: "link-accent"
+          info: "link-info"
+          success: "link-success"
+          warning: "link-warning"
+          error: "link-error"
+      hover:
+        type: boolean
+        default: false
+        description: "Show underline only on hover"
+        css_mapping:
+          true: "link-hover"
+    slots:
+      default:
+        description: "Link content (e.g., text, icons, or other components)"

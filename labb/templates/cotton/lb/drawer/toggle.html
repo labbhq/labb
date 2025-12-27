@@ -1,0 +1,17 @@
+<c-vars
+    class=""
+    for=""
+    title=""
+/>
+
+<label
+    class="{{ class }}"
+    {% if for %}for="{{ for }}"{% endif %}
+    {{ attrs }}
+>
+    {% if slot %}
+        {{ slot }}
+    {% else %}
+        {{ title }}
+    {% endif %}
+</label>

@@ -1,0 +1,77 @@
+{% load docs_tags %}
+{% load static %}
+<c-vars
+    doc_info
+    title
+/>
+
+{# Generate SEO metadata from doc_info #}
+{% get_seo_metadata doc_info as seo %}
+
+{# Basic meta tags #}
+    <title>{{ seo.title }}</title>
+    <meta name="description" content="{{ seo.description }}">
+    {% if seo.keywords %}
+    <meta name="keywords" content="{{ seo.keywords }}">
+    {% endif %}
+    <meta name="robots" content="{{ seo.robots }}">
+    <meta name="author" content="{{ seo.author }}">
+
+    {# Canonical URL #}
+    {% if seo.canonical_url %}
+    <link rel="canonical" href="{{ seo.canonical_url }}">
+    {% endif %}
+
+    {# Open Graph tags #}
+    <meta property="og:type" content="{{ seo.og_type }}">
+    <meta property="og:title" content="{{ seo.meta_title }}">
+    <meta property="og:description" content="{{ seo.description }}">
+    {% if seo.canonical_url %}
+    <meta property="og:url" content="{{ seo.canonical_url }}">
+    {% endif %}
+    <meta property="og:site_name" content="{{ seo.site_name }}">
+    <meta property="og:locale" content="{{ seo.locale }}">
+    {% if seo.og_image %}
+    {% if seo.og_image|is_full_url %}
+    <meta property="og:image" content="{{ seo.og_image }}">
+    {% else %}
+    <meta property="og:image" content="{% static seo.og_image %}">
+    {% endif %}
+    <meta property="og:image:alt" content="{{ seo.meta_title }}">
+    {% endif %}
+    {% if seo.published_time %}
+    <meta property="article:published_time" content="{{ seo.published_time }}">
+    {% endif %}
+    {% if seo.modified_time %}
+    <meta property="article:modified_time" content="{{ seo.modified_time }}">
+    {% endif %}
+    {% if seo.author %}
+    <meta property="article:author" content="{{ seo.author }}">
+    {% endif %}
+    {% if seo.tags %}
+    {% for tag in seo.tags %}
+    <meta property="article:tag" content="{{ tag }}">
+    {% endfor %}
+    {% endif %}
+
+    {# Twitter Card tags #}
+    <meta name="twitter:card" content="{{ seo.twitter_card }}">
+    <meta name="twitter:title" content="{{ seo.meta_title }}">
+    <meta name="twitter:description" content="{{ seo.description }}">
+    {% if seo.og_image %}
+    {% if seo.og_image|is_full_url %}
+    <meta name="twitter:image" content="{{ seo.og_image }}">
+    {% else %}
+    <meta name="twitter:image" content="{% static seo.og_image %}">
+    {% endif %}
+    <meta name="twitter:image:alt" content="{{ seo.meta_title }}">
+    {% endif %}
+    {% if seo.twitter_site %}
+    <meta name="twitter:site" content="{{ seo.twitter_site }}">
+    {% endif %}
+    {% if seo.twitter_creator %}
+    <meta name="twitter:creator" content="{{ seo.twitter_creator }}">
+    {% endif %}
+
+    {# JSON-LD Structured Data #}
+    {% generate_structured_data doc_info %}

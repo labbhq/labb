@@ -1,0 +1,85 @@
+{% load docs_tags %}
+
+<c-vars
+    title=""
+    description=""
+    component_name=""
+    hide_title
+    url_path=""
+    links=""
+    daisy_ui_component_name=""
+/>
+
+{% if not hide_title and title %}
+    <div class="flex flex-col gap-y-6 pb-12 border-b border-base-300 mb-12 pt-6">
+        <div class="flex items-start">
+            <h1 class="text-3xl font-bold text-base-content leading-1 border-b-[15px] border-base-200 tracking-wider rounded-sm px-1">{{ title }}</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            {% if component_name %}
+                <code class="text-xs bg-base-200 py-0.5 px-1 rounded font-mono text-base-content/70">&lt;{{ component_name }} /&gt;</code>
+            {% endif %}
+            {% if url_path %}
+                 <c-lb.button
+                    as="a"
+                    href="{{ url_path|slice:':-1' }}.md"
+                    size="xs"
+                    title="View markdown source"
+                    icon="rmx.markdown"
+                >
+                     Markdown
+                 </c-lb.button>
+             {% endif %}
+             {% if links %}
+                {% for link in links %}
+                    <c-lb.button
+                        as="a"
+                        href="{{ link.url }}"
+                        size="xs"
+                        target="_blank"
+                        title="{{ link.title }}"
+                        btnStyle="ghost"
+                    >
+                        {% if link.icon %}
+                            <c-component is="lbi" n="{{ link.icon }}" w="1.5em" h="1.5em" />
+                        {% endif %}
+                        {% if link.title %}
+                            {{ link.title }}
+                        {% endif %}
+                    </c-lb.button>
+                {% endfor %}
+             {% endif %}
+
+             <div class="flex items-center gap-1">
+                {% if daisy_ui_component_name %}
+                    <c-lb.button
+                        as="a"
+                        href="https://daisyui.com/components/{{ daisy_ui_component_name }}/"
+                        size="xs"
+                        title="View daisyUI component"
+                        btnStyle="ghost"
+                        target="_blank"
+                    >
+                        <c-lbdocs.icon.daisy_ui width="1.5em" height="1.5em" />
+                    </c-lb.button>
+                {% endif %}
+                {% if component_name %}
+                    <c-lb.button
+                        as="a"
+                        href="{% doc_github_url component_name %}"
+                        size="xs"
+                        title="View component source"
+                        btnStyle="ghost"
+                        target="_blank"
+                    >
+                        <c-component is="lbi" n="rmx.github" w="1.5em" h="1.5em" />
+                    </c-lb.button>
+                {% endif %}
+             </div>
+        </div>
+
+        {% if description %}
+            <p class="text-md text-base-content/60 leading-relaxed">{{ description }}</p>
+        {% endif %}
+    </div>
+{% endif %}

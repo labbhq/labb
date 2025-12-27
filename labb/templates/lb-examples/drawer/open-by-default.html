@@ -1,0 +1,17 @@
+<c-lb.drawer drawerId="open-drawer" open sideClass="z-40 h-96">
+  <c-slot name="sideContent">
+    <div class="p-4 h-full bg-base-200 w-48 sm:w-64">
+      <h3 class="text-lg font-semibold mb-4">Open by Default</h3>
+      <p class="mb-4">This drawer starts open when the page loads.</p>
+      <c-lb.menu class="bg-base-200 text-base-content rounded-box w-full">
+        <c-lb.menu.item title="Home" active />
+        <c-lb.menu.item title="About" />
+        <c-lb.menu.item title="Contact" />
+      </c-lb.menu>
+    </div>
+  </c-slot>
+
+  <div class="flex flex-col items-center justify-center p-4 h-full">
+    <p class="text-center">This drawer is open by default.</p>
+  </div>
+</c-lb.drawer>

@@ -1,0 +1,19 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    size="md"
+    zebra
+    pinRows
+    pinCols
+    :sizeClasses="{
+        'xl': 'table-xl',
+        'lg': 'table-lg',
+        'md': 'table-md',
+        'sm': 'table-sm',
+        'xs': 'table-xs'
+    }"
+/>
+
+  <table class="table {{ sizeClasses|get_dict_item:size }} {% if zebra %}table-zebra{% endif %} {% if pinRows %}table-pin-rows{% endif %} {% if pinCols %}table-pin-cols{% endif %} {{ class }}" {{ attrs }}>
+    {{ slot }}
+  </table>

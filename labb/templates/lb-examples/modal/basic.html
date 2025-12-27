@@ -1,0 +1,11 @@
+<c-lb.button variant="primary" onclick="basic_modal.showModal()">Open Modal</c-lb.button>
+
+<c-lb.modal id="basic_modal" boxClass="shadow border">
+    <h3 class="text-lg font-bold">Hello!</h3>
+    <p class="py-4">Press ESC key or click the button below to close</p>
+    <c-lb.modal.action>
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>

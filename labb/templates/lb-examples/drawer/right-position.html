@@ -1,0 +1,19 @@
+<c-lb.drawer drawerId="right-drawer" end sideClass="z-99">
+  <c-slot name="sideContent">
+    <div class="p-4 h-full bg-base-200 w-64">
+      <h3 class="text-lg font-semibold mb-4">Right Side Menu</h3>
+      <c-lb.menu class="bg-base-200 text-base-content rounded-box w-full">
+        <c-lb.menu.item title="Notifications" />
+        <c-lb.menu.item title="User Profile" />
+        <c-lb.menu.item title="Preferences" />
+        <c-lb.menu.item title="Logout" />
+      </c-lb.menu>
+    </div>
+  </c-slot>
+
+  <div class="flex flex-col items-center justify-center p-4">
+    <c-lb.drawer.toggle for="right-drawer" class="btn btn-primary">
+      Open Right Drawer
+    </c-lb.drawer.toggle>
+  </div>
+</c-lb.drawer>

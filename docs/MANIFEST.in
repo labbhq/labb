@@ -1,0 +1,11 @@
+include labbdocs/static/**/*
+include labbdocs/templates/**/*
+include labbdocs/content/**/*
+recursive-include labbdocs *.py
+recursive-include labbdocs *.html
+recursive-include labbdocs *.md
+recursive-include labbdocs *.css
+recursive-include labbdocs *.js
+recursive-include labbdocs *.png
+recursive-include labbdocs *.jpg
+recursive-include labbdocs *.svg

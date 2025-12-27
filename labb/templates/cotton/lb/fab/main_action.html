@@ -1,0 +1,27 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant="secondary"
+    size="lg"
+    :variantClasses="{
+        'neutral': 'btn-neutral',
+        'primary': 'btn-primary',
+        'secondary': 'btn-secondary',
+        'accent': 'btn-accent',
+        'info': 'btn-info',
+        'success': 'btn-success',
+        'warning': 'btn-warning',
+        'error': 'btn-error'
+    }"
+    :sizeClasses="{
+        'xs': 'btn-xs',
+        'sm': 'btn-sm',
+        'md': 'btn-md',
+        'lg': 'btn-lg',
+        'xl': 'btn-xl'
+    }"
+/>
+
+<div class="fab-main-action {{ class }}" {{ attrs }}>
+    <button class="btn btn-circle {{ sizeClasses|get_dict_item:size }} {{ variantClasses|get_dict_item:variant }}">{{ slot }}</button>
+</div>

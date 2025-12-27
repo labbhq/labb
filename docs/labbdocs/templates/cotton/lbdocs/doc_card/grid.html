@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    cols="3"
+    :colsClasses="{
+        '1': 'grid-cols-1',
+        '2': 'md:grid-cols-2',
+        '3': 'md:grid-cols-2 lg:grid-cols-3',
+        '4': 'md:grid-cols-2 lg:grid-cols-4'
+    }"
+/>
+
+<div class="not-prose grid gap-4 my-8 {{ colsClasses|get_dict_item:cols }} {{ class }}">
+    {{ slot }}
+</div>

@@ -1,0 +1,16 @@
+<div class="flex flex-wrap gap-4 items-center">
+    <!-- Modal with custom box class -->
+    <c-lb.button onclick="modal_with_box.showModal()">
+        Open Modal with Custom Box
+    </c-lb.button>
+</div>
+
+<c-lb.modal id="modal_with_box" boxClass="bg-gradient-to-br from-primary to-secondary text-primary-content shadow border">
+    <p class="text-lg font-bold text-primary-content">Custom Styled Modal</p>
+    <p class="py-4">This modal has a custom gradient background applied to its box using the `boxClass` prop.</p>
+    <c-lb.modal.action>
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>

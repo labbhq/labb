@@ -1,0 +1,39 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant=""
+    :variantClasses="{
+        'info': 'alert-info',
+        'success': 'alert-success',
+        'warning': 'alert-warning',
+        'error': 'alert-error'
+    }"
+    style=""
+    :styleClasses="{
+        'outline': 'alert-outline',
+        'dash': 'alert-dash',
+        'soft': 'alert-soft'
+    }"
+    direction=""
+    :directionClasses="{
+        'vertical': 'alert-vertical',
+        'horizontal': 'alert-horizontal'
+    }"
+    icon=""
+    iconFill
+    iconClass="text-lg"
+/>
+
+<div role="alert" class="alert {{ variantClasses|get_dict_item:variant }} {{ styleClasses|get_dict_item:style }} {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs }}>
+    {% if icon %}
+        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% endif %}
+
+    {{ slot }}
+
+    {% if actions %}
+        <div>
+            {{ actions }}
+        </div>
+    {% endif %}
+</div>

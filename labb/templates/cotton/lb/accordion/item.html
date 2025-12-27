@@ -1,0 +1,26 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    name=""
+    checked
+    title=""
+    style=""
+    :styleClasses="{
+        'arrow': 'collapse-arrow',
+        'plus': 'collapse-plus'
+    }"
+    join
+    border
+/>
+
+<div class="collapse {{ styleClasses|get_dict_item:style }} {% if join %}join-item{% endif %} {% if border %}border border-base-300{% endif %} {{ class }}" {{ attrs }}>
+    <input type="radio" name="{{ name }}" {% if checked %}checked{% endif %} />
+    {% if title %}
+        <div class="collapse-title font-semibold">{{ title }}</div>
+    {% else %}
+        {{ titleSlot }}
+    {% endif %}
+    <div class="collapse-content">
+        {{ slot }}
+    </div>
+</div>

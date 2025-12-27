@@ -1,0 +1,38 @@
+<c-lb.dropdown alignment="start" size="sm">
+    <c-lb.dropdown.trigger class="btn btn-sm">
+        <c-lbi n="rmx.sun" w="1.5em" h="1.5em" />
+        Theme
+    </c-lb.dropdown.trigger>
+    <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
+        <c-lb.menu class="w-full">
+            <input
+                type="radio"
+                name="theme"
+                value="labb-light"
+                class="theme-controller btn btn-ghost btn-sm justify-start"
+                aria-label="Light"
+            />
+            <input
+                type="radio"
+                name="theme"
+                value="labb-dark"
+                class="theme-controller btn btn-ghost btn-sm justify-start"
+                aria-label="Dark"
+            />
+            <input
+                type="radio"
+                name="theme"
+                value="light"
+                class="theme-controller btn btn-ghost btn-sm justify-start"
+                aria-label="Daisy Light"
+            />
+            <input
+                type="radio"
+                name="theme"
+                value="dark"
+                class="theme-controller btn btn-ghost btn-sm justify-start"
+                aria-label="Daisy Dark"
+            />
+        </c-lb.menu>
+    </c-lb.dropdown.content>
+</c-lb.dropdown>

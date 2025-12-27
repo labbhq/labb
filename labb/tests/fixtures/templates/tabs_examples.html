@@ -1,0 +1,88 @@
+<!-- Basic tabs example -->
+<c-lb.tabs name="basic_tabs" style="lift">
+    <c-lb.tabs.content name="basic_tabs" title="Live" checked="true">
+        <div class="p-6 bg-base-100 border-base-300">
+            <h3 class="text-lg font-semibold mb-2">Live Content</h3>
+            <p>This is the live tab content with some example text.</p>
+        </div>
+    </c-lb.tabs.content>
+
+    <c-lb.tabs.content name="basic_tabs" title="Laugh">
+        <div class="p-6 bg-base-100 border-base-300">
+            <h3 class="text-lg font-semibold mb-2">Laugh Content</h3>
+            <p>This is the laugh tab content with some example text.</p>
+        </div>
+    </c-lb.tabs.content>
+
+    <c-lb.tabs.content name="basic_tabs" title="Love">
+        <div class="p-6 bg-base-100 border-base-300">
+            <h3 class="text-lg font-semibold mb-2">Love Content</h3>
+            <p>This is the love tab content with some example text.</p>
+        </div>
+    </c-lb.tabs.content>
+</c-lb.tabs>
+
+<!-- Tabs with custom input slot -->
+<c-lb.tabs name="custom_tabs" style="border" class="mt-8">
+    <c-lb.tabs.content name="custom_tabs" title="Custom Tab 1" checked="true">
+        <c-slot name="input">
+            <label class="tab">
+                <input type="radio" name="custom_tabs" checked="checked" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                </svg>
+                Custom Tab 1
+            </label>
+        </c-slot>
+        <div class="p-6 bg-base-100 border-base-300">
+            <h3 class="text-lg font-semibold mb-2">Custom Tab 1 Content</h3>
+            <p>This tab has a custom input with an icon.</p>
+        </div>
+    </c-lb.tabs.content>
+
+    <c-lb.tabs.content name="custom_tabs" title="Custom Tab 2">
+        <c-slot name="input">
+            <label class="tab">
+                <input type="radio" name="custom_tabs" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
+                </svg>
+                Custom Tab 2
+            </label>
+        </c-slot>
+        <div class="p-6 bg-base-100 border-base-300">
+            <h3 class="text-lg font-semibold mb-2">Custom Tab 2 Content</h3>
+            <p>This tab also has a custom input with an icon.</p>
+        </div>
+    </c-lb.tabs.content>
+</c-lb.tabs>
+
+<!-- Different sizes -->
+<c-lb.tabs name="size_tabs" size="lg" class="mt-8">
+    <c-lb.tabs.content name="size_tabs" title="Large Tab 1" checked="true">
+        <div class="p-6 bg-base-100 border-base-300">
+            <p>Large size tab content</p>
+        </div>
+    </c-lb.tabs.content>
+
+    <c-lb.tabs.content name="size_tabs" title="Large Tab 2">
+        <div class="p-6 bg-base-100 border-base-300">
+            <p>Another large size tab content</p>
+        </div>
+    </c-lb.tabs.content>
+</c-lb.tabs>
+
+<!-- Bottom placement tabs -->
+<c-lb.tabs name="bottom_tabs" style="box" placement="bottom" class="mt-8">
+    <c-lb.tabs.content name="bottom_tabs" title="Bottom Tab 1" checked="true">
+        <div class="p-6 bg-base-100 border-base-300">
+            <p>Bottom placement tab content</p>
+        </div>
+    </c-lb.tabs.content>
+
+    <c-lb.tabs.content name="bottom_tabs" title="Bottom Tab 2">
+        <div class="p-6 bg-base-100 border-base-300">
+            <p>Another bottom placement tab content</p>
+        </div>
+    </c-lb.tabs.content>
+</c-lb.tabs>

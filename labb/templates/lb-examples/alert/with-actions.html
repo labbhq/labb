@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4">
+  <c-lb.alert variant="info" icon="rmx.information">
+    <div>We use cookies for analytics.</div>
+    <c-slot name="actions">
+      <div class="flex gap-2">
+        <c-lb.button size="sm">Accept</c-lb.button>
+      </div>
+    </c-slot>
+  </c-lb.alert>
+
+  <c-lb.alert variant="warning" icon="rmx.alert">
+    <div>This action cannot be undone.</div>
+    <c-slot name="actions">
+      <div class="flex gap-2">
+        <c-lb.button variant="warning" size="sm">Dismiss</c-lb.button>
+      </div>
+    </c-slot>
+  </c-lb.alert>
+
+  <c-lb.alert variant="error" icon="rmx.error-warning">
+    <div>Failed to save changes.</div>
+    <c-slot name="actions">
+      <div class="flex gap-2">
+        <c-lb.button variant="error" size="sm">Retry</c-lb.button>
+        <c-lb.button btnStyle="ghost" size="sm">Cancel</c-lb.button>
+      </div>
+    </c-slot>
+  </c-lb.alert>
+</div>

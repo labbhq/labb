@@ -1,0 +1,16 @@
+name: CI Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-matrix:
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+      fail-fast: false
+    uses: ./.github/workflows/test-and-coverage.yml
+    with:
+      python-version: ${{ matrix.python-version }}
+      upload-coverage: ${{ matrix.python-version == '3.12' }}

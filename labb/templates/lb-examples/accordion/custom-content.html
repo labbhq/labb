@@ -1,0 +1,44 @@
+<c-lb.accordion class="flex flex-col gap-2">
+    <c-lb.accordion.item name="custom-accordion" checked border class="bg-base-100">
+        <c-slot name="titleSlot">
+            <div class="collapse-title font-semibold flex items-center gap-2">
+                <c-lbi n="rmx.user" w="1em" h="1em" />
+                <span>User Account</span>
+            </div>
+        </c-slot>
+        <div class="space-y-2">
+            <p class="text-sm">Manage your user account settings and preferences.</p>
+            <div class="flex justify-end">
+                <c-lb.button variant="primary" size="sm">Edit Profile</c-lb.button>
+            </div>
+        </div>
+    </c-lb.accordion.item>
+    <c-lb.accordion.item name="custom-accordion" border class="bg-base-100">
+        <c-slot name="titleSlot">
+            <div class="collapse-title font-semibold flex items-center gap-2">
+                <c-lbi n="rmx.settings" w="1em" h="1em" />
+                <span>Settings</span>
+            </div>
+        </c-slot>
+        <div class="space-y-2">
+            <p class="text-sm">Configure your application settings and preferences.</p>
+            <div class="flex justify-end">
+                <c-lb.button variant="secondary" size="sm">Open Settings</c-lb.button>
+            </div>
+        </div>
+    </c-lb.accordion.item>
+    <c-lb.accordion.item name="custom-accordion" border class="bg-base-100">
+        <c-slot name="titleSlot">
+            <div class="collapse-title font-semibold flex items-center gap-2">
+                <c-lbi n="rmx.question" w="1em" h="1em" />
+                <span>Help & Support</span>
+            </div>
+        </c-slot>
+        <div class="space-y-2">
+            <p class="text-sm">Get help and support for using the application.</p>
+            <div class="flex justify-end">
+                <c-lb.button variant="accent" size="sm">Contact Support</c-lb.button>
+            </div>
+        </div>
+    </c-lb.accordion.item>
+</c-lb.accordion>

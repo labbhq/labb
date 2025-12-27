@@ -1,0 +1,44 @@
+<c-vars
+    title=""
+    summary=""
+    href=""
+    variant=""
+    icon=""
+    class=""
+/>
+
+<a href="{{ href }}" class="block no-underline hover:no-underline {{ class }} group">
+    <c-lb.card
+        class="h-full transition-all duration-300 ease-out hover:shadow-2xl hover:shadow-primary/10 cursor-pointer border-2 border-base-300/50 hover:border-primary/70 bg-gradient-to-br from-base-100 to-base-200/30 hover:from-primary/5 hover:to-primary/10 backdrop-blur-sm overflow-hidden relative"
+        variant="{{ variant }}"
+    >
+        <!-- Decorative gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+        <c-lb.card.body class="gap-3 relative z-10">
+            {% if icon %}
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    <c-lbi n="{{ icon }}" w="1.5em" h="1.5em" class="text-primary transition-all duration-300 group-hover:scale-110" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <c-lb.card.title class="text-lg font-semibold mb-2 transition-colors duration-300 group-hover:text-primary leading-tight">{{ title }}</c-lb.card.title>
+                    {% if summary %}
+                    <p class="text-sm text-base-content/60 transition-colors duration-300 group-hover:text-base-content/80 leading-relaxed">{{ summary }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div>
+                <c-lb.card.title class="text-lg font-semibold mb-2 transition-colors duration-300 group-hover:text-primary">{{ title }}</c-lb.card.title>
+                {% if summary %}
+                <p class="text-sm text-base-content/60 transition-colors duration-300 group-hover:text-base-content/80 leading-relaxed">{{ summary }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {{ slot }}
+
+        </c-lb.card.body>
+    </c-lb.card>
+</a>

@@ -1,0 +1,113 @@
+<c-vars
+    config
+    doc_info
+/>
+
+<c-lbdocs.layout.base title="{{ title|default:'Labb Docs' }}">
+
+    <!-- Docs Layout with Drawer -->
+    <c-lb.drawer drawerId="docs-drawer" class="lg:drawer-open" sideClass="top-20 max-h-[calc(100vh-80px)] scrollbar-thin docs-sidebar-container">
+        <c-slot name="sideContent">
+            <c-lb.menu class="w-80 px-4 bg-base-100 z-20 min-h-full overflow-y-auto scrollbar-hide border-r border-base-200 lg:border-r-0" id="docs-sidebar-menu">
+                {% for item in config.menu %}
+                    <c-lb.menu.item type="title" title="{{ item.title|upper }}" class="{% if not forloop.first %}mt-4{% endif %} text-xs tracking-wider" />
+                    {% if item.children %}
+                        {% for child in item.children %}
+                            {% if child.children %}
+                                <c-lb.menu.item type="submenu-details" title="{{ child.title }}" open>
+                                    {% for grandchild in child.children %}
+                                        <c-lb.menu.item
+                                            title="{{ grandchild.title }}"
+                                            href="{{ grandchild.path }}"
+                                            class="{% if doc_info.url_path == grandchild.path %}active{% endif %}"
+                                            data-menu-path="{{ grandchild.path }}"
+                                        />
+                                    {% endfor %}
+                                </c-lb.menu.item>
+                            {% else %}
+                                <c-lb.menu.item
+                                    title="{{ child.title }}"
+                                    href="{{ child.path }}"
+                                    class="{% if doc_info.url_path == child.path %}active{% endif %}"
+                                    data-menu-path="{{ child.path }}"
+                                />
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                <div class="h-50"></div>
+            </c-lb.menu>
+
+        </c-slot>
+
+        <!-- Main docs content -->
+        <div class="px-6 pt-4 pb-20">
+
+            {% if doc_info %}
+                <!-- Two-column layout: main content + TOC -->
+                <div class="flex gap-6 justify-between max-w-6xl mx-auto">
+                    <!-- Main content area -->
+                    <div class="flex-1 max-w-4xl min-w-0">
+
+                        <c-lbdocs.layout.docs.header
+                            title="{%if doc_info.frontmatter.title %}{{ doc_info.frontmatter.title }}{% else %}{{ doc_info.frontmatter.component }}{% endif %}"
+                            description="{{ doc_info.frontmatter.description }}"
+                            component_name="{{ doc_info.frontmatter.component }}"
+                            daisy_ui_component_name="{{ doc_info.frontmatter.daisy_ui_component_name }}"
+                            hide_title="{{ doc_info.frontmatter.doc_hide_title }}"
+                            url_path="{{ doc_info.url_path }}"
+                            :links=doc_info.frontmatter.doc_links
+                        />
+
+                        <article class="prose prose-md max-w-none overflow-hidden">
+                            {% include doc_info.template_path %}
+                        </article>
+
+                        <!-- Page Navigation -->
+                        <c-lbdocs.nav.page_navigator :navigation="doc_info.navigation" />
+                    </div>
+
+                    <!-- TOC sidebar -->
+                    {% if doc_info.frontmatter.doc_show_toc != False %}
+                    <div id="toc-sidebar" class="w-64 flex-shrink-0 hidden lg:block">
+                        <div class="sticky top-20 ">
+                            {% if doc_info.toc %}
+                                <c-lb.menu class="text-xs gap-y-1" size="xs">
+                                    {% for item in doc_info.toc %}
+                                        <c-lb.menu.item
+                                            title="{{ item.name }}"
+                                            href="#{{ item.id }}"
+                                            class="{% if item.level == 2 %}{% elif item.level == 3 %}ml-4{% elif item.level == 4 %}ml-8{% endif %}"
+                                        />
+                                        {% if item.children %}
+                                            {% for child in item.children %}
+                                                <c-lb.menu.item
+                                                    title="{{ child.name }}"
+                                                    href="#{{ child.id }}"
+                                                    class="ml-4 {% if child.level == 3 %}{% elif child.level == 4 %}ml-8{% endif %}"
+                                                />
+                                                {% if child.children %}
+                                                    {% for grandchild in child.children %}
+                                                        <c-lb.menu.item
+                                                            title="{{ grandchild.name }}"
+                                                            href="#{{ grandchild.id }}"
+                                                            class="ml-8"
+                                                        />
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </c-lb.menu>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <!-- Default slot content when no doc is loaded -->
+                {{ slot }}
+            {% endif %}
+        </div>
+    </c-lb.drawer>
+</c-lbdocs.layout.base>

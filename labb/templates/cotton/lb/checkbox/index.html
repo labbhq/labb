@@ -1,0 +1,29 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant=""
+    :variantClasses="{
+        'primary': 'checkbox-primary',
+        'secondary': 'checkbox-secondary',
+        'accent': 'checkbox-accent',
+        'neutral': 'checkbox-neutral',
+        'info': 'checkbox-info',
+        'success': 'checkbox-success',
+        'warning': 'checkbox-warning',
+        'error': 'checkbox-error'
+    }"
+    size="md"
+    :sizeClasses="{
+        'xs': 'checkbox-xs',
+        'sm': 'checkbox-sm',
+        'md': 'checkbox-md',
+        'lg': 'checkbox-lg',
+        'xl': 'checkbox-xl'
+    }"
+/>
+
+<input
+    type="checkbox"
+    class="checkbox {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {{ class }}"
+    {{ attrs }}
+/>

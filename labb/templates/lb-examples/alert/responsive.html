@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-4">
+  <c-lb.alert variant="info" direction="vertical" class="sm:alert-horizontal" icon="rmx.information">
+    <div>
+      <h3 class="font-bold">Responsive Alert</h3>
+      <div class="text-xs">Vertical on mobile, horizontal on desktop</div>
+    </div>
+    <c-slot name="actions">
+      <c-lb.button size="sm">See</c-lb.button>
+    </c-slot>
+  </c-lb.alert>
+
+  <c-lb.alert variant="success" direction="vertical" class="sm:alert-horizontal" icon="rmx.check">
+    <span>Your purchase has been confirmed!</span>
+    <c-slot name="actions">
+      <c-lb.button variant="success" size="sm">Continue</c-lb.button>
+    </c-slot>
+  </c-lb.alert>
+</div>

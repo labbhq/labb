@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4">
+  <c-lb.alert variant="success" icon="rmx.check" class="shadow-lg">
+    <div><span class="font-bold">Success!</span> Your changes have been saved successfully.</div>
+    <c-slot name="actions">
+      <div class="flex gap-2">
+        <c-lb.button variant="success" size="sm">Continue</c-lb.button>
+      </div>
+    </c-slot>
+  </c-lb.alert>
+
+  <c-lb.alert variant="error" icon="rmx.close-circle" class="border-2">
+    <div><span class="font-bold">Error:</span> Failed to connect to the server. Please try again.</div>
+    <c-slot name="actions">
+      <div class="flex gap-2">
+        <c-lb.button variant="error" size="sm">Retry</c-lb.button>
+        <c-lb.button btnStyle="ghost" size="sm">Cancel</c-lb.button>
+      </div>
+    </c-slot>
+  </c-lb.alert>
+
+  <c-lb.alert variant="warning" style="soft" icon="rmx.alert" class="bg-warning/10">
+    <div><span class="font-bold">Warning:</span> This action cannot be undone.</div>
+    <c-slot name="actions">
+      <div class="flex gap-2">
+        <c-lb.button variant="warning" size="sm">Dismiss</c-lb.button>
+      </div>
+    </c-slot>
+  </c-lb.alert>
+</div>

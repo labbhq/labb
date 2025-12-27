@@ -1,0 +1,13 @@
+/* Custom Highlight.js overrides */
+.hljs {
+    background: transparent !important;
+}
+
+pre code.hljs {
+    background: transparent !important;
+    /* padding: 0 !important; */
+}
+
+code.hljs {
+    background: transparent !important;
+}

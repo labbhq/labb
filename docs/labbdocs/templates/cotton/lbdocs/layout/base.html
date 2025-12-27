@@ -1,0 +1,58 @@
+{% load static %}
+{% load lb_tags %}
+
+<c-vars
+    title
+    doc_info
+    topnavTitle
+    showDrawerToggle
+    showTopNav=True
+    showFooter=True
+/>
+
+<!DOCTYPE html>
+<html lang="en" {% labb_theme %} class="scroll-smooth scroll-pt-20">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'lbdocs/img/labb/favicon/favicon.svg' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'lbdocs/img/labb/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'lbdocs/img/labb/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'lbdocs/img/labb/favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'lbdocs/img/labb/favicon/site.webmanifest' %}">
+
+    {# SEO meta tags - conditionally render based on doc_info #}
+    {% if doc_info %}
+        <c-lbdocs.seo.head :doc_info=doc_info :title=title />
+    {% else %}
+        <title>{{ title|default:"labb" }}</title>
+        <meta name="description" content="UI for Django perfectionists with deadlines.">
+    {% endif %}
+
+    <c-lb.m.dependencies
+        setThemeEndpoint="{% url 'set_theme' %}"
+    />
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="{% static 'lbdocs/css/highlight.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lbdocs/css/highlight-custom.css' %}">
+    <script src="{% static 'lbdocs/js/highlight.min.js' %}" defer></script>
+    <script src="{% static 'lbdocs/js/common.js' %}" defer></script>
+</head>
+
+<body class="min-h-screen">
+    {% if showTopNav %}
+        <c-lbdocs.nav.topnav :topnavTitle=topnavTitle :showDrawerToggle=showDrawerToggle />
+    {% endif %}
+
+    <main class="{{ class }} pt-20">
+        {{ slot }}
+    </main>
+
+    {% if showFooter %}
+        <c-lbdocs.nav.footer />
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,5 @@
+<c-vars n w h />
+
+{% if n %}
+    <c-component is="lbi.{{ n }}" w="{{ w }}" h="{{ h }}" {{ attrs }} />
+{% endif %}

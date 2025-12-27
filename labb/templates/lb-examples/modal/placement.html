@@ -1,0 +1,57 @@
+<div class="flex gap-2 flex-wrap">
+    <c-lb.button variant="outline" onclick="top_modal.showModal()">Top Modal</c-lb.button>
+    <c-lb.button variant="outline" onclick="middle_modal.showModal()">Middle Modal</c-lb.button>
+    <c-lb.button variant="outline" onclick="bottom_modal.showModal()">Bottom Modal</c-lb.button>
+    <c-lb.button variant="outline" onclick="start_modal.showModal()">Start Modal</c-lb.button>
+    <c-lb.button variant="outline" onclick="end_modal.showModal()">End Modal</c-lb.button>
+</div>
+
+<c-lb.modal id="top_modal" placement="top" withBackdrop boxClass="shadow border">
+    <h3 class="font-bold text-lg">Top Placement</h3>
+    <p class="py-4">This modal appears at the top of the screen</p>
+    <c-lb.modal.action boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>
+
+<c-lb.modal id="middle_modal" placement="middle" withBackdrop boxClass="shadow border">
+    <h3 class="font-bold text-lg">Middle Placement</h3>
+    <p class="py-4">This modal appears in the middle of the screen (default)</p>
+    <c-lb.modal.action boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>
+
+<c-lb.modal id="bottom_modal" placement="bottom" withBackdrop boxClass="shadow border">
+    <h3 class="font-bold text-lg">Bottom Placement</h3>
+    <p class="py-4">This modal appears at the bottom of the screen</p>
+    <c-lb.modal.action boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>
+
+<c-lb.modal id="start_modal" placement="start" withBackdrop boxClass="shadow border">
+    <h3 class="font-bold text-lg">Start Alignment</h3>
+    <p class="py-4">This modal appears at the start (left) of the screen</p>
+    <c-lb.modal.action boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>
+
+<c-lb.modal id="end_modal" placement="end" withBackdrop boxClass="shadow border">
+    <h3 class="font-bold text-lg">End Alignment</h3>
+    <p class="py-4">This modal appears at the end (right) of the screen</p>
+    <c-lb.modal.action boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>

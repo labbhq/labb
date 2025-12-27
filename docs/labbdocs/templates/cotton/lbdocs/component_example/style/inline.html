@@ -1,0 +1,17 @@
+<c-vars
+    class=""
+    previewStyle
+/>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 {{ class }}">
+    <div>
+        <h4 class="text-sm font-semibold mb-2">Preview</h4>
+        <c-lbdocs.component_example.section.preview :style=previewStyle>
+            {{ slot }}
+        </c-lbdocs.component_example.section.preview>
+    </div>
+    <div>
+        <h4 class="text-sm font-semibold mb-2">Code</h4>
+        <c-lbdocs.component_example.section.code code="{{ code }}" />
+    </div>
+</div>

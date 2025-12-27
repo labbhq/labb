@@ -1,0 +1,11 @@
+<c-vars
+    class=""
+/>
+
+<form
+    method="dialog"
+    class="modal-backdrop {{ class }}"
+    {{ attrs }}
+>
+    <button>{{ slot|default:"close" }}</button>
+</form>

@@ -1,0 +1,663 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-issue:
+        description: 'Main release issue number (e.g., 123)'
+        required: true
+        type: string
+
+jobs:
+  test:
+    uses: ./.github/workflows/test-and-coverage.yml
+    with:
+      python-version: '3.12'
+      upload-coverage: false
+
+  checks:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      sub_issues_data: ${{ steps.check_sub_issues.outputs.data }}
+      release_issue_data: ${{ steps.check_release_issue.outputs.data }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+
+      - name: Extract version from pyproject.toml
+        id: version
+        run: |
+          VERSION=$(grep -E '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION"
+
+          if [ -z "$VERSION" ]; then
+            echo "❌ Failed to extract version from pyproject.toml"
+            exit 1
+          fi
+
+      - name: Check all packages have the same version
+        run: |
+          MAIN_VERSION="${{ steps.version.outputs.version }}"
+
+          # Extract version from docs package
+          DOCS_VERSION=$(grep -E '^version = ' docs/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+
+          # Extract version from icons package
+          ICONS_VERSION=$(grep -E '^version = ' extras/icons/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+
+          echo "Main package version: $MAIN_VERSION"
+          echo "Docs package version: $DOCS_VERSION"
+          echo "Icons package version: $ICONS_VERSION"
+
+          # Check if all versions match
+          if [ "$MAIN_VERSION" != "$DOCS_VERSION" ]; then
+            echo "❌ Version mismatch: main ($MAIN_VERSION) != docs ($DOCS_VERSION)"
+            exit 1
+          fi
+
+          if [ "$MAIN_VERSION" != "$ICONS_VERSION" ]; then
+            echo "❌ Version mismatch: main ($MAIN_VERSION) != icons ($ICONS_VERSION)"
+            exit 1
+          fi
+
+          echo "✅ All packages have matching version: $MAIN_VERSION"
+
+      - name: Check if tag already exists
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          TAG_NAME="v$VERSION"
+
+          if git tag -l | grep -q "^$TAG_NAME$"; then
+            echo "❌ Tag $TAG_NAME already exists!"
+            exit 1
+          else
+            echo "✅ Tag $TAG_NAME does not exist, proceeding..."
+          fi
+
+      - name: Check release issue is open
+        id: check_release_issue
+        run: |
+          RELEASE_ISSUE="${{ github.event.inputs.release-issue }}"
+
+          # Get the main release issue details
+          RELEASE_ISSUE_DATA=$(gh issue view "$RELEASE_ISSUE" --json title,body,url,number,state 2>/dev/null || echo "")
+
+          if [ -z "$RELEASE_ISSUE_DATA" ]; then
+            echo "❌ Release issue #$RELEASE_ISSUE not found or not accessible"
+            exit 1
+          fi
+
+          RELEASE_STATE=$(echo "$RELEASE_ISSUE_DATA" | jq -r '.state')
+          RELEASE_TITLE=$(echo "$RELEASE_ISSUE_DATA" | jq -r '.title')
+
+          echo "Release issue: $RELEASE_TITLE"
+          echo "Release issue state: $RELEASE_STATE"
+
+          # Handle both "open" and "OPEN" states from GitHub API
+          if [ "$RELEASE_STATE" != "open" ] && [ "$RELEASE_STATE" != "OPEN" ]; then
+            echo "❌ Release issue #$RELEASE_ISSUE is not open (state: $RELEASE_STATE). Please ensure it's open before releasing."
+            exit 1
+          else
+            echo "✅ Release issue #$RELEASE_ISSUE is open"
+          fi
+
+          # Store release issue data for next job (using GitHub Actions file output)
+          echo "data<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_ISSUE_DATA" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Check all sub-issues are closed
+        id: check_sub_issues
+        run: |
+          RELEASE_ISSUE="${{ github.event.inputs.release-issue }}"
+
+          echo "🔍 Checking sub-issues for release issue #$RELEASE_ISSUE"
+
+          # Get sub-issues using the official GitHub API
+          SUB_ISSUES_DATA=$(gh api repos/${{ github.repository }}/issues/$RELEASE_ISSUE/sub_issues 2>/dev/null || echo "[]")
+
+          if [ "$SUB_ISSUES_DATA" = "[]" ] || [ -z "$SUB_ISSUES_DATA" ]; then
+            echo "⚠️  No sub-issues found for release issue #$RELEASE_ISSUE"
+          else
+            echo "Found sub-issues:"
+            echo "$SUB_ISSUES_DATA" | jq -r '.[] | "  #\(.number): \(.title) (\(.state))"'
+
+            # Check each sub-issue
+            echo "$SUB_ISSUES_DATA" | jq -r '.[] | "\(.number)|\(.title)|\(.state)"' | while IFS='|' read -r issue_num title state; do
+              if [ "$state" != "closed" ] && [ "$state" != "CLOSED" ]; then
+                echo "❌ Sub-issue #$issue_num ($title) is not closed"
+                exit 1
+              fi
+            done
+
+            echo "✅ All sub-issues are closed"
+          fi
+
+          # Store sub-issues data for next job (using GitHub Actions file output)
+          echo "data<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUB_ISSUES_DATA" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+
+  generate-changelog:
+    needs: [test, checks]
+    runs-on: ubuntu-latest
+    if: always() && needs.checks.result == 'success'
+    permissions:
+      contents: write
+      issues: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+
+      - name: Prepare data for changelog generation
+        id: prepare_data
+        run: |
+          VERSION="${{ needs.checks.outputs.version }}"
+
+          # Get data from previous job - write to temp files to avoid quote escaping issues
+          cat > /tmp/release_issue.json <<'EOF'
+          ${{ needs.checks.outputs.release_issue_data }}
+          EOF
+
+          cat > /tmp/sub_issues.json <<'EOF'
+          ${{ needs.checks.outputs.sub_issues_data }}
+          EOF
+
+          # Extract release issue info from temp file
+          RELEASE_TITLE=$(jq -r '.title' /tmp/release_issue.json)
+          RELEASE_URL=$(jq -r '.url' /tmp/release_issue.json)
+
+          # Extract sub-issues info from temp file
+          SUB_ISSUES=$(jq -r '.[].number' /tmp/sub_issues.json 2>/dev/null | tr '\n' ' ' || echo "")
+
+          if [ -z "$SUB_ISSUES" ] || [ "$SUB_ISSUES" = "" ]; then
+            SUB_ISSUES=""
+          fi
+
+          # Store data for next step
+          echo "sub_issues<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUB_ISSUES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "release_title<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_TITLE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "release_url<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_URL" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog from sub-issues
+        id: changelog
+        run: |
+          VERSION="${{ needs.checks.outputs.version }}"
+          RELEASE_TITLE="${{ steps.prepare_data.outputs.release_title }}"
+          RELEASE_URL="${{ steps.prepare_data.outputs.release_url }}"
+          SUB_ISSUES="${{ steps.prepare_data.outputs.sub_issues }}"
+
+          echo "Generating changelog for version $VERSION"
+
+          # Get current date in human-readable format with short month
+          CURRENT_DATE=$(date +"%b %d, %Y")
+
+          # Initialize changelog entry for this version
+          CHANGELOG_ENTRY="## $VERSION ($CURRENT_DATE)\n\n"
+
+          # Create temporary files to store categorized issues (avoids subshell variable issues)
+          TMP_DIR=$(mktemp -d)
+          BUG_FIXES_FILE="$TMP_DIR/bug_fixes.txt"
+          FEATURES_FILE="$TMP_DIR/features.txt"
+          MAINTENANCE_FILE="$TMP_DIR/maintenance.txt"
+          DOCUMENTATION_FILE="$TMP_DIR/documentation.txt"
+          OTHER_FILE="$TMP_DIR/other.txt"
+
+          touch "$BUG_FIXES_FILE" "$FEATURES_FILE" "$MAINTENANCE_FILE" "$DOCUMENTATION_FILE" "$OTHER_FILE"
+
+          # Process sub-issues from the passed data (already validated in checks job)
+          if [ -n "$SUB_ISSUES" ]; then
+            # Recreate the sub_issues.json file if it doesn't exist
+            if [ ! -f /tmp/sub_issues.json ]; then
+              cat > /tmp/sub_issues.json <<'EOF'
+          ${{ needs.checks.outputs.sub_issues_data }}
+          EOF
+            fi
+
+            # Process each sub-issue from the API data
+            jq -r '.[] | @json' /tmp/sub_issues.json | while read -r issue_json; do
+              issue_num=$(echo "$issue_json" | jq -r '.number')
+              title=$(echo "$issue_json" | jq -r '.title')
+              labels=$(echo "$issue_json" | jq -r '.labels[]?.name // empty' | tr '\n' ',' | sed 's/,$//')
+              url=$(echo "$issue_json" | jq -r '.html_url')
+
+              # Categorize based on labels (check new labels first, then fallback to old patterns)
+              if echo "$labels" | grep -qiE "\bfix\b"; then
+                # Match "fix" label (exact word match to avoid matching "prefix" or similar)
+                echo "* $title ([#$issue_num]($url))" >> "$BUG_FIXES_FILE"
+              elif echo "$labels" | grep -qiE "\bfeat\b"; then
+                # Match "feat" label (exact word match)
+                echo "* $title ([#$issue_num]($url))" >> "$FEATURES_FILE"
+              elif echo "$labels" | grep -qiE "\bchore\b"; then
+                # Match "chore" label (exact word match)
+                echo "* $title ([#$issue_num]($url))" >> "$MAINTENANCE_FILE"
+              elif echo "$labels" | grep -qi "bug\|fix"; then
+                # Fallback: old pattern for bug fixes
+                echo "* $title ([#$issue_num]($url))" >> "$BUG_FIXES_FILE"
+              elif echo "$labels" | grep -qi "feature\|enhancement"; then
+                # Fallback: old pattern for features
+                echo "* $title ([#$issue_num]($url))" >> "$FEATURES_FILE"
+              elif echo "$labels" | grep -qi "documentation\|docs"; then
+                # Documentation label
+                echo "* $title ([#$issue_num]($url))" >> "$DOCUMENTATION_FILE"
+              else
+                echo "* $title ([#$issue_num]($url))" >> "$OTHER_FILE"
+              fi
+            done
+          else
+            echo "* No sub-issues found in this release." >> "$OTHER_FILE"
+          fi
+
+          # Build changelog entry from temporary files
+          if [ -s "$FEATURES_FILE" ]; then
+            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Features\n$(cat "$FEATURES_FILE")\n\n"
+          fi
+
+          if [ -s "$BUG_FIXES_FILE" ]; then
+            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Bug Fixes\n$(cat "$BUG_FIXES_FILE")\n\n"
+          fi
+
+          if [ -s "$MAINTENANCE_FILE" ]; then
+            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Maintenance\n$(cat "$MAINTENANCE_FILE")\n\n"
+          fi
+
+          if [ -s "$DOCUMENTATION_FILE" ]; then
+            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Documentation\n$(cat "$DOCUMENTATION_FILE")\n\n"
+          fi
+
+          if [ -s "$OTHER_FILE" ]; then
+            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Other\n$(cat "$OTHER_FILE")\n\n"
+          fi
+
+          # Cleanup temporary files
+          rm -rf "$TMP_DIR"
+
+          # Store changelog entry
+          echo "changelog_entry<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$CHANGELOG_ENTRY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "✅ Changelog entry generated"
+
+      - name: Update CHANGELOG.md
+        run: |
+          VERSION="${{ needs.checks.outputs.version }}"
+          CHANGELOG_ENTRY="${{ steps.changelog.outputs.changelog_entry }}"
+
+          # Create empty CHANGELOG.md if it doesn't exist
+          if [ ! -f "CHANGELOG.md" ]; then
+            touch CHANGELOG.md
+            echo "Created new CHANGELOG.md"
+          fi
+
+          # Check if version already exists in changelog and remove it
+          if grep -q "^## $VERSION " CHANGELOG.md; then
+            echo "⚠️  Version $VERSION already exists in CHANGELOG.md, removing old entry..."
+
+            # Remove the existing version entry
+            # This removes from "## VERSION" to the line before the next "## " or "---" or end of file
+            awk -v ver="## $VERSION " '
+              BEGIN { skip=0 }
+              /^## / {
+                if ($0 ~ ver) {
+                  skip=1
+                  next
+                } else if (skip==1) {
+                  skip=0
+                }
+              }
+              /^---$/ {
+                if (skip==1) {
+                  skip=0
+                  next
+                }
+              }
+              skip==0 { print }
+            ' CHANGELOG.md > temp_remove.md
+
+            mv temp_remove.md CHANGELOG.md
+            echo "✅ Removed old entry for v$VERSION"
+          fi
+
+          # Prepend new changelog entry
+          if [ -s "CHANGELOG.md" ]; then
+            # File exists and has content - prepend with separator
+            {
+              echo -e "$CHANGELOG_ENTRY"
+              echo "---"
+              echo ""
+              cat CHANGELOG.md
+            } > temp_changelog.md
+          else
+            # File is empty or new - just add the entry
+            echo -e "$CHANGELOG_ENTRY" > temp_changelog.md
+          fi
+
+          # Replace CHANGELOG.md with updated content
+          mv temp_changelog.md CHANGELOG.md
+
+          echo "✅ CHANGELOG.md updated with v$VERSION"
+
+      - name: Commit and push changelog
+        run: |
+          VERSION="${{ needs.checks.outputs.version }}"
+
+          # Configure git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # Add changelog file
+          git add "CHANGELOG.md"
+
+          # Commit changelog
+          git commit -m "Add changelog for v$VERSION"
+
+          # Push changelog
+          git push origin main
+
+          echo "✅ CHANGELOG.md committed and pushed"
+
+  build-and-publish:
+    needs: [test, checks, generate-changelog]
+    runs-on: ubuntu-latest
+    if: always() && needs.checks.result == 'success' && needs.generate-changelog.result == 'success'
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Pull latest changes (including changelog)
+        run: |
+          git pull origin main
+          echo "✅ Pulled latest changes from main"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with dev --no-interaction
+
+      - name: Install dependencies (cached)
+        if: steps.cached-poetry-dependencies.outputs.cache-hit == 'true'
+        run: poetry install --with dev --no-root --no-interaction
+
+      - name: Build main package
+        run: |
+          poetry build --no-interaction
+          echo "✅ Main package built"
+
+      - name: Verify main package build
+        run: |
+          if [ ! -d "dist" ] || [ -z "$(ls -A dist)" ]; then
+            echo "❌ Error: dist directory is empty or doesn't exist"
+            exit 1
+          fi
+          echo "✅ Distribution files built"
+
+      - name: Build docs package
+        run: |
+          cd docs
+          poetry build --no-interaction
+          echo "✅ Docs package built"
+
+      - name: Build icons package
+        run: |
+          cd extras/icons
+          poetry build --no-interaction
+          echo "✅ Icons package built"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ needs.checks.outputs.version }}
+          path: |
+            dist/
+            docs/dist/
+            extras/icons/dist/
+
+      - name: Publish main package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+          print-hash: true
+          verbose: true
+
+      - name: Publish docs package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: docs/dist/
+          print-hash: true
+          verbose: true
+
+      - name: Publish icons package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: extras/icons/dist/
+          print-hash: true
+          verbose: true
+
+  cleanup:
+    needs: [test, checks, generate-changelog, build-and-publish]
+    runs-on: ubuntu-latest
+    if: always() && needs.checks.result == 'success' && needs.generate-changelog.result == 'success' && needs.build-and-publish.result == 'success'
+    permissions:
+      contents: write
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ needs.checks.outputs.version }}
+          path: artifacts/
+
+      - name: Create and push tag
+        run: |
+          VERSION="${{ needs.checks.outputs.version }}"
+
+          # Configure git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # Create tag from version
+          TAG_NAME="v$VERSION"
+          git tag "$TAG_NAME"
+
+          # Push tag to remote
+          git push origin "$TAG_NAME"
+
+          echo "✅ Tag $TAG_NAME created and pushed"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ needs.checks.outputs.version }}"
+          TAG_NAME="v$VERSION"
+
+          # Determine if this is a prerelease
+          PRERELEASE_FLAG=""
+          if [[ "$VERSION" == *"rc"* ]] || [[ "$VERSION" == *"a"* ]] || [[ "$VERSION" == *"b"* ]]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          # Create the release with GitHub CLI
+          gh release create "$TAG_NAME" \
+            --title "Release $TAG_NAME" \
+            --notes "## Release $TAG_NAME
+
+          ### Installation
+          \`\`\`bash
+          pip install labbui==$VERSION
+          \`\`\`
+
+          ### Documentation
+          - [Documentation](https://labb.io/docs)
+          - [GitHub Repository](https://github.com/labbhq/labb)" \
+            $PRERELEASE_FLAG
+
+          echo "✅ GitHub release created"
+
+      - name: Upload distribution files to release
+        run: |
+          VERSION="${{ needs.checks.outputs.version }}"
+          TAG_NAME="v$VERSION"
+
+          # Upload all wheel and tar.gz files to the release
+          for file in artifacts/dist/*.whl artifacts/dist/*.tar.gz artifacts/docs/dist/*.whl artifacts/docs/dist/*.tar.gz artifacts/extras/icons/dist/*.whl artifacts/extras/icons/dist/*.tar.gz; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file to release..."
+              gh release upload "$TAG_NAME" "$file" --clobber
+            fi
+          done
+
+          echo "✅ All distribution files uploaded to release"
+
+      # TODO: manually trigger deployment for now
+      # - name: Trigger labbio deployment
+      #   if: always() && needs.build-and-publish.result == 'success'
+      #   run: |
+      #     echo "📡 Triggering labbio deployment..."
+      #     # curl -X POST "${{ secrets.DEPLOY_ENDPOINT }}"
+
+      #     echo "✅ Labbio deployment triggered"
+
+      - name: Update GitHub release with changelog
+        if: needs.generate-changelog.result == 'success'
+        run: |
+          # Get the release ID
+          RELEASE_ID=$(gh api repos/${{ github.repository }}/releases/tags/v${{ needs.checks.outputs.version }} --jq '.id')
+
+          # Get changelog entry from previous job
+          CHANGELOG_ENTRY="${{ needs.generate-changelog.outputs.changelog_entry }}"
+
+          if [ -n "$CHANGELOG_ENTRY" ]; then
+            # Update release with changelog
+            gh api repos/${{ github.repository }}/releases/$RELEASE_ID \
+              --method PATCH \
+              --field body="$CHANGELOG_ENTRY"
+
+            echo "✅ GitHub release updated with changelog"
+          fi
+
+      - name: Close release issue with changelog
+        run: |
+          RELEASE_ISSUE="${{ github.event.inputs.release-issue }}"
+          VERSION="${{ needs.checks.outputs.version }}"
+
+          # Get changelog entry
+          CHANGELOG_ENTRY="${{ needs.generate-changelog.outputs.changelog_entry }}"
+
+          # Close the main release issue with release note
+          gh issue close "$RELEASE_ISSUE" --comment "🎉 **Released in v$VERSION**
+
+          This release issue has been completed and v$VERSION has been published.
+
+          ### 📦 Installation
+          \`\`\`bash
+          pip install labbui==$VERSION
+          \`\`\`
+
+          ### 📋 Release Notes
+          - [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/v$VERSION)
+          - [PyPI Package](https://pypi.org/project/labbui/$VERSION/)
+          - [Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
+
+          ### 📝 Changelog
+          $CHANGELOG_ENTRY
+
+          ---
+
+          *This release issue was automatically closed as part of the v$VERSION release.*"
+
+          echo "✅ Release issue #$RELEASE_ISSUE closed"
+
+  notify:
+    needs: [test, checks, generate-changelog, build-and-publish, cleanup]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify on success
+        if: |
+          needs.test.result == 'success' &&
+          needs.checks.result == 'success' &&
+          needs.generate-changelog.result == 'success' &&
+          needs.build-and-publish.result == 'success' &&
+          needs.cleanup.result == 'success'
+        run: |
+          echo "✅ Release v${{ needs.checks.outputs.version }} completed successfully!"
+          echo "📦 Packages published to PyPI"
+          echo "🏷️  GitHub release created"
+          echo "🚀 Tag created and pushed"
+          echo "📋 Changelog generated from release issue #${{ github.event.inputs.release-issue }}"
+          echo "📄 CHANGELOG.md updated with categorized entries"
+          echo "🔒 Release issue closed with release notes"
+
+      - name: Notify on failure
+        if: |
+          needs.test.result == 'failure' ||
+          needs.checks.result == 'failure' ||
+          needs.generate-changelog.result == 'failure' ||
+          needs.build-and-publish.result == 'failure' ||
+          needs.cleanup.result == 'failure'
+        run: |
+          echo "❌ Release failed at one of the following stages:"
+          echo "   Test: ${{ needs.test.result }}"
+          echo "   Checks: ${{ needs.checks.result }}"
+          echo "   Generate Changelog: ${{ needs.generate-changelog.result }}"
+          echo "   Build and Publish: ${{ needs.build-and-publish.result }}"
+          echo "   Cleanup: ${{ needs.cleanup.result }}"
+          echo ""
+          echo "Please check the workflow logs for details"

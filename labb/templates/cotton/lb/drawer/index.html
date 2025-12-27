@@ -1,0 +1,44 @@
+
+{% load lb_tags %}
+<c-vars
+    drawerId="drawer"
+    class=""
+    end
+    open
+    sideClass=""
+    overlayClass=""
+    :stateClasses="{
+        'end': 'drawer-end',
+        'open': 'drawer-open'
+    }"
+/>
+
+<div
+    class="drawer {% if end %}{{ stateClasses|get_dict_item:'end' }}{% endif %} {% if open %}{{ stateClasses|get_dict_item:'open' }}{% endif %} {{ class }}"
+    {{ attrs }}
+>
+    {% if not checkbox %}
+        <c-lb.drawer.checkbox :id=drawerId />
+    {% else %}
+        {{ checkbox }}
+    {% endif %}
+
+
+    {% if sideContent %}
+        <c-lb.drawer.side :class=sideClass>
+            <c-lb.drawer.overlay :for=drawerId :class=overlayClass />
+            {{ sideContent }}
+        </c-lb.drawer.side>
+    {% elif side %}
+        {{ side }}
+    {% endif %}
+
+    {% if not content %}
+        <c-lb.drawer.content>
+            {{ slot }}
+        </c-lb.drawer.content>
+    {% else %}
+        {{ content }}
+    {% endif %}
+
+</div>

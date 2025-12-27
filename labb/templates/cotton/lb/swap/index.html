@@ -1,0 +1,29 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    effect=""
+    :effectClasses="{
+        'rotate': 'swap-rotate',
+        'flip': 'swap-flip'
+    }"
+    checked
+    disabled
+    inputClass=""
+    name=""
+    value=""
+/>
+
+<label class="swap {{ effectClasses|get_dict_item:effect }} {{ class }}" {{ attrs }}>
+    <!-- Hidden checkbox that controls the swap state -->
+    <input
+        type="checkbox"
+        class="{{ inputClass }}"
+        {% if name %}name="{{ name }}"{% endif %}
+        {% if value %}value="{{ value }}"{% endif %}
+        {% if checked %}checked{% endif %}
+        {% if disabled %}disabled{% endif %}
+    />
+
+    <!-- Swap content -->
+    {{ slot }}
+</label>

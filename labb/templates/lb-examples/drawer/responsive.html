@@ -1,0 +1,20 @@
+<c-lb.drawer drawerId="responsive-drawer" class="lg:drawer-open" sideClass="z-99 lg:z-40 h-full lg:h-96">
+  <c-slot name="sideContent">
+    <div class="p-4 h-full bg-base-200 w-64">
+      <h3 class="text-lg font-semibold mb-4">Responsive Sidebar</h3>
+      <c-lb.menu class="bg-base-200 text-base-content rounded-box w-full">
+        <c-lb.menu.item title="Dashboard" />
+        <c-lb.menu.item title="Analytics" />
+        <c-lb.menu.item title="Reports" />
+        <c-lb.menu.item title="Settings" />
+      </c-lb.menu>
+    </div>
+  </c-slot>
+
+  <div class="flex flex-col items-center justify-center p-4 h-full gap-4">
+    <p>A toggle button will show on small screens and hide on large screens</p>
+    <c-lb.drawer.toggle for="responsive-drawer" class="btn btn-primary lg:hidden">
+      Toggle Sidebar
+    </c-lb.drawer.toggle>
+  </div>
+</c-lb.drawer>

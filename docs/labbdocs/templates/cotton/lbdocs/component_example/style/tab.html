@@ -1,0 +1,16 @@
+<c-vars
+    previewStyle
+/>
+
+<!-- Tabs for preview and code -->
+<c-lb.tabs name="example_tabs_{{ title|slugify }}" class="p-2" style="box">
+    <c-lb.tabs.content name="example_tabs_{{ title|slugify }}" title="Preview" checked="true" class="rounded-lg mt-3">
+        <c-lbdocs.component_example.section.preview :style=previewStyle class="rounded-lg">
+            {{ slot }}
+        </c-lbdocs.component_example.section.preview>
+    </c-lb.tabs.content>
+
+    <c-lb.tabs.content name="example_tabs_{{ title|slugify }}" title="Code" class="mt-3">
+        <c-lbdocs.component_example.section.code code="{{ code }}" />
+    </c-lb.tabs.content>
+</c-lb.tabs>

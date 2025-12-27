@@ -1,0 +1,12 @@
+<!-- Open the modal using ID.showModal() method -->
+<c-lb.button variant="primary" onclick="default_slot_modal.showModal()">Open Simple Modal</c-lb.button>
+
+<c-lb.modal id="default_slot_modal" boxClass="shadow border">
+  <h2 class="text-2xl font-bold mb-4">Default Slot Only</h2>
+  <p class="mb-4">This modal only uses the default slot - content is automatically wrapped in modal.box.</p>
+  <c-lb.modal.action>
+    <form method="dialog">
+      <c-lb.button>Close</c-lb.button>
+    </form>
+  </c-lb.modal.action>
+</c-lb.modal>

@@ -1,0 +1,155 @@
+<c-vars
+    component_name=""
+    class=""
+/>
+
+{% load lb_tags %}
+{% load docs_tags %}
+
+<div class="not-prose {{ class }} border-l border-base-content/10 pl-4 ml-2 py-2">
+
+
+    {% if component_name %}
+        {% with component_spec=component_name|get_component_spec %}
+
+        {% if component_spec %}
+            <!-- Variables Table -->
+            {% if component_spec.variables %}
+                <div class="mb-8">
+                    <div class="overflow-x-auto">
+                        <c-lb.table size="sm">
+                            <thead>
+                                <tr class="bg-base-200 text-xs text-base-content/50">
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for var_name, var_spec in component_spec.variables.items %}
+                                    <tr>
+                                        <td class="font-mono text-sm">{{ var_name }}</td>
+                                        <td>
+                                            {% if var_spec.type == "enum" %}
+                                                {% if var_spec.values %}
+                                                    <div class="flex flex-wrap gap-1">
+                                                        {% for value in var_spec.values %}
+                                                            {% if value != "" %}
+                                                                <span class="badge badge-primary badge-outline badge-xs">{{ value }}</span>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            {% elif var_spec.type == "boolean" %}
+                                                <span class="badge badge-info badge-xs">boolean</span>
+                                            {% elif var_spec.type == "map" %}
+                                                <div class="flex  gap-1">
+                                                    <span class="badge badge-secondary badge-xs">map</span>
+                                                    <span class="badge badge-ghost badge-outline badge-xs font-mono">{{ var_spec.variable }}</span>
+                                                </div>
+                                            {% else %}
+                                                <span class="badge badge-ghost badge-xs">{{ var_spec.type|default:"string" }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center text-nowrap">
+                                            {% if var_spec.default is not None and var_spec.default != "" %}
+                                                <code class="badge badge-ghost badge-xs">{{ var_spec.default|stringformat:"s" }}</code>
+                                            {% else %}
+                                                <span class="text-base-content/50">-</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if var_spec.required %}
+                                                <span class="badge badge-error badge-xs">Yes</span>
+                                            {% else %}
+                                                <span class="badge badge-success badge-xs">No</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-sm">{{ var_spec.description|default:"-" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </c-lb.table>
+                    </div>
+                </div>
+            {% endif %}
+
+
+            <!-- Slots -->
+            {% if component_spec.slots %}
+                <div class="mb-8">
+                    <div class="overflow-x-auto">
+                        <c-lb.table size="sm">
+                            <thead>
+                                <tr class="bg-base-200 text-xs text-base-content/50">
+                                    <th>Slot Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for slot_name, slot_spec in component_spec.slots.items %}
+                                    <tr>
+                                        <td class="font-mono text-sm">
+                                            {% if slot_name == "default" %}
+                                                <span class="badge badge-primary badge-sm">default</span>
+                                            {% else %}
+                                                {{ slot_name }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-sm">{{ slot_spec.description|default:"-" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </c-lb.table>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Events -->
+            {% if component_spec.events %}
+                <div class="mb-8">
+                    <h4 class="text-md font-medium mb-3">Events</h4>
+                    <div class="overflow-x-auto">
+                        <c-lb.table zebra size="sm">
+                            <thead>
+                                <tr>
+                                    <th>Event Name</th>
+                                    <th>Description</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for event in component_spec.events %}
+                                    <tr>
+                                        <td class="font-mono text-sm">{{ event.name }}</td>
+                                        <td class="text-sm">{{ event.description|default:"-" }}</td>
+                                        <td class="text-sm">{{ event.data|default:"-" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </c-lb.table>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div class="alert alert-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+                <span>Component "{{ component_name }}" not found in registry.</span>
+            </div>
+        {% endif %}
+
+        {% endwith %}
+    {% else %}
+        <div class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>No component name provided.</span>
+        </div>
+    {% endif %}
+</div>

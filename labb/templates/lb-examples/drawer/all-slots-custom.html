@@ -1,0 +1,30 @@
+<c-lb.drawer drawerId="all-custom-drawer" end sideClass="z-99">
+  <c-slot name="checkbox">
+    <c-lb.drawer.checkbox id="all-custom-drawer" />
+  </c-slot>
+
+  <c-slot name="content">
+    <c-lb.drawer.content as="section" class="flex flex-col items-center justify-center p-4 bg-base-200 text-center">
+      <h2 class="text-2xl font-bold mb-4">All Slots Custom</h2>
+      <p class="mb-4">This drawer customizes all available slots.</p>
+      <c-lb.drawer.toggle for="all-custom-drawer" class="btn btn-accent">
+        Open All Custom Drawer
+      </c-lb.drawer.toggle>
+    </c-lb.drawer.content>
+  </c-slot>
+
+  <c-slot name="side">
+    <c-lb.drawer.side class="z-99">
+      <c-lb.drawer.overlay for="all-custom-drawer" class="bg-black bg-opacity-75" />
+      <div class="p-4 h-full bg-base-200 w-64">
+        <h3 class="text-lg font-semibold mb-4">All Custom Slots</h3>
+        <p class="mb-4">Checkbox, content, and side are all customized.</p>
+        <c-lb.menu class="bg-base-200 text-base-content rounded-box w-full">
+          <c-lb.menu.item title="Custom Item 1" />
+          <c-lb.menu.item title="Custom Item 2" />
+          <c-lb.menu.item title="Custom Item 3" />
+        </c-lb.menu>
+      </div>
+    </c-lb.drawer.side>
+  </c-slot>
+</c-lb.drawer>

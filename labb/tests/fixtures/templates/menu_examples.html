@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu Examples</title>
+</head>
+<body>
+    <!-- Vertical menu (default) -->
+    <c-lb.menu title="Navigation">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Contact</a></li>
+    </c-lb.menu>
+
+    <!-- Horizontal menu -->
+    <c-lb.menu orientation="horizontal" size="lg" classNames="navbar-menu">
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Logout</a></li>
+    </c-lb.menu>
+
+    <!-- Small vertical menu with ID -->
+    <c-lb.menu id="sidebar-menu" size="sm" as="nav">
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Preferences</a></li>
+    </c-lb.menu>
+
+    <!-- Extra large horizontal menu -->
+    <c-lb.menu orientation="horizontal" size="xl" title="Main Navigation" as="ol">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+    </c-lb.menu>
+
+    <!-- Menu with custom classes -->
+    <c-lb.menu classNames="bg-base-100 rounded-box shadow-lg" size="md">
+        <li><a href="#">Item 1</a></li>
+        <li><a href="#">Item 2</a></li>
+    </c-lb.menu>
+</body>
+</html>

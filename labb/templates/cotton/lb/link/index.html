@@ -1,0 +1,48 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    as="a"
+    href=""
+    viewname=""
+    variant=""
+    hover
+    :variantClasses="{
+        'neutral': 'link-neutral',
+        'primary': 'link-primary',
+        'secondary': 'link-secondary',
+        'accent': 'link-accent',
+        'info': 'link-info',
+        'success': 'link-success',
+        'warning': 'link-warning',
+        'error': 'link-error'
+    }"
+/>
+
+{% if viewname %}
+    {% resolve_labb_link viewname attrs as resolved_url %}
+    <{{ as }}
+        {% if resolved_url %}href="{{ resolved_url }}"{% endif %}
+        class="
+            link
+            {{ variantClasses|get_dict_item:variant }}
+            {% if hover %}link-hover{% endif %}
+            {{ class }}
+        "
+        {{ attrs|remove_l_attrs }}
+    >
+        {{ slot }}
+    </{{ as }}>
+{% else %}
+    <{{ as }}
+        class="
+            link
+            {{ variantClasses|get_dict_item:variant }}
+            {% if hover %}link-hover{% endif %}
+            {{ class }}
+        "
+        {% if href %}href="{{ href }}"{% endif %}
+        {{ attrs|remove_l_attrs }}
+    >
+        {{ slot }}
+    </{{ as }}>
+{% endif %}

@@ -1,0 +1,20 @@
+<c-lb.drawer drawerId="custom-overlay-drawer" overlayClass="bg-black bg-opacity-50" sideClass="z-99">
+  <c-slot name="sideContent">
+    <div class="p-4 h-full bg-base-200 w-64">
+      <h3 class="text-lg font-semibold mb-4">Custom Overlay</h3>
+      <p class="mb-4">This drawer has a custom dark overlay.</p>
+      <c-lb.menu class="bg-base-200 text-base-content rounded-box w-full">
+        <c-lb.menu.item title="Dashboard" />
+        <c-lb.menu.item title="Analytics" />
+        <c-lb.menu.item title="Reports" />
+        <c-lb.menu.item title="Settings" />
+      </c-lb.menu>
+    </div>
+  </c-slot>
+
+  <div class="flex flex-col items-center justify-center p-4">
+    <c-lb.drawer.toggle for="custom-overlay-drawer" class="btn btn-secondary">
+      Open with Custom Overlay
+    </c-lb.drawer.toggle>
+  </div>
+</c-lb.drawer>

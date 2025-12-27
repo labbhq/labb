@@ -1,0 +1,15 @@
+
+<!--
+To enable backend theme persistence, add the dependencies component to your base template's <head> section:
+<head>
+    ...
+    <c-lb.m.dependencies setThemeEndpoint="{% url 'set_theme' %}" />
+    ...
+</head>
+-->
+
+<div class="flex items-center gap-4">
+  <span class="text-sm">Theme:</span>
+  <c-lb.toggle class="theme-controller" value="light" size="sm" />
+  <span class="text-sm">Light Mode</span>
+</div>

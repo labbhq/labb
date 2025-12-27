@@ -1,0 +1,37 @@
+<c-vars
+    navigation
+
+    linkClass="group flex items-center gap-2 hover:text-base-content transition-colors bg-base-200/30 hover:bg-base-200/70 rounded-lg py-3 px-4"
+    linkTextClass="text-xs uppercase tracking-wide text-base-content/80 font-light"
+    linkTitleClass="text-md tracking-wider"
+    linkIconClass="transition-transform"
+/>
+
+<!-- Page Navigation -->
+{% if navigation.prev or navigation.next %}
+    <div class="flex flex-wrap justify-between items-start gap-4 mt-12 pt-8">
+        <div class="flex-shrink-0 min-w-0">
+            {% if navigation.prev %}
+                <a href="{{ navigation.prev.path }}" class="{{ linkClass }}">
+                    <c-lbi.rmx.arrow-left w="16" h="16" class="{{ linkIconClass }} group-hover:-translate-x-0.5" />
+                    <div class="flex flex-col min-w-0">
+                        <span class="{{ linkTextClass }}">Prev</span>
+                        <span class="{{ linkTitleClass }} truncate">{{ navigation.prev.title }}</span>
+                    </div>
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="flex-shrink-0 min-w-0 text-right">
+            {% if navigation.next %}
+                <a href="{{ navigation.next.path }}" class="{{ linkClass }}">
+                    <div class="flex flex-col text-right min-w-0">
+                        <span class="{{ linkTextClass }}">Next</span>
+                        <span class="{{ linkTitleClass }} truncate">{{ navigation.next.title }}</span>
+                    </div>
+                    <c-lbi.rmx.arrow-right w="16" h="16" class="{{ linkIconClass }} group-hover:translate-x-0.5" />
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

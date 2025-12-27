@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drawer Examples</title>
+</head>
+<body>
+    <!-- Simple left drawer -->
+    <c-lb.drawer id="main-drawer">
+        <c-lb.drawer.toggle id="drawer-toggle" />
+        <c-lb.drawer.content>
+            <h1>Main Content</h1>
+            <p>This is the main page content.</p>
+        </c-lb.drawer.content>
+        <c-lb.drawer.side>
+            <c-lb.drawer.overlay toggle_id="drawer-toggle" />
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </nav>
+        </c-lb.drawer.side>
+    </c-lb.drawer>
+
+    <!-- Right side drawer -->
+    <c-lb.drawer placement="end" id="right-drawer" classNames="custom-drawer">
+        <c-lb.drawer.toggle />
+        <c-lb.drawer.content>
+            <header>Header content</header>
+            <main>Main content area</main>
+        </c-lb.drawer.content>
+        <c-lb.drawer.side classNames="bg-base-200">
+            <c-lb.drawer.overlay />
+            <div class="p-4">
+                <h2>Sidebar</h2>
+                <p>Right side content</p>
+            </div>
+        </c-lb.drawer.side>
+    </c-lb.drawer>
+
+    <!-- Drawer with open state -->
+    <c-lb.drawer open="true" id="open-drawer">
+        <c-lb.drawer.toggle toggle_id="open-toggle" />
+        <c-lb.drawer.content id="content-area">
+            <div class="container">Content here</div>
+        </c-lb.drawer.content>
+        <c-lb.drawer.side id="sidebar-area">
+            <c-lb.drawer.overlay toggle_id="open-toggle" classNames="backdrop-blur" />
+            <aside>Sidebar content</aside>
+        </c-lb.drawer.side>
+    </c-lb.drawer>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<c-lb.drawer drawerId="custom-side-drawer" sideClass="z-99">
+  <c-slot name="side">
+    <c-lb.drawer.side class="z-99">
+      <c-lb.drawer.overlay for="custom-side-drawer" />
+      <div class="p-4 h-full bg-gradient-to-b from-primary to-secondary text-primary-content w-64">
+        <h3 class="text-lg font-semibold mb-4">Custom Side</h3>
+        <p class="mb-4">This drawer uses a custom side slot with gradient background.</p>
+        <c-lb.menu class="bg-base-200 text-base-content rounded-box w-full">
+          <c-lb.menu.item title="Home" />
+          <c-lb.menu.item title="About" />
+          <c-lb.menu.item title="Contact" />
+        </c-lb.menu>
+      </div>
+    </c-lb.drawer.side>
+  </c-slot>
+
+  <div class="flex flex-col items-center justify-center p-4">
+    <c-lb.drawer.toggle for="custom-side-drawer" class="btn btn-primary">
+      Open with Custom Side
+    </c-lb.drawer.toggle>
+  </div>
+</c-lb.drawer>

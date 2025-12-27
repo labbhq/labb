@@ -1,0 +1,48 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant=""
+    size="lg"
+    flower
+    label=""
+    icon=""
+    iconFill
+    iconClass=""
+    :variantClasses="{
+        'neutral': 'btn-neutral',
+        'primary': 'btn-primary',
+        'secondary': 'btn-secondary',
+        'accent': 'btn-accent',
+        'info': 'btn-info',
+        'success': 'btn-success',
+        'warning': 'btn-warning',
+        'error': 'btn-error'
+    }"
+    :sizeClasses="{
+        'xs': 'btn-xs',
+        'sm': 'btn-sm',
+        'md': 'btn-md',
+        'lg': 'btn-lg',
+        'xl': 'btn-xl'
+    }"
+/>
+
+<div class="fab {% if flower %}fab-flower{% endif %} {{ class }}" {{ attrs }}>
+    <!-- Main focusable button (using div for Safari compatibility) -->
+    {% if icon or label %}
+        <div
+            tabindex="0"
+            role="button"
+            class="btn btn-circle {{ sizeClasses|get_dict_item:size }} {{ variantClasses|get_dict_item:variant }}"
+        >
+            {% if icon %}
+                <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+            {% elif label %}
+                {{ label }}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Speed dial action buttons (main slot) -->
+    {{ slot }}
+</div>

@@ -1,0 +1,22 @@
+<c-lb.button variant="error" onclick="confirm_modal.showModal()">Delete Item</c-lb.button>
+
+<c-lb.modal id="confirm_modal" withBackdrop boxClass="shadow border">
+    <div class="flex items-center gap-4">
+        <div class="flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="font-bold text-lg">Delete Confirmation</h3>
+            <p class="py-2">Are you sure you want to delete this item? This action cannot be undone.</p>
+        </div>
+    </div>
+
+    <c-lb.modal.action class="justify-end">
+        <form method="dialog" class="flex gap-2">
+            <c-lb.button>Cancel</c-lb.button>
+            <c-lb.button variant="error">Delete</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>

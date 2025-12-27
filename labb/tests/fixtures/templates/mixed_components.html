@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mixed Components</title>
+</head>
+<body>
+    <!-- Complex layout with multiple components -->
+    <c-lb.drawer id="app-drawer" placement="end">
+        <c-lb.drawer.toggle id="app-toggle" />
+
+        <c-lb.drawer.content>
+            <!-- Header with horizontal menu -->
+            <header>
+                <c-lb.menu orientation="horizontal" size="md" classNames="navbar">
+                    <li><c-lb.button variant="ghost" size="sm">Home</c-lb.button></li>
+                    <li><c-lb.button variant="ghost" size="sm">About</c-lb.button></li>
+                    <li><c-lb.button variant="primary" size="sm">Login</c-lb.button></li>
+                </c-lb.menu>
+            </header>
+
+            <!-- Main content area -->
+            <main class="container mx-auto p-4">
+                <h1>Welcome to our site</h1>
+
+                <!-- Action buttons -->
+                <div class="flex gap-4 my-4">
+                    <c-lb.button variant="primary" size="lg" modifier="wide">Get Started</c-lb.button>
+                    <c-lb.button variant="secondary" btnStyle="outline">Learn More</c-lb.button>
+                </div>
+
+                <!-- Nested drawer example -->
+                <c-lb.drawer id="nested-drawer">
+                    <c-lb.drawer.toggle />
+                    <c-lb.drawer.content>
+                        <p>Nested content</p>
+                    </c-lb.drawer.content>
+                    <c-lb.drawer.side>
+                        <c-lb.drawer.overlay />
+                        <c-lb.menu size="sm">
+                            <li><a href="#">Sub item 1</a></li>
+                            <li><a href="#">Sub item 2</a></li>
+                        </c-lb.menu>
+                    </c-lb.drawer.side>
+                </c-lb.drawer>
+            </main>
+        </c-lb.drawer.content>
+
+        <c-lb.drawer.side>
+            <c-lb.drawer.overlay toggle_id="app-toggle" />
+
+            <!-- Sidebar menu -->
+            <c-lb.menu title="Settings" classNames="w-64 min-h-full bg-base-200">
+                <li><c-lb.button variant="ghost" modifier="block">Profile</c-lb.button></li>
+                <li><c-lb.button variant="ghost" modifier="block">Account</c-lb.button></li>
+                <li><c-lb.button variant="ghost" modifier="block">Preferences</c-lb.button></li>
+                <li><c-lb.button variant="error" btnStyle="outline" modifier="block">Logout</c-lb.button></li>
+            </c-lb.menu>
+        </c-lb.drawer.side>
+    </c-lb.drawer>
+
+    <!-- Footer with buttons -->
+    <footer class="p-4">
+        <c-lb.button variant="info" btnStyle="link" size="xs">Privacy Policy</c-lb.button>
+        <c-lb.button variant="info" btnStyle="link" size="xs">Terms of Service</c-lb.button>
+    </footer>
+</body>
+</html>

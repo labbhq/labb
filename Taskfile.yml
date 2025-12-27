@@ -1,0 +1,90 @@
+version: '3'
+
+tasks:
+  install:
+    desc: Install main project dependencies
+    dir: .
+    cmds:
+      - poetry install --with dev
+    sources:
+      - pyproject.toml
+      - poetry.lock
+    generates:
+      - poetry.lock
+
+  venv:
+    desc: Show poetry virtual environment activation instructions
+    cmds:
+      - echo "To activate the virtual environment, run:"
+      - echo "eval \"\$(poetry env activate)\""
+
+  lint:
+    desc: Run linting for the project
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run ruff format
+      - poetry run ruff check --select I --fix
+
+  check:
+    desc: Run checking for the project
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run pre-commit run --all-files
+
+  test:icons:
+    desc: Run tests for the icons project
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run pytest extras/icons
+
+  test:
+    desc: Run tests for the main project
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run pytest
+
+  llms:generate:
+    desc: Generate llms.txt file for LLM documentation
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run python -m labb.llms.generator
+
+  clean:
+    desc: Clean up generated files and caches
+    cmds:
+      - find . -type f -name "*.pyc" -delete
+      - find . -type d -name "__pycache__" -delete
+      - find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+      - echo "Cleaned up generated files"
+
+  version:
+    desc: Update version numbers across all packages
+    dir: .
+    cmds:
+      - poetry run python scripts/version_manager.py {{.CLI_ARGS}}
+    summary: |
+      Update version numbers across all packages.
+
+      Examples:
+        task version -- 0.2.0                    # Update to version 0.2.0
+        task version -- 0.2.0 --dry-run         # Preview changes without modifying files
+
+      The script will update versions in:
+      - Main project (pyproject.toml, labb/__init__.py)
+      - Docs package (docs/pyproject.toml, docs/labbdocs/__init__.py)
+      - Icons package (extras/icons/pyproject.toml, extras/icons/labbicons/__init__.py)
+
+      After updating versions:
+      1. Review changes: git diff
+      2. Commit changes: git add . && git commit -m 'Bump version to X.X.X'
+      3. Push to main branch to trigger release
+
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list

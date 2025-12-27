@@ -1,0 +1,113 @@
+<!-- Interactive example showing indeterminate state -->
+<div class="space-y-4 sm:w-50">
+
+    <!-- Parent checkbox -->
+    <div class="flex items-center gap-2 p-3 bg-base-200 rounded-lg w-full">
+        <c-lb.swap id="parent-swap">
+            <c-lb.swap.on>
+                <c-lbi n="rmx.check" w="1.5em" h="1.5em" class="text-success" />
+            </c-lb.swap.on>
+            <c-lb.swap.off>
+                <c-lbi n="rmx.close" w="1.5em" h="1.5em" class="text-error" />
+            </c-lb.swap.off>
+            <c-lb.swap.indeterminate>
+                <c-lbi n="rmx.subtract" w="1.5em" h="1.5em" class="text-warning" />
+            </c-lb.swap.indeterminate>
+        </c-lb.swap>
+        <span class="font-medium">Select All Files</span>
+    </div>
+
+    <!-- Child checkboxes -->
+    <div class="ml-6 space-y-2">
+        <div class="flex items-center gap-2">
+            <c-lb.swap class="child-checkbox">
+                <c-lb.swap.on>
+                    <c-lbi n="rmx.check" w="1em" h="1em" class="text-success" />
+                </c-lb.swap.on>
+                <c-lb.swap.off>
+                    <c-lbi n="rmx.close" w="1em" h="1em" class="text-error" />
+                </c-lb.swap.off>
+            </c-lb.swap>
+            <span class="text-sm">Document 1</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <c-lb.swap class="child-checkbox">
+                <c-lb.swap.on>
+                    <c-lbi n="rmx.check" w="1em" h="1em" class="text-success" />
+                </c-lb.swap.on>
+                <c-lb.swap.off>
+                    <c-lbi n="rmx.close" w="1em" h="1em" class="text-error" />
+                </c-lb.swap.off>
+            </c-lb.swap>
+            <span class="text-sm">Document 2</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <c-lb.swap class="child-checkbox">
+                <c-lb.swap.on>
+                    <c-lbi n="rmx.check" w="1em" h="1em" class="text-success" />
+                </c-lb.swap.on>
+                <c-lb.swap.off>
+                    <c-lbi n="rmx.close" w="1em" h="1em" class="text-error" />
+                </c-lb.swap.off>
+            </c-lb.swap>
+            <span class="text-sm">Document 3</span>
+        </div>
+    </div>
+
+    <!-- Status display -->
+    <div class="text-xs text-base-content/70 mt-4 p-3 bg-base-100 rounded border">
+        <p><strong>Status:</strong> <span id="status-text">No files selected</span></p>
+        <p><strong>Parent state:</strong> <span id="parent-state">Unchecked</span></p>
+    </div>
+
+    <!-- JavaScript to handle the logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const parentCheckbox = document.querySelector('#parent-swap input[type="checkbox"]');
+            const childCheckboxes = document.querySelectorAll('.child-checkbox input[type="checkbox"]');
+            const statusText = document.getElementById('status-text');
+            const parentState = document.getElementById('parent-state');
+
+            // Function to update parent checkbox state
+            function updateParentState() {
+                const checkedCount = Array.from(childCheckboxes).filter(cb => cb.checked).length;
+                const totalCount = childCheckboxes.length;
+
+                // Update status text
+                if (checkedCount === 0) {
+                    statusText.textContent = 'No files selected';
+                    parentState.textContent = 'Unchecked';
+                    parentCheckbox.checked = false;
+                    parentCheckbox.indeterminate = false;
+                } else if (checkedCount === totalCount) {
+                    statusText.textContent = 'All files selected';
+                    parentState.textContent = 'Checked';
+                    parentCheckbox.checked = true;
+                    parentCheckbox.indeterminate = false;
+                } else {
+                    statusText.textContent = `${checkedCount} of ${totalCount} files selected`;
+                    parentState.textContent = 'Indeterminate';
+                    parentCheckbox.checked = false;
+                    parentCheckbox.indeterminate = true;
+                }
+            }
+
+            // Add event listeners to child checkboxes
+            childCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateParentState);
+            });
+
+            // Add event listener to parent checkbox
+            parentCheckbox.addEventListener('change', function() {
+                const isChecked = this.checked;
+                childCheckboxes.forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
+                updateParentState();
+            });
+
+            // Initialize state
+            updateParentState();
+        });
+    </script>
+</div>

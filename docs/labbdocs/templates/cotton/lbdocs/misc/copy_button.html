@@ -1,0 +1,18 @@
+<c-vars
+    text=""
+    label=""
+    elementId=""
+    icon=""
+/>
+
+<div class="flex items-center gap-2">
+    <c-lb.button href="#" onclick="copyToClipboard('{{ text }}', '{{ elementId }}')" size="xs">
+        {% if icon %}
+            <c-lbi n="{{ icon }}" w="1em" h="1em" />
+        {% endif %}
+
+        {{ label }}
+    </c-lb.button>
+    {% comment %} todo: change this to tooltip {% endcomment %}
+    <span class="text-xs text-gray-500 hidden" id="{{ elementId }}-copied">Copied</span>
+</div>

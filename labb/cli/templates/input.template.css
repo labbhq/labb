@@ -1,0 +1,108 @@
+/* labb CSS Setup for Tailwind CSS 4 + DaisyUI 5 */
+
+/* Override Tailwind's @property to allow shadow color inheritance for labn */
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: true !important;
+}
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light, dark;
+};
+
+@plugin "daisyui/theme" {
+  name: "labb-light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(96% 0.002 247);
+  --color-base-300: oklch(89% 0.003 247);
+  --color-base-content: oklch(9% 0.005 247);
+
+  --color-primary: oklch(9% 0.005 247);
+  --color-primary-content: oklch(98% 0.002 247);
+
+  --color-secondary: oklch(71% 0.004 247);
+  --color-secondary-content: oklch(98% 0.002 247);
+
+  --color-accent: oklch(45% 0.006 247);
+  --color-accent-content: oklch(98% 0.002 247);
+
+  --color-neutral: oklch(25% 0.004 247);
+  --color-neutral-content: oklch(98% 0.002 247);
+
+  --color-info: oklch(64% 0.12 221);
+  --color-info-content: oklch(98% 0.002 221);
+
+  --color-success: oklch(60% 0.11 145);
+  --color-success-content: oklch(98% 0.002 145);
+
+  --color-warning: oklch(75% 0.15 85);
+  --color-warning-content: oklch(15% 0.02 85);
+
+  --color-error: oklch(58% 0.15 15);
+  --color-error-content: oklch(98% 0.002 15);
+
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "labb-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(9% 0.005 247);
+  --color-base-200: oklch(30% 0.007 247);
+  --color-base-300: oklch(50% 0.010 247);
+  --color-base-content: oklch(98% 0.002 247);
+
+  --color-primary: oklch(98% 0.002 247);
+  --color-primary-content: oklch(9% 0.005 247);
+
+  --color-secondary: oklch(71% 0.004 247);
+  --color-secondary-content: oklch(9% 0.005 247);
+
+  --color-accent: oklch(82% 0.006 247);
+  --color-accent-content: oklch(9% 0.005 247);
+
+  --color-neutral: oklch(25% 0.004 247);
+  --color-neutral-content: oklch(98% 0.002 247);
+
+  --color-info: oklch(70% 0.12 221);
+  --color-info-content: oklch(9% 0.005 221);
+
+  --color-success: oklch(65% 0.11 145);
+  --color-success-content: oklch(9% 0.005 145);
+
+  --color-warning: oklch(80% 0.15 85);
+  --color-warning-content: oklch(9% 0.005 85);
+
+  --color-error: oklch(65% 0.15 15);
+  --color-error-content: oklch(9% 0.005 15);
+
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* Custom project styles (optional) */
+/* Add your custom CSS below this line */

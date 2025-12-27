@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+recursive-include labb/templates *.html
+recursive-include labb/components/schema *.yaml
+recursive-include labb/cli/templates *.css

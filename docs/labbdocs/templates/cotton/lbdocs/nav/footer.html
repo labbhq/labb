@@ -1,0 +1,89 @@
+{% load lb_tags %}
+{% load static %}
+
+<c-vars
+    class=""
+    :themeOptions="{
+        '__system__': 'System',
+        'labb-light': 'Light',
+        'labb-dark': 'Dark',
+        'light': 'Daisy Light',
+        'dark': 'Daisy Dark'
+    }"
+/>
+
+{% labb_theme_val as theme %}
+
+<c-lb.footer direction="horizontal" class="border-t border-base-300 bg-base-100 py-4 px-4 {{ class }}">
+    <aside class="flex flex-row gap-4 items-center">
+        <c-lbdocs.ui.logo height="30" />
+        <span class="text-xs sm:text-sm">
+            <span class="hidden sm:inline">All rights reserved </span>© {% now "Y" %}
+        </span>
+    </aside>
+
+    <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end flex items-center">
+        <a href="https://twitter.com/labbhq" target="_blank" rel="noopener noreferrer" class="link link-hover" aria-label="Twitter">
+            <c-lbi n="rmx.twitter" w="1.5em" h="1.5em" />
+        </a>
+        <a href="https://github.com/labbhq" target="_blank" rel="noopener noreferrer" class="link link-hover" aria-label="GitHub">
+            <c-lbi n="rmx.github" w="1.5em" h="1.5em" />
+        </a>
+        <c-lb.dropdown alignment="end" placement="top" size="sm">
+            <c-lb.dropdown.trigger class="btn btn-sm btn-ghost btn-circle">
+                <c-lbi.rmx.sun w="1.5em" h="1.5em" />
+            </c-lb.dropdown.trigger>
+            <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
+                <c-lb.menu class="w-full">
+                    {% for key, value in themeOptions.items %}
+                        <input
+                            type="radio"
+                            name="doc-theme"
+                            value="{{key}}"
+                            class="theme-controller btn btn-ghost btn-sm justify-start"
+                            aria-label="{{value}}"
+                            {% if key == theme %}checked{% endif %}
+                        />
+                    {% endfor %}
+                </c-lb.menu>
+            </c-lb.dropdown.content>
+        </c-lb.dropdown>
+    </nav>
+</c-lb.footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get current theme from data-theme attribute
+    const currentTheme = "{{ theme }}";
+
+    // Find all theme controller inputs in the footer
+    const themeInputs = document.querySelectorAll('input[name="doc-theme"].theme-controller');
+
+    // Function to update active state
+    function updateActiveState() {
+        themeInputs.forEach(function(input) {
+            if (input.value === currentTheme) {
+                input.classList.add('btn-active');
+            } else {
+                input.classList.remove('btn-active');
+            }
+        });
+    }
+
+    // Set initial active state
+    updateActiveState();
+
+    // Add change event listeners to update active state when theme changes
+    themeInputs.forEach(function(input) {
+        input.addEventListener('change', function() {
+            // Remove active class from all inputs
+            themeInputs.forEach(function(btn) {
+                btn.classList.remove('btn-active');
+            });
+
+            // Add active class to the selected input
+            this.classList.add('btn-active');
+        });
+    });
+});
+</script>

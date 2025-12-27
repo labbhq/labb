@@ -1,0 +1,13 @@
+<c-vars
+    class=""
+    src=""
+    alt="Second comparison image"
+/>
+
+<div class="diff-item-2 {{ class }}" role="img" {{ attrs }}>
+    {% if slot %}
+        {{ slot }}
+    {% elif src %}
+        <img alt="{{ alt }}" src="{{ src }}" />
+    {% endif %}
+</div>

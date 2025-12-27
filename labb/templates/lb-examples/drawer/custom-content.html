@@ -1,0 +1,23 @@
+<c-lb.drawer drawerId="custom-content-drawer" sideClass="z-99">
+  <c-slot name="content">
+    <c-lb.drawer.content as="main" class="flex flex-col items-center justify-center p-4 text-center">
+      <h2 class="text-2xl font-bold mb-4">Custom Content Area</h2>
+      <p class="mb-4">This drawer uses a custom content slot with a main element.</p>
+      <c-lb.drawer.toggle for="custom-content-drawer" class="btn btn-secondary">
+        Open Drawer
+      </c-lb.drawer.toggle>
+    </c-lb.drawer.content>
+  </c-slot>
+
+  <c-slot name="sideContent">
+    <div class="p-4 h-full bg-base-200 w-64">
+      <h3 class="text-lg font-semibold mb-4">Custom Content</h3>
+      <p class="mb-4">The main content area was completely customized.</p>
+      <c-lb.menu class="bg-base-200 text-base-content rounded-box w-full">
+        <c-lb.menu.item title="Dashboard" />
+        <c-lb.menu.item title="Profile" />
+        <c-lb.menu.item title="Settings" />
+      </c-lb.menu>
+    </div>
+  </c-slot>
+</c-lb.drawer>

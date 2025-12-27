@@ -1,0 +1,50 @@
+<div class="flex gap-2 flex-wrap">
+    <c-lb.button variant="outline" onclick="top_right_modal.showModal()">Top Right</c-lb.button>
+    <c-lb.button variant="outline" onclick="top_left_modal.showModal()">Top Left</c-lb.button>
+    <c-lb.button variant="outline" onclick="bottom_right_modal.showModal()">Bottom Right</c-lb.button>
+    <c-lb.button variant="outline" onclick="bottom_left_modal.showModal()">Bottom Left</c-lb.button>
+</div>
+
+<c-lb.modal id="top_right_modal" withCloseBtn closeBtnPosition="top-right" boxClass="shadow border">
+    <h3 class="font-bold text-lg">Top Right Close Button</h3>
+    <p class="py-4">Close button is positioned at the top right corner</p>
+    <c-lb.modal.action boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>
+
+<c-lb.modal id="top_left_modal" withCloseBtn closeBtnPosition="top-left" boxClass="shadow border">
+    <div class="text-right">
+        <h3 class="font-bold text-lg">Top Left Close Button</h3>
+        <p class="py-4">Close button is positioned at the top left corner</p>
+    </div>
+    <c-lb.modal.action class="justify-start" boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>
+
+<c-lb.modal id="bottom_right_modal" withCloseBtn closeBtnPosition="bottom-right" boxClass="shadow border">
+    <h3 class="font-bold text-lg">Bottom Right Close Button</h3>
+    <p class="py-4">Close button is positioned at the bottom right corner</p>
+    <c-lb.modal.action class="justify-start" boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>
+
+<c-lb.modal id="bottom_left_modal" withCloseBtn closeBtnPosition="bottom-left" boxClass="shadow border">
+    <div class="text-right">
+        <h3 class="font-bold text-lg">Bottom Left Close Button</h3>
+        <p class="py-4">Close button is positioned at the bottom left corner</p>
+    </div>
+    <c-lb.modal.action class="justify-end" boxClass="shadow border">
+        <form method="dialog">
+            <c-lb.button>Close</c-lb.button>
+        </form>
+    </c-lb.modal.action>
+</c-lb.modal>

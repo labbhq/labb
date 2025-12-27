@@ -1,0 +1,22 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    placement="bottom"
+    :placementClasses="{
+        'top': 'dropdown-top',
+        'left': 'dropdown-left',
+        'right': 'dropdown-right'
+    }"
+    alignment=""
+    :alignmentClasses="{
+        'start': 'dropdown-start',
+        'center': 'dropdown-center',
+        'end': 'dropdown-end'
+    }"
+    hover
+    open
+/>
+
+<div class="dropdown {{ placementClasses|get_dict_item:placement }} {{ alignmentClasses|get_dict_item:alignment }}{% if hover %} dropdown-hover{% endif %}{% if open %} dropdown-open{% endif %} {{ class }}" {{ attrs }}>
+    {{ slot }}
+</div>

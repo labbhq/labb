@@ -1,0 +1,252 @@
+# labb - Django Component Library
+
+labb is a Django component library providing components built with Django Cotton and styled with Tailwind CSS + daisyUI 5.
+
+## Key Features
+- **Django Cotton Integration**: HTML-like component syntax
+- **Backend Rendered**: Server-side rendering for fast loads and SEO
+- **No JavaScript Required**: Components work without JS by default
+- **Theme Support**: Built-in light/dark themes with custom theme creation
+- **CLI Tool**: `labb` command for project setup, CSS building, and component scanning
+
+## Installation
+1. Install: `pip install labbui` or `poetry add labbui`
+2. Add 'django_cotton', 'labb' to INSTALLED_APPS
+3. Initialize project (from Django project root): `labb init --defaults`
+4. Install dependencies: `labb setup --install-deps`
+5. Start development: `labb dev`
+
+## Icons (Optional)
+Install labbicons for icon support: `pip install labbicons` or `poetry add labbicons`
+
+**Icon Usage:**
+- Search icons: `labb icons search "arrow"`
+- List packs: `labb icons packs`
+- Get icon info: `labb icons info rmx.arrow-down`
+- Use in components that supports icon: `<c-lb.button icon="rmx.arrow-down">Button</c-lb.button>`
+- Direct icon usage: `<c-lbi.rmx.arrow-down w="3" h="3" />`
+
+**Examples:**
+```html
+<!-- Badge with integrated icon -->
+<c-lb.badge variant="info" icon="rmx.information">Info</c-lb.badge>
+
+<!-- Badge with direct icon usage -->
+<c-lb.badge variant="success">
+  <c-lbi n="rmx.check" w="1em" h="1em" />
+  Success
+</c-lb.badge>
+```
+
+## Django Cotton
+Django Cotton enables HTML-like component syntax in Django templates. labb components are built with this system. Components are reusable template fragments that accept parameters and slots.
+
+```html
+<!-- Component definition: templates/cotton/card.html -->
+<div class="card">
+    <h2>{{ title }}</h2>
+    {{ slot }}
+</div>
+
+<!-- Usage in templates -->
+<c-card title="My Card">
+    <p>Card content here</p>
+</c-card>
+```
+
+See: https://django-cotton.com/ for complete Django Cotton documentation.
+
+## Quick Start
+```html
+{% load lb_tags %}
+<!DOCTYPE html>
+<html data-theme="{% labb_theme %}">
+<head>
+    <c-lb.m.dependencies />
+</head>
+<body>
+    <c-lb.button variant="primary">Click me</c-lb.button>
+    <c-lb.card>
+        <c-lb.card.body>
+            <c-lb.card.title>Card Title</c-lb.card.title>
+            <p>Content here</p>
+        </c-lb.card.body>
+    </c-lb.card>
+</body>
+</html>
+```
+
+## CLI Help
+- Get help: `labb --help` or `labb <command> --help`
+- Main commands: `init`, `setup`, `dev`, `build`, `scan`, `components`, `icons`, `llms`
+- Development workflow: `labb dev` (watches files and rebuilds automatically)
+- Component inspection: `labb components inspect <component>` (shows specs, variables, types)
+- View examples: `labb components ex <component> [example1] [example2]` (shows raw HTML code)
+- Browse all examples: `labb components ex --tree` (hierarchical view of all examples)
+- Icon management: `labb icons search/packs/info` (requires labbicons package)
+- Display llms.txt content for AI/LLM consumption: `labb llms`
+
+## Configuration (labb.yaml)
+The `labb.yaml` file controls CSS building and template scanning:
+
+```yaml
+css:
+  build:
+    input: static_src/input.css    # Input CSS file
+    output: static/css/output.css  # Output CSS file
+    minify: true                   # Minify output
+  scan:
+    output: static_src/labb-classes.txt  # Extracted classes file
+    templates:                           # Template patterns to scan
+      - templates/**/*.html
+      - '*/templates/**/*.html'
+```
+
+**Override with CLI:**
+```bash
+labb build --input src/styles.css --output dist/app.css
+labb scan --output src/classes.txt --patterns "templates/**/*.html"
+```
+
+**Environment variable:** `LABB_CONFIG_PATH` to override config file location
+
+## Django Settings
+Configure labb settings in your Django `settings.py`:
+
+```python
+LABB_SETTINGS = {
+    'DEFAULT_THEME': 'default',  # Default theme for new users
+}
+```
+
+`DEFAULT_THEME` can be set to `default` or any daisyUI theme configured in your project's `input.css`.
+
+**Access settings in code:**
+```python
+from labb.django_settings import get_labb_setting, get_default_theme
+
+theme = get_labb_setting('DEFAULT_THEME', 'default')
+default_theme = get_default_theme()
+```
+
+## General Rules
+- Boolean attributes can be set implicitly to true by just adding them (no need for `="true"`)
+  - Example: `<c-lb.button disabled>` instead of `<c-lb.button disabled="true">`
+
+## Theming
+labb provides built-in theming with daisyUI 5 integration:
+
+**Quick Setup:**
+```html
+{% load lb_tags %}
+<!-- Base template -->
+<html data-theme="{% labb_theme %}">
+<head>
+    <c-lb.m.dependencies setThemeEndpoint="{% url 'set_theme' %}" />
+</head>
+```
+
+**URL Configuration:**
+```python
+# urls.py
+from labb.shortcuts import set_theme_view
+path('set-theme/', set_theme_view, name='set_theme')
+```
+
+**Theme Controller:**
+```html
+<!-- Toggle switch -->
+<c-lb.toggle class="theme-controller" value="labb-dark" />
+
+<!-- Checkbox -->
+<c-lb.checkbox class="theme-controller" value="labb-dark" />
+```
+
+**Available Themes:** `labb-light`, `labb-dark`, `light` (daisyUI's built-in theme), `dark` (daisyUI's built-in theme), plus any custom themes defined in `input.css`
+
+**Utility Functions:**
+- `labb.shortcuts.set_labb_theme(request, theme)` - Set theme in session
+- `labb.shortcuts.get_labb_theme(request)` - Get current theme
+- `{% labb_theme %}` - Template tag for current theme
+
+## AI/LLM Usage Guidelines
+**ALWAYS USE THE CLI FIRST** when working with labb components, especially when stuck with an issue:
+
+```bash
+# Get exact component specifications (parameters, types, defaults)
+labb components inspect <component>
+
+# See working examples with correct syntax
+labb components ex <component>
+
+# View specific examples to copy exact syntax (supports multiple examples)
+labb components ex <component> <example-name> <example-name> ...
+
+# Explore all available components and examples
+labb components ex --tree
+```
+
+**Why Use CLI:**
+- Get exact parameter names (e.g., `btnStyle` not `style`)
+- See all available options and built-in features
+- Copy tested, working syntax
+- Avoid parameter name mistakes and missing features
+
+**Common Mistakes to Avoid:**
+- DON'T guess parameter names - Use `labb components inspect`
+- DON'T create manual icons - Use built-in `icon="rmx.iconname"` (search with `labb icons search`)
+- DON'T skip CLI examples - They show correct syntax
+
+## Components
+**accordion**: Accordion component for displaying collapsible content sections | Vars: class: string, join: boolean | 5 examples
+**accordion.item**: Individual accordion item with collapsible content | Vars: style: arrow/plus, class: string, name: string, checked: boolean
+**alert**: Alert component for displaying important messages with various styles and colors | Vars: variant: info/success/warning/error, style: outline/dash/soft, class: string, direction: vertical/horizontal, icon: string | 10 examples
+**avatar**: Avatar component for displaying user thumbnails or profile pictures | Vars: size: xs/sm/md/lg/xl, class: string, rounded: xs/sm/md/lg/xl/full, mask: heart/squircle/hexagon-2/triangle/pentagon/diamond/star | 11 examples
+**avatar.group**: Group wrapper for multiple avatars with overlapping layout | Vars: class: string, spacing: wide/normal/tight/tighter/tightest
+**badge**: Badge component for displaying status, counts, or labels | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, style: outline/dash/soft/ghost, size: xs/sm/md/lg/xl, class: string, icon: string, iconFill: boolean | 11 examples
+**button**: Button component with different styles and sizes | Vars: as: button/a/input/div, variant: neutral/primary/secondary/accent/info/success/warning/error, behavior: active/disabled, size: xs/sm/md/lg/xl, class: string, btnStyle: outline/dash/soft/ghost/link | 10 examples
+**card**: Main card container component with support for various layouts and styles | Vars: variant: default/primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string, border: boolean, dash: boolean | 11 examples
+**card.actions**: Container for action elements (e.g., buttons) | Vars: class: string, justify: start/center/end/between/around/evenly
+**card.body**: Main content area of the card | Vars: class: string
+**card.figure**: Image container within the card | Vars: class: string
+**card.title**: Title section within the card body | Vars: as: h1/h2/h3/h4/h5/h6/div/span, class: string
+**checkbox**: Checkbox input component with various styles and states | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string | 4 examples
+**diff**: Image comparison component with draggable resizer for before/after views | Vars: class: string, aspectRatio: 16/9/4/3/1/1/3/4/9/16 | 5 examples
+**diff.item-1**: First item in the diff comparison (typically the 'before' image) | Vars: class: string, src: string, alt: string
+**diff.item-2**: Second item in the diff comparison (typically the 'after' image) | Vars: class: string, src: string, alt: string
+**diff.resizer**: Draggable resizer control for adjusting the comparison view | Vars: class: string
+**drawer**: Main drawer wrapper component - use with drawer sub-components for full functionality | Vars: drawerId: string, class: string, end: boolean | 12 examples
+**drawer.checkbox**: Drawer toggle checkbox input - controls drawer open/close state | Vars: class: string
+**drawer.content**: Drawer main content area - contains the primary page content | Vars: as: div/main/section/article, class: string
+**drawer.overlay**: Drawer overlay label - provides backdrop for closing the drawer | Vars: class: string
+**drawer.side**: Drawer sidebar container - wraps the sidebar content and overlay | Vars: class: string
+**drawer.toggle**: Drawer toggle label - provides a clickable label for the drawer checkbox | Vars: class: string, for: string
+**dropdown**: Dropdown component that shows content when focused or clicked | Vars: class: string, placement: bottom/top/left/right, alignment: start/center/end | 6 examples
+**dropdown.content**: Dropdown content container that appears when dropdown is active | Vars: class: string
+**dropdown.trigger**: Dropdown trigger button that controls the dropdown visibility | Vars: as: div/button/label, class: string
+**fab**: FAB (Floating Action Button) with Speed Dial functionality | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, size: xs/sm/md/lg/xl, class: string, flower: boolean, icon: string | 16 examples
+**fab.close**: FAB close button sub-component | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, size: xs/sm/md/lg/xl, class: string
+**fab.main-action**: FAB main action button sub-component | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, size: xs/sm/md/lg/xl, class: string
+**footer**: Footer component for displaying site footer content with optional centered layout | Vars: as: footer/div/section, class: string, center: boolean, direction: horizontal/vertical | 9 examples
+**footer.title**: Footer section title component - applies footer-title styling | Vars: as: span/h2/h3/h4/h5/h6/div/p, class: string
+**link**: Link component with support for href, Django view name resolution, DaisyUI styling, and l: prefixed URL arguments | Vars: as: a/button/span/div, variant: neutral/primary/secondary/accent/info/success/warning/error, class: string, href: string, viewname: string | 5 examples
+**menu**: Flexible navigation menu component with support for horizontal/vertical layout and sizes | Vars: size: xs/sm/md/lg/xl, class: string, direction: vertical/horizontal | 12 examples
+**menu.item**: Unified menu item supporting links, titles, and submenus with choice of details/summary or ul/li | Vars: size: xs/sm/md/lg/xl, class: string, type: link/title/submenu-details/submenu-toggle, title: string
+**modal**: Modal dialog component using HTML dialog element for better accessibility | Vars: size: map, class: string, id: string, placement: top/middle/bottom/start/end | 13 examples
+**modal.action**: Container for modal action buttons | Vars: class: string
+**modal.backdrop**: Backdrop overlay for closing modal when clicked outside | Vars: class: string
+**modal.box**: Main content container for the modal | Vars: size: xs/sm/md/lg/xl/screen, class: string
+**modal.close**: Close button for modal | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, class: string, position: top-right/top-left/bottom-right/bottom-left
+**navbar**: Responsive navigation bar component with support for brand, menu items, search, and profile sections | Vars: as: div/nav/header, class: string | 8 examples
+**navbar.center**: Center section of the navbar - typically contains main navigation links (works within navbar context) | Vars: as: div/section/nav, class: string
+**navbar.end**: Right section of the navbar - typically contains search, notifications, and profile (works within navbar context) | Vars: as: div/section/aside, class: string
+**navbar.start**: Left section of the navbar - typically contains brand and mobile menu toggle (works within navbar context) | Vars: as: div/section/aside, class: string
+**swap**: Swap component for toggling between two elements with smooth transitions | Vars: class: string, effect: rotate/flip, checked: boolean | 8 examples
+**swap.indeterminate**: Content shown when checkbox is in indeterminate state | Vars: class: string
+**swap.off**: Content shown when swap is inactive | Vars: class: string
+**swap.on**: Content shown when swap is active | Vars: class: string
+**table**: DaisyUI Table component with support for zebra, pinning, and sizes. | Vars: size: xs/sm/md/lg/xl, class: string, zebra: boolean, pinRows: boolean | 4 examples
+**tabs**: Main tabs wrapper component - use with tabs.content for full functionality | Vars: style: border/lift/box, size: xs/sm/md/lg/xl, class: string, placement: top/bottom, name: string | 6 examples
+**tabs.content**: Individual tab content with radio input and content area | Vars: class: string, name: string, checked: boolean
+**text**: Text component with support for variants, sizes, underline, and icons | Vars: as: span/p/div/h1/h2/h3/h4/h5/h6, variant: neutral/primary/secondary/accent/info/success/warning/error, size: xs/sm/md/lg/xl/2xl/3xl/4xl, class: string, underline: boolean, icon: string | 9 examples
+**toggle**: Toggle switch component for boolean input | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string, checked: boolean, disabled: boolean | 6 examples

@@ -1,0 +1,48 @@
+<c-lb.menu class="bg-base-100 rounded-box w-64 shadow">
+    <c-lb.menu.item href="#" title="Home" />
+    <c-lb.menu.item href="#" title="About" />
+    <c-lb.menu.item type="submenu-toggle" title="Services">
+        <c-lb.menu.item href="#" title="Web Design" />
+        <c-lb.menu.item href="#" title="Development" />
+        <c-lb.menu.item href="#" title="Consulting" />
+    </c-lb.menu.item>
+    <c-lb.menu.item href="#" title="Contact" />
+</c-lb.menu>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle menu dropdown toggle functionality
+    const menuDropdownToggles = document.querySelectorAll('.menu-dropdown-toggle');
+
+    menuDropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Find the associated dropdown menu
+            const dropdown = this.nextElementSibling;
+            if (dropdown && dropdown.classList.contains('menu-dropdown')) {
+                // Toggle the show class
+                dropdown.classList.toggle('menu-dropdown-show');
+
+                // Optional: Close other open dropdowns
+                const allDropdowns = document.querySelectorAll('.menu-dropdown');
+                allDropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('menu-dropdown-show');
+                    }
+                });
+            }
+        });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.menu-dropdown-toggle') && !e.target.closest('.menu-dropdown')) {
+            const allDropdowns = document.querySelectorAll('.menu-dropdown');
+            allDropdowns.forEach(dropdown => {
+                dropdown.classList.remove('menu-dropdown-show');
+            });
+        }
+    });
+});
+</script>

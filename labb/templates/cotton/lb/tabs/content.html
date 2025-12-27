@@ -1,0 +1,31 @@
+<c-vars
+    class=""
+    name=""
+    checked
+    disabled
+    title=""
+    icon=""
+    iconFill
+    iconClass="me-2 size-4"
+/>
+
+{% if not input %}
+    <label class="tab">
+        <input
+            type="radio"
+            name="{{ name }}"
+            {% if checked %}checked="checked"{% endif %}
+            {% if disabled %}disabled{% endif %}
+        />
+        {% if icon %}
+            <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+        {% endif %}
+        {% if title %}{{ title }}{% endif %}
+    </label>
+{% else %}
+    {{ input }}
+{% endif %}
+
+<div class="tab-content {% if checked %}tab-active{% endif %} {% if disabled %}tab-disabled{% endif %} {{ class }}" {{ attrs }}>
+    {{ slot }}
+</div>

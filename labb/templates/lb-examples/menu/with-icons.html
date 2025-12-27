@@ -1,0 +1,34 @@
+<c-lb.menu class="bg-base-100 rounded-box w-64 shadow">
+    <c-lb.menu.item href="#" title="Home">
+        <c-lbi n="rmx.home" w="1em" h="1em" />
+        Home
+    </c-lb.menu.item>
+    <c-lb.menu.item href="#" title="About">
+        <c-lbi n="rmx.info-i" w="1em" h="1em" />
+        About
+    </c-lb.menu.item>
+    <c-lb.menu.item type="submenu-details" title="Services">
+        <c-slot name="titleSlot">
+            <summary>
+                <c-lbi n="rmx.settings" w="1em" h="1em" />
+                Services
+            </summary>
+        </c-slot>
+        <c-lb.menu.item href="#" title="Web Design">
+            <c-lbi n="rmx.palette" w="1em" h="1em" />
+            Web Design
+        </c-lb.menu.item>
+        <c-lb.menu.item href="#" title="Development">
+            <c-lbi n="rmx.code" w="1em" h="1em" />
+            Development
+        </c-lb.menu.item>
+        <c-lb.menu.item href="#" title="Consulting">
+            <c-lbi n="rmx.group" w="1em" h="1em" />
+            Consulting
+        </c-lb.menu.item>
+    </c-lb.menu.item>
+    <c-lb.menu.item href="#" title="Contact">
+        <c-lbi n="rmx.mail" w="1em" h="1em" />
+        Contact
+    </c-lb.menu.item>
+</c-lb.menu>

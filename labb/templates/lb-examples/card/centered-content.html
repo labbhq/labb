@@ -1,0 +1,14 @@
+{% load static %}
+
+<c-lb.card border class="bg-base-100 shadow-sm w-full max-w-96">
+  <c-lb.card.figure class="px-10 pt-10">
+    <img src="{% static 'lbdocs/img/stock/shoe.jpg' %}" alt="Shoes" class="rounded-xl" />
+  </c-lb.card.figure>
+  <c-lb.card.body class="items-center text-center">
+    <c-lb.card.title>Card Title</c-lb.card.title>
+    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+    <c-lb.card.actions justify="end">
+      <c-lb.button variant="secondary">Buy Now</c-lb.button>
+    </c-lb.card.actions>
+  </c-lb.card.body>
+</c-lb.card>

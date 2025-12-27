@@ -1,0 +1,14 @@
+<c-vars
+    title=""
+    class=""
+/>
+
+<div class="{{ class }}">
+    <div class="codeblock-title p-1 text-base-content/70 border border-base-content/10 rounded-lg flex flex-col gap-2">
+        <div class="flex items-center gap-1 py-1 text-xs font-light tracking-wide">
+            <c-lbi.rmx.corner-down-right w="1em" h="1em" />
+            <span>{{ title }}</span>
+        </div>
+        {{ slot }}
+    </div>
+</div>

@@ -1,0 +1,24 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    style="flex-center"
+    :styleClasses="{
+        'block': 'block',
+        'flex-center': 'flex items-center justify-center',
+        'flex-col': 'flex flex-col items-center justify-center'
+    }"
+/>
+
+<div class="not-prose bg-base-100/20 min-h-64 p-6 lg:p-8 inset-shadow-sm inset-shadow-base-300 relative {{ styleClasses|get_dict_item:style }} {{ class }}">
+    <svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+       <defs>
+            <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="1" cy="1" r="1" fill="currentColor" opacity="0.1"/>
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dots)"/>
+    </svg>
+    <div class="relative">
+        {{ slot }}
+    </div>
+</div>
