@@ -3,6 +3,7 @@ SEO utilities for labb documentation.
 Provides metadata extraction and generation for search engine optimization.
 """
 
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.parse import urljoin
@@ -255,10 +256,18 @@ def generate_article_schema(
             schema["image"] = og_image
 
     if published_time := seo_metadata.get_published_time():
-        schema["datePublished"] = published_time
+        # Convert datetime objects to ISO format strings for JSON serialization
+        if isinstance(published_time, datetime):
+            schema["datePublished"] = published_time.isoformat()
+        else:
+            schema["datePublished"] = str(published_time)
 
     if modified_time := seo_metadata.get_modified_time():
-        schema["dateModified"] = modified_time
+        # Convert datetime objects to ISO format strings for JSON serialization
+        if isinstance(modified_time, datetime):
+            schema["dateModified"] = modified_time.isoformat()
+        else:
+            schema["dateModified"] = str(modified_time)
 
     if tags := seo_metadata.get_component_tags():
         schema["keywords"] = tags
