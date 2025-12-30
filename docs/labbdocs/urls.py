@@ -20,6 +20,12 @@ urlpatterns = [
         views.icons_docs,
         name="icons_docs_detail",
     ),
+    path("blog/", views.blog_docs, name="blog_docs"),
+    path(
+        "blog/<path:path>/",
+        views.blog_docs,
+        name="blog_docs_detail",
+    ),
     path("sitemap.xml", views.sitemap_view, name="sitemap"),
     path("robots.txt", views.robots_txt_view, name="robots_txt"),
 ]
