@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Scroll to active menu item in docs sidebar
     scrollToActiveMenuItem();
+
+    // Setup toggle behavior for submenu-details (collapse when clicking outside)
+    setupSubmenuDetailsToggle();
 });
 
 /**
@@ -79,5 +82,39 @@ function copyCodeBlock(button) {
         }
     }).catch(err => {
         console.error('Failed to copy code:', err);
+    });
+}
+
+/**
+ * Collapse submenu-details when clicking outside of them
+ * Only collapses details where the parent <li> has the 'auto-collapse' class
+ * This provides toggle behavior - clicking outside closes open details
+ */
+function setupSubmenuDetailsToggle() {
+    // Add click event listener to the document
+    document.addEventListener('click', function(event) {
+        // Find all open details elements where parent <li> has 'auto-collapse' class
+        const allDetails = document.querySelectorAll('li details[open]');
+        const autoCollapseDetails = Array.from(allDetails).filter(details => {
+            const parentLi = details.closest('li');
+            return parentLi && parentLi.classList.contains('auto-collapse');
+        });
+
+        if (autoCollapseDetails.length === 0) return;
+
+        // Check if the click was inside any of these details elements
+        let clickedInsideDetails = false;
+        autoCollapseDetails.forEach(details => {
+            if (details.contains(event.target)) {
+                clickedInsideDetails = true;
+            }
+        });
+
+        // If click was outside all auto-collapse details elements, close them
+        if (!clickedInsideDetails) {
+            autoCollapseDetails.forEach(details => {
+                details.removeAttribute('open');
+            });
+        }
     });
 }

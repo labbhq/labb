@@ -297,3 +297,75 @@ def generate_structured_data(context, doc_info=None):
     json_ld = json.dumps(schemas, indent=2)
 
     return mark_safe(f'<script type="application/ld+json">\n{json_ld}\n</script>')
+
+
+@register.simple_tag(takes_context=True)
+def get_blog_posts(context, doc_name="blog"):
+    """
+    Get all blog posts sorted by published_time (most recent first).
+    Excludes the index page and returns posts with their metadata.
+
+    Usage: {% get_blog_posts as posts %}
+    """
+    config = context.get("config", {})
+    pages = config.get("pages", {})
+
+    posts = []
+    for url_path, page_data in pages.items():
+        # Skip the index page
+        if url_path.endswith("/index/"):
+            continue
+
+        # Only include posts (pages under /blog/posts/)
+        if "/posts/" in url_path:
+            frontmatter = page_data.get("frontmatter", {})
+            seo = page_data.get("seo", {})
+
+            # Get published_time for sorting (use seo data if available, fallback to frontmatter)
+            published_time = seo.get("published_time") or frontmatter.get(
+                "published_time"
+            )
+
+            posts.append(
+                {
+                    "url_path": url_path,
+                    "title": frontmatter.get("title", ""),
+                    "description": frontmatter.get("description", ""),
+                    "author": frontmatter.get("author", ""),
+                    "published_time": published_time,
+                    "modified_time": frontmatter.get("modified_time", ""),
+                    "tags": frontmatter.get("tags", []),
+                    "og_image": seo.get("og_image", ""),
+                }
+            )
+
+    # Sort by published_time (most recent first)
+    # Posts without published_time go to the end
+    def sort_key(post):
+        published = post.get("published_time") or ""
+        if not published:
+            # Posts without dates go to the end
+            return (False, "")
+
+        # Handle both date objects and strings
+        from datetime import date, datetime
+
+        if isinstance(published, (date, datetime)):
+            # Convert date/datetime object to string for sorting
+            date_str = published.strftime("%Y-%m-%d")
+        elif isinstance(published, str):
+            # Extract date portion for consistent sorting (handle datetime strings)
+            date_str = published[:10] if len(published) >= 10 else published
+        else:
+            # Fallback: convert to string
+            date_str = (
+                str(published)[:10] if len(str(published)) >= 10 else str(published)
+            )
+
+        # Return tuple: (has_date, date_string) for proper sorting
+        # Reverse=True will put newest dates first
+        return (True, date_str)
+
+    posts.sort(key=sort_key, reverse=True)
+
+    return posts
