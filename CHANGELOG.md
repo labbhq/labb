@@ -1,3 +1,12 @@
+## 0.0.2 (Dec 30, 2025)
+
+### Maintenance
+* chore/22-add-blog-post-support-to-docs ([#2](https://github.com/labbhq/labb/issues/2))
+* chore/23-add-community-menu ([#4](https://github.com/labbhq/labb/issues/4))
+
+
+---
+
 ## 0.0.1a2 (Oct 29, 2025)
 
 ### Features
