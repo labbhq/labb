@@ -149,6 +149,11 @@ def icons_docs(request, path=""):
     return docs_view(request, "icons", path)
 
 
+def blog_docs(request, path=""):
+    """Blog documentation view."""
+    return docs_view(request, "blog", path)
+
+
 def sitemap_view(request):
     """
     Generate XML sitemap for all documentation pages.
