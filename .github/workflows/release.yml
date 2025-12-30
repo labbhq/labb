@@ -159,10 +159,19 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+
+      - name: Generate GitHub App token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for proper versioning
+          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Prepare data for changelog generation
         id: prepare_data
