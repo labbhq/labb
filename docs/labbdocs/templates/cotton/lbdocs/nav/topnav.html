@@ -23,6 +23,13 @@
         <c-lb.menu direction="horizontal" class="items-center gap-2 sm:flex hidden">
             <c-lb.menu.item title="UI" href="{% url 'ui_docs' %}" />
             <c-lb.menu.item title="Icons" href="{% url 'icons_docs' %}" />
+            <c-lb.menu.item type="submenu-details" title="Community" class="auto-collapse">
+                <div class="w-40 border border-base-200 rounded-box p-2">
+                    <c-lb.menu.item href="{% url 'blog_docs' %}" title="Blog" />
+                    <c-lb.menu.item href="https://discord.gg/34eBUJMQv2" target="_blank" title="Discord" />
+                    <c-lb.menu.item href="https://github.com/labbhq/labb" target="_blank" title="GitHub" />
+                </div>
+            </c-lb.menu.item>
         </c-lb.menu>
 
 
@@ -37,6 +44,11 @@
                 <c-lb.menu class="w-full">
                     <c-lb.menu.item title="UI" href="{% url 'ui_docs' %}" />
                     <c-lb.menu.item title="Icons" href="{% url 'icons_docs' %}" />
+                    <c-lb.menu.item type="submenu-details" title="Community" open>
+                        <c-lb.menu.item href="{% url 'blog_docs' %}" title="Blog" />
+                        <c-lb.menu.item href="https://discord.gg/34eBUJMQv2" target="_blank" title="Discord" />
+                        <c-lb.menu.item href="https://github.com/labbhq/labb" target="_blank" title="GitHub" />
+                    </c-lb.menu.item>
                 </c-lb.menu>
             </c-lb.dropdown.content>
         </c-lb.dropdown>
