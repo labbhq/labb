@@ -50,7 +50,7 @@
                 <!-- Two-column layout: main content + TOC -->
                 <div class="flex gap-6 justify-between max-w-6xl mx-auto">
                     <!-- Main content area -->
-                    <div class="flex-1 max-w-4xl min-w-0 {% if not doc_info.frontmatter.doc_show_toc %}mx-auto{% endif %}">
+                    <div class="flex-1 max-w-4xl min-w-0 {% if not doc_info.frontmatter.doc_show_toc and doc_info.frontmatter.doc_hide_sidebar %}mx-auto{% endif %}">
 
                         <c-lbdocs.layout.docs.header
                             title="{%if doc_info.frontmatter.title %}{{ doc_info.frontmatter.title }}{% else %}{{ doc_info.frontmatter.component }}{% endif %}"
