@@ -183,20 +183,16 @@ Now you can create templates with labb components:
 <c-lbdocs.codeblock.title title="templates/example.html">
 {% verbatim %}
 ```html
-{% extends "base.html" %}
+<!-- Basic button -->
+<c-lb.button variant="primary">Click me</c-lb.button>
 
-{% block content %}
-    <!-- Basic button -->
-    <c-lb.button variant="primary">Click me</c-lb.button>
-
-    <!-- Card component -->
-    <c-lb.card>
-      <c-lb.card.body>
-        <c-lb.card.title>Card Title</c-lb.card.title>
-        <p>Card content goes here</p>
-      </c-lb.card.body>
-    </c-lb.card>
-{% endblock %}
+<!-- Card component -->
+<c-lb.card>
+    <c-lb.card.body>
+    <c-lb.card.title>Card Title</c-lb.card.title>
+    <p>Card content goes here</p>
+    </c-lb.card.body>
+</c-lb.card>
 ```
 {% endverbatim %}
 </c-lbdocs.codeblock.title>
