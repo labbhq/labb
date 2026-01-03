@@ -3,7 +3,7 @@ title: labb blog
 description: labb blog posts and articles
 doc_show_toc: false
 doc_hide_title: true
-doc_hide_sidebar: true
+doc_hide_drawer: true
 ---
 
 {% load docs_tags %}

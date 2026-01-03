@@ -1,3 +1,11 @@
+## 0.1.0 (Dec 30, 2025)
+
+### Other
+* No sub-issues found in this release.
+
+
+---
+
 ## 0.0.2 (Dec 30, 2025)
 
 ### Maintenance

@@ -104,7 +104,7 @@ css:
 ```
 
 {% verbatim %}
-**Note:** This CSS is automatically included when using `<c-lb.m.dependencies>` component, so you typically don't need to include it manually unless you're setting `no_global_css` variable (i.e. `<c-lb.m.dependencies no_global_css>`).
+**Note:** This CSS is automatically included when using `<c-lb.m.dependencies>` component, so you typically don't need to include it manually unless you're setting `noGlobalCSS` variable (i.e. `<c-lb.m.dependencies noGlobalCSS>`).
 {% endverbatim %}
 
 </c-lbdocs.indented_block>

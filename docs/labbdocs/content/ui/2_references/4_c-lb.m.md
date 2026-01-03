@@ -27,13 +27,13 @@ Includes essential CSS, JavaScript, and styling dependencies for labb components
 <c-lb.m.dependencies setThemeEndpoint="/api/set-theme/" />
 
 <!-- Without global CSS -->
-<c-lb.m.dependencies no_global_css />
+<c-lb.m.dependencies noGlobalCSS />
 ```
 {% endverbatim %}
 
 **Parameters:**
 
-- `no_global_css` (boolean, default: `False`) - Skip including the global labb CSS file
+- `noGlobalCSS` (boolean, default: `False`) - Skip including the global labb CSS file
 - `setThemeEndpoint` (string, default: `""`) - Django endpoint for theme switching via AJAX
 
 **What it includes:**
