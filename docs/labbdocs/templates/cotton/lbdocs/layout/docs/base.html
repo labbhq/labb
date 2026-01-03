@@ -7,8 +7,8 @@
 <c-lbdocs.layout.base title="{{ title|default:'Labb Docs' }}">
 
     <!-- Docs Layout with Drawer -->
-    <c-lb.drawer drawerId="docs-drawer" class="{% if not doc_info.frontmatter.doc_hide_sidebar %}lg:drawer-open{% endif %}" sideClass="top-20 max-h-[calc(100vh-80px)] scrollbar-thin docs-sidebar-container">
-        {% if not doc_info.frontmatter.doc_hide_sidebar %}
+    <c-lb.drawer drawerId="docs-drawer" class="{% if not doc_info.frontmatter.doc_hide_drawer %}lg:drawer-open{% endif %}" sideClass="top-20 max-h-[calc(100vh-80px)] scrollbar-thin docs-sidebar-container">
+        {% if not doc_info.frontmatter.doc_hide_drawer %}
         <c-slot name="sideContent">
             <c-lb.menu class="w-80 px-4 bg-base-100 z-20 min-h-full overflow-y-auto scrollbar-hide border-r border-base-200 lg:border-r-0" id="docs-sidebar-menu">
                 {% for item in config.menu %}
@@ -50,7 +50,7 @@
                 <!-- Two-column layout: main content + TOC -->
                 <div class="flex gap-6 justify-between max-w-6xl mx-auto">
                     <!-- Main content area -->
-                    <div class="flex-1 max-w-4xl min-w-0 {% if not doc_info.frontmatter.doc_show_toc and doc_info.frontmatter.doc_hide_sidebar %}mx-auto{% endif %}">
+                    <div class="flex-1 max-w-4xl min-w-0 {% if not doc_info.frontmatter.doc_show_toc and doc_info.frontmatter.doc_hide_drawer %}mx-auto{% endif %}">
 
                         <c-lbdocs.layout.docs.header
                             title="{%if doc_info.frontmatter.title %}{{ doc_info.frontmatter.title }}{% else %}{{ doc_info.frontmatter.component }}{% endif %}"

@@ -277,7 +277,7 @@ For theme persistence to work, Django's CSRF protection requires a valid CSRF to
 </c-lbdocs.codeblock.title>
 
 <c-lb.alert variant="warning" style="soft" class="mt-4">
-<span>This important for the POST request to the `setThemeEndpoint` to be successful.</span>
+<span>This is required for the POST request to the `setThemeEndpoint` to be successful.</span>
 </c-lb.alert>
 
 ## 4.1. Available Utility Functions

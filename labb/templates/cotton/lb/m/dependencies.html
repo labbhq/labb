@@ -2,11 +2,11 @@
 {% load static %}
 
 <c-vars
-    :no_global_css="False"
+    :noGlobalCSS="False"
     setThemeEndpoint=""
 />
 
-{% if not no_global_css %}
+{% if not noGlobalCSS %}
     {% lb_css_path as css_path %}
     <link rel="stylesheet" href="{% static css_path %}">
 {% endif %}

@@ -16,7 +16,7 @@ tags:
 
 Hi djangonauts,
 
-Name is [Zadiq](https://github.com/zadiq), and I have been developing with Django for over 7 years now, both professionally and on the side. I have never felt the need to switch to another framework because I believe Django strikes the right balance between flexibility, extendability, and speed of development.
+I have been developing with Django for over 7 years now, both professionally and on the side. I have never felt the need to switch to another framework because I believe Django strikes the right balance between flexibility, extendability, and speed of development.
 
 However, as we all know, building highly interactive web interfaces with Django requires us to dip our feet into the world we djangonauts are not always fond of: the world of JavaScript. This often means setting up full SPA applications and relegating Django to a simple API backend. While this approach works in some cases, it comes at the cost of the simplicity and speed of development that Django provides, and most importantly, server-side rendering.
 
