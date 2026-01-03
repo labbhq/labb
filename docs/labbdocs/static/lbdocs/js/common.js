@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Scroll to active menu item in docs sidebar
     scrollToActiveMenuItem();
-
-    // Setup toggle behavior for submenu-details (collapse when clicking outside)
-    setupSubmenuDetailsToggle();
 });
 
 /**
