@@ -43,6 +43,8 @@
 </head>
 
 <body class="min-h-screen">
+    {% csrf_token %}
+
     {% if showTopNav %}
         <c-lbdocs.nav.topnav :topnavTitle=topnavTitle :showDrawerToggle=showDrawerToggle />
     {% endif %}
