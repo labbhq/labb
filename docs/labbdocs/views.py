@@ -31,7 +31,9 @@ def _build_docs_context(
     context = {
         "config": config,
         "topnavTitle": topnav_title,
-        "showDrawerToggle": True,
+        "showDrawerToggle": not doc_info.get("frontmatter", {}).get(
+            "doc_hide_drawer", False
+        ),
         "doc_name": doc_name,
         "doc_url": request.build_absolute_uri(),
         "llms_txt_url": request.build_absolute_uri(reverse("llms_txt")),

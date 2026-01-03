@@ -1,6 +1,6 @@
 [project]
 name = "labbicons"
-version = "0.1.0"
+version = "0.1.1"
 description = "Icon components library for labb UI and django projects"
 authors = [
     {name = "zadiq", email = "dev@zadiq.com"}
