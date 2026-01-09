@@ -1761,3 +1761,66 @@ components:
     slots:
       default:
         description: "Link content (e.g., text, icons, or other components)"
+
+  breadcrumbs:
+    template: "lb/breadcrumbs/index.html"
+    description: "Breadcrumbs navigation component for displaying current page location in site hierarchy"
+    base_classes: ["breadcrumbs"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Breadcrumbs text size"
+        css_mapping:
+          xs: "text-xs"
+          sm: "text-sm"
+          md: "text-base"
+          lg: "text-lg"
+          xl: "text-xl"
+    slots:
+      default:
+        description: "Breadcrumb items using breadcrumbs.item components"
+
+  breadcrumbs.item:
+    template: "lb/breadcrumbs/item.html"
+    description: "Individual breadcrumb item with optional link and icon support"
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      href:
+        type: string
+        default: ""
+        description: "Link URL for the breadcrumb item (if not provided, item will be plain text)"
+        required: false
+      viewname:
+        type: string
+        default: ""
+        description: "Django view name to resolve (alternative to href). Use l: prefixed attributes for URL arguments"
+        required: false
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library to display before the breadcrumb text"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+    slots:
+      default:
+        description: "Breadcrumb item content (text or custom content)"
