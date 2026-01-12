@@ -1,0 +1,13 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    id=""
+/>
+
+<div
+    class="carousel-item {{ class }}"
+    {% if id %}id="{{ id }}"{% endif %}
+    {{ attrs }}
+>
+    {{ slot }}
+</div>
