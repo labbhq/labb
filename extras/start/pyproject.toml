@@ -13,7 +13,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -33,7 +32,7 @@ keywords = [
     "tailwind",
     "daisyui",
 ]
-requires-python = ">=3.9,<4"
+requires-python = ">=3.10,<4"
 packages = [{include = "labbstart"}]
 dependencies = [
     "typer (>=0.19.2,<0.20.0)",
