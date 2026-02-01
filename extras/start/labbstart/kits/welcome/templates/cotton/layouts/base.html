@@ -1,0 +1,23 @@
+{% load static %}
+{% load lb_tags %}
+<!DOCTYPE html>
+<html lang="en" {% labb_theme %}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:"Welcome to labb" }}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static '__LABBSTART_APP_NAME__/img/labb/favicon/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static '__LABBSTART_APP_NAME__/img/labb/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static '__LABBSTART_APP_NAME__/img/labb/favicon/favicon-16x16.png' %}">
+    <link rel="shortcut icon" href="{% static '__LABBSTART_APP_NAME__/img/labb/favicon/favicon.ico' %}">
+    <link rel="manifest" href="{% static '__LABBSTART_APP_NAME__/img/labb/favicon/site.webmanifest' %}">
+
+    <c-lb.m.dependencies setThemeEndpoint="{% url '__LABBSTART_APP_NAME__:set_theme' %}" />
+</head>
+<body class="min-h-screen bg-base-100 text-base-content grainy-bg antialiased">
+    {% csrf_token %}
+    {{ slot }}
+</body>
+</html>

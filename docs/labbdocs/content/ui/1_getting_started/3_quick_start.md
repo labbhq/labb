@@ -5,6 +5,7 @@ description: Get up and running with labb components in minutes
 
 {% load docs_tags %}
 
+<c-lbdocs.labbstart_info class="my-6" />
 
 A concise step-by-step overview to get you started with labb. For detailed explanations, follow the links provided.
 

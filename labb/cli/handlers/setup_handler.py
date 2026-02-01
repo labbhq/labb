@@ -9,6 +9,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.prompt import Confirm
 
 from labb.cli.handlers.commons import confirm_load_config
+from labb.versions import DAISYUI_VERSION, TAILWIND_VERSION
 
 console = Console()
 
@@ -54,7 +55,7 @@ def setup_project(install_deps: Optional[bool]):
     else:
         console.print("[yellow]Skipped Node.js dependencies installation.[/yellow]")
         console.print(
-            "[dim]To install manually: npm install -D tailwindcss @tailwindcss/cli daisyui@latest[/dim]"
+            f"[dim]To install manually: npm install -D tailwindcss@{TAILWIND_VERSION} @tailwindcss/cli@{TAILWIND_VERSION} daisyui@{DAISYUI_VERSION}[/dim]"
         )
 
     _show_success_message()
@@ -66,17 +67,28 @@ def _install_tailwind_cli(current_dir: Path):
         TextColumn("[progress.description]{task.description}"),
         console=console,
     ) as progress:
-        progress.add_task("Installing tailwindcss & @tailwindcss/cli...", total=None)
+        progress.add_task(
+            f"Installing tailwindcss@{TAILWIND_VERSION} & @tailwindcss/cli...",
+            total=None,
+        )
 
         try:
             subprocess.run(
-                ["npm", "install", "-D", "tailwindcss", "@tailwindcss/cli"],
+                [
+                    "npm",
+                    "install",
+                    "-D",
+                    f"tailwindcss@{TAILWIND_VERSION}",
+                    f"@tailwindcss/cli@{TAILWIND_VERSION}",
+                ],
                 cwd=current_dir,
                 check=True,
                 capture_output=True,
                 text=True,
             )
-            console.print("[green]✅ Installed tailwindcss & @tailwindcss/cli[/green]")
+            console.print(
+                f"[green]✅ Installed tailwindcss@{TAILWIND_VERSION} & @tailwindcss/cli@{TAILWIND_VERSION}[/green]"
+            )
         except subprocess.CalledProcessError as e:
             console.print(f"[red]❌ Error installing Tailwind CSS CLI: {e}[/red]")
             raise typer.Exit(1)
@@ -88,17 +100,17 @@ def _install_daisyui(current_dir: Path):
         TextColumn("[progress.description]{task.description}"),
         console=console,
     ) as progress:
-        progress.add_task("Installing daisyui@latest...", total=None)
+        progress.add_task(f"Installing daisyui@{DAISYUI_VERSION}...", total=None)
 
         try:
             subprocess.run(
-                ["npm", "install", "-D", "daisyui@latest"],
+                ["npm", "install", "-D", f"daisyui@{DAISYUI_VERSION}"],
                 cwd=current_dir,
                 check=True,
                 capture_output=True,
                 text=True,
             )
-            console.print("[green]✅ Installed daisyui@latest[/green]")
+            console.print(f"[green]✅ Installed daisyui@{DAISYUI_VERSION}[/green]")
         except subprocess.CalledProcessError as e:
             console.print(f"[red]❌ Error installing DaisyUI: {e}[/red]")
             raise typer.Exit(1)
