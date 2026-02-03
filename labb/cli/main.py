@@ -21,8 +21,16 @@ except ImportError:
 
 app = typer.Typer(
     help="labb Django UI Components CLI",
-    no_args_is_help=True,  # Show help when no command is provided
+    invoke_without_command=True,  # Run callback when no subcommand → show help and exit 0
 )
+
+
+@app.callback()
+def main(ctx: typer.Context):
+    """When no command is given, show help and exit successfully (0)."""
+    if ctx.invoked_subcommand is None:
+        typer.echo(ctx.get_help())
+        raise typer.Exit(0)
 
 
 @app.command()

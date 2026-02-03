@@ -97,6 +97,16 @@ labb is a Django component library providing components built with Django Cotton
 4. Install dependencies: `labb setup --install-deps`
 5. Start development: `labb dev`
 
+## labbstart (Project Scaffolding)
+**labbstart** scaffolds a new Django project with labb pre-configured. Use it for the fastest way to get started.
+
+- Install: `pip install labbstart` or `poetry add labbstart` or `uv add labbstart`
+- Create project: `labbstart new` (interactive) or `labbstart new myproject --django-version 5 --package-manager poetry --kit welcome --app-name starter`
+- Prompts for: project name, Django version (4/5/6), package manager (poetry/pip/uv), kit (e.g. welcome), app name
+- Creates: project dir, package manager setup, Django + labbui + labbicons, starter kit app, labb init + build, .gitignore, README
+- After creation: run `labb dev` in one terminal and `python manage.py runserver` in another
+- Requirements: Python 3.10+ (<4), and poetry/pip/uv
+
 ## Icons (Optional)
 Install labbicons for icon support: `pip install labbicons` or `poetry add labbicons`
 
@@ -221,11 +231,17 @@ labb provides built-in theming with daisyUI 5 integration:
 ```html
 {{% load lb_tags %}}
 <!-- Base template -->
-<html data-theme="{{% labb_theme %}}">
+<html {{% labb_theme %}}>
 <head>
     <c-lb.m.dependencies setThemeEndpoint="{{% url 'set_theme' %}}" />
 </head>
+<body>
+    {{% csrf_token %}}  <!-- REQUIRED: Add CSRF token for theme switching -->
+    <!-- Your content here -->
+</body>
 ```
+
+**IMPORTANT:** Always include `{{% csrf_token %}}` in your main template body when using theme controllers. The theme switching functionality requires CSRF protection for POST requests.
 
 **URL Configuration:**
 ```python
@@ -248,7 +264,7 @@ path('set-theme/', set_theme_view, name='set_theme')
 **Utility Functions:**
 - `labb.shortcuts.set_labb_theme(request, theme)` - Set theme in session
 - `labb.shortcuts.get_labb_theme(request)` - Get current theme
-- `{{% labb_theme %}}` - Template tag for current theme
+- `{{% labb_theme %}}` - Template tag for current theme (adds data-theme attribute)
 
 ## AI/LLM Usage Guidelines
 **ALWAYS USE THE CLI FIRST** when working with labb components, especially when stuck with an issue:
@@ -275,8 +291,12 @@ labb components ex --tree
 
 **Common Mistakes to Avoid:**
 - DON'T guess parameter names - Use `labb components inspect`
+- DON'T guess icon names - Use `labb icons search "term"` or `labb llms` to find exact icon names. Guessing (e.g. `rmx.rocket-2-line`) often causes: `TypeError: cannot unpack non-iterable NoneType object` when the icon does not exist.
 - DON'T create manual icons - Use built-in `icon="rmx.iconname"` (search with `labb icons search`)
 - DON'T skip CLI examples - They show correct syntax
+
+**Common Errors:**
+- `TypeError: cannot unpack non-iterable NoneType object` at docs or UI routes: Usually caused by an invalid or guessed icon name (e.g. `rmx.rocket-2-line` when the actual icon is `rmx.rocket-2`). Fix: Run `labb icons search "keyword"` or `labb llms` to find the correct icon name; use the exact "Component" value from search results (e.g. `rmx.rocket-2`).
 
 ## Components
 {component_descriptions}

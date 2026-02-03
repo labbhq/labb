@@ -55,9 +55,13 @@ jobs:
           # Extract version from icons package
           ICONS_VERSION=$(grep -E '^version = ' extras/icons/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
 
+          # Extract version from start package
+          START_VERSION=$(grep -E '^version = ' extras/start/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+
           echo "Main package version: $MAIN_VERSION"
           echo "Docs package version: $DOCS_VERSION"
           echo "Icons package version: $ICONS_VERSION"
+          echo "Start package version: $START_VERSION"
 
           # Check if all versions match
           if [ "$MAIN_VERSION" != "$DOCS_VERSION" ]; then
@@ -67,6 +71,11 @@ jobs:
 
           if [ "$MAIN_VERSION" != "$ICONS_VERSION" ]; then
             echo "❌ Version mismatch: main ($MAIN_VERSION) != icons ($ICONS_VERSION)"
+            exit 1
+          fi
+
+          if [ "$MAIN_VERSION" != "$START_VERSION" ]; then
+            echo "❌ Version mismatch: main ($MAIN_VERSION) != start ($START_VERSION)"
             exit 1
           fi
 
@@ -461,6 +470,12 @@ jobs:
           poetry build --no-interaction
           echo "✅ Icons package built"
 
+      - name: Build start package
+        run: |
+          cd extras/start
+          poetry build --no-interaction
+          echo "✅ Start package built"
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -469,6 +484,7 @@ jobs:
             dist/
             docs/dist/
             extras/icons/dist/
+            extras/start/dist/
 
       - name: Publish main package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
@@ -488,6 +504,13 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: extras/icons/dist/
+          print-hash: true
+          verbose: true
+
+      - name: Publish start package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: extras/start/dist/
           print-hash: true
           verbose: true
 
@@ -549,7 +572,13 @@ jobs:
 
           ### Installation
           \`\`\`bash
+          # Core UI components
           pip install labbui==$VERSION
+
+          # Optional packages
+          pip install labbicons==$VERSION  # Icon components
+          pip install labbdocs==$VERSION   # Documentation
+          pip install labbstart==$VERSION  # Project starter CLI
           \`\`\`
 
           ### Documentation
@@ -565,7 +594,7 @@ jobs:
           TAG_NAME="v$VERSION"
 
           # Upload all wheel and tar.gz files to the release
-          for file in artifacts/dist/*.whl artifacts/dist/*.tar.gz artifacts/docs/dist/*.whl artifacts/docs/dist/*.tar.gz artifacts/extras/icons/dist/*.whl artifacts/extras/icons/dist/*.tar.gz; do
+          for file in artifacts/dist/*.whl artifacts/dist/*.tar.gz artifacts/docs/dist/*.whl artifacts/docs/dist/*.tar.gz artifacts/extras/icons/dist/*.whl artifacts/extras/icons/dist/*.tar.gz artifacts/extras/start/dist/*.whl artifacts/extras/start/dist/*.tar.gz; do
             if [ -f "$file" ]; then
               echo "Uploading $file to release..."
               gh release upload "$TAG_NAME" "$file" --clobber
@@ -616,12 +645,21 @@ jobs:
 
           ### 📦 Installation
           \`\`\`bash
+          # Core UI components
           pip install labbui==$VERSION
+
+          # Optional packages
+          pip install labbicons==$VERSION  # Icon components
+          pip install labbdocs==$VERSION   # Documentation
+          pip install labbstart==$VERSION  # Project starter CLI
           \`\`\`
 
           ### 📋 Release Notes
           - [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/v$VERSION)
-          - [PyPI Package](https://pypi.org/project/labbui/$VERSION/)
+          - [PyPI - labbui](https://pypi.org/project/labbui/$VERSION/)
+          - [PyPI - labbicons](https://pypi.org/project/labbicons/$VERSION/)
+          - [PyPI - labbdocs](https://pypi.org/project/labbdocs/$VERSION/)
+          - [PyPI - labbstart](https://pypi.org/project/labbstart/$VERSION/)
           - [Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
 
           ### 📝 Changelog

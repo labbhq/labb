@@ -3,6 +3,8 @@ title: Installation
 description: How to install and set up labb in your Django project
 ---
 
+<c-lbdocs.labbstart_info class="my-6" />
+
 ## Prerequisites
 
 Before installing labb, make sure you have:
