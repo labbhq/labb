@@ -232,6 +232,8 @@ labb components ex --tree
 **card.body**: Main content area of the card | Vars: class: string
 **card.figure**: Image container within the card | Vars: class: string
 **card.title**: Title section within the card body | Vars: as: h1/h2/h3/h4/h5/h6/div/span, class: string
+**carousel**: Carousel component for displaying scrollable content with snap behavior | Vars: class: string, snap: start/center/end, direction: horizontal/vertical | 7 examples
+**carousel.item**: Individual carousel item container | Vars: class: string, id: string
 **checkbox**: Checkbox input component with various styles and states | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string | 4 examples
 **diff**: Image comparison component with draggable resizer for before/after views | Vars: class: string, aspectRatio: 16/9/4/3/1/1/3/4/9/16 | 5 examples
 **diff.item-1**: First item in the diff comparison (typically the 'before' image) | Vars: class: string, src: string, alt: string
