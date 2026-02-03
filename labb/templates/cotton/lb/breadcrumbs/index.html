@@ -1,0 +1,18 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    size="md"
+    :sizeClasses="{
+        'xs': 'text-xs',
+        'sm': 'text-sm',
+        'md': 'text-base',
+        'lg': 'text-lg',
+        'xl': 'text-xl'
+    }"
+/>
+
+<div class="breadcrumbs {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs }}>
+    <ul>
+        {{ slot }}
+    </ul>
+</div>
