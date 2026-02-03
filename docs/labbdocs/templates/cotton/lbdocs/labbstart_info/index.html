@@ -1,0 +1,24 @@
+{% load docs_tags %}
+<c-vars class="" />
+<c-lb.alert variant="info" style="soft" icon="rmx.rocket-2" class="{{ class }}">
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+    <div>
+      <p class="font-semibold text-base-content">
+        Quickest way to get running
+      </p>
+      <p class="text-sm text-base-content/80 mt-0.5">
+        Use <strong>labbstart</strong> to scaffold a new Django project with labb pre-configured. One command and you're ready to build—no manual setup.
+      </p>
+    </div>
+    <c-lb.button
+      as="a"
+      href="{% doc_url '1_getting_started/0_labbstart.md' 'ui' %}"
+      variant="primary"
+      size="sm"
+      class="flex-shrink-0 gap-1.5"
+    >
+      Scaffold a new project
+      <c-lbi n="rmx.arrow-right" w="1em" h="1em" />
+    </c-lb.button>
+  </div>
+</c-lb.alert>

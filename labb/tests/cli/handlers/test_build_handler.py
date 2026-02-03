@@ -4,6 +4,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from labb.cli.handlers.build_handler import (
+    _check_dependencies,
     _run_build_process,
     _run_build_watcher,
     _run_concurrent_build_and_scan,
@@ -11,54 +12,169 @@ from labb.cli.handlers.build_handler import (
     build_css,
 )
 
+# Tests for dependency checking
 
+
+@patch("labb.cli.handlers.build_handler.subprocess.run")
+@patch("pathlib.Path.exists")
+@patch("labb.cli.handlers.build_handler.console")
+def test_check_dependencies_all_present(mock_console, mock_path_exists, mock_run):
+    """Test dependency check when all dependencies are present"""
+    mock_run.return_value = Mock(returncode=0)  # npx available
+    mock_path_exists.return_value = True  # All paths exist
+
+    # Should not raise any exception
+    _check_dependencies()
+
+    # Should check npx
+    mock_run.assert_called_once()
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.run")
+@patch("labb.cli.handlers.build_handler.console")
+def test_check_dependencies_npx_not_available(mock_console, mock_run):
+    """Test dependency check when npx is not available"""
+    mock_run.side_effect = FileNotFoundError()
+
+    with pytest.raises(SystemExit):
+        _check_dependencies()
+
+    # Should print error about npx
+    print_calls = mock_console.print.call_args_list
+    error_text = str(print_calls)
+    assert "npx" in error_text.lower()
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.run")
+@patch("labb.cli.handlers.build_handler.console")
+def test_check_dependencies_package_json_missing(mock_console, mock_run, temp_dir):
+    """Test dependency check when package.json is missing"""
+    mock_run.return_value = Mock(returncode=0)  # npx available
+
+    with patch("labb.cli.handlers.build_handler.Path.cwd", return_value=temp_dir):
+        with pytest.raises(SystemExit):
+            _check_dependencies()
+
+    # Should print error about package.json
+    print_calls = mock_console.print.call_args_list
+    error_text = str(print_calls)
+    assert "package.json" in error_text.lower()
+    assert "labb init" in error_text
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.run")
+@patch("labb.cli.handlers.build_handler.console")
+def test_check_dependencies_node_modules_missing(mock_console, mock_run, temp_dir):
+    """Test dependency check when node_modules is missing"""
+    mock_run.return_value = Mock(returncode=0)  # npx available
+
+    # Create package.json but not node_modules
+    (temp_dir / "package.json").write_text("{}")
+
+    with patch("labb.cli.handlers.build_handler.Path.cwd", return_value=temp_dir):
+        with pytest.raises(SystemExit):
+            _check_dependencies()
+
+    # Should print error about node_modules
+    print_calls = mock_console.print.call_args_list
+    error_text = str(print_calls)
+    assert "node_modules" in error_text.lower()
+    assert "labb setup" in error_text
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.run")
+@patch("labb.cli.handlers.build_handler.console")
+def test_check_dependencies_tailwind_not_installed(mock_console, mock_run, temp_dir):
+    """Test dependency check when Tailwind CSS is not installed"""
+    mock_run.return_value = Mock(returncode=0)  # npx available
+
+    # Create package.json and node_modules but not Tailwind
+    (temp_dir / "package.json").write_text("{}")
+    (temp_dir / "node_modules").mkdir()
+
+    with patch("labb.cli.handlers.build_handler.Path.cwd", return_value=temp_dir):
+        with pytest.raises(SystemExit):
+            _check_dependencies()
+
+    # Should print error about Tailwind CSS
+    print_calls = mock_console.print.call_args_list
+    error_text = str(print_calls)
+    assert "tailwind" in error_text.lower()
+    assert "labb setup" in error_text
+
+
+# Tests for build_css
+
+
+@patch("labb.cli.handlers.build_handler._check_dependencies")
 @patch("pathlib.Path.exists")
 @patch("labb.cli.handlers.commons.load_config")
 @patch("labb.cli.handlers.build_handler._run_build_process")
 @patch("labb.cli.handlers.build_handler.console")
 def test_build_css_simple(
-    mock_console, mock_run_build, mock_load_config, mock_path_exists, mock_config
+    mock_console,
+    mock_run_build,
+    mock_load_config,
+    mock_path_exists,
+    mock_check_deps,
+    mock_config,
 ):
     mock_load_config.return_value = mock_config
     mock_path_exists.return_value = True
 
     build_css()
 
+    mock_check_deps.assert_called_once()
     mock_run_build.assert_called_once_with(
         mock_config.input_file, mock_config.output_file, mock_config.minify, watch=False
     )
 
 
+@patch("labb.cli.handlers.build_handler._check_dependencies")
 @patch("pathlib.Path.exists")
 @patch("labb.cli.handlers.commons.load_config")
 @patch("labb.cli.handlers.build_handler._run_concurrent_build_and_scan")
 @patch("labb.cli.handlers.build_handler.console")
 def test_build_css_watch_only(
-    mock_console, mock_run_concurrent, mock_load_config, mock_path_exists, mock_config
+    mock_console,
+    mock_run_concurrent,
+    mock_load_config,
+    mock_path_exists,
+    mock_check_deps,
+    mock_config,
 ):
     mock_load_config.return_value = mock_config
     mock_path_exists.return_value = True
 
     build_css(watch=True, scan=False)
 
+    mock_check_deps.assert_called_once()
     mock_run_concurrent.assert_called_once()
 
 
+@patch("labb.cli.handlers.build_handler._check_dependencies")
 @patch("pathlib.Path.exists")
 @patch("labb.cli.handlers.commons.load_config")
 @patch("labb.cli.handlers.build_handler._run_concurrent_build_and_scan")
 @patch("labb.cli.handlers.build_handler.console")
 def test_build_css_watch_and_scan(
-    mock_console, mock_run_concurrent, mock_load_config, mock_path_exists, mock_config
+    mock_console,
+    mock_run_concurrent,
+    mock_load_config,
+    mock_path_exists,
+    mock_check_deps,
+    mock_config,
 ):
     mock_load_config.return_value = mock_config
     mock_path_exists.return_value = True
 
     build_css(watch=True, scan=True)
 
+    mock_check_deps.assert_called_once()
     mock_run_concurrent.assert_called_once()
 
 
+@patch("labb.cli.handlers.build_handler._check_dependencies")
 @patch("pathlib.Path.exists")
 @patch("labb.cli.handlers.commons.load_config")
 @patch("labb.cli.handlers.build_handler._run_build_process")
@@ -68,6 +184,7 @@ def test_build_css_with_overrides(
     mock_run_build,
     mock_load_config,
     mock_path_exists,
+    mock_check_deps,
     mock_config,
     tmp_path,
 ):
@@ -80,6 +197,7 @@ def test_build_css_with_overrides(
 
     build_css(minify=False, input_file=input_css, output_file=output_css)
 
+    mock_check_deps.assert_called_once()
     mock_run_build.assert_called_once_with(input_css, output_css, False, watch=False)
 
 
@@ -103,15 +221,12 @@ def test_run_build_process_success(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock successful subprocess calls
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        Mock(returncode=0, stderr="", stdout=""),  # actual build
-    ]
+    # Mock successful subprocess call (npx check is now in _check_dependencies)
+    mock_run.return_value = Mock(returncode=0, stderr="", stdout="")
 
     _run_build_process(str(input_file), str(output_file), True, False)
 
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 1
 
 
 @patch("labb.cli.handlers.build_handler.subprocess.run")
@@ -121,11 +236,8 @@ def test_run_build_process_watch_mode(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock npx check and keyboard interrupt
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        KeyboardInterrupt(),  # watch interrupted
-    ]
+    # Mock keyboard interrupt (npx check is now in _check_dependencies)
+    mock_run.side_effect = KeyboardInterrupt()
 
     with pytest.raises(SystemExit):
         _run_build_process(str(input_file), str(output_file), True, True)
@@ -134,10 +246,12 @@ def test_run_build_process_watch_mode(mock_console, mock_run, temp_dir):
 @patch("labb.cli.handlers.build_handler.subprocess.run")
 @patch("labb.cli.handlers.build_handler.console")
 def test_run_build_process_npx_not_found(mock_console, mock_run, temp_dir):
+    """Test that build process fails if npx command fails"""
     input_file = temp_dir / "input.css"
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
+    # npx check is now in _check_dependencies, this tests the build command failing
     mock_run.side_effect = FileNotFoundError()
 
     with pytest.raises(SystemExit):
@@ -151,11 +265,10 @@ def test_run_build_process_build_error(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock npx check success, build failure
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        subprocess.CalledProcessError(1, "npx", stderr="Build failed"),
-    ]
+    # Mock build failure (npx check is now in _check_dependencies)
+    mock_run.side_effect = subprocess.CalledProcessError(
+        1, "npx", stderr="Build failed"
+    )
 
     with pytest.raises(SystemExit):
         _run_build_process(str(input_file), str(output_file), True, False)
@@ -233,11 +346,8 @@ def test_run_build_process_with_file_size(mock_console, mock_run, temp_dir):
     input_file.write_text("/* test css */")
     output_file.write_text("/* output css */")
 
-    # Mock successful subprocess calls
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        Mock(returncode=0, stderr="", stdout=""),  # actual build
-    ]
+    # Mock successful subprocess call (npx check is now in _check_dependencies)
+    mock_run.return_value = Mock(returncode=0, stderr="", stdout="")
 
     _run_build_process(str(input_file), str(output_file), True, False)
 
@@ -253,16 +363,13 @@ def test_run_build_process_command_construction(mock_console, mock_run, temp_dir
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock successful subprocess calls
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        Mock(returncode=0, stderr="", stdout=""),  # actual build
-    ]
+    # Mock successful subprocess call (npx check is now in _check_dependencies)
+    mock_run.return_value = Mock(returncode=0, stderr="", stdout="")
 
     _run_build_process(str(input_file), str(output_file), True, False)
 
     # Check the build command was constructed correctly
-    build_call = mock_run.call_args_list[1]
+    build_call = mock_run.call_args_list[0]
     command = build_call[0][0]
 
     assert "npx" in command
@@ -285,20 +392,22 @@ def test_run_build_process_with_warnings(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock successful subprocess calls with warnings
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        Mock(
-            returncode=1, stderr="Warning: some warning", stdout=""
-        ),  # build with warnings (non-zero return code)
-    ]
+    # Mock build with warnings (npx check is now in _check_dependencies)
+    error = subprocess.CalledProcessError(1, "npx")
+    error.stderr = "Warning: some warning"
+    mock_run.side_effect = error
 
-    _run_build_process(str(input_file), str(output_file), True, False)
+    with pytest.raises(SystemExit):
+        _run_build_process(str(input_file), str(output_file), True, False)
 
-    # Should show warning message
+    # Should show warning/error message
     print_calls = mock_console.print.call_args_list
-    warning_calls = [call for call in print_calls if "warning" in str(call).lower()]
-    assert len(warning_calls) > 0
+    error_calls = [
+        call
+        for call in print_calls
+        if "failed" in str(call).lower() or "error" in str(call).lower()
+    ]
+    assert len(error_calls) > 0
 
 
 @patch("labb.cli.handlers.build_handler.subprocess.run")
@@ -309,13 +418,10 @@ def test_run_build_process_with_stdout_output(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock npx check success, build failure with stdout
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        subprocess.CalledProcessError(
-            1, "npx", output="Build completed", stderr=""
-        ),  # build with stdout
-    ]
+    # Mock build failure with stdout (npx check is now in _check_dependencies)
+    mock_run.side_effect = subprocess.CalledProcessError(
+        1, "npx", output="Build completed", stderr=""
+    )
 
     with pytest.raises(SystemExit):
         _run_build_process(str(input_file), str(output_file), True, False)
@@ -334,11 +440,8 @@ def test_run_build_process_file_size_error(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock successful subprocess calls
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        Mock(returncode=0, stderr="", stdout=""),  # actual build
-    ]
+    # Mock successful subprocess call (npx check is now in _check_dependencies)
+    mock_run.return_value = Mock(returncode=0, stderr="", stdout="")
 
     # Mock Path.stat to raise an exception
     with patch("pathlib.Path.stat", side_effect=OSError("File not found")):
@@ -361,13 +464,10 @@ def test_run_build_process_tailwind_error(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock npx check success, build failure with tailwind error
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        subprocess.CalledProcessError(
-            1, "npx tailwindcss", stderr="tailwindcss error"
-        ),  # Include tailwindcss in command name
-    ]
+    # Mock build failure with tailwind error (npx check is now in _check_dependencies)
+    mock_run.side_effect = subprocess.CalledProcessError(
+        1, "npx tailwindcss", stderr="tailwindcss error"
+    )
 
     with pytest.raises(SystemExit):
         _run_build_process(str(input_file), str(output_file), True, False)
@@ -388,11 +488,8 @@ def test_run_build_process_unexpected_error(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock npx check success, build failure with unexpected error
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        Exception("Unexpected error"),  # unexpected error
-    ]
+    # Mock build failure with unexpected error (npx check is now in _check_dependencies)
+    mock_run.side_effect = Exception("Unexpected error")
 
     with pytest.raises(SystemExit):
         _run_build_process(str(input_file), str(output_file), True, False)
@@ -564,16 +661,13 @@ def test_run_build_process_no_minify(mock_console, mock_run, temp_dir):
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock successful subprocess calls
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        Mock(returncode=0, stderr="", stdout=""),  # actual build
-    ]
+    # Mock successful subprocess call (npx check is now in _check_dependencies)
+    mock_run.return_value = Mock(returncode=0, stderr="", stdout="")
 
     _run_build_process(str(input_file), str(output_file), False, False)
 
     # Check that --minify was not included in the command
-    build_call = mock_run.call_args_list[1]  # Second call is the build
+    build_call = mock_run.call_args_list[0]  # First call is the build
     cmd = build_call[0][0]  # First argument is the command list
     assert "--minify" not in cmd
 
@@ -588,11 +682,8 @@ def test_run_build_process_watch_mode_keyboard_interrupt(
     output_file = temp_dir / "output.css"
     input_file.write_text("/* test css */")
 
-    # Mock npx check success, then keyboard interrupt during watch
-    mock_run.side_effect = [
-        Mock(returncode=0),  # npx --version check
-        KeyboardInterrupt(),  # keyboard interrupt during watch
-    ]
+    # Mock keyboard interrupt during watch (npx check is now in _check_dependencies)
+    mock_run.side_effect = KeyboardInterrupt()
 
     with pytest.raises(SystemExit):
         _run_build_process(str(input_file), str(output_file), True, True)
