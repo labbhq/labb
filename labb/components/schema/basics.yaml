@@ -1761,3 +1761,113 @@ components:
     slots:
       default:
         description: "Link content (e.g., text, icons, or other components)"
+
+  breadcrumbs:
+    template: "lb/breadcrumbs/index.html"
+    description: "Breadcrumbs navigation component for displaying current page location in site hierarchy"
+    base_classes: ["breadcrumbs"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Breadcrumbs text size"
+        css_mapping:
+          xs: "text-xs"
+          sm: "text-sm"
+          md: "text-base"
+          lg: "text-lg"
+          xl: "text-xl"
+    slots:
+      default:
+        description: "Breadcrumb items using breadcrumbs.item components"
+
+  breadcrumbs.item:
+    template: "lb/breadcrumbs/item.html"
+    description: "Individual breadcrumb item with optional link and icon support"
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      href:
+        type: string
+        default: ""
+        description: "Link URL for the breadcrumb item (if not provided, item will be plain text)"
+        required: false
+      viewname:
+        type: string
+        default: ""
+        description: "Django view name to resolve (alternative to href). Use l: prefixed attributes for URL arguments"
+        required: false
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library to display before the breadcrumb text"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+    slots:
+      default:
+        description: "Breadcrumb item content (text or custom content)"
+
+  carousel:
+    template: "lb/carousel/index.html"
+    description: "Carousel component for displaying scrollable content with snap behavior"
+    base_classes: ["carousel"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      snap:
+        type: enum
+        values: [start, center, end]
+        default: start
+        description: "Snap position for carousel items"
+        css_mapping:
+          start: "carousel-start"
+          center: "carousel-center"
+          end: "carousel-end"
+      direction:
+        type: enum
+        values: [horizontal, vertical]
+        default: horizontal
+        description: "Carousel scroll direction"
+        css_mapping:
+          horizontal: ""
+          vertical: "carousel-vertical"
+    slots:
+      default:
+        description: "Carousel content using carousel.item components"
+
+  carousel.item:
+    template: "lb/carousel/item.html"
+    description: "Individual carousel item container"
+    base_classes: ["carousel-item"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      id:
+        type: string
+        default: ""
+        description: "Unique ID for anchor-based navigation"
+        required: false

@@ -10,6 +10,7 @@ from labb.cli.handlers.setup_handler import (
     setup_project,
     setup_project_with_config,
 )
+from labb.versions import DAISYUI_VERSION, TAILWIND_VERSION
 
 
 @patch("labb.cli.handlers.commons.load_config")
@@ -153,14 +154,20 @@ def test_install_tailwind_cli_success(mock_console, mock_run, temp_dir):
     _install_tailwind_cli(temp_dir)
 
     mock_run.assert_called_once_with(
-        ["npm", "install", "-D", "tailwindcss", "@tailwindcss/cli"],
+        [
+            "npm",
+            "install",
+            "-D",
+            f"tailwindcss@{TAILWIND_VERSION}",
+            f"@tailwindcss/cli@{TAILWIND_VERSION}",
+        ],
         cwd=temp_dir,
         check=True,
         capture_output=True,
         text=True,
     )
     mock_console.print.assert_called_with(
-        "[green]✅ Installed tailwindcss & @tailwindcss/cli[/green]"
+        f"[green]✅ Installed tailwindcss@{TAILWIND_VERSION} & @tailwindcss/cli@{TAILWIND_VERSION}[/green]"
     )
 
 
@@ -187,13 +194,15 @@ def test_install_daisyui_success(mock_console, mock_run, temp_dir):
     _install_daisyui(temp_dir)
 
     mock_run.assert_called_once_with(
-        ["npm", "install", "-D", "daisyui@latest"],
+        ["npm", "install", "-D", f"daisyui@{DAISYUI_VERSION}"],
         cwd=temp_dir,
         check=True,
         capture_output=True,
         text=True,
     )
-    mock_console.print.assert_called_with("[green]✅ Installed daisyui@latest[/green]")
+    mock_console.print.assert_called_with(
+        f"[green]✅ Installed daisyui@{DAISYUI_VERSION}[/green]"
+    )
 
 
 @patch("labb.cli.handlers.setup_handler.subprocess.run")

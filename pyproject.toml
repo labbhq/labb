@@ -1,6 +1,6 @@
 [project]
 name = "labbui"
-version = "0.1.1"
+version = "0.2.1"
 description = "UI components library for Django perfectionists"
 authors = [
     {name = "zadiq", email = "dev@zadiq.com"}
@@ -13,7 +13,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -32,7 +31,7 @@ keywords = [
     "tailwind",
     "daisyui",
 ]
-requires-python = ">=3.9,<4"
+requires-python = ">=3.10,<4"
 packages = [{include = "labb"}]
 dependencies = [
     "django-cotton (>=2.1.3,<3.0.0)",
@@ -57,11 +56,13 @@ labb = "labb.cli.main:app"
 dev = [
     "pytest (>=8.4.2,<9.0.0)",
     "pytest-mock (>=3.15.1,<4.0.0)",
+    "pytest-xdist (>=3.6.1,<4.0.0)",
     "ruff (>=0.14.0,<0.15.0)",
     "pytest-django (>=4.11.1,<5.0.0)",
     "pytest-cov (>=7.0.0,<8.0.0)",
     "labbicons @ ./extras/icons",
     "labbdocs @ ./docs",
+    "labbstart @ ./extras/start",
     "pre-commit (>=4.3.0,<5.0.0)",
 ]
 
@@ -81,15 +82,24 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 labbicons = {develop = true}
 labbdocs = {develop = true}
+labbstart = {develop = true}
 
 [project.optional-dependencies]
 icons = ["labbicons"]
 docs = ["labbdocs"]
+start = ["labbstart"]
 
 [tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+]
 filterwarnings = [
     'ignore:install "ipywidgets" for Jupyter support:UserWarning',
 ]
+# Parallel execution with pytest-xdist
+# Use -n auto to automatically detect CPU count
+# Use -n <number> to specify number of workers
+addopts = "-n auto --dist loadgroup"
 
 [tool.ruff]
 line-length = 88

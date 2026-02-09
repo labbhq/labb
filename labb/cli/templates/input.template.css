@@ -11,7 +11,7 @@
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: light, dark;
-};
+}
 
 @plugin "daisyui/theme" {
   name: "labb-light";
@@ -58,6 +58,7 @@
   --border: 1px;
   --depth: 0;
   --noise: 0;
+  --tw-shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 @plugin "daisyui/theme" {
@@ -105,6 +106,7 @@
   --border: 1px;
   --depth: 0;
   --noise: 0;
+  --tw-shadow-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Custom project styles (optional) */

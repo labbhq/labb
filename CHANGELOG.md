@@ -1,3 +1,11 @@
+## 0.1.1 (Jan 03, 2026)
+
+### Maintenance
+* chore/24-clean-up-doc-site ([#14](https://github.com/labbhq/labb/issues/14))
+
+
+---
+
 ## 0.1.0 (Dec 30, 2025)
 
 ### Other

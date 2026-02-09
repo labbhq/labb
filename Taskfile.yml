@@ -34,18 +34,29 @@ tasks:
       - poetry run pre-commit run --all-files
 
   test:icons:
-    desc: Run tests for the icons project
+    desc: Run tests for the icons project (parallel execution enabled)
     dir: .
     deps: [install]
     cmds:
-      - poetry run pytest extras/icons
+      - poetry run pytest extras/icons {{.CLI_ARGS}}
 
   test:
-    desc: Run tests for the main project
+    desc: Run tests for the main project (parallel execution enabled)
     dir: .
     deps: [install]
     cmds:
-      - poetry run pytest
+      - poetry run pytest {{.CLI_ARGS}}
+    summary: |
+      Run tests for the main project with parallel execution.
+
+      Parallel execution is enabled by default (uses all CPU cores).
+
+      Examples:
+        task test                           # Run all tests in parallel (auto-detect CPUs)
+        task test -- -n 4                   # Run with 4 workers
+        task test -- -n 0                   # Disable parallel execution
+        task test -- -k test_button         # Run specific test (with parallelism)
+        task test -- labb/tests/cli         # Run specific directory
 
   llms:generate:
     desc: Generate llms.txt file for LLM documentation
