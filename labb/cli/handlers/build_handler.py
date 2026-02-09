@@ -14,6 +14,55 @@ from labb.cli.handlers.commons import confirm_load_config
 console = Console()
 
 
+def _check_dependencies():
+    """Check if required dependencies are installed before building"""
+    current_dir = Path.cwd()
+
+    # Check 1: npx is available (Node.js installed)
+    try:
+        subprocess.run(
+            ["npx", "--version"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        console.print(
+            "[red]❌ npx is not available. Please install Node.js and npm[/red]"
+        )
+        console.print(
+            "[yellow]💡 Visit https://nodejs.org/ to install Node.js[/yellow]"
+        )
+        sys.exit(1)
+
+    # Check 2: package.json exists
+    package_json_path = current_dir / "package.json"
+    if not package_json_path.exists():
+        console.print("[red]❌ package.json not found[/red]")
+        console.print("[yellow]💡 Run 'labb init' to initialize the project[/yellow]")
+        sys.exit(1)
+
+    # Check 3: node_modules exists (dependencies installed)
+    node_modules_path = current_dir / "node_modules"
+    if not node_modules_path.exists():
+        console.print(
+            "[red]❌ node_modules not found - dependencies not installed[/red]"
+        )
+        console.print(
+            "[yellow]💡 Run 'labb setup' to install Tailwind CSS and DaisyUI[/yellow]"
+        )
+        sys.exit(1)
+
+    # Check 4: Tailwind CSS is installed
+    tailwind_path = node_modules_path / "@tailwindcss" / "cli"
+    if not tailwind_path.exists():
+        console.print("[red]❌ Tailwind CSS CLI not found in node_modules[/red]")
+        console.print(
+            "[yellow]💡 Run 'labb setup' to install Tailwind CSS and DaisyUI[/yellow]"
+        )
+        sys.exit(1)
+
+
 def build_css(
     watch: bool = False,
     scan: bool = False,
@@ -34,9 +83,12 @@ def build_css(
     if not input_path_obj.exists():
         console.print(f"[red]❌ Input CSS file not found: {input_path}[/red]")
         console.print(
-            "[yellow]💡 Run 'labb setup' to create the required files[/yellow]"
+            "[yellow]💡 Run 'labb init' to create the required files[/yellow]"
         )
         sys.exit(1)
+
+    # Check dependencies before starting build
+    _check_dependencies()
 
     output_path_obj.parent.mkdir(parents=True, exist_ok=True)
 
@@ -198,18 +250,6 @@ def _run_build_process(
     info_text.append(f"Watch:  {'Yes' if watch else 'No'}", style="magenta")
 
     console.print(Panel(info_text, title="CSS Build", border_style="blue"))
-
-    try:
-        # Check if npx is available
-        subprocess.run(["npx", "--version"], check=True, capture_output=True, text=True)
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        console.print(
-            "[red]❌ npx is not available. Please install Node.js and npm[/red]"
-        )
-        console.print(
-            "[yellow]💡 Visit https://nodejs.org/ to install Node.js[/yellow]"
-        )
-        sys.exit(1)
 
     try:
         # Execute the build command

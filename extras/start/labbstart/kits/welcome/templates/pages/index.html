@@ -1,0 +1,142 @@
+{% load lb_tags %}
+
+<c-vars
+    :themeOptions="{
+        '__system__': 'System',
+        'labb-light': 'Light',
+        'labb-dark': 'Dark',
+        'light': 'Daisy Light',
+        'dark': 'Daisy Dark'
+    }"
+/>
+
+{% labb_theme_val as theme %}
+
+<c-layouts.base title="Welcome">
+    <!-- Theme Switcher -->
+    <div class="fixed top-6 right-6 z-50">
+        <c-lb.dropdown placement="bottom" alignment="end">
+            <c-lb.dropdown.trigger class="btn btn-sm btn-circle btn-ghost bg-base-100 border border-base-content/10 hover:border-base-content/20 shadow-sm hover:shadow transition-all duration-200">
+                <c-lbi.rmx.palette w="1.125rem" h="1.125rem" class="text-base-content/70" />
+            </c-lb.dropdown.trigger>
+            <c-lb.dropdown.content class="bg-base-100 rounded-xl w-48 shadow-lg border border-base-content/10 mt-2">
+                <c-lb.menu class="w-full p-2">
+                    {% for key, value in themeOptions.items %}
+                        <input
+                            type="radio"
+                            name="theme-dropdown"
+                            value="{{key}}"
+                            class="theme-controller btn btn-ghost btn-sm justify-start rounded-lg text-sm font-normal"
+                            aria-label="{{value}}"
+                            {% if key == theme %}checked{% endif %}
+                        />
+                    {% endfor %}
+                </c-lb.menu>
+            </c-lb.dropdown.content>
+        </c-lb.dropdown>
+    </div>
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-16">
+        <!-- Subtle gradient accents -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-0 right-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-green-300/12 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-4xl w-full relative z-10">
+            <div class="space-y-16">
+                <!-- Header Section -->
+                <div class="text-center space-y-8">
+                    <!-- Logo -->
+                    <div class="flex justify-center">
+                        <c-logo height="64" class="text-base-content opacity-90" />
+                    </div>
+
+                    <!-- Main Message -->
+                    <div class="space-y-6">
+                        <h1 class="text-4xl md:text-6xl font-light tracking-tight leading-tight max-w-3xl mx-auto">
+                            Your Django project is ready
+                        </h1>
+                        <p class="text-base md:text-lg text-base-content/60 max-w-xl mx-auto font-light">
+                            Start building beautiful interfaces with labb components
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Getting Started Card -->
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-base-100 border border-base-content/5 rounded-2xl p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <h2 class="text-xl md:text-2xl font-light mb-8 text-base-content/80">Getting Started</h2>
+                        <ul class="space-y-5">
+                            <c-info-item>
+                                Inform your AI agents to run <code class="code-inline">labb llms</code> to introduce them to labb
+                            </c-info-item>
+                            <c-info-item>
+                                Edit this page in <code class="code-inline">templates/pages/index.html</code>
+                            </c-info-item>
+                            <c-info-item>
+                                Customize themes in <code class="code-inline">static_src/input.css</code>
+                            </c-info-item>
+                            <c-info-item>
+                                Explore all components with <code class="code-inline">labb components ex --tree</code>
+                            </c-info-item>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-3 justify-center flex-wrap">
+                    <c-lb.button variant="primary" icon="rmx.book-open" as="a" href="https://labb.io" target="_blank" class="btn-md">
+                        Documentation
+                    </c-lb.button>
+                    <c-lb.button variant="outline" icon="rmx.github" as="a" href="https://github.com/labbhq/labb" target="_blank" class="btn-md">
+                        GitHub
+                    </c-lb.button>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center text-sm text-base-content/40 font-light">
+                    <p>Powered by Django Cotton, Tailwind CSS & daisyUI</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</c-layouts.base>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get current theme from data-theme attribute
+    const currentTheme = "{{ theme }}";
+
+    // Find all theme controller inputs
+    const themeInputs = document.querySelectorAll('input[name="theme-dropdown"].theme-controller');
+
+    // Function to update active state
+    function updateActiveState() {
+        themeInputs.forEach(function(input) {
+            if (input.value === currentTheme) {
+                input.classList.add('btn-active');
+            } else {
+                input.classList.remove('btn-active');
+            }
+        });
+    }
+
+    // Set initial active state
+    updateActiveState();
+
+    // Add change event listeners to update active state when theme changes
+    themeInputs.forEach(function(input) {
+        input.addEventListener('change', function() {
+            // Remove active class from all inputs
+            themeInputs.forEach(function(btn) {
+                btn.classList.remove('btn-active');
+            });
+
+            // Add active class to the selected input
+            this.classList.add('btn-active');
+        });
+    });
+});
+</script>

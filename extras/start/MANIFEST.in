@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+recursive-include labbstart/kits *.py *.html *.css *.js
+recursive-exclude labbstart/__pycache__ *
+recursive-exclude labbstart/*/__pycache__ *

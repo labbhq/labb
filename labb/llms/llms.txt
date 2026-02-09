@@ -16,6 +16,16 @@ labb is a Django component library providing components built with Django Cotton
 4. Install dependencies: `labb setup --install-deps`
 5. Start development: `labb dev`
 
+## labbstart (Project Scaffolding)
+**labbstart** scaffolds a new Django project with labb pre-configured. Use it for the fastest way to get started.
+
+- Install: `pip install labbstart` or `poetry add labbstart` or `uv add labbstart`
+- Create project: `labbstart new` (interactive) or `labbstart new myproject --django-version 5 --package-manager poetry --kit welcome --app-name starter`
+- Prompts for: project name, Django version (4/5/6), package manager (poetry/pip/uv), kit (e.g. welcome), app name
+- Creates: project dir, package manager setup, Django + labbui + labbicons, starter kit app, labb init + build, .gitignore, README
+- After creation: run `labb dev` in one terminal and `python manage.py runserver` in another
+- Requirements: Python 3.10+ (<4), and poetry/pip/uv
+
 ## Icons (Optional)
 Install labbicons for icon support: `pip install labbicons` or `poetry add labbicons`
 
@@ -140,11 +150,17 @@ labb provides built-in theming with daisyUI 5 integration:
 ```html
 {% load lb_tags %}
 <!-- Base template -->
-<html data-theme="{% labb_theme %}">
+<html {% labb_theme %}>
 <head>
     <c-lb.m.dependencies setThemeEndpoint="{% url 'set_theme' %}" />
 </head>
+<body>
+    {% csrf_token %}  <!-- REQUIRED: Add CSRF token for theme switching -->
+    <!-- Your content here -->
+</body>
 ```
+
+**IMPORTANT:** Always include `{% csrf_token %}` in your main template body when using theme controllers. The theme switching functionality requires CSRF protection for POST requests.
 
 **URL Configuration:**
 ```python
@@ -167,7 +183,7 @@ path('set-theme/', set_theme_view, name='set_theme')
 **Utility Functions:**
 - `labb.shortcuts.set_labb_theme(request, theme)` - Set theme in session
 - `labb.shortcuts.get_labb_theme(request)` - Get current theme
-- `{% labb_theme %}` - Template tag for current theme
+- `{% labb_theme %}` - Template tag for current theme (adds data-theme attribute)
 
 ## AI/LLM Usage Guidelines
 **ALWAYS USE THE CLI FIRST** when working with labb components, especially when stuck with an issue:
@@ -194,8 +210,12 @@ labb components ex --tree
 
 **Common Mistakes to Avoid:**
 - DON'T guess parameter names - Use `labb components inspect`
+- DON'T guess icon names - Use `labb icons search "term"` or `labb llms` to find exact icon names. Guessing (e.g. `rmx.rocket-2-line`) often causes: `TypeError: cannot unpack non-iterable NoneType object` when the icon does not exist.
 - DON'T create manual icons - Use built-in `icon="rmx.iconname"` (search with `labb icons search`)
 - DON'T skip CLI examples - They show correct syntax
+
+**Common Errors:**
+- `TypeError: cannot unpack non-iterable NoneType object` at docs or UI routes: Usually caused by an invalid or guessed icon name (e.g. `rmx.rocket-2-line` when the actual icon is `rmx.rocket-2`). Fix: Run `labb icons search "keyword"` or `labb llms` to find the correct icon name; use the exact "Component" value from search results (e.g. `rmx.rocket-2`).
 
 ## Components
 **accordion**: Accordion component for displaying collapsible content sections | Vars: class: string, join: boolean | 5 examples
@@ -204,12 +224,16 @@ labb components ex --tree
 **avatar**: Avatar component for displaying user thumbnails or profile pictures | Vars: size: xs/sm/md/lg/xl, class: string, rounded: xs/sm/md/lg/xl/full, mask: heart/squircle/hexagon-2/triangle/pentagon/diamond/star | 11 examples
 **avatar.group**: Group wrapper for multiple avatars with overlapping layout | Vars: class: string, spacing: wide/normal/tight/tighter/tightest
 **badge**: Badge component for displaying status, counts, or labels | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, style: outline/dash/soft/ghost, size: xs/sm/md/lg/xl, class: string, icon: string, iconFill: boolean | 11 examples
+**breadcrumbs**: Breadcrumbs navigation component for displaying current page location in site hierarchy | Vars: size: xs/sm/md/lg/xl, class: string | 7 examples
+**breadcrumbs.item**: Individual breadcrumb item with optional link and icon support | Vars: class: string, href: string, viewname: string
 **button**: Button component with different styles and sizes | Vars: as: button/a/input/div, variant: neutral/primary/secondary/accent/info/success/warning/error, behavior: active/disabled, size: xs/sm/md/lg/xl, class: string, btnStyle: outline/dash/soft/ghost/link | 10 examples
 **card**: Main card container component with support for various layouts and styles | Vars: variant: default/primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string, border: boolean, dash: boolean | 11 examples
 **card.actions**: Container for action elements (e.g., buttons) | Vars: class: string, justify: start/center/end/between/around/evenly
 **card.body**: Main content area of the card | Vars: class: string
 **card.figure**: Image container within the card | Vars: class: string
 **card.title**: Title section within the card body | Vars: as: h1/h2/h3/h4/h5/h6/div/span, class: string
+**carousel**: Carousel component for displaying scrollable content with snap behavior | Vars: class: string, snap: start/center/end, direction: horizontal/vertical | 7 examples
+**carousel.item**: Individual carousel item container | Vars: class: string, id: string
 **checkbox**: Checkbox input component with various styles and states | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string | 4 examples
 **diff**: Image comparison component with draggable resizer for before/after views | Vars: class: string, aspectRatio: 16/9/4/3/1/1/3/4/9/16 | 5 examples
 **diff.item-1**: First item in the diff comparison (typically the 'before' image) | Vars: class: string, src: string, alt: string
