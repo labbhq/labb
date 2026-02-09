@@ -6,3 +6,5 @@ chore/22-add-blog-post-support-to-docs
 chore/24-clean-up-doc-site
 feat/25-labbstart-for-starter-kits
 chore/26-enhance-readme-md
+feat/27-add-breadcrumbs-component
+feat/28-add-carousel-component

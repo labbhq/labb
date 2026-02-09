@@ -8,7 +8,16 @@ doc_show_toc: false
 
 ## Getting Started
 
+<c-lbdocs.labbstart_info class="my-6" />
+
 <c-lbdocs.doc_card.grid cols="3">
+  <c-lbdocs.doc_card
+    title="labbstart"
+    summary="Scaffold a new Django project with labb—quickest way to get running"
+    href="{% doc_url '1_getting_started/0_labbstart.md' 'ui' %}"
+    icon="rmx.rocket-2"
+  />
+
   <c-lbdocs.doc_card
     title="Introduction"
     summary="Learn about labb and how it simplifies Django UI development"
@@ -18,7 +27,7 @@ doc_show_toc: false
 
   <c-lbdocs.doc_card
     title="Installation"
-    summary="Add labb to your existing and new Django projects"
+    summary="Add labb to your existing Django project"
     href="{% doc_url '1_getting_started/2_installation.md' 'ui' %}"
     icon="rmx.download"
   />
