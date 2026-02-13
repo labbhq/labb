@@ -1,3 +1,5 @@
+![labb welcome kit](docs/labbdocs/static/lbdocs/img/labb/labb_welcome_kit.jpg)
+
 # labb
 
 UI components library for Django perfectionists.
@@ -49,8 +51,6 @@ labbstart new myproject
 ```
 
 This scaffolds a complete Django project with labb, Tailwind CSS, and DaisyUI pre-configured -- ready to run in one command. It supports Poetry, pip, and uv, and includes a welcome page to get you oriented.
-
-![labb welcome kit](docs/labbdocs/static/lbdocs/img/labb/labb_welcome_kit.jpg)
 
 ### Adding to an existing project
 
