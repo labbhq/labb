@@ -1673,8 +1673,8 @@ components:
           error: "text-error"
       size:
         type: enum
-        values: [xs, sm, md, lg, xl, "2xl", "3xl", "4xl"]
-        default: md
+        values: ["", xs, sm, md, lg, xl, "2xl", "3xl", "4xl"]
+        default: ""
         description: "Text size"
         css_mapping:
           xs: "text-xs"
@@ -1870,4 +1870,693 @@ components:
         type: string
         default: ""
         description: "Unique ID for anchor-based navigation"
+        required: false
+
+  chat:
+    template: "lb/chat/index.html"
+    description: "Chat container for a single message in a conversation thread"
+    base_classes: ["chat"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      placement:
+        type: enum
+        values: [start, end]
+        default: start
+        description: "Horizontal placement of the chat message"
+        css_mapping:
+          start: "chat-start"
+          end: "chat-end"
+    slots:
+      default:
+        description: "Chat content using chat.image, chat.header, chat.bubble, and chat.footer components"
+
+  chat.bubble:
+    template: "lb/chat/bubble.html"
+    description: "Message bubble that displays the chat message text"
+    base_classes: ["chat-bubble"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", primary, secondary, accent, neutral, info, success, warning, error]
+        default: ""
+        description: "Bubble color variant"
+        css_mapping:
+          primary: "chat-bubble-primary"
+          secondary: "chat-bubble-secondary"
+          accent: "chat-bubble-accent"
+          neutral: "chat-bubble-neutral"
+          info: "chat-bubble-info"
+          success: "chat-bubble-success"
+          warning: "chat-bubble-warning"
+          error: "chat-bubble-error"
+    slots:
+      default:
+        description: "Message content displayed inside the bubble"
+
+  chat.image:
+    template: "lb/chat/image.html"
+    description: "Avatar image displayed alongside the chat message"
+    base_classes: ["chat-image", "avatar"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      src:
+        type: string
+        default: ""
+        description: "Image source URL for the avatar"
+        required: false
+      alt:
+        type: string
+        default: "Avatar"
+        description: "Alt text for the avatar image"
+        required: false
+      size:
+        type: enum
+        values: [sm, md, lg]
+        default: md
+        description: "Avatar image size"
+        css_mapping:
+          sm: "w-8"
+          md: "w-10"
+          lg: "w-12"
+    slots:
+      default:
+        description: "Custom avatar content (overrides automatic image rendering when src is not provided)"
+
+  chat.header:
+    template: "lb/chat/header.html"
+    description: "Header text displayed above the chat bubble, typically showing the sender name"
+    base_classes: ["chat-header"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+    slots:
+      default:
+        description: "Header content such as sender name and timestamp"
+
+  chat.footer:
+    template: "lb/chat/footer.html"
+    description: "Footer text displayed below the chat bubble, typically showing delivery status or timestamp"
+    base_classes: ["chat-footer"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+    slots:
+      default:
+        description: "Footer content such as delivery status or read receipts"
+
+  collapse:
+    template: "lb/collapse/index.html"
+    description: "Standalone expandable section with a title and collapsible content area"
+    base_classes: ["collapse"]
+    optional_base_classes: ["collapse-arrow", "collapse-plus", "collapse-open", "collapse-title", "collapse-content"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      style:
+        type: enum
+        values: ["", arrow, plus]
+        default: ""
+        description: "Icon style shown on the collapse title"
+        css_mapping:
+          arrow: "collapse-arrow"
+          plus: "collapse-plus"
+      open:
+        type: boolean
+        default: false
+        description: "Whether the collapse is initially open"
+        css_mapping:
+          true: "collapse-open"
+      title:
+        type: string
+        default: ""
+        description: "Title text for the collapse header (alternative to title slot)"
+        required: false
+    slots:
+      default:
+        description: "Collapsible content that appears when the collapse is expanded"
+      titleSlot:
+        description: "Custom title content including the collapse-title wrapper (overrides title attribute when provided)"
+
+  hover-gallery:
+    template: "lb/hover_gallery/index.html"
+    description: "CSS-only image gallery that reveals different images on hover across horizontal columns"
+    base_classes: ["hover-gallery"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [figure, div]
+        default: figure
+        description: "HTML element to use as container"
+    slots:
+      default:
+        description: "Image elements to display in the gallery"
+
+  hover3d:
+    template: "lb/hover3d/index.html"
+    description: "CSS-only 3D tilt effect wrapper using 8 hover-zone divs to detect mouse position and apply rotation"
+    base_classes: ["hover-3d"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+
+  kbd:
+    template: "lb/kbd/index.html"
+    description: "Keyboard key indicator to display keyboard shortcuts or key combinations"
+    base_classes: ["kbd"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Size of the keyboard key"
+        css_mapping:
+          xs: "kbd-xs"
+          sm: "kbd-sm"
+          md: "kbd-md"
+          lg: "kbd-lg"
+          xl: "kbd-xl"
+      variant:
+        type: enum
+        default: ""
+        description: "Color variant for the keyboard key"
+        values: ["", "neutral", "primary", "secondary", "accent", "info", "success", "warning", "error"]
+        css_mapping:
+          "neutral": "bg-neutral/15 text-neutral border-neutral/25"
+          "primary": "bg-primary/15 text-primary border-primary/25"
+          "secondary": "bg-secondary/15 text-secondary border-secondary/25"
+          "accent": "bg-accent/15 text-accent border-accent/25"
+          "info": "bg-info/15 text-info border-info/25"
+          "success": "bg-success/15 text-success border-success/25"
+          "warning": "bg-warning/15 text-warning border-warning/25"
+          "error": "bg-error/15 text-error border-error/25"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name to display inside the key (e.g., 'rmx.arrow-up')"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+    slots:
+      default:
+        description: "Key label text"
+
+  list:
+    template: "lb/list/index.html"
+    description: "List component for displaying information in vertical rows with horizontal layout"
+    base_classes: ["list"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [ul, div, ol]
+        default: ul
+        description: "HTML tag to use for the list container"
+    slots:
+      default:
+        description: "List content using list.row components"
+
+  list.row:
+    template: "lb/list/row.html"
+    description: "Individual list row item with horizontal grid layout"
+    base_classes: ["list-row"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      as:
+        type: enum
+        values: [li, div]
+        default: li
+        description: "HTML tag to use for the row element"
+    slots:
+      default:
+        description: "Row content - multiple children arranged horizontally (second child grows by default)"
+
+  stat.group:
+    template: "lb/stat/group.html"
+    description: "Container for grouping multiple stat components with horizontal or vertical layout"
+    base_classes: ["stats"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      direction:
+        type: enum
+        values: [horizontal, vertical]
+        default: horizontal
+        description: "Layout direction for stats"
+        css_mapping:
+          horizontal: "stats-horizontal"
+          vertical: "stats-vertical"
+    slots:
+      default:
+        description: "Container for stat components"
+
+  stat:
+    template: "lb/stat/index.html"
+    description: "Individual stat block for displaying a metric with optional title, value, description, and figure"
+    base_classes: ["stat"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+    slots:
+      default:
+        description: "Stat content using stat.title, stat.value, stat.desc, stat.figure, and stat.actions components"
+
+  stat.title:
+    template: "lb/stat/title.html"
+    description: "Title or label for the stat metric"
+    base_classes: ["stat-title"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+    slots:
+      default:
+        description: "Title text content"
+
+  stat.value:
+    template: "lb/stat/value.html"
+    description: "Primary value display for the stat metric"
+    base_classes: ["stat-value"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", primary, secondary, accent, neutral, info, success, warning, error]
+        default: ""
+        description: "Color variant for the stat value"
+        css_mapping:
+          primary: "text-primary"
+          secondary: "text-secondary"
+          accent: "text-accent"
+          neutral: "text-neutral"
+          info: "text-info"
+          success: "text-success"
+          warning: "text-warning"
+          error: "text-error"
+    slots:
+      default:
+        description: "Value content (typically a number or metric)"
+
+  stat.desc:
+    template: "lb/stat/desc.html"
+    description: "Description or subtitle for the stat metric"
+    base_classes: ["stat-desc"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", primary, secondary, accent, neutral, info, success, warning, error]
+        default: ""
+        description: "Color variant for the stat description"
+        css_mapping:
+          primary: "text-primary"
+          secondary: "text-secondary"
+          accent: "text-accent"
+          neutral: "text-neutral"
+          info: "text-info"
+          success: "text-success"
+          warning: "text-warning"
+          error: "text-error"
+    slots:
+      default:
+        description: "Description text content"
+
+  stat.figure:
+    template: "lb/stat/figure.html"
+    description: "Container for icon or image displayed with the stat"
+    base_classes: ["stat-figure"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library (e.g., 'rmx.heart')"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+      variant:
+        type: enum
+        values: ["", primary, secondary, accent, neutral, info, success, warning, error]
+        default: ""
+        description: "Color variant for the figure"
+        css_mapping:
+          primary: "text-primary"
+          secondary: "text-secondary"
+          accent: "text-accent"
+          neutral: "text-neutral"
+          info: "text-info"
+          success: "text-success"
+          warning: "text-warning"
+          error: "text-error"
+    slots:
+      default:
+        description: "Custom figure content (icon or image element)"
+
+  stat.actions:
+    template: "lb/stat/actions.html"
+    description: "Container for action elements within a stat"
+    base_classes: ["stat-actions"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+    slots:
+      default:
+        description: "Action buttons or interactive elements"
+
+  status:
+    template: "lb/status/index.html"
+    description: "Small status indicator icon to show current state like online, offline, or error"
+    base_classes: ["status"]
+    optional_base_classes: ["inline-grid", "*:[grid-area:1/1]"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      variant:
+        type: enum
+        values: ["", neutral, primary, secondary, accent, info, success, warning, error]
+        default: ""
+        description: "Status color variant"
+        css_mapping:
+          neutral: "status-neutral"
+          primary: "status-primary"
+          secondary: "status-secondary"
+          accent: "status-accent"
+          info: "status-info"
+          success: "status-success"
+          warning: "status-warning"
+          error: "status-error"
+      size:
+        type: enum
+        values: [xs, sm, md, lg, xl]
+        default: md
+        description: "Status indicator size"
+        css_mapping:
+          xs: "status-xs"
+          sm: "status-sm"
+          md: "status-md"
+          lg: "status-lg"
+          xl: "status-xl"
+      animate:
+        type: enum
+        values: ["", ping, bounce]
+        default: ""
+        description: "Animation effect for the status indicator"
+        css_mapping:
+          ping: "animate-ping"
+          bounce: "animate-bounce"
+
+  text-rotate:
+    template: "lb/text_rotate/index.html"
+    description: "Text rotation component that cycles through multiple text items with animation"
+    base_classes: ["text-rotate"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      duration:
+        type: string
+        default: ""
+        description: "Tailwind duration class for animation speed (e.g., 'duration-6000')"
+        required: false
+    slots:
+      default:
+        description: "Text items to rotate through (up to 6 span elements)"
+
+  timeline:
+    template: "lb/timeline/index.html"
+    description: "Timeline component for displaying chronological events"
+    base_classes: ["timeline"]
+    optional_base_classes: ["timeline-compact", "timeline-snap-icon"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      direction:
+        type: enum
+        values: ["", horizontal, vertical]
+        default: ""
+        description: "Timeline layout direction"
+        css_mapping:
+          horizontal: "timeline-horizontal"
+          vertical: "timeline-vertical"
+      compact:
+        type: boolean
+        default: false
+        description: "Force all items to one side"
+        css_mapping:
+          true: "timeline-compact"
+      snap:
+        type: boolean
+        default: false
+        description: "Align icon to start instead of middle"
+        css_mapping:
+          true: "timeline-snap-icon"
+    slots:
+      default:
+        description: "Timeline items using timeline.item components"
+
+  timeline.item:
+    template: "lb/timeline/item.html"
+    description: "Individual timeline event item with automatic hr connectors and convenience props for start, middle, and end content"
+    base_classes: []
+    optional_base_classes: ["timeline-start", "timeline-middle", "timeline-end", "timeline-box"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      first:
+        type: boolean
+        default: false
+        description: "Mark as the first item (no hr before)"
+      last:
+        type: boolean
+        default: false
+        description: "Mark as the last item (no hr after)"
+      icon:
+        type: string
+        default: ""
+        description: "Icon name for the timeline middle marker (e.g., 'rmx.check')"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+      start:
+        type: string
+        default: ""
+        description: "Text content for the start section"
+        required: false
+      startBox:
+        type: boolean
+        default: false
+        description: "Apply timeline-box styling to the start section"
+        css_mapping:
+          true: "timeline-box"
+      end:
+        type: string
+        default: ""
+        description: "Text content for the end section"
+        required: false
+      endBox:
+        type: boolean
+        default: false
+        description: "Apply timeline-box styling to the end section"
+        css_mapping:
+          true: "timeline-box"
+      variant:
+        type: enum
+        default: ""
+        description: "Color variant applied to the icon and hr connectors"
+        values: ["", "neutral", "primary", "secondary", "accent", "info", "success", "warning", "error"]
+        css_mapping:
+          "neutral": "bg-neutral / text-neutral"
+          "primary": "bg-primary / text-primary"
+          "secondary": "bg-secondary / text-secondary"
+          "accent": "bg-accent / text-accent"
+          "info": "bg-info / text-info"
+          "success": "bg-success / text-success"
+          "warning": "bg-warning / text-warning"
+          "error": "bg-error / text-error"
+    slots:
+      default:
+        description: "Additional content or full manual control of the item"
+      startSlot:
+        description: "Custom start content (overrides start prop)"
+      middleSlot:
+        description: "Custom middle content (overrides icon prop)"
+      endSlot:
+        description: "Custom end content (overrides end prop)"
+
+  timeline.start:
+    template: "lb/timeline/start.html"
+    description: "Content positioned at the start side of a timeline item"
+    base_classes: ["timeline-start"]
+    optional_base_classes: ["timeline-box"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      box:
+        type: boolean
+        default: false
+        description: "Apply box styling to the content"
+        css_mapping:
+          true: "timeline-box"
+    slots:
+      default:
+        description: "Start content"
+
+  timeline.middle:
+    template: "lb/timeline/middle.html"
+    description: "Central icon or marker area of a timeline item"
+    base_classes: ["timeline-middle"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      icon:
+        type: string
+        default: ""
+        description: "Icon name from the icon library (e.g., 'rmx.check')"
+        required: false
+      iconFill:
+        type: boolean
+        default: false
+        description: "Whether the icon should be filled (solid) or outlined"
+      iconClass:
+        type: string
+        default: ""
+        description: "Additional CSS classes for the icon"
+        required: false
+    slots:
+      default:
+        description: "Custom marker content (used alongside or instead of icon)"
+
+  timeline.end:
+    template: "lb/timeline/end.html"
+    description: "Content positioned at the end side of a timeline item"
+    base_classes: ["timeline-end"]
+    optional_base_classes: ["timeline-box"]
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply"
+        required: false
+      box:
+        type: boolean
+        default: false
+        description: "Apply box styling to the content"
+        css_mapping:
+          true: "timeline-box"
+    slots:
+      default:
+        description: "End content"
+
+  timeline.hr:
+    template: "lb/timeline/hr.html"
+    description: "Connector line between timeline items"
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ""
+        description: "Additional CSS classes to apply (e.g., 'bg-primary' for colored connectors)"
         required: false

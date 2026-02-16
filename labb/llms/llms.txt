@@ -234,7 +234,13 @@ labb components ex --tree
 **card.title**: Title section within the card body | Vars: as: h1/h2/h3/h4/h5/h6/div/span, class: string
 **carousel**: Carousel component for displaying scrollable content with snap behavior | Vars: class: string, snap: start/center/end, direction: horizontal/vertical | 7 examples
 **carousel.item**: Individual carousel item container | Vars: class: string, id: string
+**chat**: Chat container for a single message in a conversation thread | Vars: class: string, placement: start/end | 3 examples
+**chat.bubble**: Message bubble that displays the chat message text | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, class: string
+**chat.footer**: Footer text displayed below the chat bubble, typically showing delivery status or timestamp | Vars: class: string
+**chat.header**: Header text displayed above the chat bubble, typically showing the sender name | Vars: class: string
+**chat.image**: Avatar image displayed alongside the chat message | Vars: size: sm/md/lg, class: string, src: string, alt: string
 **checkbox**: Checkbox input component with various styles and states | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string | 4 examples
+**collapse**: Standalone expandable section with a title and collapsible content area | Vars: style: arrow/plus, class: string, open: boolean, title: string | 4 examples
 **diff**: Image comparison component with draggable resizer for before/after views | Vars: class: string, aspectRatio: 16/9/4/3/1/1/3/4/9/16 | 5 examples
 **diff.item-1**: First item in the diff comparison (typically the 'before' image) | Vars: class: string, src: string, alt: string
 **diff.item-2**: Second item in the diff comparison (typically the 'after' image) | Vars: class: string, src: string, alt: string
@@ -253,7 +259,12 @@ labb components ex --tree
 **fab.main-action**: FAB main action button sub-component | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, size: xs/sm/md/lg/xl, class: string
 **footer**: Footer component for displaying site footer content with optional centered layout | Vars: as: footer/div/section, class: string, center: boolean, direction: horizontal/vertical | 9 examples
 **footer.title**: Footer section title component - applies footer-title styling | Vars: as: span/h2/h3/h4/h5/h6/div/p, class: string
+**hover-gallery**: CSS-only image gallery that reveals different images on hover across horizontal columns | Vars: as: figure/div, class: string | 3 examples
+**hover3d**: CSS-only 3D tilt effect wrapper using 8 hover-zone divs to detect mouse position and apply rotation | Vars: class: string | 2 examples
+**kbd**: Keyboard key indicator to display keyboard shortcuts or key combinations | Vars: size: xs/sm/md/lg/xl, variant: neutral/primary/secondary/accent/info/success/warning/error, class: string, icon: string, iconFill: boolean | 9 examples
 **link**: Link component with support for href, Django view name resolution, DaisyUI styling, and l: prefixed URL arguments | Vars: as: a/button/span/div, variant: neutral/primary/secondary/accent/info/success/warning/error, class: string, href: string, viewname: string | 5 examples
+**list**: List component for displaying information in vertical rows with horizontal layout | Vars: as: ul/div/ol, class: string | 2 examples
+**list.row**: Individual list row item with horizontal grid layout | Vars: as: li/div, class: string
 **menu**: Flexible navigation menu component with support for horizontal/vertical layout and sizes | Vars: size: xs/sm/md/lg/xl, class: string, direction: vertical/horizontal | 12 examples
 **menu.item**: Unified menu item supporting links, titles, and submenus with choice of details/summary or ul/li | Vars: size: xs/sm/md/lg/xl, class: string, type: link/title/submenu-details/submenu-toggle, title: string
 **modal**: Modal dialog component using HTML dialog element for better accessibility | Vars: size: map, class: string, id: string, placement: top/middle/bottom/start/end | 13 examples
@@ -265,6 +276,14 @@ labb components ex --tree
 **navbar.center**: Center section of the navbar - typically contains main navigation links (works within navbar context) | Vars: as: div/section/nav, class: string
 **navbar.end**: Right section of the navbar - typically contains search, notifications, and profile (works within navbar context) | Vars: as: div/section/aside, class: string
 **navbar.start**: Left section of the navbar - typically contains brand and mobile menu toggle (works within navbar context) | Vars: as: div/section/aside, class: string
+**stat**: Individual stat block for displaying a metric with optional title, value, description, and figure | Vars: class: string | 5 examples
+**stat.actions**: Container for action elements within a stat | Vars: class: string
+**stat.desc**: Description or subtitle for the stat metric | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, class: string
+**stat.figure**: Container for icon or image displayed with the stat | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, class: string, icon: string, iconFill: boolean
+**stat.group**: Container for grouping multiple stat components with horizontal or vertical layout | Vars: class: string, direction: horizontal/vertical
+**stat.title**: Title or label for the stat metric | Vars: class: string
+**stat.value**: Primary value display for the stat metric | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, class: string
+**status**: Small status indicator icon to show current state like online, offline, or error | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, size: xs/sm/md/lg/xl, class: string, animate: ping/bounce | 3 examples
 **swap**: Swap component for toggling between two elements with smooth transitions | Vars: class: string, effect: rotate/flip, checked: boolean | 8 examples
 **swap.indeterminate**: Content shown when checkbox is in indeterminate state | Vars: class: string
 **swap.off**: Content shown when swap is inactive | Vars: class: string
@@ -273,4 +292,11 @@ labb components ex --tree
 **tabs**: Main tabs wrapper component - use with tabs.content for full functionality | Vars: style: border/lift/box, size: xs/sm/md/lg/xl, class: string, placement: top/bottom, name: string | 6 examples
 **tabs.content**: Individual tab content with radio input and content area | Vars: class: string, name: string, checked: boolean
 **text**: Text component with support for variants, sizes, underline, and icons | Vars: as: span/p/div/h1/h2/h3/h4/h5/h6, variant: neutral/primary/secondary/accent/info/success/warning/error, size: xs/sm/md/lg/xl/2xl/3xl/4xl, class: string, underline: boolean, icon: string | 9 examples
+**text-rotate**: Text rotation component that cycles through multiple text items with animation | Vars: class: string, duration: string | 4 examples
+**timeline**: Timeline component for displaying chronological events | Vars: class: string, direction: horizontal/vertical, compact: boolean | 8 examples
+**timeline.end**: Content positioned at the end side of a timeline item | Vars: class: string, box: boolean
+**timeline.hr**: Connector line between timeline items | Vars: class: string
+**timeline.item**: Individual timeline event item with automatic hr connectors and convenience props for start, middle, and end content | Vars: variant: neutral/primary/secondary/accent/info/success/warning/error, class: string, first: boolean, last: boolean
+**timeline.middle**: Central icon or marker area of a timeline item | Vars: class: string, icon: string, iconFill: boolean
+**timeline.start**: Content positioned at the start side of a timeline item | Vars: class: string, box: boolean
 **toggle**: Toggle switch component for boolean input | Vars: variant: primary/secondary/accent/neutral/info/success/warning/error, size: xs/sm/md/lg/xl, class: string, checked: boolean, disabled: boolean | 6 examples

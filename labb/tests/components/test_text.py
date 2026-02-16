@@ -179,9 +179,8 @@ class TestText(ComponentTestBase):
         html = self.render_component("text", slot_content="Default Text")
         # Should render as span (default)
         assert "<span" in html
-        # Should have default size (text-base)
-        assert "text-base" in html
-        # Should not have variant, underline, or icon
+        # Should not have size, variant, underline, or icon by default
+        assert "text-base" not in html
         assert "text-primary" not in html
         assert "underline" not in html
         assert "<svg" not in html

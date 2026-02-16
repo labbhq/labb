@@ -1,0 +1,23 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    title=""
+    open
+    style=""
+    :styleClasses="{
+        'arrow': 'collapse-arrow',
+        'plus': 'collapse-plus'
+    }"
+/>
+
+<div class="collapse {{ styleClasses|get_dict_item:style }} {% if open %}collapse-open{% endif %} {{ class }}" {{ attrs }}>
+    <input type="checkbox" {% if open %}checked{% endif %} />
+    {% if title %}
+        <div class="collapse-title font-semibold">{{ title }}</div>
+    {% else %}
+        {{ titleSlot }}
+    {% endif %}
+    <div class="collapse-content">
+        {{ slot }}
+    </div>
+</div>

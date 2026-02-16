@@ -1,0 +1,25 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant=""
+    :variantClasses="{
+        'primary': 'text-primary',
+        'secondary': 'text-secondary',
+        'accent': 'text-accent',
+        'neutral': 'text-neutral',
+        'info': 'text-info',
+        'success': 'text-success',
+        'warning': 'text-warning',
+        'error': 'text-error'
+    }"
+    icon=""
+    iconFill
+    iconClass=""
+/>
+
+<div class="stat-figure {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs }}>
+    {% if icon %}
+        <c-component is="lbi" n="{{ icon }}" w="1.5em" h="1.5em" :fill=iconFill :class=iconClass />
+    {% endif %}
+    {{ slot }}
+</div>

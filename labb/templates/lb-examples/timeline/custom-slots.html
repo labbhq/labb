@@ -1,0 +1,20 @@
+<c-lb.timeline direction="vertical">
+    <c-lb.timeline.item first icon="rmx.checkbox-circle" end="Default end">
+        <c-slot name="startSlot">
+            <div class="timeline-start timeline-box font-bold text-primary">Custom Start</div>
+        </c-slot>
+    </c-lb.timeline.item>
+    <c-lb.timeline.item last start="2024">
+        <c-slot name="middleSlot">
+            <c-lb.timeline.middle>
+                <c-lb.status variant="success" />
+            </c-lb.timeline.middle>
+        </c-slot>
+        <c-slot name="endSlot">
+            <c-lb.timeline.end box>
+                <span class="font-bold">Custom End</span>
+                <p class="text-sm">With rich content</p>
+            </c-lb.timeline.end>
+        </c-slot>
+    </c-lb.timeline.item>
+</c-lb.timeline>

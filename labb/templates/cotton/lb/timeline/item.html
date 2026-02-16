@@ -1,0 +1,62 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    first
+    last
+    icon=""
+    iconFill
+    iconClass=""
+    start=""
+    startBox
+    end=""
+    endBox
+    variant=""
+    :variantHrClasses="{
+        'neutral': 'bg-neutral',
+        'primary': 'bg-primary',
+        'secondary': 'bg-secondary',
+        'accent': 'bg-accent',
+        'info': 'bg-info',
+        'success': 'bg-success',
+        'warning': 'bg-warning',
+        'error': 'bg-error'
+    }"
+    :variantIconClasses="{
+        'neutral': 'text-neutral',
+        'primary': 'text-primary',
+        'secondary': 'text-secondary',
+        'accent': 'text-accent',
+        'info': 'text-info',
+        'success': 'text-success',
+        'warning': 'text-warning',
+        'error': 'text-error'
+    }"
+/>
+
+<li class="{{ class }}" {{ attrs }}>
+    {% if not first %}<hr {% if variant %}class="{{ variantHrClasses|get_dict_item:variant }}"{% endif %} />{% endif %}
+
+    {% if startSlot %}
+        {{ startSlot }}
+    {% elif start %}
+        <div class="timeline-start {% if startBox %}timeline-box{% endif %}">{{ start }}</div>
+    {% endif %}
+
+    {% if middleSlot %}
+        {{ middleSlot }}
+    {% elif icon %}
+        <div class="timeline-middle">
+            <c-component is="lbi" n="{{ icon }}" w="1.25em" h="1.25em" :fill=iconFill class="{{ variantIconClasses|get_dict_item:variant }} {{ iconClass }}" />
+        </div>
+    {% endif %}
+
+    {% if endSlot %}
+        {{ endSlot }}
+    {% elif end %}
+        <div class="timeline-end {% if endBox %}timeline-box{% endif %}">{{ end }}</div>
+    {% endif %}
+
+    {{ slot }}
+
+    {% if not last %}<hr {% if variant %}class="{{ variantHrClasses|get_dict_item:variant }}"{% endif %} />{% endif %}
+</li>
