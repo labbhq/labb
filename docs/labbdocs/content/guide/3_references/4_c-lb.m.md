@@ -39,7 +39,7 @@ Includes essential CSS, JavaScript, and styling dependencies for labb components
 **What it includes:**
 
 - **Global CSS**: Automatically includes labb CSS using `lb_css_path` template tag
-- **Theme Controller**: A small piece of JavaScript for handling theme switching with session persistence when the `setThemeEndpoint` parameter is provided. See the [theming documentation]({% doc_url '1_getting_started/4_theming.md' 'ui' %}) for more details.
+- **Theme Controller**: A small piece of JavaScript for handling theme switching with session persistence when the `setThemeEndpoint` parameter is provided. See the [theming documentation]({% doc_url '2_concepts/1_theming.md' 'guide' %}) for more details.
 
 **CSRF Token Requirements:**
 

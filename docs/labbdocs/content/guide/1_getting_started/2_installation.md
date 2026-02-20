@@ -201,4 +201,4 @@ Now you can create templates with labb components:
 
 ## Next Steps
 
-Head to the <a href="{% doc_url '1_getting_started/3_quick_start.md' 'ui' %}">Quick Start guide</a> for a concise step-by-step overview of using labb.
+Head to the <a href="{% doc_url '1_getting_started/3_quick_start.md' 'guide' %}">Quick Start guide</a> for a concise step-by-step overview of using labb.

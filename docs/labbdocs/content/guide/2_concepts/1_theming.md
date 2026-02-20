@@ -354,7 +354,7 @@ For more detailed examples and advanced usage, see the <a href="{% doc_url '3_co
 
 ## Django Settings Configuration
 
-The default theme for your application can be configured in the `LABB_SETTINGS` dictionary in your `settings.py` file. See <a href="{% doc_url '2_references/2_django_settings.md' 'ui' %}">settings</a> for more details.
+The default theme for your application can be configured in the `LABB_SETTINGS` dictionary in your `settings.py` file. See <a href="{% doc_url '3_references/2_django_settings.md' 'guide' %}">settings</a> for more details.
 
 <c-lbdocs.codeblock.title title="settings.py">
 ```python

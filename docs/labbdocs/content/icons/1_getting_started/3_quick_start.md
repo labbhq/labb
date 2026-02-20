@@ -122,4 +122,4 @@ labb icons info rmx.arrow-down
 labb icons packs
 ```
 
-For complete CLI documentation, see the <a href="{% doc_url '2_references/0_labb_cli.md' 'ui' %}#labb-icons">labb icons command reference</a>.
+For complete CLI documentation, see the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-icons">labb icons command reference</a>.

@@ -29,7 +29,7 @@ css:
 
 ### CSS Build Configuration
 
-Controls how CSS is built using Tailwind CSS 4 when using the <a href="{% doc_url '2_references/0_labb_cli.md' 'ui' %}#labb-build">`labb build`</a> command:
+Controls how CSS is built using Tailwind CSS 4 when using the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-build">`labb build`</a> command:
 
 ```yaml
 css:
@@ -51,7 +51,7 @@ labb build --no-minify
 
 ### CSS Scan Configuration
 
-Controls how templates are scanned for labb components when using the <a href="{% doc_url '2_references/0_labb_cli.md' 'ui' %}#labb-scan">`labb scan`</a> command:
+Controls how templates are scanned for labb components when using the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-scan">`labb scan`</a> command:
 
 ```yaml
 css:

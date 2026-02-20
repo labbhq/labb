@@ -74,4 +74,4 @@ python manage.py runserver
 
 Then open [http://localhost:8000](http://localhost:8000) to see your new project.
 
-For more on labb components and usage, see the rest of the [documentation]({% doc_url '1_getting_started/1_introduction.md' 'ui' %}).
+For more on labb components and usage, see the rest of the [documentation]({% doc_url '1_getting_started/1_introduction.md' 'guide' %}).

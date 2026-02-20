@@ -146,6 +146,11 @@ def ui_docs(request, path=""):
     return docs_view(request, "ui", path)
 
 
+def guide_docs(request, path=""):
+    """Guide documentation view."""
+    return docs_view(request, "guide", path)
+
+
 def icons_docs(request, path=""):
     """Icons documentation view."""
     return docs_view(request, "icons", path)

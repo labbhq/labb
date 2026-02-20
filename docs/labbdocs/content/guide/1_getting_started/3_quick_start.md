@@ -11,7 +11,7 @@ A concise step-by-step overview to get you started with labb. For detailed expla
 
 ## 1. Installation
 
-Install labb and set up your Django project. See <a href="{% doc_url '1_getting_started/2_installation.md' 'ui' %}">full installation guide</a> for details.
+Install labb and set up your Django project. See <a href="{% doc_url '1_getting_started/2_installation.md' 'guide' %}">full installation guide</a> for details.
 
 ```bash
 # Install labb
@@ -23,7 +23,7 @@ labb init --defaults && labb setup
 
 ## 2. Add Dependencies to HTML Header
 
-Add `<c-lb.m.dependencies />` to your main HTML template header. This includes required CSS and JavaScript for components. Learn more about <a href="{% doc_url '2_references/4_c-lb.m.md' 'ui' %}">dependencies configuration</a>.
+Add `<c-lb.m.dependencies />` to your main HTML template header. This includes required CSS and JavaScript for components. Learn more about <a href="{% doc_url '3_references/4_c-lb.m.md' 'guide' %}">dependencies configuration</a>.
 
 <c-lbdocs.codeblock.title title="templates/base.html">
 {% verbatim %}
@@ -68,7 +68,7 @@ Use labb components in your templates with simple HTML-like syntax. Browse <a hr
 
 ## 4. Start labb Dev CLI Command
 
-In your first terminal, start the labb development watcher to monitor template changes and build CSS automatically. Learn more about <a href="{% doc_url '2_references/0_labb_cli.md' 'ui' %}#labb-dev">labb dev command</a>.
+In your first terminal, start the labb development watcher to monitor template changes and build CSS automatically. Learn more about <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-dev">labb dev command</a>.
 
 ```bash
 labb dev
@@ -86,7 +86,7 @@ python manage.py runserver
 
 ## 6. Exploring CLI Commands
 
-The labb CLI offers powerful tools for component discovery and inspection. See <a href="{% doc_url '2_references/0_labb_cli.md' 'ui' %}">complete CLI reference</a>.
+The labb CLI offers powerful tools for component discovery and inspection. See <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}">complete CLI reference</a>.
 
 ```bash
 # List all available components
@@ -125,7 +125,7 @@ pip install labbui[icons]
 
 ## 8. Configuration (labb.yaml)
 
-The `labb.yaml` file controls CSS building, template scanning, and more. See <a href="{% doc_url '2_references/1_config_yaml.md' 'ui' %}">configuration reference</a>.
+The `labb.yaml` file controls CSS building, template scanning, and more. See <a href="{% doc_url '3_references/1_config_yaml.md' 'guide' %}">configuration reference</a>.
 
 ```yaml
 css:
@@ -154,7 +154,7 @@ labb config --validate
 
 ## 9. Theming
 
-labb includes light and dark themes by default. Add a theme switcher to let users toggle between themes. See <a href="{% doc_url '1_getting_started/4_theming.md' 'ui' %}">complete theming guide</a>.
+labb includes light and dark themes by default. Add a theme switcher to let users toggle between themes. See <a href="{% doc_url '2_concepts/1_theming.md' 'guide' %}">complete theming guide</a>.
 
 **Set up theme persistence** by adding the theme endpoint to your URLs:
 
@@ -211,11 +211,11 @@ urlpatterns = [
 }
 ```
 
-Learn more about <a href="{% doc_url '1_getting_started/4_theming.md' 'ui' %}">theme customization</a> and <a href="{% doc_url '3_components/1_basics/theme-controller.md' 'ui' %}">theme controller component</a>.
+Learn more about <a href="{% doc_url '2_concepts/1_theming.md' 'guide' %}">theme customization</a> and <a href="{% doc_url '3_components/1_basics/theme-controller.md' 'ui' %}">theme controller component</a>.
 
 ## 10. Building for Production
 
-Build optimized CSS for production deployment. See <a href="{% doc_url '1_getting_started/5_building_css.md' 'ui' %}">CSS building guide</a> for details.
+Build optimized CSS for production deployment. See <a href="{% doc_url '2_concepts/2_building_css.md' 'guide' %}">CSS building guide</a> for details.
 
 ```bash
 # Build minified CSS for production
@@ -235,8 +235,8 @@ labb build
 
 ## Next Steps
 
-- <a href="{% doc_url '1_getting_started/4_theming.md' 'ui' %}">Theming</a> — Customize colors and design system
-- <a href="{% doc_url '1_getting_started/5_building_css.md' 'ui' %}">Building CSS</a> — Understand the CSS build process
+- <a href="{% doc_url '2_concepts/1_theming.md' 'guide' %}">Theming</a> — Customize colors and design system
+- <a href="{% doc_url '2_concepts/2_building_css.md' 'guide' %}">Building CSS</a> — Understand the CSS build process
 - Browse component examples in the documentation
 
 You're ready to build with labb! 🚀

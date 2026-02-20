@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 ```
 
 <c-lb.alert variant="info" style="soft" class="not-prose">
-  <span><strong>Note:</strong> labb Icons only requires the `django-cotton` package and can be used independently of the labb UI components in any Django project. If you have already installed `labb`, you would have already <a href="{% doc_url '1_getting_started/2_installation.md' 'ui' %}#add-to-django-settings">added</a> `django_cotton`.</span>
+  <span><strong>Note:</strong> labb Icons only requires the `django-cotton` package and can be used independently of the labb UI components in any Django project. If you have already installed `labb`, you would have already <a href="{% doc_url '1_getting_started/2_installation.md' 'guide' %}#add-to-django-settings">added</a> `django_cotton`.</span>
 </c-lb.alert>
 
 ## Basic Usage
@@ -70,4 +70,4 @@ labb icons packs
 labb icons info rmx.arrow-down
 ```
 
-For complete CLI documentation, see the <a href="{% doc_url '2_references/0_labb_cli.md' 'ui' %}#labb-icons">labb icons command reference</a>.
+For complete CLI documentation, see the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-icons">labb icons command reference</a>.

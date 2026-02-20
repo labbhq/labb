@@ -198,4 +198,4 @@ Returns the raw theme value from the user's session or the default theme from Dj
 </c-lbdocs.indented_block>
 
 
-See the [configuration documentation]({% doc_url '2_references/1_config_yaml.md' 'ui' %}) and [Django settings documentation]({% doc_url '2_references/2_django_settings.md' 'ui' %}) for more details about using some of these tags.
+See the [configuration documentation]({% doc_url '3_references/1_config_yaml.md' 'guide' %}) and [Django settings documentation]({% doc_url '3_references/2_django_settings.md' 'guide' %}) for more details about using some of these tags.

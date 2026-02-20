@@ -169,6 +169,7 @@ def doc_url(context, file_path, doc_name=None):
     # Map view names to URL prefixes
     url_prefix_map = {
         "ui": "/docs/ui",
+        "guide": "/docs/guide",
         "icons": "/docs/icons",
     }
 
