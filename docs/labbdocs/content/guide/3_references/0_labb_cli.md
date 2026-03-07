@@ -328,7 +328,7 @@ labb components ex modal basic-modal
 ### `labb icons`
 
 <c-lbdocs.indented_block>
-Search and manage icon packs (requires <a href="{% doc_url '1_getting_started/2_installation.md' 'icons' %}">labbicons package</a> to be installed).
+Search and manage icon packs (requires <a href="{% doc_url '1_getting_started/1_introduction.md' 'icons' %}">labbicons package</a> to be installed).
 
 > *If the `labbicons` package is not installed, the command will show an error with installation instructions.*
 

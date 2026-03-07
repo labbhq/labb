@@ -1,0 +1,666 @@
+# Component Schema Documentation
+#
+# Each component can have:
+# - base_classes: CSS classes that are always applied when the component renders
+# - optional_base_classes: CSS classes that are conditionally applied based on component state/slots
+#   These classes are not required to be present in all renderings and won't cause test failures
+#
+components:
+  menu:
+    template: lb/menu/index.html
+    description: Flexible navigation menu component with support for horizontal/vertical layout and sizes
+    base_classes:
+    - menu
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      direction:
+        type: enum
+        values:
+        - vertical
+        - horizontal
+        default: vertical
+        description: Menu direction - vertical (default) or horizontal
+        css_mapping:
+          horizontal: menu-horizontal
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Menu size
+        css_mapping:
+          xs: menu-xs
+          sm: menu-sm
+          md: menu-md
+          lg: menu-lg
+          xl: menu-xl
+
+  menu.item:
+    template: lb/menu/item.html
+    description: Unified menu item supporting links, titles, and submenus with choice of details/summary or ul/li
+    base_classes: []
+    slots:
+      default:
+        description: Default slot content for menu item
+        required: false
+      titleSlot:
+        description: Custom title slot for submenu items (overrides title attribute)
+        required: false
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      type:
+        type: enum
+        values:
+        - link
+        - title
+        - submenu-details
+        - submenu-toggle
+        default: link
+        description: Type of menu item
+        css_mapping:
+          title: menu-title
+          submenu-details: menu-dropdown
+          submenu-toggle: menu-dropdown-toggle
+      title:
+        type: string
+        default: ''
+        description: Text for the menu item (required for submenu types, alternative to slot for link/title types)
+        required: false
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: ''
+        description: Menu item size
+        css_mapping:
+          xs: menu-xs
+          sm: menu-sm
+          md: menu-md
+          lg: menu-lg
+          xl: menu-xl
+      disabled:
+        type: boolean
+        default: false
+        description: Whether the item is disabled
+        css_mapping:
+          true: menu-disabled
+      active:
+        type: boolean
+        default: false
+        description: Whether the item appears active/selected
+        css_mapping:
+          true: menu-active
+      href:
+        type: string
+        default: ''
+        description: Link URL for link-type items
+        required: false
+      open:
+        type: boolean
+        default: false
+        description: Whether submenu is initially open/expanded
+        css_mapping:
+          true: menu-dropdown-show
+
+  navbar:
+    template: lb/navbar/index.html
+    description: Responsive navigation bar component with support for brand, menu items, search, and profile sections
+    base_classes:
+    - navbar
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - div
+        - nav
+        - header
+        default: div
+        description: HTML tag to use for the navbar container
+
+  navbar.start:
+    template: lb/navbar/start.html
+    description: Left section of the navbar - typically contains brand and mobile menu toggle (works within navbar context)
+    base_classes:
+    - navbar-start
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - div
+        - section
+        - aside
+        default: div
+        description: HTML tag to use for the navbar start section
+
+  navbar.center:
+    template: lb/navbar/center.html
+    description: Center section of the navbar - typically contains main navigation links (works within navbar context)
+    base_classes:
+    - navbar-center
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - div
+        - section
+        - nav
+        default: div
+        description: HTML tag to use for the navbar center section
+
+  navbar.end:
+    template: lb/navbar/end.html
+    description: Right section of the navbar - typically contains search, notifications, and profile (works within navbar context)
+    base_classes:
+    - navbar-end
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - div
+        - section
+        - aside
+        default: div
+        description: HTML tag to use for the navbar end section
+
+  tabs:
+    template: lb/tabs/index.html
+    description: Main tabs wrapper component - use with tabs.content for full functionality
+    base_classes:
+    - tabs
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      style:
+        type: enum
+        values:
+        - ''
+        - border
+        - lift
+        - box
+        default: ''
+        description: Tab style variant
+        css_mapping:
+          border: tabs-border
+          lift: tabs-lift
+          box: tabs-box
+      placement:
+        type: enum
+        values:
+        - top
+        - bottom
+        default: top
+        description: Tab placement - top or bottom
+        css_mapping:
+          bottom: tabs-bottom
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Tab size
+        css_mapping:
+          xs: tabs-xs
+          sm: tabs-sm
+          md: tabs-md
+          lg: tabs-lg
+          xl: tabs-xl
+      name:
+        type: string
+        default: tabs
+        description: Unique name for the tab group (used for radio inputs)
+        required: false
+    slots:
+      default:
+        description: Tab content items using <c-lb.tabs.content> components
+      content:
+        description: Custom tab content area. Defaults to rendering the default slot
+
+  tabs.content:
+    template: lb/tabs/content.html
+    description: Individual tab content with radio input and content area
+    base_classes:
+    - tab-content
+    optional_base_classes:
+    - size-4
+    - me-2
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      name:
+        type: string
+        default: ''
+        description: Tab name for the radio input (required)
+        required: true
+      checked:
+        type: boolean
+        default: false
+        description: Whether this tab is initially selected
+        css_mapping:
+          true: tab-active
+      disabled:
+        type: boolean
+        default: false
+        description: Whether this tab is disabled
+        css_mapping:
+          true: tab-disabled
+      title:
+        type: string
+        default: ''
+        description: Tab title text (alternative to slot for simple text)
+      icon:
+        type: string
+        default: ''
+        description: Icon name to display
+        required: false
+        dot_modifiers:
+          fill: Render in filled (solid) style
+      icon.class:
+        type: string
+        default: ''
+        description: Additional CSS classes for the icon
+        required: false
+    slots:
+      default:
+        description: Tab content (main content area)
+      input:
+        description: Custom tab input/label area. Defaults to <label class='tab' />
+
+  link:
+    template: lb/link/index.html
+    description: 'Link component with support for href, Django view name resolution, DaisyUI styling, and l: prefixed URL arguments'
+    base_classes:
+    - link
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - a
+        - button
+        - span
+        - div
+        default: a
+        description: HTML tag to use for the link element
+      href:
+        type: string
+        default: ''
+        description: Direct URL for the link (alternative to viewname)
+        required: false
+      viewname:
+        type: string
+        default: ''
+        description: 'Django view name to resolve (e.g., ''blog:post''). Use l: prefixed attributes for URL arguments'
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Link color variant
+        css_mapping:
+          neutral: link-neutral
+          primary: link-primary
+          secondary: link-secondary
+          accent: link-accent
+          info: link-info
+          success: link-success
+          warning: link-warning
+          error: link-error
+      hover:
+        type: boolean
+        default: false
+        description: Show underline only on hover
+        css_mapping:
+          true: link-hover
+    slots:
+      default:
+        description: Link content (e.g., text, icons, or other components)
+
+  breadcrumbs:
+    template: lb/breadcrumbs/index.html
+    description: Breadcrumbs navigation component for displaying current page location in site hierarchy
+    base_classes:
+    - breadcrumbs
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Breadcrumbs text size
+        css_mapping:
+          xs: text-xs
+          sm: text-sm
+          md: text-base
+          lg: text-lg
+          xl: text-xl
+    slots:
+      default:
+        description: Breadcrumb items using breadcrumbs.item components
+
+  breadcrumbs.item:
+    template: lb/breadcrumbs/item.html
+    description: Individual breadcrumb item with optional link and icon support
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      href:
+        type: string
+        default: ''
+        description: Link URL for the breadcrumb item (if not provided, item will be plain text)
+        required: false
+      viewname:
+        type: string
+        default: ''
+        description: 'Django view name to resolve (alternative to href). Use l: prefixed attributes for URL arguments'
+        required: false
+      icon:
+        type: string
+        default: ''
+        description: Icon name to display
+        required: false
+        dot_modifiers:
+          fill: Render in filled (solid) style
+      icon.class:
+        type: string
+        default: ''
+        description: Additional CSS classes for the icon
+        required: false
+    slots:
+      default:
+        description: Breadcrumb item content (text or custom content)
+
+  dock:
+    template: lb/dock/index.html
+    description: Bottom navigation dock component for mobile app-style navigation
+    base_classes:
+    - dock
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Dock color variant using bg-[variant] and text-[variant]-content
+        css_mapping:
+          neutral: bg-neutral text-neutral-content
+          primary: bg-primary text-primary-content
+          secondary: bg-secondary text-secondary-content
+          accent: bg-accent text-accent-content
+          info: bg-info text-info-content
+          success: bg-success text-success-content
+          warning: bg-warning text-warning-content
+          error: bg-error text-error-content
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Dock size
+        css_mapping:
+          xs: dock-xs
+          sm: dock-sm
+          md: dock-md
+          lg: dock-lg
+          xl: dock-xl
+    slots:
+      default:
+        description: Dock navigation items (buttons with icons and optional dock-label spans)
+
+  dock.label:
+    template: lb/dock/label.html
+    description: Text label for a dock navigation item
+    base_classes:
+    - dock-label
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Label text content
+
+  pagination:
+    template: lb/pagination/index.html
+    description: Pagination component using join group for page navigation
+    base_classes:
+    - join
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Pagination items using pagination.item components
+
+  pagination.item:
+    template: lb/pagination/item.html
+    description: Individual pagination button item
+    base_classes:
+    - join-item
+    - btn
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      active:
+        type: boolean
+        default: false
+        description: Whether this is the active/current page
+        css_mapping:
+          true: btn-active
+      disabled:
+        type: boolean
+        default: false
+        description: Whether the button is disabled
+        css_mapping:
+          true: btn-disabled
+      size:
+        type: enum
+        values:
+        - ''
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: ''
+        description: Button size
+        css_mapping:
+          xs: btn-xs
+          sm: btn-sm
+          md: btn-md
+          lg: btn-lg
+          xl: btn-xl
+      icon:
+        type: string
+        default: ''
+        description: Icon name to display
+        required: false
+        dot_modifiers:
+          fill: Render in filled (solid) style
+          end: Place at the end of the text
+      icon.class:
+        type: string
+        default: ''
+        description: Additional CSS classes for the icon
+        required: false
+    slots:
+      default:
+        description: Button content (page number or navigation text)
+
+  steps:
+    template: lb/steps/index.html
+    description: Steps component for showing progress through a multi-step process
+    base_classes:
+    - steps
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      direction:
+        type: enum
+        values:
+        - horizontal
+        - vertical
+        default: horizontal
+        description: Steps layout direction
+        css_mapping:
+          horizontal: steps-horizontal
+          vertical: steps-vertical
+    slots:
+      default:
+        description: Step items using steps.item components
+
+  steps.item:
+    template: lb/steps/item.html
+    description: Individual step in a steps sequence
+    base_classes:
+    - step
+    optional_base_classes:
+    - step-icon
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Step color variant
+        css_mapping:
+          neutral: step-neutral
+          primary: step-primary
+          secondary: step-secondary
+          accent: step-accent
+          info: step-info
+          success: step-success
+          warning: step-warning
+          error: step-error
+      content:
+        type: string
+        default: ''
+        description: Custom data-content for the step marker (e.g., a checkmark or symbol)
+        required: false
+      icon:
+        type: string
+        default: ''
+        description: Icon name to display
+        required: false
+        dot_modifiers:
+          fill: Render in filled (solid) style
+      icon.class:
+        type: string
+        default: ''
+        description: Additional CSS classes for the icon
+        required: false
+    slots:
+      default:
+        description: Step label text

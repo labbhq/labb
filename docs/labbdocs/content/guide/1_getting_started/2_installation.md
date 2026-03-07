@@ -3,34 +3,59 @@ title: Installation
 description: How to install and set up labb in your Django project
 ---
 
-<c-lbdocs.labbstart_info class="my-6" />
+{% load docs_tags %}
 
-## Prerequisites
+## New Project (Recommended)
 
-Before installing labb, make sure you have:
+The fastest way to get started is with **labbstart**, which scaffolds a new Django project with labb pre-configured.
 
-- Django 4.2 or higher
-- Python 3.8 or higher
+```bash
+pip install labbstart
+labbstart new
+```
 
-## Install labb
+This interactively prompts you for project name, Django version, package manager, and starter kit. You can also pass flags directly:
 
-### Using pip
+```bash
+labbstart new myproject --django-version 5 --package-manager poetry --kit welcome --app-name starter
+```
+
+Once created, start two terminals:
+
+```bash
+# Terminal 1 — CSS watcher
+cd your-project-name && labb dev
+
+# Terminal 2 — Django server
+cd your-project-name && python manage.py runserver
+```
+
+Open [http://localhost:8000](http://localhost:8000) and you're ready to build.
+
+---
+
+## Existing Project
+
+### Prerequisites
+
+- Python 3.8+
+- Django 4.2+
+
+### Step 1: Install labb
 
 ```bash
 pip install labbui
 ```
 
-### Using Poetry
+Or with Poetry:
 
 ```bash
 poetry add labbui
 ```
 
-## Add to Django Settings
+### Step 2: Add to Django Settings
 
-Add `labb` to your `INSTALLED_APPS` in your Django settings:
-
-### Automatic configuration:
+Add `labb` to your `INSTALLED_APPS`:
 
 <c-lbdocs.codeblock.title title="settings.py">
 ```python
@@ -42,11 +67,10 @@ INSTALLED_APPS = [
 ```
 </c-lbdocs.codeblock.title>
 
-This will attempt to automatically handle the settings.py by adding the required loader and templatetags.
+This automatically configures the required template loader and templatetags.
 
-### Custom configuration
-
-If your project requires any non-default loaders or you do not wish Cotton to manage your settings, you should instead provide `django_cotton.apps.SimpleAppConfig` in your INSTALLED_APPS:
+<c-lb.collapse title="Custom configuration" class="my-4" style="arrow">
+If your project uses non-default loaders or you don't want Cotton to manage your settings, use `django_cotton.apps.SimpleAppConfig` instead:
 
 <c-lbdocs.codeblock.title title="settings.py">
 ```python
@@ -86,54 +110,20 @@ TEMPLATES = [
 ]
 ```
 </c-lbdocs.codeblock.title>
+</c-lb.collapse>
 
-## Initialize labb Project
-
-After adding labb to your Django settings, you need to initialize and set up labb in your project:
-
-### Step 1: Initialize Project
-
-Initialize labb project with configuration and project structure:
-
-```bash
-labb init
-```
-
-For quick setup with defaults:
+### Step 3: Initialize and Set Up
 
 ```bash
 labb init --defaults
-```
-
-**Init Options:**
-
-```bash
-# Force overwrite existing files created by labb init
-labb init --force
-```
-### Step 2: Install Dependencies
-
-Install the required Node.js dependencies:
-
-```bash
 labb setup
 ```
 
-**Setup Options:**
+`labb init` creates the project configuration and structure. `labb setup` installs the required Node.js dependencies.
 
-```bash
-# Install dependencies automatically
-labb setup --install-deps
+### Step 4: Add Dependencies to Your Template
 
-# Skip dependency installation
-labb setup --no-install-deps
-```
-
-## Add Dependencies to Your Template
-
-<c-lb.alert variant="info" style="soft" icon="rmx.information" iconFill class="mb-4">
-<span>Add `<c-lb.m.dependencies />` to your main HTML template's `<head>` section. This includes the required CSS and JavaScript for labb components to work properly.</span>
-</c-lb.alert>
+Add `<c-lb.m.dependencies />` to your base template's `<head>` section:
 
 <c-lbdocs.codeblock.title title="templates/base.html">
 {% verbatim %}
@@ -146,8 +136,6 @@ labb setup --no-install-deps
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My labb App</title>
-
-    <!-- Required: Add labb dependencies -->
     <c-lb.m.dependencies setThemeEndpoint="{% url 'set_theme' %}" />
 </head>
 <body>
@@ -162,43 +150,46 @@ labb setup --no-install-deps
 <span>Without `<c-lb.m.dependencies />`, components will not have the correct styling and interactive features may not work.</span>
 </c-lb.alert>
 
-## Basic Usage
+### Step 5: Start Developing
 
-Once installed and setup, you can start using components in your templates.
-
-First, start the labb development watcher to monitor changes and build CSS:
+Start two terminals:
 
 ```bash
+# Terminal 1 — CSS watcher
 labb dev
-```
 
-This will start both CSS building and template scanning in watch mode. Keep this running while you develop.
-
-Next, in a **separate terminal**, start your Django development server:
-
-```bash
+# Terminal 2 — Django server
 python manage.py runserver
 ```
 
-Now you can create templates with labb components:
+---
+
+## Basic Usage
+
+Use labb components in your templates with HTML-like syntax:
 
 <c-lbdocs.codeblock.title title="templates/example.html">
 {% verbatim %}
 ```html
-<!-- Basic button -->
 <c-lb.button variant="primary">Click me</c-lb.button>
 
-<!-- Card component -->
 <c-lb.card>
     <c-lb.card.body>
-    <c-lb.card.title>Card Title</c-lb.card.title>
-    <p>Card content goes here</p>
+        <c-lb.card.title>Card Title</c-lb.card.title>
+        <p>Card content goes here</p>
     </c-lb.card.body>
 </c-lb.card>
+
+<c-lb.alert variant="success">Success message!</c-lb.alert>
 ```
 {% endverbatim %}
 </c-lbdocs.codeblock.title>
 
+Browse <a href="{% doc_url '1_actions/button.md' 'ui' %}">component documentation</a> for all available components.
+
 ## Next Steps
 
-Head to the <a href="{% doc_url '1_getting_started/3_quick_start.md' 'guide' %}">Quick Start guide</a> for a concise step-by-step overview of using labb.
+- <a href="{% doc_url '2_concepts/1_theming.md' 'guide' %}">Theming</a> — Customize colors and themes
+- <a href="{% doc_url '2_concepts/2_building_css.md' 'guide' %}">Building CSS</a> — CSS build process and production builds
+- <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}">CLI Reference</a> — Component inspection, icon search, and more
+- <a href="{% doc_url '1_getting_started/1_introduction.md' 'icons' %}">Icons</a> — Install labbicons for 2,800+ Remix icons

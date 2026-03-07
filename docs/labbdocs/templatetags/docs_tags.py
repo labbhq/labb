@@ -111,37 +111,17 @@ def get_components_menu(context):
     config = context.get("config", {})
     menu = config.get("menu", [])
 
-    # Find the Components menu item
-    components_menu = None
-    for item in menu:
-        if item.get("title") == "Components":
-            components_menu = item
-            break
-
-    if not components_menu:
-        return []
-
-    # Get the children (should be the "Basics" section)
-    children = components_menu.get("children", [])
-    if not children:
-        return []
-
-    # Find the "Basics" section and get its direct children (high-level components)
+    # Collect components from all category sections (top-level menu items)
     components = []
-    for child in children:
-        if child.get("title") == "Basics":
-            # Get direct children - these are the high-level components
-            basics_children = child.get("children", [])
-            for component in basics_children:
-                # Only include items that have a path (not nested submenus)
-                if component.get("path"):
-                    components.append(
-                        {
-                            "title": component.get("title", ""),
-                            "path": component.get("path", ""),
-                        }
-                    )
-            break
+    for category in menu:
+        for component in category.get("children", []):
+            if component.get("path"):
+                components.append(
+                    {
+                        "title": component.get("title", ""),
+                        "path": component.get("path", ""),
+                    }
+                )
 
     # Sort by title
     return sorted(components, key=lambda x: x["title"])

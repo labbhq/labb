@@ -3,9 +3,6 @@
     class=""
     first
     last
-    icon=""
-    iconFill
-    iconClass=""
     start=""
     startBox
     end=""
@@ -32,8 +29,9 @@
         'error': 'text-error'
     }"
 />
+{% parse_icon attrs as i %}
 
-<li class="{{ class }}" {{ attrs }}>
+<li class="{{ class }}" {{ attrs|strip_icon_attrs }}>
     {% if not first %}<hr {% if variant %}class="{{ variantHrClasses|get_dict_item:variant }}"{% endif %} />{% endif %}
 
     {% if startSlot %}
@@ -44,9 +42,9 @@
 
     {% if middleSlot %}
         {{ middleSlot }}
-    {% elif icon %}
+    {% elif i.name %}
         <div class="timeline-middle">
-            <c-component is="lbi" n="{{ icon }}" w="1.25em" h="1.25em" :fill=iconFill class="{{ variantIconClasses|get_dict_item:variant }} {{ iconClass }}" />
+            <c-component is="lbi" n="{{ i.name }}" w="1.25em" h="1.25em" :fill=i.fill class="{{ variantIconClasses|get_dict_item:variant }} {{ i.css_class }}" />
         </div>
     {% endif %}
 

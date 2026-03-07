@@ -74,30 +74,23 @@ class TestFabComponent(ComponentTestTemplate):
 
     def test_fab_with_filled_icon(self):
         """Test FAB with filled icon"""
-        html = self.render_component("fab", icon="rmx.add", iconFill="true")
-
-        # Should have icon with fill attribute
-        assert 'is="lbi"' in html or "<svg" in html
-        assert 'n="rmx.add"' in html or "<svg" in html
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.fab icon.fill="rmx.add" />'
+        )
+        assert "<svg" in html
 
     def test_fab_with_icon_class(self):
         """Test FAB with icon class"""
-        html = self.render_component("fab", icon="rmx.add", iconClass="text-red-500")
-
-        # Should have icon with class attribute
-        assert 'is="lbi"' in html or "<svg" in html
-        assert 'n="rmx.add"' in html or "<svg" in html
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.fab icon="rmx.add" icon.class="text-red-500" />'
+        )
+        assert "<svg" in html
+        assert "text-red-500" in html
 
     def test_fab_combined_features(self):
         """Test FAB with multiple features combined"""
-        html = self.render_component(
-            "fab",
-            variant="primary",
-            size="lg",
-            flower="true",
-            icon="rmx.add",
-            iconClass="text-white",
-            class_="custom-fab",
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.fab variant="primary" size="lg" flower icon="rmx.add" icon.class="text-white" class="custom-fab" />'
         )
 
         # Should have all expected classes

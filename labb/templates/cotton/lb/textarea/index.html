@@ -1,0 +1,30 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant=""
+    :variantClasses="{
+        'neutral': 'textarea-neutral',
+        'primary': 'textarea-primary',
+        'secondary': 'textarea-secondary',
+        'accent': 'textarea-accent',
+        'info': 'textarea-info',
+        'success': 'textarea-success',
+        'warning': 'textarea-warning',
+        'error': 'textarea-error'
+    }"
+    size="md"
+    :sizeClasses="{
+        'xs': 'textarea-xs',
+        'sm': 'textarea-sm',
+        'md': 'textarea-md',
+        'lg': 'textarea-lg',
+        'xl': 'textarea-xl'
+    }"
+    ghost
+    validate
+/>
+
+<textarea
+    class="textarea {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {% if ghost %}textarea-ghost{% endif %} {% if validate %}validator{% endif %} {{ class }}"
+    {{ attrs }}
+>{{ slot }}</textarea>

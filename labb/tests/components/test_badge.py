@@ -149,36 +149,29 @@ class TestBadge(ComponentTestBase):
 
     def test_badge_with_icon_fill(self):
         """Test badge with filled icon"""
-        html = self.render_component(
-            "badge", icon="rmx.star", iconFill="true", slot_content="Filled Star"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.badge icon.fill="rmx.star">Filled Star</c-lb.badge>'
         )
         assert "badge" in html
         assert "Filled Star" in html
-        # Should contain the rendered SVG icon with fill
         assert "<svg" in html
         assert 'fill="currentColor"' in html
-        assert 'height="1em"' in html
-        assert 'width="1em"' in html
 
     def test_badge_with_icon_no_fill(self):
         """Test badge with unfilled icon (default)"""
         html = self.render_component(
-            "badge", icon="rmx.star", iconFill="false", slot_content="Unfilled Star"
+            "badge", icon="rmx.star", slot_content="Unfilled Star"
         )
         assert "badge" in html
         assert "Unfilled Star" in html
-        # Should contain the rendered SVG icon without fill
         assert "<svg" in html
         assert 'fill="currentColor"' in html
-        assert 'height="1em"' in html
-        assert 'width="1em"' in html
 
     def test_badge_with_icon_class(self):
         """Test badge with icon and custom icon class"""
-        html = self.render_component(
-            "badge", icon="rmx.check", iconClass="text-warning", slot_content="Success"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.badge icon="rmx.check" icon.class="text-warning">Success</c-lb.badge>'
         )
         assert "badge" in html
         assert "Success" in html
-        # Should contain the icon component with custom class
-        assert 'is="lbi"' in html or "<svg" in html
+        assert "text-warning" in html
