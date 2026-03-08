@@ -290,10 +290,11 @@ class TestTimelineMiddle(ComponentTestBase):
 
     def test_timeline_middle_icon_with_custom_class(self):
         """Test timeline.middle icon with custom class"""
-        html = self.render_component(
-            "timeline.middle", icon="rmx.check", iconClass="text-primary"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.timeline.middle icon="rmx.check" icon.class="text-primary" />'
         )
         assert "<svg" in html
+        assert "text-primary" in html
 
 
 class TestTimelineEnd(ComponentTestBase):

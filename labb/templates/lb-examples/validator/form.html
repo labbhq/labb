@@ -1,0 +1,15 @@
+<form class="fieldset w-52 gap-2">
+  <c-lb.fieldset legend="Email">
+    <c-lb.input validate type="email" required placeholder="mail@site.com" />
+    <c-lb.validator.hint hidden>Enter a valid email address</c-lb.validator.hint>
+  </c-lb.fieldset>
+  <c-lb.fieldset legend="Username">
+    <c-lb.input validate type="text" required placeholder="Username" pattern="[A-Za-z][A-Za-z0-9\-]*" minlength="3" maxlength="30" />
+    <c-lb.validator.hint hidden>Must be 3-30 characters, starting with a letter</c-lb.validator.hint>
+  </c-lb.fieldset>
+  <c-lb.fieldset legend="Password">
+    <c-lb.input validate type="password" required placeholder="Password" minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" />
+    <c-lb.validator.hint hidden>8+ characters with uppercase, lowercase, and number</c-lb.validator.hint>
+  </c-lb.fieldset>
+  <c-lb.button type="submit" variant="primary">Sign Up</c-lb.button>
+</form>

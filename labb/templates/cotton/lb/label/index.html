@@ -1,0 +1,7 @@
+<c-vars class="" as="p" floating />
+
+{% if floating %}
+<label class="floating-label {{ class }}" {{ attrs }}>{{ slot }}</label>
+{% else %}
+<{{ as }} class="label {{ class }}" {{ attrs }}>{{ slot }}</{{ as }}>
+{% endif %}

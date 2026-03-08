@@ -5,10 +5,6 @@
     variant=""
     size=""
     underline
-    icon=""
-    iconFill
-    iconEnd
-    iconClass=""
     :variantClasses="{
         'neutral': 'text-neutral',
         'primary': 'text-primary',
@@ -30,22 +26,23 @@
         '4xl': 'text-4xl'
     }"
 />
+{% parse_icon attrs as i %}
 
 <{{ as }}
     class="
-        {% if icon %}flex items-center gap-2{% endif %}
+        {% if i.name %}flex items-center gap-2{% endif %}
         {{ variantClasses|get_dict_item:variant }}
         {{ sizeClasses|get_dict_item:size }}
         {% if underline %}underline{% endif %}
         {{ class }}
     "
-    {{ attrs }}
+    {{ attrs|strip_icon_attrs }}
 >
-    {% if icon and not iconEnd %}
-        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% if i.name and not i.end %}
+        <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
     {{ slot }}
-    {% if icon and iconEnd %}
-        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% if i.name and i.end %}
+        <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
 </{{ as }}>

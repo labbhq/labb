@@ -147,35 +147,28 @@ class TestTabsContentComponent(ComponentTestTemplate):
 
     def test_tabs_content_with_filled_icon(self):
         """Test tabs content renders with filled icon"""
-        html = self.render_component(
-            "tabs.content",
-            name="test_tabs",
-            title="Messages",
-            icon="rmx.message",
-            iconFill="true",
+        html = self.render_template_string(
+            "{% load cotton %}"
+            '<c-lb.tabs.content name="test_tabs" title="Messages" icon.fill="rmx.message" />'
         )
 
-        # Should contain the icon component with fill attribute
-        assert 'is="lbi"' in html or "<svg" in html
+        assert "<svg" in html
         assert "Messages" in html
-        # Icon should be rendered with fill
         assert "me-2 size-4" in html
 
     def test_tabs_content_with_icon_class(self):
         """Test tabs content renders with custom icon class"""
-        html = self.render_component(
-            "tabs.content",
-            name="test_tabs",
-            title="Settings",
-            icon="rmx.settings",
-            iconClass="text-primary",
+        html = self.render_template_string(
+            "{% load cotton %}"
+            '<c-lb.tabs.content name="test_tabs" title="Settings" icon="rmx.settings" icon.class="text-primary" />'
         )
 
         # Should contain the icon component with custom class
         assert 'is="lbi"' in html or "<svg" in html
         assert "Settings" in html
-        # Icon should have custom class overriding default classes
-        assert 'class="text-primary"' in html
+        # Icon should have custom class combined with default classes
+        assert "text-primary" in html
+        assert "me-2 size-4" in html
 
     def test_tabs_content_icon_only(self):
         """Test tabs content with only icon (no title)"""
@@ -239,7 +232,7 @@ class TestTabsComponentIntegration(ComponentTestBase):
     <c-lb.tabs.content name="icon_integration_test" title="Settings" icon="rmx.settings">
         <div class="p-6">Settings Content</div>
     </c-lb.tabs.content>
-    <c-lb.tabs.content name="icon_integration_test" title="Messages" icon="rmx.message" iconFill="true">
+    <c-lb.tabs.content name="icon_integration_test" title="Messages" icon.fill="rmx.message">
         <div class="p-6">Messages Content</div>
     </c-lb.tabs.content>
 </c-lb.tabs>
@@ -306,8 +299,7 @@ class TestTabsSchemaCompliance(ComponentTestBase):
             "disabled",
             "title",
             "icon",
-            "iconFill",
-            "iconClass",
+            "icon.class",
         }
 
         assert "variables" in schema

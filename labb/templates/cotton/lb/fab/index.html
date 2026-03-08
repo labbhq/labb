@@ -5,9 +5,6 @@
     size="lg"
     flower
     label=""
-    icon=""
-    iconFill
-    iconClass=""
     :variantClasses="{
         'neutral': 'btn-neutral',
         'primary': 'btn-primary',
@@ -26,17 +23,18 @@
         'xl': 'btn-xl'
     }"
 />
+{% parse_icon attrs as i %}
 
-<div class="fab {% if flower %}fab-flower{% endif %} {{ class }}" {{ attrs }}>
+<div class="fab {% if flower %}fab-flower{% endif %} {{ class }}" {{ attrs|strip_icon_attrs }}>
     <!-- Main focusable button (using div for Safari compatibility) -->
-    {% if icon or label %}
+    {% if i.name or label %}
         <div
             tabindex="0"
             role="button"
             class="btn btn-circle {{ sizeClasses|get_dict_item:size }} {{ variantClasses|get_dict_item:variant }}"
         >
-            {% if icon %}
-                <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+            {% if i.name %}
+                <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
             {% elif label %}
                 {{ label }}
             {% endif %}

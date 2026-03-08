@@ -9,6 +9,12 @@ urlpatterns = [
         views.ui_docs,
         name="ui_docs_detail",
     ),
+    path("docs/guide/", views.guide_docs, name="guide_docs"),
+    path(
+        "docs/guide/<path:path>/",
+        views.guide_docs,
+        name="guide_docs_detail",
+    ),
     path("docs/icons/", views.icons_docs, name="icons_docs"),
     path(
         "docs/icons/packs/remix/load/",

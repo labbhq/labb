@@ -1,0 +1,109 @@
+# Component Schema Documentation
+#
+# Each component can have:
+# - base_classes: CSS classes that are always applied when the component renders
+# - optional_base_classes: CSS classes that are conditionally applied based on component state/slots
+#   These classes are not required to be present in all renderings and won't cause test failures
+#
+components:
+  mockup-browser:
+    template: lb/mockup_browser/index.html
+    description: Browser window mockup
+    base_classes:
+    - mockup-browser
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      url:
+        type: string
+        default: ''
+        description: URL to display in the toolbar
+        required: false
+    slots:
+      default:
+        description: Browser content
+
+  mockup-code:
+    template: lb/mockup_code/index.html
+    description: Code terminal mockup
+    base_classes:
+    - mockup-code
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Code lines (use <pre data-prefix='$'><code>...</code></pre>)
+
+  mockup-phone:
+    template: lb/mockup_phone/index.html
+    description: Phone device mockup
+    base_classes:
+    - mockup-phone
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Phone display content
+
+  mockup-phone.camera:
+    template: lb/mockup_phone/camera.html
+    description: Phone camera notch
+    base_classes:
+    - mockup-phone-camera
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+
+  mockup-phone.display:
+    template: lb/mockup_phone/display.html
+    description: Phone display area
+    base_classes:
+    - mockup-phone-display
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      img:
+        type: string
+        default: ''
+        description: Image URL to display (renders an img tag instead of slot content)
+        required: false
+      alt:
+        type: string
+        default: ''
+        description: Alt text for the image
+        required: false
+    slots:
+      default:
+        description: Display content (used when img is not set)
+
+  mockup-window:
+    template: lb/mockup_window/index.html
+    description: OS window mockup
+    base_classes:
+    - mockup-window
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Window content

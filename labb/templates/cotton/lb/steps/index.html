@@ -1,0 +1,13 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    direction="horizontal"
+    :directionClasses="{
+        'horizontal': 'steps-horizontal',
+        'vertical': 'steps-vertical'
+    }"
+/>
+
+<ul class="steps {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs }}>
+    {{ slot }}
+</ul>
