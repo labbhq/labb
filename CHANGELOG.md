@@ -1,3 +1,11 @@
+## 0.3.1 (Mar 08, 2026)
+
+### Maintenance
+* chore/30-add-changelog-and-roadmap ([#44](https://github.com/labbhq/labb/issues/44))
+
+
+---
+
 ## 0.3.0 (Mar 08, 2026)
 
 ### Other
