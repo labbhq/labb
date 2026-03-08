@@ -1,3 +1,11 @@
+## 0.3.0 (Mar 08, 2026)
+
+### Other
+* No sub-issues found in this release.
+
+
+---
+
 ## 0.2.0 (Feb 09, 2026)
 
 ### Features
