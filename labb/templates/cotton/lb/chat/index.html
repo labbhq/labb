@@ -1,0 +1,16 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    placement="start"
+    :placementClasses="{
+        'start': 'chat-start',
+        'end': 'chat-end'
+    }"
+/>
+
+<div
+    class="chat {{ placementClasses|get_dict_item:placement }} {{ class }}"
+    {{ attrs }}
+>
+    {{ slot }}
+</div>

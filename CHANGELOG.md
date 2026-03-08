@@ -1,3 +1,16 @@
+## 0.2.0 (Feb 09, 2026)
+
+### Features
+* feat/25-labbstart-for-starter-kits ([#20](https://github.com/labbhq/labb/issues/20))
+* feat/27-add-breadcrumbs-component ([#25](https://github.com/labbhq/labb/issues/25))
+* feat/28-add-carousel-component ([#27](https://github.com/labbhq/labb/issues/27))
+
+### Maintenance
+* chore/26-enhance-readme-md ([#22](https://github.com/labbhq/labb/issues/22))
+
+
+---
+
 ## 0.1.1 (Jan 03, 2026)
 
 ### Maintenance

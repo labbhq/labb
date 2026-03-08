@@ -81,3 +81,43 @@ class TestSwap(ComponentTestBase):
         # Test swap.indeterminate
         html = self.render_component("swap.indeterminate")
         self.assert_classes_present(html, {"swap-indeterminate"})
+
+    def test_swap_on_with_icon(self):
+        """Test swap.on with icon prop"""
+        html = self.render_component("swap.on", icon="rmx.sun")
+        assert "swap-on" in html
+        assert "<svg" in html
+
+    def test_swap_off_with_icon(self):
+        """Test swap.off with icon prop"""
+        html = self.render_component("swap.off", icon="rmx.moon")
+        assert "swap-off" in html
+        assert "<svg" in html
+
+    def test_swap_on_with_icon_fill(self):
+        """Test swap.on with filled icon"""
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.swap.on icon.fill="rmx.sun" />'
+        )
+        assert "swap-on" in html
+        assert "<svg" in html
+
+    def test_swap_indeterminate_with_icon(self):
+        """Test swap.indeterminate with icon prop"""
+        html = self.render_component("swap.indeterminate", icon="rmx.subtract")
+        assert "swap-indeterminate" in html
+        assert "<svg" in html
+
+    def test_swap_integration_with_icons(self):
+        """Test full swap with icon props on sub-components"""
+        html = self.render_template_string(
+            "{% load cotton %}"
+            '<c-lb.swap effect="rotate">'
+            '    <c-lb.swap.on icon="rmx.sun" />'
+            '    <c-lb.swap.off icon="rmx.moon" />'
+            "</c-lb.swap>"
+        )
+        assert "swap" in html
+        assert "swap-rotate" in html
+        assert "swap-on" in html
+        assert "swap-off" in html

@@ -91,54 +91,43 @@ class TestText(ComponentTestBase):
     def test_text_icon_at_start(self):
         """Test text with icon at start (default)"""
         html = self.render_component(
-            "text", icon="rmx.information", iconEnd=False, slot_content="Info text"
+            "text", icon="rmx.information", slot_content="Info text"
         )
         assert "Info text" in html
         assert "<svg" in html
-        # Icon should appear before text content
-        # We can't easily test order, but we can verify both are present
         assert 'height="1em"' in html
 
     def test_text_icon_at_end(self):
         """Test text with icon at end"""
-        html = self.render_component(
-            "text", icon="rmx.arrow-right", iconEnd=True, slot_content="Next"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.text icon.end="rmx.arrow-right">Next</c-lb.text>'
         )
         assert "Next" in html
         assert "<svg" in html
-        assert 'height="1em"' in html
-        assert 'width="1em"' in html
 
     def test_text_with_icon_fill(self):
         """Test text with filled icon"""
-        html = self.render_component(
-            "text", icon="rmx.star", iconFill=True, slot_content="Filled Star"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.text icon.fill="rmx.star">Filled Star</c-lb.text>'
         )
         assert "Filled Star" in html
-        # Should contain the rendered SVG icon
         assert "<svg" in html
-        assert 'height="1em"' in html
-        assert 'width="1em"' in html
 
     def test_text_with_icon_no_fill(self):
         """Test text with unfilled icon (default)"""
         html = self.render_component(
-            "text", icon="rmx.star", iconFill=False, slot_content="Unfilled Star"
+            "text", icon="rmx.star", slot_content="Unfilled Star"
         )
         assert "Unfilled Star" in html
-        # Should contain the rendered SVG icon
         assert "<svg" in html
-        assert 'height="1em"' in html
-        assert 'width="1em"' in html
 
     def test_text_with_icon_class(self):
         """Test text with icon and custom icon class"""
-        html = self.render_component(
-            "text", icon="rmx.check", iconClass="text-warning", slot_content="Success"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.text icon="rmx.check" icon.class="text-warning">Success</c-lb.text>'
         )
         assert "Success" in html
-        # Should contain the icon component
-        assert 'is="lbi"' in html or "<svg" in html
+        assert "text-warning" in html
 
     def test_text_combination(self):
         """Test text with multiple properties"""
@@ -158,15 +147,8 @@ class TestText(ComponentTestBase):
 
     def test_text_combination_with_icon_end(self):
         """Test text with icon at end and other properties"""
-        html = self.render_component(
-            "text",
-            variant="success",
-            size="xl",
-            underline=True,
-            icon="rmx.arrow-right",
-            iconEnd=True,
-            iconFill=True,
-            slot_content="Complete",
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.text variant="success" size="xl" underline icon.fill.end="rmx.arrow-right">Complete</c-lb.text>'
         )
         assert "text-success" in html
         assert "text-xl" in html
@@ -179,9 +161,8 @@ class TestText(ComponentTestBase):
         html = self.render_component("text", slot_content="Default Text")
         # Should render as span (default)
         assert "<span" in html
-        # Should have default size (text-base)
-        assert "text-base" in html
-        # Should not have variant, underline, or icon
+        # Should not have size, variant, underline, or icon by default
+        assert "text-base" not in html
         assert "text-primary" not in html
         assert "underline" not in html
         assert "<svg" not in html

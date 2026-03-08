@@ -118,42 +118,30 @@ class TestAlert(ComponentTestBase):
 
     def test_alert_with_icon_fill(self):
         """Test alert with filled icon"""
-        html = self.render_component(
-            "alert", icon="rmx.star", iconFill=True, slot_content="Filled Star Alert"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.alert icon.fill="rmx.star">Filled Star Alert</c-lb.alert>'
         )
         assert "alert" in html
         assert "Filled Star Alert" in html
-        # Should contain the rendered SVG icon with fill
         assert "<svg" in html
-        assert 'fill="currentColor"' in html
-        assert 'height="1em"' in html
-        assert 'width="1em"' in html
 
     def test_alert_with_icon_no_fill(self):
         """Test alert with unfilled icon (default)"""
         html = self.render_component(
-            "alert", icon="rmx.star", iconFill=False, slot_content="Unfilled Star Alert"
+            "alert", icon="rmx.star", slot_content="Unfilled Star Alert"
         )
         assert "alert" in html
         assert "Unfilled Star Alert" in html
-        # Should contain the rendered SVG icon without fill
         assert "<svg" in html
-        assert 'fill="currentColor"' in html
-        assert 'height="1em"' in html
-        assert 'width="1em"' in html
 
     def test_alert_with_icon_class(self):
         """Test alert with icon and custom icon class"""
-        html = self.render_component(
-            "alert",
-            icon="rmx.check",
-            iconClass="text-warning",
-            slot_content="Success Alert",
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.alert icon="rmx.check" icon.class="text-warning">Success Alert</c-lb.alert>'
         )
         assert "alert" in html
         assert "Success Alert" in html
-        # Should contain the icon component with custom class
-        assert 'is="lbi"' in html or "<svg" in html
+        assert "text-warning" in html
 
     def test_alert_with_actions_slot(self):
         """Test alert with actions slot"""

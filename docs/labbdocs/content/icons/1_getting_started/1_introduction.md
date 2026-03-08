@@ -1,26 +1,89 @@
 ---
-title: Introduction
-description: Beautiful, accessible, and customizable icon components for your Django projects.
-doc_show_toc: False
+title: Installation
+description: Install labbicons and start using icon components in your Django project.
 ---
 
-**labbicons** gives you access to icons packs as simple Django components. Write `<c-lbi.rmx.heart />` instead of copying SVG code. Backend-rendered, accessible, and zero JavaScript required.
+{% load docs_tags %}
 
-## Why labbicons?
+**labbicons** gives you access to icon packs as simple Django components. Write `<c-lbi.rmx.heart />` instead of copying SVG code. Backend-rendered, accessible, and zero JavaScript required.
 
-**Simple as HTML** — Use icons like any other HTML tag. Clean syntax, easy to read and maintain.
+## Installation
 
-**Massive Library** — Remix icons (and more packs coming soon) covering UI, business, development, media, and more.
+```bash
+pip install labbicons
+# or install alongside labbui
+pip install labbui[icons]
+```
 
-**Fill & Line Variants** — Every icon has both outlined (line) and filled variants. Switch with a single attribute.
+Add `labbicons` to your `INSTALLED_APPS`:
 
-**Zero Dependencies** — No external CDNs or JavaScript libraries. Icons are rendered on the server.
+```python
+INSTALLED_APPS = [
+    # ... other apps
+    'django_cotton',
+    'labbicons',
+]
+```
 
-## What You Get
+<c-lb.alert variant="info" style="soft" class="not-prose">
+  <span><strong>Note:</strong> labbicons only requires `django-cotton` and can be used independently of labb UI components. If you already have `labb` installed, `django_cotton` is already configured.</span>
+</c-lb.alert>
 
-- **1000+ Icons** — Complete Remix icon library (and more packs coming soon)
-- **Two Styles** — Line (outlined) and fill (solid) variants for every icon
-- **Smart Search** — Find icons instantly with `labb icons search "keyword"`
-- **Direct Usage** — `<c-lbi n="rmx.icon-name" />` or `<c-lbi.rmx.icon-name />`
-- **Component Integration** — Works seamlessly with labb components via `icon="rmx.name"` attribute
-- **Customizable** — Control size, color, and styling with standard HTML attributes
+## Usage
+
+Icons can be referenced in three ways:
+
+```html
+<!-- Direct component syntax -->
+<c-lbi.rmx.heart w="24" h="24" class="text-red-500" />
+
+<!-- Name attribute syntax -->
+<c-lbi n="rmx.heart" w="24" h="24" class="text-red-500" />
+
+<!-- Inside labb components (if supported) -->
+<c-lb.button variant="primary" icon="rmx.save">Save</c-lb.button>
+<c-lb.badge variant="info" icon="rmx.information">Info</c-lb.badge>
+```
+
+## Variants
+
+Most icons come in line (outlined) and fill (solid) variants:
+
+```html
+<!-- Line variant (default) -->
+<c-lbi.rmx.camera w="24" h="24" />
+
+<!-- Fill variant -->
+<c-lbi.rmx.camera w="24" h="24" fill />
+```
+
+## Size and Styling
+
+Control size with `w` and `h` attributes. Style with CSS classes:
+
+```html
+<!-- Numeric values (pixels) -->
+<c-lbi.rmx.heart w="16" h="16" />
+<c-lbi.rmx.heart w="32" h="32" />
+
+<!-- Em units (scales with font size) -->
+<c-lbi.rmx.heart w="1em" h="1em" />
+
+<!-- Styling with classes -->
+<c-lbi.rmx.heart w="24" h="24" class="text-red-500 hover:text-red-700 transition-colors" />
+```
+
+## CLI Commands
+
+```bash
+# Search for icons
+labb icons search "arrow"
+
+# List available packs
+labb icons packs
+
+# Get icon info
+labb icons info rmx.arrow-down
+```
+
+See the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-icons">labb icons command reference</a> for full documentation.

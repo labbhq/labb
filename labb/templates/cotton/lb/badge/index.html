@@ -27,18 +27,15 @@
         'lg': 'badge-lg',
         'xl': 'badge-xl'
     }"
-    icon=""
-    iconFill
-    iconEnd
-    iconClass=""
 />
+{% parse_icon attrs as i %}
 
-<span class="badge {{ variantClasses|get_dict_item:variant }} {{ styleClasses|get_dict_item:style }} {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs }}>
-    {% if icon and not iconEnd %}
-        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+<span class="badge {{ variantClasses|get_dict_item:variant }} {{ styleClasses|get_dict_item:style }} {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs|strip_icon_attrs }}>
+    {% if i.name and not i.end %}
+        <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
     {{ slot }}
-    {% if icon and iconEnd %}
-        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% if i.name and i.end %}
+        <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
 </span>
