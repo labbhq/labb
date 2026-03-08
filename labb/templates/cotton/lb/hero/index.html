@@ -1,0 +1,10 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    overlay
+/>
+
+<div class="hero {{ class }}" {{ attrs }}>
+    {% if overlay %}<div class="hero-overlay"></div>{% endif %}
+    {{ slot }}
+</div>

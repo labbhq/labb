@@ -60,14 +60,12 @@
         'warning': 'bg-warning text-warning-content',
         'error': 'bg-error text-error-content'
     }"
-    icon=""
-    iconFill
-    iconClass=""
 />
+{% parse_icon attrs as i %}
 
 <div
     class="avatar {{ statusClasses|get_dict_item:status }} {% if placeholder %}avatar-placeholder{% endif %} {{ class }}"
-    {{ attrs }}
+    {{ attrs|strip_icon_attrs }}
 >
     {% if slot %}
         {{ slot }}
@@ -82,12 +80,12 @@
             {% if src %}
                 <img src="{{ src }}" alt="{{ alt }}" />
             {% elif placeholder %}
-                {% if icon %}
-                    <c-component is="lbi" n="{{ icon }}" w="1.5em" h="1.5em" :fill=iconFill :class=iconClass />
+                {% if i.name %}
+                    <c-component is="lbi" n="{{ i.name }}" w="1.5em" h="1.5em" :fill=i.fill class="{{ i.css_class }}" />
                 {% elif initials %}
                     <span>{{ initials }}</span>
                 {% else %}
-                    <c-component is="lbi" n="rmx.user" w="1.5em" h="1.5em" :class=iconClass :fill=iconFill />
+                    <c-component is="lbi" n="rmx.user" w="1.5em" h="1.5em" :fill=i.fill class="{{ i.css_class }}" />
                 {% endif %}
             {% endif %}
         </div>

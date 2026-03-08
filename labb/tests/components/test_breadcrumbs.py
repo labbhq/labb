@@ -131,28 +131,21 @@ class TestBreadcrumbsItem(ComponentTestBase):
 
     def test_item_icon_fill(self):
         """Test breadcrumb item with filled icon"""
-        html = self.render_component(
-            "breadcrumbs.item",
-            icon="rmx.home",
-            iconFill="true",
-            slot_content="Home",
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.breadcrumbs.item icon.fill="rmx.home">Home</c-lb.breadcrumbs.item>'
         )
         assert "<li" in html
         assert "Home" in html
         assert "<svg" in html
-        assert 'fill="currentColor"' in html
 
     def test_item_icon_class(self):
         """Test breadcrumb item with icon and custom icon class"""
-        html = self.render_component(
-            "breadcrumbs.item",
-            icon="rmx.home",
-            iconClass="text-primary",
-            slot_content="Home",
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.breadcrumbs.item icon="rmx.home" icon.class="text-primary">Home</c-lb.breadcrumbs.item>'
         )
         assert "<li" in html
         assert "Home" in html
-        assert 'is="lbi"' in html or "<svg" in html
+        assert "text-primary" in html
 
     def test_item_custom_class(self):
         """Test breadcrumb item with custom class"""

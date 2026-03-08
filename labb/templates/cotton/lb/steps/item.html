@@ -1,0 +1,24 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant=""
+    :variantClasses="{
+        'neutral': 'step-neutral',
+        'primary': 'step-primary',
+        'secondary': 'step-secondary',
+        'accent': 'step-accent',
+        'info': 'step-info',
+        'success': 'step-success',
+        'warning': 'step-warning',
+        'error': 'step-error'
+    }"
+    content=""
+/>
+{% parse_icon attrs as i %}
+
+<li class="step {{ variantClasses|get_dict_item:variant }} {{ class }}" {% if content %}data-content="{{ content }}"{% endif %} {{ attrs|strip_icon_attrs }}>
+    {% if i.name %}
+        <span class="step-icon"><c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" /></span>
+    {% endif %}
+    {{ slot }}
+</li>

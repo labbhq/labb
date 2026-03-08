@@ -1,0 +1,34 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    type="spinner"
+    :typeClasses="{
+        'spinner': 'loading-spinner',
+        'dots': 'loading-dots',
+        'ring': 'loading-ring',
+        'ball': 'loading-ball',
+        'bars': 'loading-bars',
+        'infinity': 'loading-infinity'
+    }"
+    size="md"
+    :sizeClasses="{
+        'xs': 'loading-xs',
+        'sm': 'loading-sm',
+        'md': 'loading-md',
+        'lg': 'loading-lg',
+        'xl': 'loading-xl'
+    }"
+    variant=""
+    :variantClasses="{
+        'neutral': 'text-neutral',
+        'primary': 'text-primary',
+        'secondary': 'text-secondary',
+        'accent': 'text-accent',
+        'info': 'text-info',
+        'success': 'text-success',
+        'warning': 'text-warning',
+        'error': 'text-error'
+    }"
+/>
+
+<span class="loading {{ typeClasses|get_dict_item:type }} {{ sizeClasses|get_dict_item:size }} {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs }}></span>

@@ -20,10 +20,11 @@
         'lg': 'checkbox-lg',
         'xl': 'checkbox-xl'
     }"
+    validate
 />
 
 <input
     type="checkbox"
-    class="checkbox {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {{ class }}"
+    class="checkbox {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {% if validate %}validator{% endif %} {{ class }}"
     {{ attrs }}
 />

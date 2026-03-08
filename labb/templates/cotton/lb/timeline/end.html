@@ -1,0 +1,9 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    box
+/>
+
+<div class="timeline-end {% if box %}timeline-box{% endif %} {{ class }}" {{ attrs }}>
+    {{ slot }}
+</div>

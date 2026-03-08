@@ -1,5 +1,10 @@
+{% load lb_tags %}
 <c-vars class="" />
+{% parse_icon attrs as i %}
 
-<div class="swap-on {{ class }}" {{ attrs }}>
+<div class="swap-on {{ class }}" {{ attrs|strip_icon_attrs }}>
+    {% if i.name %}
+        <c-component is="lbi" n="{{ i.name }}" w="2em" h="2em" :fill=i.fill class="{{ i.css_class }}" />
+    {% endif %}
     {{ slot }}
 </div>

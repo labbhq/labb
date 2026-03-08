@@ -1,0 +1,27 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    variant=""
+    size="md"
+    :variantClasses="{
+        'neutral': 'bg-neutral text-neutral-content',
+        'primary': 'bg-primary text-primary-content',
+        'secondary': 'bg-secondary text-secondary-content',
+        'accent': 'bg-accent text-accent-content',
+        'info': 'bg-info text-info-content',
+        'success': 'bg-success text-success-content',
+        'warning': 'bg-warning text-warning-content',
+        'error': 'bg-error text-error-content'
+    }"
+    :sizeClasses="{
+        'xs': 'dock-xs',
+        'sm': 'dock-sm',
+        'md': 'dock-md',
+        'lg': 'dock-lg',
+        'xl': 'dock-xl'
+    }"
+/>
+
+<div class="dock {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs }}>
+    {{ slot }}
+</div>

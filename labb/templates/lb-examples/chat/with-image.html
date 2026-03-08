@@ -1,0 +1,23 @@
+{% load static %}
+<div class="space-y-2 w-full max-w-md">
+  <c-lb.chat placement="start">
+    <c-lb.chat.image src="{% static 'lbdocs/img/stock/avatar.png' %}" alt="Alice" />
+    <c-lb.chat.header>Alice <time datetime="2024-01-01 10:00">10:00 AM</time></c-lb.chat.header>
+    <c-lb.chat.bubble>How are you doing today?</c-lb.chat.bubble>
+    <c-lb.chat.footer class="opacity-50">Delivered</c-lb.chat.footer>
+  </c-lb.chat>
+
+  <c-lb.chat placement="end">
+    <c-lb.chat.image src="{% static 'lbdocs/img/stock/avatar.png' %}" alt="Bob" />
+    <c-lb.chat.header>Bob <time datetime="2024-01-01 10:02">10:02 AM</time></c-lb.chat.header>
+    <c-lb.chat.bubble>I'm doing great, thanks for asking!</c-lb.chat.bubble>
+    <c-lb.chat.footer class="opacity-50">Seen</c-lb.chat.footer>
+  </c-lb.chat>
+
+  <c-lb.chat placement="start">
+    <c-lb.chat.image src="{% static 'lbdocs/img/stock/avatar.png' %}" alt="Alice" />
+    <c-lb.chat.header>Alice <time datetime="2024-01-01 10:05">10:05 AM</time></c-lb.chat.header>
+    <c-lb.chat.bubble>That's wonderful to hear!</c-lb.chat.bubble>
+    <c-lb.chat.footer class="opacity-50">Delivered</c-lb.chat.footer>
+  </c-lb.chat>
+</div>
