@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    direction=""
+    :directionClasses="{
+        'top': 'stack-top',
+        'bottom': 'stack-bottom',
+        'start': 'stack-start',
+        'end': 'stack-end'
+    }"
+/>
+
+<div class="stack {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs }}>
+    {{ slot }}
+</div>

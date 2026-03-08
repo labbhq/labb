@@ -7,10 +7,6 @@
     behavior=""
     size="md"
     modifier=""
-    icon=""
-    iconFill
-    iconEnd
-    iconClass=""
     :variantClasses="{
         'neutral': 'btn-neutral',
         'primary': 'btn-primary',
@@ -46,24 +42,25 @@
         'circle': 'btn-circle'
     }"
 />
+{% parse_icon attrs as i %}
 
 <{{ as }}
     class="
-        btn
+        {% if btnStyle != 'bare' %}btn
         {{ variantClasses|get_dict_item:variant }}
         {{ btnStyleClasses|get_dict_item:btnStyle }}
         {{ behaviorClasses|get_dict_item:behavior }}
         {{ sizeClasses|get_dict_item:size }}
-        {{ modifierClasses|get_dict_item:modifier }}
+        {{ modifierClasses|get_dict_item:modifier }}{% endif %}
         {{ class }}
     "
-    {{ attrs }}
+    {{ attrs|strip_icon_attrs }}
 >
-    {% if icon and not iconEnd %}
-        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% if i.name and not i.end %}
+        <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
     {{ slot }}
-    {% if icon and iconEnd %}
-        <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+    {% if i.name and i.end %}
+        <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
 </{{ as }}>

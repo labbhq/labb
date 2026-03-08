@@ -20,9 +20,7 @@
         'warning': 'bg-warning/15 text-warning border-warning/25',
         'error': 'bg-error/15 text-error border-error/25'
     }"
-    icon=""
-    iconFill
-    iconClass=""
 />
+{% parse_icon attrs as i %}
 
-<kbd class="kbd {{ sizeClasses|get_dict_item:size }} {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs }}>{% if icon %}<c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />{% endif %}{{ slot }}</kbd>
+<kbd class="kbd {{ sizeClasses|get_dict_item:size }} {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs|strip_icon_attrs }}>{% if i.name %}<c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />{% endif %}{{ slot }}</kbd>

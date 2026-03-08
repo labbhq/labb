@@ -1,13 +1,12 @@
+{% load lb_tags %}
 <c-vars
     class=""
-    icon=""
-    iconFill
-    iconClass=""
 />
+{% parse_icon attrs as i %}
 
-<div class="timeline-middle {{ class }}" {{ attrs }}>
-    {% if icon %}
-        <c-component is="lbi" n="{{ icon }}" w="1.25em" h="1.25em" :fill=iconFill :class=iconClass />
+<div class="timeline-middle {{ class }}" {{ attrs|strip_icon_attrs }}>
+    {% if i.name %}
+        <c-component is="lbi" n="{{ i.name }}" w="1.25em" h="1.25em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
     {{ slot }}
 </div>

@@ -12,14 +12,12 @@
         'warning': 'text-warning',
         'error': 'text-error'
     }"
-    icon=""
-    iconFill
-    iconClass=""
 />
+{% parse_icon attrs as i %}
 
-<div class="stat-figure {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs }}>
-    {% if icon %}
-        <c-component is="lbi" n="{{ icon }}" w="1.5em" h="1.5em" :fill=iconFill :class=iconClass />
+<div class="stat-figure {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs|strip_icon_attrs }}>
+    {% if i.name %}
+        <c-component is="lbi" n="{{ i.name }}" w="1.5em" h="1.5em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}
     {{ slot }}
 </div>

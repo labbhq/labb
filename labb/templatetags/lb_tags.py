@@ -3,6 +3,7 @@ from pathlib import Path
 
 from django import template
 from django.urls import NoReverseMatch, reverse
+from django.utils.safestring import mark_safe
 
 from labb.config import load_config
 from labb.django_settings import get_default_theme
@@ -27,6 +28,45 @@ def get_dict_item(dictionary, key):
 
     value = dictionary.get(key)
     return "" if value is None else value
+
+
+@register.filter
+def make_range(value):
+    """
+    Create a range list from a number for use in template loops.
+
+    Usage: {% for i in max|make_range %}
+    """
+    try:
+        return range(1, int(value) + 1)
+    except (ValueError, TypeError):
+        return range(1, 6)
+
+
+@register.filter
+def is_half_rate(rate, i):
+    """
+    Check if rate matches i-0.5 (for half-star rating checked state).
+
+    Usage: {% if rate|is_half_rate:i %}checked{% endif %}
+    """
+    try:
+        return float(rate) == int(i) - 0.5
+    except (ValueError, TypeError):
+        return False
+
+
+@register.filter
+def is_whole_rate(rate, i):
+    """
+    Check if rate matches whole number i (for rating checked state).
+
+    Usage: {% if rate|is_whole_rate:i %}checked{% endif %}
+    """
+    try:
+        return float(rate) == int(i)
+    except (ValueError, TypeError):
+        return False
 
 
 @register.filter
@@ -56,7 +96,79 @@ def remove_l_attrs(attrs):
     cleaned = re.sub(pattern, "", attrs_str)
     # Clean up any extra whitespace
     cleaned = re.sub(r"\s+", " ", cleaned).strip()
-    return cleaned
+    return mark_safe(cleaned)
+
+
+@register.simple_tag
+def parse_icon(attrs=""):
+    """
+    Parse icon dot-notation attributes from a cotton attrs string.
+
+    Supports:
+        icon="name"              → icon name, line style, start position
+        icon.fill="name"         → icon name, fill style
+        icon.end="name"          → icon name, end position
+        icon.fill.end="name"     → icon name, fill style, end position
+        icon.end.fill="name"     → icon name, fill style, end position
+        icon.class="classes"     → additional CSS classes for the icon
+
+    Usage:
+        {% parse_icon attrs as i %}
+        {{ i.name }}  {{ i.fill }}  {{ i.end }}  {{ i.css_class }}
+
+    Returns:
+        dict with keys: name (str), fill (bool), end (bool), css_class (str)
+    """
+    result = {
+        "name": "",
+        "fill": False,
+        "end": False,
+        "css_class": "",
+    }
+
+    if not attrs:
+        return result
+
+    s = str(attrs)
+
+    # Extract icon.class="..."
+    class_match = re.search(r'\bicon\.class=["\']([^"\']*)["\']', s)
+    if class_match:
+        result["css_class"] = class_match.group(1)
+
+    # Extract the main icon attribute: icon[.fill][.end]="name"
+    # Matches: icon="x", icon.fill="x", icon.end="x", icon.fill.end="x", icon.end.fill="x"
+    # Does NOT match icon.class="x" because .class is not .fill or .end
+    main_match = re.search(r'\bicon((?:\.(?:fill|end))*)\s*=["\']([^"\']*)["\']', s)
+    if main_match:
+        modifiers = main_match.group(1) or ""
+        result["name"] = main_match.group(2)
+        result["fill"] = ".fill" in modifiers
+        result["end"] = ".end" in modifiers
+
+    return result
+
+
+@register.filter
+def strip_icon_attrs(attrs):
+    """
+    Remove all icon-related attributes from an attrs string.
+
+    Removes attributes matching: icon="...", icon.fill="...", icon.class="...", etc.
+
+    Usage: {{ attrs|strip_icon_attrs }}
+    """
+    if not attrs:
+        return ""
+
+    s = str(attrs)
+
+    # Remove icon attributes with values: icon="...", icon.fill="...", icon.class="...", etc.
+    s = re.sub(r'\s*\bicon(?:\.[\w.]+)?\s*=["\'][^"\']*["\']', "", s)
+
+    # Clean up whitespace
+    s = re.sub(r"\s+", " ", s).strip()
+    return mark_safe(s)
 
 
 @register.simple_tag

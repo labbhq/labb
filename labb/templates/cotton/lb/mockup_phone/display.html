@@ -1,0 +1,9 @@
+<c-vars class="" img="" alt="" />
+
+<div class="mockup-phone-display {{ class }}" {{ attrs }}>
+    {% if img %}
+        <img src="{{ img }}" alt="{{ alt }}" />
+    {% else %}
+        {{ slot }}
+    {% endif %}
+</div>
