@@ -1,0 +1,55 @@
+{% load lb_tags %}
+<c-vars
+    class=""
+    name="rating"
+    max="5"
+    shape="star-2"
+    :shapeClasses="{
+        'star': 'mask-star',
+        'star-2': 'mask-star-2',
+        'heart': 'mask-heart',
+        'diamond': 'mask-diamond',
+        'circle': 'mask-circle',
+        'squircle': 'mask-squircle',
+        'hexagon': 'mask-hexagon',
+        'hexagon-2': 'mask-hexagon-2',
+        'decagon': 'mask-decagon',
+        'pentagon': 'mask-pentagon',
+        'triangle': 'mask-triangle'
+    }"
+    variant=""
+    :variantClasses="{
+        'neutral': 'bg-neutral',
+        'primary': 'bg-primary',
+        'secondary': 'bg-secondary',
+        'accent': 'bg-accent',
+        'info': 'bg-info',
+        'success': 'bg-success',
+        'warning': 'bg-warning',
+        'error': 'bg-error'
+    }"
+    rate=""
+    size="md"
+    :sizeClasses="{
+        'xs': 'rating-xs',
+        'sm': 'rating-sm',
+        'md': 'rating-md',
+        'lg': 'rating-lg',
+        'xl': 'rating-xl'
+    }"
+    half
+/>
+
+<div class="rating {{ sizeClasses|get_dict_item:size }} {% if half %}rating-half{% endif %} {{ class }}" {{ attrs }}>
+    {% if half %}
+        <input type="radio" name="{{ name }}" class="rating-hidden" />
+        {% for i in max|make_range %}
+            <input type="radio" name="{{ name }}" class="mask {{ shapeClasses|get_dict_item:shape }} mask-half-1 {{ variantClasses|get_dict_item:variant }}" aria-label="{{ i|add:"-1" }}.5 star" {% if rate|is_half_rate:i %}checked="checked"{% endif %} />
+            <input type="radio" name="{{ name }}" class="mask {{ shapeClasses|get_dict_item:shape }} mask-half-2 {{ variantClasses|get_dict_item:variant }}" aria-label="{{ i }} star" {% if rate|is_whole_rate:i %}checked="checked"{% endif %} />
+        {% endfor %}
+    {% else %}
+        {% for i in max|make_range %}
+            <input type="radio" name="{{ name }}" class="mask {{ shapeClasses|get_dict_item:shape }} {{ variantClasses|get_dict_item:variant }}" aria-label="{{ i }} star" {% if rate|is_whole_rate:i %}checked="checked"{% endif %} />
+        {% endfor %}
+    {% endif %}
+</div>

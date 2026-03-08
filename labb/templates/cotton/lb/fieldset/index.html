@@ -1,0 +1,10 @@
+<c-vars class="" legend="" />
+
+<fieldset class="fieldset {{ class }}" {{ attrs }}>
+    {% if legendSlot %}
+        {{ legendSlot }}
+    {% elif legend %}
+        <legend class="fieldset-legend">{{ legend }}</legend>
+    {% endif %}
+    {{ slot }}
+</fieldset>

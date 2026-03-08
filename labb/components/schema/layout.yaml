@@ -1,0 +1,533 @@
+# Component Schema Documentation
+#
+# Each component can have:
+# - base_classes: CSS classes that are always applied when the component renders
+# - optional_base_classes: CSS classes that are conditionally applied based on component state/slots
+#   These classes are not required to be present in all renderings and won't cause test failures
+#
+components:
+  drawer:
+    template: lb/drawer/index.html
+    description: Main drawer wrapper component - use with drawer sub-components for full functionality
+    base_classes:
+    - drawer
+    - drawer-toggle
+    - drawer-content
+    optional_base_classes:
+    - drawer-side
+    - drawer-overlay
+    variables:
+      drawerId:
+        type: string
+        default: drawer
+        description: Drawer ID for checkbox linking
+        required: false
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      end:
+        type: boolean
+        default: false
+        description: Position drawer on the right side
+        css_mapping:
+          true: drawer-end
+      open:
+        type: boolean
+        default: false
+        description: Whether the drawer is initially open
+        css_mapping:
+          true: drawer-open
+      sideClass:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply to the drawer side
+        required: false
+      overlayClass:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply to the drawer overlay
+        required: false
+    slots:
+      default:
+        description: Main drawer content that gets wrapped in <c-lb.drawer.content> when content slot is not used
+      checkbox:
+        description: Custom drawer toggle checkbox. Defaults to <c-lb.drawer.checkbox> if not provided
+      content:
+        description: Complete custom drawer content area. Defaults to <c-lb.drawer.content> wrapping the default slot
+      sideContent:
+        description: Sidebar content that gets wrapped in <c-lb.drawer.side> with overlay automatically added
+      side:
+        description: For custom sidebar component as alternative to sideContent slot
+
+  drawer.checkbox:
+    template: lb/drawer/checkbox.html
+    description: Drawer toggle checkbox input - controls drawer open/close state
+    base_classes:
+    - drawer-toggle
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+
+  drawer.content:
+    template: lb/drawer/content.html
+    description: Drawer main content area - contains the primary page content
+    base_classes:
+    - drawer-content
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - div
+        - main
+        - section
+        - article
+        default: div
+        description: HTML element to render as
+
+  drawer.side:
+    template: lb/drawer/side.html
+    description: Drawer sidebar container - wraps the sidebar content and overlay
+    base_classes:
+    - drawer-side
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+
+  drawer.overlay:
+    template: lb/drawer/overlay.html
+    description: Drawer overlay label - provides backdrop for closing the drawer
+    base_classes:
+    - drawer-overlay
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+
+  drawer.toggle:
+    template: lb/drawer/toggle.html
+    description: Drawer toggle label - provides a clickable label for the drawer checkbox
+    base_classes: []
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      for:
+        type: string
+        default: ''
+        description: ID of the drawer checkbox to control (for label elements)
+        required: false
+
+  footer:
+    template: lb/footer/index.html
+    description: Footer component for displaying site footer content with optional centered layout
+    base_classes:
+    - footer
+    optional_base_classes:
+    - footer-center
+    - footer-horizontal
+    - footer-vertical
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - footer
+        - div
+        - section
+        default: footer
+        description: HTML tag to use for the footer element
+      center:
+        type: boolean
+        default: false
+        description: Center the footer content
+        css_mapping:
+          true: footer-center
+      direction:
+        type: enum
+        values:
+        - horizontal
+        - vertical
+        default: horizontal
+        description: Layout direction for footer sections - horizontal (side-by-side) or vertical (stacked)
+        css_mapping:
+          horizontal: footer-horizontal
+          vertical: footer-vertical
+    slots:
+      default:
+        description: Footer content - typically contains navigation sections, social links, and copyright info
+
+  footer.title:
+    template: lb/footer/title.html
+    description: Footer section title component - applies footer-title styling
+    base_classes:
+    - footer-title
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      as:
+        type: enum
+        values:
+        - span
+        - h2
+        - h3
+        - h4
+        - h5
+        - h6
+        - div
+        - p
+        default: span
+        description: HTML tag to use for the title element
+    slots:
+      default:
+        description: Title text content
+
+  hero:
+    template: lb/hero/index.html
+    description: Hero section with content and optional overlay
+    base_classes:
+    - hero
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      overlay:
+        type: boolean
+        default: false
+        description: Show hero overlay for background images
+        css_mapping:
+          true: ''
+    slots:
+      default:
+        description: Hero content
+
+  hero.content:
+    template: lb/hero/content.html
+    description: Content wrapper inside hero
+    base_classes:
+    - hero-content
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Hero content elements
+
+  hero.overlay:
+    template: lb/hero/overlay.html
+    description: Overlay layer for hero background images
+    base_classes:
+    - hero-overlay
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+
+  indicator:
+    template: lb/indicator/index.html
+    description: Container that positions an indicator item on a child element
+    base_classes:
+    - indicator
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Content to attach indicator to
+
+  indicator.item:
+    template: lb/indicator/item.html
+    description: Item positioned on corner of sibling element
+    base_classes:
+    - indicator-item
+    optional_base_classes:
+    - badge
+    - status
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      shape:
+        type: enum
+        values:
+        - badge
+        - status
+        - none
+        default: badge
+        description: Visual shape preset (badge, status dot, or none for full customisation)
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Color variant (classes depend on shape)
+      horizontal:
+        type: enum
+        default: ''
+        description: Horizontal alignment
+        values:
+        - ''
+        - start
+        - center
+        - end
+        css_mapping:
+          start: indicator-start
+          center: indicator-center
+          end: indicator-end
+      vertical:
+        type: enum
+        default: ''
+        description: Vertical alignment
+        values:
+        - ''
+        - top
+        - middle
+        - bottom
+        css_mapping:
+          top: indicator-top
+          middle: indicator-middle
+          bottom: indicator-bottom
+      size:
+        type: enum
+        values:
+        - ''
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: ''
+        description: Size (classes depend on shape)
+      icon:
+        type: string
+        default: ''
+        description: Icon name to display
+        required: false
+        dot_modifiers:
+          fill: Render in filled (solid) style
+      icon.class:
+        type: string
+        default: ''
+        description: Additional CSS classes for the icon
+        required: false
+    slots:
+      default:
+        description: Indicator content (badge, status, etc.)
+
+  join:
+    template: lb/join/index.html
+    description: Groups multiple items together visually
+    base_classes:
+    - join
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      direction:
+        type: enum
+        default: ''
+        description: Layout direction
+        values:
+        - ''
+        - horizontal
+        - vertical
+        css_mapping:
+          horizontal: join-horizontal
+          vertical: join-vertical
+    slots:
+      default:
+        description: Join items (use class='join-item' on children)
+
+  mask:
+    template: lb/mask/index.html
+    description: Applies mask shape to crop content
+    base_classes:
+    - mask
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      shape:
+        type: enum
+        default: squircle
+        description: Mask shape
+        values:
+        - squircle
+        - heart
+        - hexagon
+        - hexagon-2
+        - decagon
+        - pentagon
+        - diamond
+        - square
+        - circle
+        - star
+        - star-2
+        - triangle
+        - triangle-2
+        - triangle-3
+        - triangle-4
+        css_mapping:
+          squircle: mask-squircle
+          heart: mask-heart
+          hexagon: mask-hexagon
+          hexagon-2: mask-hexagon-2
+          decagon: mask-decagon
+          pentagon: mask-pentagon
+          diamond: mask-diamond
+          square: mask-square
+          circle: mask-circle
+          star: mask-star
+          star-2: mask-star-2
+          triangle: mask-triangle
+          triangle-2: mask-triangle-2
+          triangle-3: mask-triangle-3
+          triangle-4: mask-triangle-4
+      half:
+        type: enum
+        default: ''
+        description: Crop to half
+        values:
+        - ''
+        - '1'
+        - '2'
+        css_mapping:
+          '1': mask-half-1
+          '2': mask-half-2
+
+  stack:
+    template: lb/stack/index.html
+    description: Stacks child elements on top of each other
+    base_classes:
+    - stack
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      direction:
+        type: enum
+        default: ''
+        description: Stack alignment direction
+        values:
+        - ''
+        - top
+        - bottom
+        - start
+        - end
+        css_mapping:
+          top: stack-top
+          bottom: stack-bottom
+          start: stack-start
+          end: stack-end
+    slots:
+      default:
+        description: Stacked elements
+
+  divider:
+    template: lb/divider/index.html
+    description: Divider line to separate content
+    base_classes:
+    - divider
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        default: ''
+        description: Color variant
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        css_mapping:
+          neutral: divider-neutral
+          primary: divider-primary
+          secondary: divider-secondary
+          accent: divider-accent
+          info: divider-info
+          success: divider-success
+          warning: divider-warning
+          error: divider-error
+      direction:
+        type: enum
+        default: ''
+        description: Divider direction
+        values:
+        - ''
+        - horizontal
+        - vertical
+        css_mapping:
+          horizontal: divider-horizontal
+          vertical: divider-vertical
+      position:
+        type: enum
+        default: ''
+        description: Text position on divider
+        values:
+        - ''
+        - start
+        - end
+        css_mapping:
+          start: divider-start
+          end: divider-end
+    slots:
+      default:
+        description: Optional text content displayed on the divider

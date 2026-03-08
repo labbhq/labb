@@ -1,0 +1,10 @@
+<c-vars
+    class=""
+    duration=""
+/>
+
+<span class="text-rotate {% if duration %}{{ duration }}{% endif %} {{ class }}" {{ attrs }}>
+    <span>
+        {{ slot }}
+    </span>
+</span>

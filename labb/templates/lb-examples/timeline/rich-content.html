@@ -1,0 +1,29 @@
+<c-lb.timeline snap direction="vertical">
+    <c-lb.timeline.item first icon="rmx.checkbox-circle" variant="success">
+        <c-slot name="startSlot">
+            <c-lb.timeline.start class="text-end">
+                <time datetime="2024-01-01">Jan 2024</time>
+                <h3 class="font-bold text-lg">Project Kickoff</h3>
+                <p class="text-sm">Assembled the team and defined project scope.</p>
+            </c-lb.timeline.start>
+        </c-slot>
+    </c-lb.timeline.item>
+    <c-lb.timeline.item icon="rmx.checkbox-circle" variant="success">
+        <c-slot name="endSlot">
+            <c-lb.timeline.end>
+                <time datetime="2024-03-01">Mar 2024</time>
+                <h3 class="font-bold text-lg">Alpha Release</h3>
+                <p class="text-sm">Core features built and tested internally.</p>
+            </c-lb.timeline.end>
+        </c-slot>
+    </c-lb.timeline.item>
+    <c-lb.timeline.item last icon="rmx.checkbox-circle">
+        <c-slot name="startSlot">
+            <c-lb.timeline.start class="text-end">
+                <time datetime="2024-06-01">Jun 2024</time>
+                <h3 class="font-bold text-lg">Public Launch</h3>
+                <p class="text-sm">Released to production with full documentation.</p>
+            </c-lb.timeline.start>
+        </c-slot>
+    </c-lb.timeline.item>
+</c-lb.timeline>

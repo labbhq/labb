@@ -1,0 +1,479 @@
+# Component Schema Documentation
+#
+# Each component can have:
+# - base_classes: CSS classes that are always applied when the component renders
+# - optional_base_classes: CSS classes that are conditionally applied based on component state/slots
+#   These classes are not required to be present in all renderings and won't cause test failures
+#
+components:
+  alert:
+    template: lb/alert/index.html
+    description: Alert component for displaying important messages with various styles and colors
+    base_classes:
+    - alert
+    optional_base_classes:
+    - text-lg
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Alert color variant
+        css_mapping:
+          info: alert-info
+          success: alert-success
+          warning: alert-warning
+          error: alert-error
+      style:
+        type: enum
+        values:
+        - ''
+        - outline
+        - dash
+        - soft
+        default: ''
+        description: Alert style variant
+        css_mapping:
+          outline: alert-outline
+          dash: alert-dash
+          soft: alert-soft
+      direction:
+        type: enum
+        values:
+        - ''
+        - vertical
+        - horizontal
+        default: ''
+        description: Alert layout direction
+        css_mapping:
+          vertical: alert-vertical
+          horizontal: alert-horizontal
+      icon:
+        type: string
+        default: ''
+        description: Icon name to display
+        required: false
+        dot_modifiers:
+          fill: Render in filled (solid) style
+      icon.class:
+        type: string
+        default: ''
+        description: Additional CSS classes for the icon
+        required: false
+    slots:
+      default:
+        description: Alert content
+      actions:
+        description: Action buttons or elements for the alert (rendered in a div wrapper)
+
+  status:
+    template: lb/status/index.html
+    description: Small status indicator icon to show current state like online, offline, or error
+    base_classes:
+    - status
+    optional_base_classes:
+    - inline-grid
+    - '*:[grid-area:1/1]'
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Status color variant
+        css_mapping:
+          neutral: status-neutral
+          primary: status-primary
+          secondary: status-secondary
+          accent: status-accent
+          info: status-info
+          success: status-success
+          warning: status-warning
+          error: status-error
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Status indicator size
+        css_mapping:
+          xs: status-xs
+          sm: status-sm
+          md: status-md
+          lg: status-lg
+          xl: status-xl
+      animate:
+        type: enum
+        values:
+        - ''
+        - ping
+        - bounce
+        default: ''
+        description: Animation effect for the status indicator
+        css_mapping:
+          ping: animate-ping
+          bounce: animate-bounce
+
+  loading:
+    template: lb/loading/index.html
+    description: Loading spinner/animation indicator
+    base_classes:
+    - loading
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      type:
+        type: enum
+        values:
+        - spinner
+        - dots
+        - ring
+        - ball
+        - bars
+        - infinity
+        default: spinner
+        description: Loading animation type
+        css_mapping:
+          spinner: loading-spinner
+          dots: loading-dots
+          ring: loading-ring
+          ball: loading-ball
+          bars: loading-bars
+          infinity: loading-infinity
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Loading indicator size
+        css_mapping:
+          xs: loading-xs
+          sm: loading-sm
+          md: loading-md
+          lg: loading-lg
+          xl: loading-xl
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Loading color variant
+        css_mapping:
+          neutral: text-neutral
+          primary: text-primary
+          secondary: text-secondary
+          accent: text-accent
+          info: text-info
+          success: text-success
+          warning: text-warning
+          error: text-error
+
+  progress:
+    template: lb/progress/index.html
+    description: Progress bar to show completion status
+    base_classes:
+    - progress
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Progress bar color variant
+        css_mapping:
+          neutral: progress-neutral
+          primary: progress-primary
+          secondary: progress-secondary
+          accent: progress-accent
+          info: progress-info
+          success: progress-success
+          warning: progress-warning
+          error: progress-error
+      value:
+        type: string
+        default: ''
+        description: Current progress value (0-100). Omit for indeterminate.
+        required: false
+      max:
+        type: string
+        default: '100'
+        description: Maximum progress value
+        required: false
+
+  radial-progress:
+    template: lb/radial_progress/index.html
+    description: Circular progress indicator using CSS variables
+    base_classes:
+    - radial-progress
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Color variant
+        css_mapping:
+          neutral: text-neutral
+          primary: text-primary
+          secondary: text-secondary
+          accent: text-accent
+          info: text-info
+          success: text-success
+          warning: text-warning
+          error: text-error
+      bgVariant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Background color variant
+        css_mapping:
+          neutral: bg-neutral text-neutral-content border-neutral
+          primary: bg-primary text-primary-content border-primary
+          secondary: bg-secondary text-secondary-content border-secondary
+          accent: bg-accent text-accent-content border-accent
+          info: bg-info text-info-content border-info
+          success: bg-success text-success-content border-success
+          warning: bg-warning text-warning-content border-warning
+          error: bg-error text-error-content border-error
+      value:
+        type: string
+        default: '0'
+        description: Progress percentage (0-100)
+        required: true
+      progressSize:
+        type: string
+        default: ''
+        description: Custom size (e.g., '5rem'). Sets --size CSS variable
+        required: false
+      thickness:
+        type: string
+        default: ''
+        description: Custom stroke thickness (e.g., '4px'). Sets --thickness CSS variable
+        required: false
+    slots:
+      default:
+        description: Content displayed in the center (typically the percentage text)
+
+  skeleton:
+    template: lb/skeleton/index.html
+    description: Placeholder element with loading animation
+    base_classes:
+    - skeleton
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply (e.g., dimensions like 'h-32 w-32')
+        required: false
+      as:
+        type: enum
+        values:
+        - div
+        - span
+        default: div
+        description: HTML element to render as
+      text:
+        type: boolean
+        default: false
+        description: Use text color animation instead of background
+        css_mapping:
+          true: skeleton-text
+    slots:
+      default:
+        description: Optional content (used with skeleton-text for text placeholders)
+
+  toast:
+    template: lb/toast/index.html
+    description: Fixed-position container for toast notifications
+    base_classes:
+    - toast
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      horizontal:
+        type: enum
+        values:
+        - ''
+        - start
+        - center
+        - end
+        default: ''
+        description: Horizontal position
+        css_mapping:
+          start: toast-start
+          center: toast-center
+          end: toast-end
+      vertical:
+        type: enum
+        values:
+        - ''
+        - top
+        - middle
+        - bottom
+        default: ''
+        description: Vertical position
+        css_mapping:
+          top: toast-top
+          middle: toast-middle
+          bottom: toast-bottom
+    slots:
+      default:
+        description: Toast content (typically alert components)
+
+  tooltip:
+    template: lb/tooltip/index.html
+    description: Tooltip component that shows text or custom content on hover
+    base_classes:
+    - tooltip
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      tip:
+        type: string
+        default: ''
+        description: Tooltip text (sets data-tip attribute)
+        required: false
+      placement:
+        type: enum
+        values:
+        - top
+        - bottom
+        - left
+        - right
+        default: top
+        description: Tooltip position
+        css_mapping:
+          top: tooltip-top
+          bottom: tooltip-bottom
+          left: tooltip-left
+          right: tooltip-right
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Tooltip color variant
+        css_mapping:
+          neutral: tooltip-neutral
+          primary: tooltip-primary
+          secondary: tooltip-secondary
+          accent: tooltip-accent
+          info: tooltip-info
+          success: tooltip-success
+          warning: tooltip-warning
+          error: tooltip-error
+      open:
+        type: boolean
+        default: false
+        description: Force tooltip to stay open
+        css_mapping:
+          true: tooltip-open
+    slots:
+      default:
+        description: Element that triggers the tooltip on hover
+
+  tooltip.content:
+    template: lb/tooltip/content.html
+    description: Custom HTML content for tooltip (alternative to data-tip text)
+    base_classes:
+    - tooltip-content
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+    slots:
+      default:
+        description: Custom tooltip HTML content

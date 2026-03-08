@@ -67,6 +67,14 @@ class TestButtonComponent(ComponentTestTemplate):
             html = self.render_component("button", btnStyle=style, slot_content="Test")
             self.assert_classes_present(html, {"btn", expected_class})
 
+    def test_button_bare_style(self):
+        """Test bare style strips all btn classes"""
+        html = self.render_component("button", btnStyle="bare", slot_content="Bare")
+        assert "<button" in html
+        assert "Bare" in html
+        assert "btn " not in html
+        assert "btn-md" not in html
+
     def test_button_sizes(self):
         """Test all button sizes"""
         sizes = ["xs", "sm", "md", "lg", "xl"]
@@ -165,40 +173,91 @@ class TestButtonComponent(ComponentTestTemplate):
         assert 'href="/contact"' in html
         self.assert_classes_present(html, {"btn", "btn-primary"})
 
+    # --- Icon dot-notation tests ---
+
     def test_button_with_icon(self):
-        """Test button renders with icon"""
+        """Test button renders with icon using icon='name' syntax"""
         html = self.render_component("button", icon="rmx.home", slot_content="Home")
 
-        # Should contain the icon component or SVG content
-        assert 'is="lbi"' in html or "<svg" in html
+        assert "<svg" in html
         assert "Home" in html
 
-    def test_button_with_filled_icon(self):
-        """Test button renders with filled icon"""
-        html = self.render_component(
-            "button", icon="rmx.star", iconFill=True, slot_content="Favorite"
+    def test_button_with_icon_fill(self):
+        """Test button renders with filled icon using icon.fill='name'"""
+        html = self.render_template_string(
+            '{% load lb_tags %}<c-lb.button icon.fill="rmx.home">Home</c-lb.button>'
         )
 
-        # Should contain the icon component or SVG content
-        assert 'is="lbi"' in html or "<svg" in html
-        assert "Favorite" in html
+        assert "<svg" in html
+        assert "Home" in html
+
+    def test_button_with_icon_end(self):
+        """Test button renders with icon at end using icon.end='name'"""
+        html = self.render_template_string(
+            '{% load lb_tags %}<c-lb.button icon.end="rmx.home">Home</c-lb.button>'
+        )
+
+        assert "<svg" in html
+        assert "Home" in html
+        # Icon should appear after the text content
+        svg_pos = html.find("<svg")
+        text_pos = html.find("Home")
+        assert text_pos < svg_pos, "Icon should appear after text when using icon.end"
+
+    def test_button_with_icon_fill_end(self):
+        """Test button with icon.fill.end='name'"""
+        html = self.render_template_string(
+            '{% load lb_tags %}<c-lb.button icon.fill.end="rmx.home">Home</c-lb.button>'
+        )
+
+        assert "<svg" in html
+        assert "Home" in html
+        svg_pos = html.find("<svg")
+        text_pos = html.find("Home")
+        assert text_pos < svg_pos, (
+            "Icon should appear after text when using icon.fill.end"
+        )
+
+    def test_button_with_icon_end_fill(self):
+        """Test button with icon.end.fill='name' (reversed order)"""
+        html = self.render_template_string(
+            '{% load lb_tags %}<c-lb.button icon.end.fill="rmx.home">Home</c-lb.button>'
+        )
+
+        assert "<svg" in html
+        assert "Home" in html
+        svg_pos = html.find("<svg")
+        text_pos = html.find("Home")
+        assert text_pos < svg_pos, (
+            "Icon should appear after text when using icon.end.fill"
+        )
+
+    def test_button_with_icon_class(self):
+        """Test button with icon and icon.class"""
+        html = self.render_template_string(
+            '{% load lb_tags %}<c-lb.button icon="rmx.home" icon.class="text-warning">Test</c-lb.button>'
+        )
+
+        assert "<svg" in html
+        assert "text-warning" in html
 
     def test_button_icon_only(self):
         """Test button with only icon (no text)"""
         html = self.render_component("button", icon="rmx.home", modifier="circle")
 
-        # Should contain the icon component or SVG content
-        assert 'is="lbi"' in html or "<svg" in html
+        assert "<svg" in html
         assert "btn-circle" in html
 
-    def test_button_with_icon_class(self):
-        """Test button with icon and custom icon class"""
-        html = self.render_component(
-            "button", icon="rmx.add", iconClass="text-warning", slot_content="Test"
+    def test_button_icon_attrs_stripped_from_element(self):
+        """Test that icon.* attrs don't leak onto the button element"""
+        html = self.render_template_string(
+            '{% load lb_tags %}<c-lb.button icon.fill="rmx.home" icon.class="text-red" id="my-btn">Test</c-lb.button>'
         )
-        self.assert_classes_present(html, {"btn"})
-        # Should contain the icon component with custom class
-        assert 'is="lbi"' in html or "<svg" in html
+
+        assert 'id="my-btn"' in html
+        # icon.fill and icon.class should NOT appear on the button element itself
+        assert "icon.fill=" not in html
+        assert "icon.class=" not in html
 
 
 class TestButtonSchemaCompliance(ComponentTestBase):
@@ -217,8 +276,7 @@ class TestButtonSchemaCompliance(ComponentTestBase):
             "size",
             "modifier",
             "icon",
-            "iconFill",
-            "iconClass",
+            "icon.class",
         }
 
         assert "variables" in schema
@@ -261,6 +319,103 @@ class TestButtonSchemaCompliance(ComponentTestBase):
 
             html = self.render_component("button", slot_content="Test")
             assert f"<{default_as}" in html
+
+
+# --- Tests for parse_icon and strip_icon_attrs ---
+
+
+class TestParseIconTag(ComponentTestBase):
+    """Test the parse_icon template tag logic directly"""
+
+    def test_parse_icon_basic(self):
+        """Test parsing icon='name' from attrs string"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon('icon="rmx.home" id="btn"')
+        assert result["name"] == "rmx.home"
+        assert result["fill"] is False
+        assert result["end"] is False
+
+    def test_parse_icon_fill(self):
+        """Test parsing icon.fill='name'"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon('icon.fill="rmx.home"')
+        assert result["name"] == "rmx.home"
+        assert result["fill"] is True
+        assert result["end"] is False
+
+    def test_parse_icon_end(self):
+        """Test parsing icon.end='name'"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon('icon.end="rmx.home"')
+        assert result["name"] == "rmx.home"
+        assert result["fill"] is False
+        assert result["end"] is True
+
+    def test_parse_icon_fill_end(self):
+        """Test parsing icon.fill.end='name'"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon('icon.fill.end="rmx.home"')
+        assert result["name"] == "rmx.home"
+        assert result["fill"] is True
+        assert result["end"] is True
+
+    def test_parse_icon_end_fill(self):
+        """Test parsing icon.end.fill='name' (reversed order)"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon('icon.end.fill="rmx.home"')
+        assert result["name"] == "rmx.home"
+        assert result["fill"] is True
+        assert result["end"] is True
+
+    def test_parse_icon_class(self):
+        """Test parsing icon.class='classes'"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon('icon="rmx.home" icon.class="text-red-500"')
+        assert result["name"] == "rmx.home"
+        assert result["css_class"] == "text-red-500"
+
+    def test_parse_icon_empty(self):
+        """Test parsing with no icon attrs"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon('id="btn" class="foo"')
+        assert result["name"] == ""
+        assert result["fill"] is False
+        assert result["end"] is False
+        assert result["css_class"] == ""
+
+    def test_parse_icon_none(self):
+        """Test parsing with None/empty attrs"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        result = parse_icon("")
+        assert result["name"] == ""
+
+        result = parse_icon()
+        assert result["name"] == ""
+
+    def test_strip_icon_attrs(self):
+        """Test stripping icon attrs from attrs string"""
+        from labb.templatetags.lb_tags import strip_icon_attrs
+
+        result = strip_icon_attrs('icon.fill="rmx.home" icon.class="text-red" id="btn"')
+        assert "icon" not in result
+        assert 'id="btn"' in result
+
+    def test_strip_icon_attrs_preserves_non_icon(self):
+        """Test that non-icon attributes are preserved"""
+        from labb.templatetags.lb_tags import strip_icon_attrs
+
+        result = strip_icon_attrs('icon="rmx.home" id="btn" data-x="y"')
+        assert 'id="btn"' in result
+        assert 'data-x="y"' in result
+        assert "icon" not in result
 
 
 # Test fixtures

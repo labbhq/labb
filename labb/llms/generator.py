@@ -117,12 +117,24 @@ Install labbicons for icon support: `pip install labbicons` or `poetry add labbi
 - Use in components that supports icon: `<c-lb.button icon="rmx.arrow-down">Button</c-lb.button>`
 - Direct icon usage: `<c-lbi.rmx.arrow-down w="3" h="3" />`
 
-**Examples:**
-```html
-<!-- Badge with integrated icon -->
-<c-lb.badge variant="info" icon="rmx.information">Info</c-lb.badge>
+**Icon Dot-Notation Modifiers:**
+Components that support `icon` also support dot-notation modifiers in the attribute name:
+- `icon="name"` — line (outlined) icon at start
+- `icon.fill="name"` — filled (solid) icon
+- `icon.end="name"` — icon at end (button, badge, text, pagination.item)
+- `icon.fill.end="name"` — filled icon at end (modifiers combine, order doesn't matter)
+- `icon.class="classes"` — additional CSS classes for the icon (separate attribute, does not combine with fill/end)
 
-<!-- Badge with direct icon usage -->
+```html
+<c-lb.button icon="rmx.home">Home</c-lb.button>
+<c-lb.button icon.fill="rmx.heart" variant="error">Like</c-lb.button>
+<c-lb.button icon.end="rmx.arrow-right">Next</c-lb.button>
+<c-lb.button icon.fill.end="rmx.check" variant="success">Done</c-lb.button>
+<c-lb.button icon="rmx.star" icon.class="text-warning">Favorite</c-lb.button>
+```
+
+**Direct icon usage** (for full control over size, attributes):
+```html
 <c-lb.badge variant="success">
   <c-lbi n="rmx.check" w="1em" h="1em" />
   Success

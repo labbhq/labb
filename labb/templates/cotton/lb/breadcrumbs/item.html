@@ -3,31 +3,29 @@
     class=""
     href=""
     viewname=""
-    icon=""
-    iconFill
-    iconClass=""
 />
+{% parse_icon attrs as i %}
 
 <li class="{{ class }}">
     {% if viewname %}
         {% resolve_labb_link viewname attrs as resolved_url %}
-        <a {% if resolved_url %}href="{{ resolved_url }}"{% endif %} {{ attrs|remove_l_attrs }}>
-            {% if icon %}
-                <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+        <a {% if resolved_url %}href="{{ resolved_url }}"{% endif %} {{ attrs|strip_icon_attrs|remove_l_attrs }}>
+            {% if i.name %}
+                <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
             {% endif %}
             {{ slot }}
         </a>
     {% elif href %}
-        <a href="{{ href }}" {{ attrs }}>
-            {% if icon %}
-                <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+        <a href="{{ href }}" {{ attrs|strip_icon_attrs }}>
+            {% if i.name %}
+                <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
             {% endif %}
             {{ slot }}
         </a>
     {% else %}
         <span>
-            {% if icon %}
-                <c-component is="lbi" n="{{ icon }}" w="1em" h="1em" :fill=iconFill :class=iconClass />
+            {% if i.name %}
+                <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
             {% endif %}
             {{ slot }}
         </span>

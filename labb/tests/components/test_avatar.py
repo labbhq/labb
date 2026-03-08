@@ -154,11 +154,10 @@ class TestAvatar(ComponentTestBase):
 
     def test_avatar_icon_fill(self):
         """Test avatar placeholder icon with fill"""
-        html = self.render_component(
-            "avatar", placeholder="true", icon="rmx.star", iconFill="true"
+        html = self.render_template_string(
+            '{% load cotton %}<c-lb.avatar placeholder icon.fill="rmx.star" />'
         )
         assert "avatar-placeholder" in html
-        # Should contain SVG icon (rendered by labbicons)
         assert "<svg" in html
         assert "currentColor" in html
 
