@@ -18,6 +18,9 @@ daisy_ui_component_name: drawer
 ## Responsive Layout
 <c-lbdocs.component_example path="drawer/responsive" previewStyle="block" />
 
+## Icon Only Sidebar
+<c-lbdocs.component_example path="drawer/icon-only" previewStyle="block" />
+
 ## Custom Overlay
 <c-lbdocs.component_example path="drawer/with-custom-overlay" />
 
