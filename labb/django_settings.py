@@ -8,6 +8,12 @@ except ImportError:
 # Default settings
 DEFAULT_SETTINGS = {
     "DEFAULT_THEME": "__system__",  # system's default theme
+    "ALPINE_JS_PATH": "labb/js/alpine/alpine.min.js",  # local static path or full URL
+    "STACK_HELPERS": {
+        # Maps stack name → ordered list of helpers to prepend.
+        # "alpine" is a special token: emits a <script defer src="..."> using ALPINE_JS_PATH.
+        "components": ["labb/js/alpine/labb-component.js", "alpine"],
+    },
 }
 
 
