@@ -2,7 +2,8 @@
 doc_layout: component
 component: c-lbi.rmx
 title: Remix
-description: Open-source neutral-style system symbols elaborately crafted for designers and developers.
+description: "Remix Icon pack for labbicons: 2000+ django-cotton icon components for Django, Tailwind CSS, and labb templates on labb.io."
+keywords: "remix icons django, labbicons rmx, django icon component, c-lbi remix"
 doc_show_toc: false
 doc_links:
     - url: https://remixicon.com/

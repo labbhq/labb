@@ -1,6 +1,7 @@
 ---
 title: Installation
-description: Install labbicons and start using icon components in your Django project.
+description: "Install labbicons for Django: Remix icon components with django-cotton, Tailwind CSS, and labb UI. pip install labbicons."
+keywords: "labbicons install, django icons pip, remix icons django, labb icon components"
 ---
 
 {% load docs_tags %}
@@ -25,7 +26,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-<c-lb.alert variant="info" style="soft" class="not-prose">
+<c-lb.alert variant="info" alertStyle="soft" class="not-prose">
   <span><strong>Note:</strong> labbicons only requires `django-cotton` and can be used independently of labb UI components. If you already have `labb` installed, `django_cotton` is already configured.</span>
 </c-lb.alert>
 

@@ -1,78 +1,106 @@
 ---
 title: settings.py
-description: Learn how to configure labb settings in your Django project
+description: "LABB_SETTINGS in Django settings.py: configure labb, django-cotton integration, and optional labbdocs for your django ui project."
+keywords: "labb django settings, LABB_SETTINGS, django-cotton settings"
 ---
 
-## Overview
+## Overview of LABB_SETTINGS
 
-labb provides a simple way to configure labb-specific settings through Django's `settings.py` file. All labb-specific settings are organized under a `LABB_SETTINGS` object for easy management.
-
-Add the `LABB_SETTINGS` object to your Django `settings.py` file, and configure the variables as needed:
+All labb-specific settings live under a single `LABB_SETTINGS` dict in your Django `settings.py`:
 
 <c-lbdocs.codeblock.title title="settings.py">
 ```python
 LABB_SETTINGS = {
-    'DEFAULT_THEME': 'default',  # system's default theme
+    'DEFAULT_THEME': 'labb-light',
+    'ALPINE_JS_PATH': 'https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js',
 }
 ```
-</c-lbdocs.codeblock_with_title>
+</c-lbdocs.codeblock.title>
 
-These settings can be accessed in your code using `labb.django_settings.get_labb_setting`. For example:
+Only set what you need — all settings have built-in defaults and are fully optional.
+
+## Settings Reference
+
+### `DEFAULT_THEME`
+
+<c-lbdocs.indented_block>
+
+| | |
+|---|---|
+| **Default** | `"__system__"` |
+| **Type** | `str` |
+
+The theme applied to new users who have not yet made a selection. Can be any daisyUI theme registered in your project's `input.css`. The special value `"__system__"` defers to the OS-level light/dark preference.
 
 ```python
-from labb.django_settings import get_labb_setting
-
-default_theme = get_labb_setting('DEFAULT_THEME')
+LABB_SETTINGS = {
+    'DEFAULT_THEME': 'labb-light',
+}
 ```
 
-## Settings
+</c-lbdocs.indented_block>
 
-| Variable | Default | Description |
-|---------|---------|-------------|
-| `DEFAULT_THEME` | `default` | Default theme for new users. Can be any daisyui theme configured in your project's `input.css`. |
+### `ALPINE_JS_PATH`
 
+<c-lbdocs.indented_block>
+
+| | |
+|---|---|
+| **Default** | `"labb/js/alpine/alpine.min.js"` |
+| **Type** | `str` |
+
+Path to the Alpine.js file loaded when reactive (`.x`) components are used on a page. By default, labb serves Alpine from its own bundled static file.
+
+- **Static path** — resolved via Django's static files system, emitted as `<script defer src="...">`
+- **Full URL** (`http://` / `https://`) — emitted as-is, useful for CDN or custom builds
+
+```python
+LABB_SETTINGS = {
+    # Use jsDelivr CDN instead of the bundled file
+    'ALPINE_JS_PATH': 'https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js',
+}
+```
+
+See the [Reactivity guide]({% doc_url '2_concepts/1_reactivity.md' 'guide' %}) for more detail on how Alpine loading works.
+
+</c-lbdocs.indented_block>
+
+---
 
 ## Functions
 
-### `get_labb_setting(key, default=None)`
+### `get_labb_setting()`
 
 <c-lbdocs.indented_block>
-Retrieves a labb setting from Django settings with fallback to defaults.
 
-**Parameters:**
-
-- `key` (str): The setting key to retrieve
-- `default`: Default value if setting is not found
-
-**Returns:**
-
-- The setting value or default
-
-**Example:**
+Retrieves a setting from `LABB_SETTINGS` with fallback to labb's built-in defaults:
 
 ```python
 from labb.django_settings import get_labb_setting
 
-# Get a specific setting
-theme = get_labb_setting('DEFAULT_THEME', 'labb-light')
+theme = get_labb_setting('DEFAULT_THEME')
+alpine_path = get_labb_setting('ALPINE_JS_PATH')
 ```
+
+**Signature:** `get_labb_setting(key, default=None)`
+
+| Parameter | Description |
+|---|---|
+| `key` | Setting name to retrieve |
+| `default` | Fallback if the key is absent from both `LABB_SETTINGS` and labb's defaults |
+
 </c-lbdocs.indented_block>
 
 ### `get_default_theme()`
 
 <c-lbdocs.indented_block>
-Convenience function to get the default theme setting.
 
-**Returns:**
-
-- The default theme value from settings
-
-**Example:**
+Convenience function to get the current default theme setting.
 
 ```python
 from labb.django_settings import get_default_theme
 
-default_theme = get_default_theme()
-print(f"Default theme: {default_theme}")
+theme = get_default_theme()
 ```
+
 </c-lbdocs.indented_block>

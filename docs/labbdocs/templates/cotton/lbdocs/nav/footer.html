@@ -12,11 +12,17 @@
         </span>
     </aside>
 
-    <nav class="flex items-center gap-4 ml-auto">
+    <nav class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 ml-auto">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm">
+            <a href="{% url 'guide_docs' %}" class="link link-hover">Guide</a>
+            <a href="{% url 'ui_docs' %}" class="link link-hover">Components</a>
+            <a href="{% url 'icons_docs' %}" class="link link-hover">Icons</a>
+            <a href="{% url 'blog_docs' %}" class="link link-hover">Blog</a>
+        </div>
         <a href="https://twitter.com/labbhq" target="_blank" rel="noopener noreferrer" class="link link-hover" aria-label="Twitter">
             <c-lbi n="rmx.twitter" w="1.5em" h="1.5em" />
         </a>
-        <a href="https://github.com/labbhq" target="_blank" rel="noopener noreferrer" class="link link-hover" aria-label="GitHub">
+        <a href="https://github.com/labbhq/labb" target="_blank" rel="noopener noreferrer" class="link link-hover" aria-label="GitHub">
             <c-lbi n="rmx.github" w="1.5em" h="1.5em" />
         </a>
     </nav>

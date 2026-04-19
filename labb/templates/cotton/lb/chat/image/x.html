@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars x-data="lbChatImageComp" />
+
+{% lb_push_stack name="components" path="labb/js/alpine/components/chat_image.js" %}
+
+
+<c-lb.chat.image
+    x-data="{{ x_data }}"
+    data-lb-defaults="{% lb_alpine_defaults attrs "chat.image" %}"
+    x-modelable="lbProps"
+    ::class="compClasses"
+    :attrs=attrs
+>
+    {{ slot }}
+</c-lb.chat.image>

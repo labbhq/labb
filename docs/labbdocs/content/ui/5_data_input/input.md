@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.input
 title: Input
-description: Styled text input field with color and size variants.
+description: "Input component for Django: create styled text fields and form inputs. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django input component, text input django, daisyui input django, tailwind input django, input django-cotton, django form input, styled text field django, django-cotton"
 daisy_ui_component_name: input
 ---
+
+Input renders a styled `<input>` with any `type` via the prop of the same name, plus daisyUI form styling. Size, colour, and validation state variants keep it consistent with other form components.
 
 ## Basic Input
 <c-lbdocs.component_example path="input/basic" />

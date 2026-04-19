@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars x-data="lbTimelineComp" />
+
+{% lb_push_stack name="components" path="labb/js/alpine/components/timeline.js" %}
+
+
+<c-lb.timeline
+    x-data="{{ x_data }}"
+    data-lb-defaults="{% lb_alpine_defaults attrs "timeline" %}"
+    x-modelable="lbProps"
+    ::class="compClasses"
+    :attrs=attrs
+>
+    {{ slot }}
+</c-lb.timeline>

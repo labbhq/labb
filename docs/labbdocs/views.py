@@ -179,6 +179,16 @@ def sitemap_view(request):
     # Collect all URLs from all documentation types
     urls = []
 
+    # Homepage (not in YAML-driven doc pages)
+    urls.append(
+        {
+            "loc": f"{site_url}/",
+            "lastmod": datetime.now().strftime("%Y-%m-%d"),
+            "changefreq": "daily",
+            "priority": "1.0",
+        }
+    )
+
     for doc_name, doc_config in doc_types.items():
         yaml_file_path = doc_config.get("config")
         if not yaml_file_path:

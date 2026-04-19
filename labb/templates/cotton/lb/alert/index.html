@@ -8,7 +8,7 @@
         'warning': 'alert-warning',
         'error': 'alert-error'
     }"
-    style=""
+    alertStyle=""
     :styleClasses="{
         'outline': 'alert-outline',
         'dash': 'alert-dash',
@@ -22,7 +22,7 @@
 />
 {% parse_icon attrs as i %}
 
-<div role="alert" class="alert {{ variantClasses|get_dict_item:variant }} {{ styleClasses|get_dict_item:style }} {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs|strip_icon_attrs }}>
+<div role="alert" class="alert {{ variantClasses|get_dict_item:variant }} {{ styleClasses|get_dict_item:alertStyle }} {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs|strip_icon_attrs }}>
     {% if i.name %}
         <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="text-lg {{ i.css_class }}" />
     {% endif %}

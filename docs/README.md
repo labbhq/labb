@@ -1,18 +1,18 @@
 # labbdocs
 
-The documentation is available online at [https://labb.io/](https://labb.io/).
+**labbdocs** packages the [labb.io](https://labb.io/) documentation as a Django app: UI component reference, guides, icons, and blog — all powered by **labb**, **django-cotton**, **Tailwind CSS**, and **daisyUI 5**.
 
-This documentation is installed as a django app in the django project that powers the [labb.io](https://labb.io) website.
+The public site at [https://labb.io/](https://labb.io/) runs this app alongside the labb marketing pages. Install **labbdocs** in your own Django project if you want to embed or mirror that docs experience.
 
-## Installation
+## Install the labbdocs package
 
 ```bash
 pip install labbdocs
 ```
 
-## Integration with a django site
+## Integrate labbdocs into Django
 
-### 1. Add to INSTALLED_APPS
+### 1. Add labbdocs to INSTALLED_APPS
 
 Add `labbdocs` to your Django project's `INSTALLED_APPS`:
 
@@ -24,9 +24,9 @@ INSTALLED_APPS = [
 ]
 ```
 
-### 2. Configure LABB_DOCS
+### 2. Configure LABB_DOCS in settings
 
-Set up your documentation configuration in your Django settings:
+Set up your documentation configuration in Django settings:
 
 ```python
 # settings.py
@@ -50,7 +50,7 @@ LABB_DOCS = {
 }
 ```
 
-### 3. Include URLs
+### 3. Include labbdocs URLs
 
 Add labbdocs URLs to your main URL configuration:
 
@@ -64,7 +64,7 @@ urlpatterns = [
 ]
 ```
 
-### 4. Build Documentation
+### 4. Build documentation
 
 Use the management command to build your documentation:
 

@@ -1,6 +1,7 @@
 ---
 title: Introduction
-description: Beautiful, accessible, and customizable UI components for your Django projects.
+description: "labb is a Django UI component library: build interfaces with django-cotton, Tailwind CSS, and daisyUI 5. Server-rendered HTML, optional Alpine.js, 50+ components."
+keywords: "django ui components, django component library, django-cotton, labb django, tailwind django, daisyui django, django frontend"
 doc_show_toc: False
 ---
 {% load static %}
@@ -42,20 +43,22 @@ doc_show_toc: False
 
 **Developer Friendly** — Powerful CLI for setup, component inspection, and AI-assisted development. Works seamlessly with Cursor, VSCode Copilot, and other AI tools.
 
-## What You Get
+**Reactive When You Need It** — Components are zero-JS by default. Add Alpine.js interactivity with `.x` variants on a per-component basis. No bundler, no build step, nothing loads unless you use it.
 
-- **40+ Components** (in progress) — Buttons, cards, modals, drawers, forms, and more
+## Django UI Components Included
+
+- **50+ Components** — Buttons, cards, modals, drawers, forms, and more
 - **Extensive examples** — Each component has multiple examples with different variations and use cases
 - **Icon Libraries** — 2,800+ Remix icons and more via optional `labbicons` package
 - **Theme Support** — Light, dark, and custom themes out of the box
 - **Zero Config** — `labb init --defaults` and you're ready to go
 - **No JavaScript Build Step** — Components work without JavaScript by default
+- **Opt-in Reactivity** — Alpine.js-powered `.x` variants for runtime prop changes, zero overhead on pages that don't use them
 - **CLI Tool** — `labb` command for project setup, component inspection, and AI-assisted development
 
 
-## Coming Soon
+## Coming Soon
 
 - IDE extensions for autocomplete and documentation
 - More icon packs
-- Seamless integration with AlpineJS for interactive component properties
 - Starter kits, blocks and templates.

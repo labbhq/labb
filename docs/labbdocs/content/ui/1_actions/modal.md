@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.modal
 title: Modal
-description: Display overlay dialogs using HTML dialog element for better accessibility.
+description: "Modal component for Django: create accessible dialogs and overlays without JavaScript. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django modal component, modal django, daisyui modal django, tailwind modal django, modal django-cotton, django ui modal, django dialog component, django-cotton"
 daisy_ui_component_name: modal
 ---
+
+Modal uses CSS-driven dialog toggling via checkbox state, so no JavaScript is required. The `c-lb.modal.action` slot is the trigger; `c-lb.modal.content` holds the panel body. Closing works via the built-in close button or a backdrop click.
 
 ## Basic Modal
 <c-lbdocs.component_example path="modal/basic" style="tab" />

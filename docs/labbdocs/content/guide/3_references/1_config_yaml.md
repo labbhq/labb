@@ -1,6 +1,7 @@
 ---
 title: labb.yaml
-description: Configuration options for your labb project
+description: "labb.yaml configuration for Django projects: paths, Tailwind CSS, daisyUI themes, and labb CLI defaults."
+keywords: "labb.yaml, labb config django, labb project configuration"
 ---
 
 {% load docs_tags %}

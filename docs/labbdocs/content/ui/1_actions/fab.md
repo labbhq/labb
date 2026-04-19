@@ -2,11 +2,12 @@
 doc_layout: component
 component: c-lb.fab
 title: FAB / Speed Dial
-description: Floating Action Button with Speed Dial functionality for quick access to multiple actions
+description: "Floating action button (FAB) component for Django: add speed dial menus and prominent actions. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django fab component, floating action button django, speed dial django, daisyui fab django, tailwind fab django, django-cotton fab, django ui fab"
 daisy_ui_component_name: fab
 ---
 
-<c-lb.alert variant="info" icon="rmx.information" style="outline">
+<c-lb.alert variant="info" icon="rmx.information" alertStyle="outline">
 <span>The `relative` and `absolute` positioning classes (along with `bottom-4 right-4`) shown in the examples below are only added for the previewer to demonstrate the FAB components within a contained area. By default, FAB components are positioned relative to the screen/viewport and don't require these positioning classes in actual usage.</span>
 </c-lb.alert>
 

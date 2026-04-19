@@ -2,7 +2,8 @@
 doc_layout: component
 component: c-lb.card
 title: Card
-description: Display content with images, titles, descriptions, and actions.
+description: "Card component for Django: create structured content containers with headers, bodies, and actions. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django card component, card django, daisyui card django, tailwind card django, card django-cotton, django ui card, content card django, django-cotton"
 daisy_ui_component_name: card
 ---
 

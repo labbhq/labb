@@ -156,6 +156,16 @@ def _inspect_specific_component(
 
             var_table.add_row(var_name, var_type, default_display, desc)
 
+            # Show dot modifiers as indented sub-rows (e.g. icon.fill, icon.end)
+            dot_modifiers = var_spec.get("dot_modifiers", {})
+            for modifier, modifier_desc in dot_modifiers.items():
+                var_table.add_row(
+                    f"[dim]  {var_name}.{modifier}[/dim]",
+                    "[dim]modifier[/dim]",
+                    "[dim]-[/dim]",
+                    f"[dim]{modifier_desc}[/dim]",
+                )
+
         console.print(var_table)
 
     # Events section

@@ -1,0 +1,27 @@
+<div x-data="{
+    chartConfig: {
+        data: {
+            labels: ['Design', 'Development', 'Testing', 'Deployment', 'Support'],
+            datasets: [
+                { data: [40, 75, 60, 25, 55] }
+            ]
+        }
+    },
+    randomize() {
+        this.chartConfig = {
+            data: {
+                labels: this.chartConfig.data.labels,
+                datasets: [{
+                    data: this.chartConfig.data.labels.map(function() {
+                        return Math.floor(Math.random() * 70) + 10;
+                    })
+                }]
+            }
+        };
+    }
+}">
+    <div class="flex justify-end gap-2 mb-4">
+        <c-lb.button size="sm" variant="primary" icon="rmx.shuffle" @click="randomize()">Randomize</c-lb.button>
+    </div>
+    <c-lb.chart.polar-area x-model="chartConfig" />
+</div>

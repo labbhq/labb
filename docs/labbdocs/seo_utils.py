@@ -45,20 +45,22 @@ class SEOMetadata:
         self.default_locale = default_locale
         self.frontmatter = doc_info.get("frontmatter", {})
 
-    def get_title(self) -> str:
-        """Get the page title with site name."""
+    def _seo_title(self) -> str:
+        """Base SEO title (component-aware, without site suffix)."""
         doc_title = self.frontmatter.get("title", "")
         component = self.frontmatter.get("component", "")
-        title = doc_title or component or "Documentation"
+        doc_layout = self.frontmatter.get("doc_layout", "")
+        if doc_layout == "component" and doc_title:
+            return f"Django {doc_title} Component"
+        return doc_title or component or "Documentation"
 
-        # Add site name suffix
-        return f"{title} | {self.site_name}"
+    def get_title(self) -> str:
+        """Get the page title with site name."""
+        return f"{self._seo_title()} | {self.site_name}"
 
     def get_meta_title(self) -> str:
         """Get the meta title (without site name for social media)."""
-        doc_title = self.frontmatter.get("title", "")
-        component = self.frontmatter.get("component", "")
-        return doc_title or component or "Documentation"
+        return self._seo_title()
 
     def get_description(self) -> str:
         """Get the page description."""
@@ -184,10 +186,12 @@ def generate_breadcrumb_schema(url_path: str, site_url: str) -> Dict:
     current_path = ""
     for i, part in enumerate(parts, start=1):
         current_path += f"/{part}"
-        # Format breadcrumb name
+        # Human-readable segment labels (first segment is never "Home" for /docs/...)
         name = part.replace("-", " ").title()
-        if i == 1:
-            name = "Home"
+        if part.lower() == "ui":
+            name = "UI"
+        elif part.lower() == "docs":
+            name = "Docs"
 
         breadcrumbs.append(
             {
