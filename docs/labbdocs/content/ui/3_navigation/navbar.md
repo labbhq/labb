@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.navbar
 title: Navbar
-description: Navigation bar component with flexible layout sections for headers and navigation
+description: "Navbar component for Django: build responsive top navigation bars with menus and branding. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django navbar component, navbar django, daisyui navbar django, tailwind navbar django, navbar django-cotton, django ui navbar, top navigation django, django-cotton"
 daisy_ui_component_name: navbar
 ---
+
+Navbar renders a top bar with start, center, and end layout slots. Use it for site-wide navigation with a brand logo, main links, and utility actions like search or user avatar.
 
 ## Basic Navbar
 <c-lbdocs.component_example path="navbar/basic" previewStyle="block" />

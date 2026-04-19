@@ -1,6 +1,7 @@
 ---
 title: llms.txt
-description: Using labb with LLMs
+description: "labb llms.txt and labb llms CLI: feed AI assistants accurate django component docs, props, and examples for labb."
+keywords: "labb llms, labb llms.txt, django ai coding labb, cursor labb"
 doc_links:
     - title: llms.txt
       url: /llms.txt

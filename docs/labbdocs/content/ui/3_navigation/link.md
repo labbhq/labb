@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.link
 title: Link
-description: Link component with support for href and Django view name resolution
+description: "Link component for Django: apply consistent link styles across your Django templates. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django link component, styled link django, daisyui link django, tailwind link django, link django-cotton, django ui link, anchor component django, django-cotton"
 daisy_ui_component_name: link
 ---
+
+Link wraps an `<a>` element with daisyUI link styling and colour variants. Use it in prose, navigation lists, or anywhere you need a consistently styled, theme-aware hyperlink.
 
 ## Basic Link
 <c-lbdocs.component_example path="link/basic" />

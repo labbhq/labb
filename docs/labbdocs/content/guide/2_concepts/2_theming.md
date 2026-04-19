@@ -1,13 +1,14 @@
 ---
 title: "Theming"
 description: "Customize themes, create custom color schemes, and integrate daisyUI theming with labb components."
+keywords: "labb theming django, daisyui themes django, tailwind themes django, django dark mode, labb_theme tag"
 ---
 
 {% load docs_tags %}
 
 labb's theming is built on <a href="https://daisyui.com/docs/themes/" target="_blank">daisyUI 5</a>. Themes are defined as CSS variables in `input.css`, applied via template tags, and optionally persisted server-side.
 
-## Setup
+## Configuring labb themes in Django
 
 Add the `{% verbatim %}{% labb_theme %}{% endverbatim %}` tag to your `<html>` element and register the theme persistence URL:
 
@@ -47,7 +48,7 @@ urlpatterns = [
 
 `{% verbatim %}{% labb_theme %}{% endverbatim %}` outputs `data-theme="theme-name"` on the `<html>` element, reading from the user's session or falling back to `LABB_SETTINGS['DEFAULT_THEME']`. The `{% verbatim %}{% csrf_token %}{% endverbatim %}` is required for the theme persistence POST request.
 
-<c-lb.alert variant="info" style="outline" class="mt-4">
+<c-lb.alert variant="info" alertStyle="outline" class="mt-4">
 <span>Use `{% verbatim %}{% labb_theme_val %}{% endverbatim %}` instead if you need the raw theme value for conditional logic (e.g., `{% verbatim %}{% labb_theme_val as current_theme %}{% endverbatim %}`).</span>
 </c-lb.alert>
 

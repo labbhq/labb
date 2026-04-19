@@ -1,6 +1,7 @@
 ---
 title: labbicons
-description: Beautiful icon components for Django
+description: "Django icon components via labbicons: thousands of Remix icons as django-cotton tags. No SVG spriting; works with labb UI and Tailwind CSS on labb.io."
+keywords: "django icons, labbicons, remix icons django, django-cotton icons, tailwind icons django, labb icon component"
 doc_show_toc: false
 ---
 

@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.mockup-phone
 title: Phone
-description: Phone device mockup with camera and display areas.
+description: "Phone mockup component for Django: wrap content in a mobile phone frame for app demos. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django phone mockup, mobile mockup django, daisyui phone mockup django, tailwind phone mockup, phone mockup django-cotton, smartphone frame django, django-cotton"
 daisy_ui_component_name: mockup-phone
 ---
+
+Mockup Phone wraps content in a stylised phone outline for showing mobile UI in context. Use it on landing pages or in documentation to demonstrate responsive components.
 
 ## Basic Phone Mockup
 <c-lbdocs.component_example path="mockup-phone/basic" previewStyle="block"/>

@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.swap
 title: Swap
-description: Toggle between two elements with smooth transitions and animations
+description: "Swap component for Django: toggle between two states with smooth transitions. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django swap component, swap toggle django, daisyui swap django, tailwind swap django, swap django-cotton, django ui swap, django-cotton"
 daisy_ui_component_name: swap
 ---
+
+Swap toggles between two child elements using CSS checkbox state — no JavaScript needed. Common uses include icon toggles, show/hide text, and theme icon switching. Rotate and flip transition effects are available via the `effect` prop.
 
 ## Basic Swap
 <c-lbdocs.component_example path="swap/basic" />

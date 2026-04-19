@@ -1,6 +1,7 @@
 ---
 title: labb blog
-description: labb blog posts and articles
+description: "labb blog: Django UI tutorials, releases, and opinions on django-cotton, Tailwind CSS, and daisyUI. Updates from the labb.io team."
+keywords: "labb blog, django ui blog, django components tutorial, labb.io, django-cotton news"
 doc_show_toc: false
 doc_hide_title: true
 doc_hide_drawer: true

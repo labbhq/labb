@@ -1,6 +1,7 @@
 ---
 title: Building CSS
-description: Understanding the CSS building flow in labb CLI
+description: "Build Tailwind CSS for labb: CLI scans django-cotton templates, generates CSS, and integrates daisyUI with your Django project."
+keywords: "labb build css, tailwind django labb, labb dev watcher, django-cotton tailwind"
 ---
 
 One of the main features of the labb CLI is the ability to automatically detect CSS classes based on component attributes in templates.
@@ -115,7 +116,7 @@ labb build --watch
 labb dev
 ```
 
-<c-lb.alert variant="info" style="outline">
+<c-lb.alert variant="info" alertStyle="outline">
 <span>`labb dev` is a shortcut for `labb build -w -s` (watch + scan mode).</span>
 </c-lb.alert>
 

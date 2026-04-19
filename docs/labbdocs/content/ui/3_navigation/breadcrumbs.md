@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.breadcrumbs
 title: Breadcrumbs
-description: Navigation component for displaying current page location in site hierarchy.
+description: "Breadcrumbs component for Django: add accessible navigation trails to multi-level pages. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django breadcrumbs component, breadcrumbs django, daisyui breadcrumbs django, tailwind breadcrumbs django, breadcrumbs django-cotton, django ui breadcrumbs, navigation breadcrumbs django"
 daisy_ui_component_name: breadcrumbs
 ---
+
+Breadcrumbs renders an accessible `<nav>` with a separator-joined trail of links. Pass each crumb as a `c-lb.breadcrumbs.item` with an `href` — the last item renders without a link to indicate the current page.
 
 ## Basic Usage
 <c-lbdocs.component_example path="breadcrumbs/basic" />

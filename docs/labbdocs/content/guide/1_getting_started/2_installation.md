@@ -1,11 +1,12 @@
 ---
 title: Installation
-description: How to install and set up labb in your Django project
+description: "Install labb in new or existing Django projects: labbstart for greenfield apps, or pip install labbui with django-cotton. Tailwind CSS and daisyUI 5 ready."
+keywords: "install labb django, labb django setup, django-cotton install, labbstart, pip labbui, tailwind django project"
 ---
 
 {% load docs_tags %}
 
-## New Project (Recommended)
+## New Django Project with labbstart
 
 The fastest way to get started is with **labbstart**, which scaffolds a new Django project with labb pre-configured.
 
@@ -146,7 +147,7 @@ Add `<c-lb.m.dependencies />` to your base template's `<head>` section:
 {% endverbatim %}
 </c-lbdocs.codeblock.title>
 
-<c-lb.alert variant="warning" style="outline" class="mt-4">
+<c-lb.alert variant="warning" alertStyle="outline" class="mt-4">
 <span>Without `<c-lb.m.dependencies />`, components will not have the correct styling and interactive features may not work.</span>
 </c-lb.alert>
 
@@ -187,9 +188,30 @@ Use labb components in your templates with HTML-like syntax:
 
 Browse <a href="{% doc_url '1_actions/button.md' 'ui' %}">component documentation</a> for all available components.
 
+### Reactive Components
+
+Add `.x` to any component name to get a reactive twin. Props can be changed at runtime using Alpine.js:
+
+<c-lbdocs.codeblock.title title="templates/example.html">
+{% verbatim %}
+```html
+<div x-data="{ btn: { variant: 'primary' } }">
+    <c-lb.button.x x-model="btn" variant="primary">
+        <span x-text="btn.variant"></span> button
+    </c-lb.button.x>
+
+    <c-lb.button variant="ghost" @click="btn.variant = 'success'">Change</c-lb.button>
+</div>
+```
+{% endverbatim %}
+</c-lbdocs.codeblock.title>
+
+See the <a href="{% doc_url '2_concepts/1_reactivity.md' 'guide' %}">Reactivity guide</a> for the full picture.
+
 ## Next Steps
 
-- <a href="{% doc_url '2_concepts/1_theming.md' 'guide' %}">Theming</a> — Customize colors and themes
-- <a href="{% doc_url '2_concepts/2_building_css.md' 'guide' %}">Building CSS</a> — CSS build process and production builds
+- <a href="{% doc_url '2_concepts/2_theming.md' 'guide' %}">Theming</a> — Customize colors and themes
+- <a href="{% doc_url '2_concepts/3_building_css.md' 'guide' %}">Building CSS</a> — CSS build process and production builds
+- <a href="{% doc_url '2_concepts/1_reactivity.md' 'guide' %}">Reactivity</a> — Add Alpine.js-powered interactivity to components with `.x` variants
 - <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}">CLI Reference</a> — Component inspection, icon search, and more
 - <a href="{% doc_url '1_getting_started/1_introduction.md' 'icons' %}">Icons</a> — Install labbicons for 2,800+ Remix icons

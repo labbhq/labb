@@ -1,6 +1,7 @@
 ---
 title: Changelog
-description: Release history and version notes for labb
+description: "Release history and version notes for labb: django component library, labbui, and labbdocs."
+keywords: "labb changelog, labbui release notes, django labb versions"
 ---
 
 {% load docs_tags %}

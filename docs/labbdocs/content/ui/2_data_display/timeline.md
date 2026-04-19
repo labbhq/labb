@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.timeline
 title: Timeline
-description: Display chronological events with connectors and markers.
+description: "Timeline component for Django: display ordered events, changelogs, and progress steps. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django timeline component, timeline django, daisyui timeline django, tailwind timeline django, timeline django-cotton, django ui timeline, event timeline django, django-cotton"
 daisy_ui_component_name: timeline
 ---
+
+Timeline renders a vertical or horizontal sequence of events using daisyUI's timeline layout. Each `c-lb.timeline.item` holds a start, middle, and end slot for date labels, connectors, and event descriptions.
 
 ## Basic Timeline
 <c-lbdocs.component_example path="timeline/basic" />

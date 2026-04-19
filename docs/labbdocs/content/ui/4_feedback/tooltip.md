@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.tooltip
 title: Tooltip
-description: Tooltip component that shows text or custom content on hover.
+description: "Tooltip component for Django: add contextual hints and hover descriptions. Built with django-cotton, Tailwind CSS, and daisyUI 5. Zero JavaScript by default."
+keywords: "django tooltip component, tooltip django, daisyui tooltip django, tailwind tooltip django, tooltip django-cotton, django ui tooltip, hover tooltip django, django-cotton"
 daisy_ui_component_name: tooltip
 ---
+
+Tooltip adds a CSS-driven hover label to any element — no JavaScript required. Position it above, below, left, or right of the trigger, and set the `tip` prop for the label text.
 
 ## Basic Tooltip
 <c-lbdocs.component_example path="tooltip/basic" />
