@@ -7,7 +7,21 @@ keywords: "labb changelog, labbui release notes, django labb versions"
 {% load docs_tags %}
 
 
-## 0.3.0 <c-lb.badge size="sm">latest</c-lb.badge>
+## 0.4.0 <c-lb.badge size="sm">latest</c-lb.badge>
+
+**Apr 19, 2026**
+
+### Features
+- **AlpineJS integration** — opt-in client-side reactivity via `.x` component variants (e.g. `<c-lb.button.x>`). Alpine is only injected when a reactive variant is used; static pages stay zero-JS. New `window.lb` helpers (`extendComponent`, `lbProps`) for extending reactive components. ([#31](https://github.com/labbhq/labb/issues/31))
+- **Charts** — new Chart.js-backed components (`chart.bar`, `chart.line`, `chart.pie`, `chart.doughnut`, `chart.radar`, `chart.polar-area`, `chart.scatter`, `chart.bubble`) with live DaisyUI theming, auto-palette colouring, `-light` translucent variants, and `x-model` reactivity. `<c-lb.chart />` page-level provider for global Chart.js config.
+- **Icons** — added ~85 new Remix icons (AI/ML, signal, chat, painting, network, chart, misc).
+
+### Fixes
+- **Alert** — renamed the `style` prop to `alertStyle` to avoid clashing with the HTML `style` attribute on cotton passthrough.
+
+---
+
+## 0.3.0
 
 **Mar 08, 2026**
 
