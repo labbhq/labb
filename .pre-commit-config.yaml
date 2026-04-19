@@ -9,6 +9,14 @@ repos:
         pass_filenames: false
         always_run: true
 
+      - id: alpine-generate
+        name: Generate Alpine.js component JS files
+        entry: task
+        args: ["alpine:generate"]
+        language: system
+        pass_filenames: false
+        always_run: true
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.13.2
     hooks:

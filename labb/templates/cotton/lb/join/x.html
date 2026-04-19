@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars x-data="lbJoinComp" />
+
+{% lb_push_stack name="components" path="labb/js/alpine/components/join.js" %}
+
+
+<c-lb.join
+    x-data="{{ x_data }}"
+    data-lb-defaults="{% lb_alpine_defaults attrs "join" %}"
+    x-modelable="lbProps"
+    ::class="compClasses"
+    :attrs=attrs
+>
+    {{ slot }}
+</c-lb.join>

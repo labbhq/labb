@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars x-data="lbAvatarGroupComp" />
+
+{% lb_push_stack name="components" path="labb/js/alpine/components/avatar_group.js" %}
+
+
+<c-lb.avatar.group
+    x-data="{{ x_data }}"
+    data-lb-defaults="{% lb_alpine_defaults attrs "avatar.group" %}"
+    x-modelable="lbProps"
+    ::class="compClasses"
+    :attrs=attrs
+>
+    {{ slot }}
+</c-lb.avatar.group>
