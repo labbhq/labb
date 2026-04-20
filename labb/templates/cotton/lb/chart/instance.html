@@ -1,0 +1,16 @@
+{% load lb_tags %}
+<c-vars type="" height="300" legend="top" data="{}" options="{}" class="" />
+
+{% lb_chart_deps %}
+{% lb_push_stack name="components" path="labb/js/alpine/custom/chart.js" %}
+
+<div class="lb-chart {{ class }}"
+    x-data="lbChartComp"
+    x-modelable="modelValue"
+    data-lb-chart-type="{{ type }}"
+    data-lb-chart-legend="{{ legend }}"
+    data-lb-chart-data="{{ data }}"
+    data-lb-chart-options="{{ options }}"
+    {{ attrs }}>
+    <canvas x-ref="canvas" style="height: {{ height }}px; width: 100%;"></canvas>
+</div>

@@ -1,0 +1,30 @@
+<div x-data="{
+    chartConfig: {
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [
+                { label: 'Revenue',  data: [4200, 3800, 5100, 4700, 6200, 5800] },
+                { label: 'Expenses', data: [2100, 2400, 2800, 2200, 3100, 2700] }
+            ]
+        }
+    },
+    randomize() {
+        this.chartConfig = {
+            data: {
+                labels: this.chartConfig.data.labels,
+                datasets: this.chartConfig.data.datasets.map(function(ds) {
+                    return Object.assign({}, ds, {
+                        data: ds.data.map(function() {
+                            return Math.floor(Math.random() * 8000) + 500;
+                        })
+                    });
+                })
+            }
+        };
+    }
+}">
+    <div class="flex justify-end gap-2 mb-4">
+        <c-lb.button size="sm" variant="primary" icon="rmx.shuffle" @click="randomize()">Randomize data</c-lb.button>
+    </div>
+    <c-lb.chart.bar x-model="chartConfig" />
+</div>

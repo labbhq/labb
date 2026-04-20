@@ -1,0 +1,26 @@
+<c-lb.chart.bar data='{
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    "datasets": [
+        {
+            "type": "bar",
+            "label": "Units sold",
+            "data": [1200, 950, 1400, 1100, 1650, 1500],
+            "yAxisID": "y"
+        },
+        {
+            "type": "line",
+            "label": "Conversion rate (%)",
+            "data": [3.2, 2.8, 3.9, 3.4, 4.1, 3.8],
+            "yAxisID": "y2",
+            "borderColor": "secondary",
+            "backgroundColor": "transparent",
+            "pointRadius": 4,
+            "borderWidth": 2
+        }
+    ]
+}' options='{
+    "scales": {
+        "y":  { "position": "left",  "title": { "display": true, "text": "Units" } },
+        "y2": { "position": "right", "grid": { "display": false }, "title": { "display": true, "text": "Rate (%)" } }
+    }
+}' />

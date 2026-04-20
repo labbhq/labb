@@ -2,7 +2,8 @@
 doc_layout: component
 component: c-lb.chat
 title: Chat
-description: Display conversation-style message threads with avatars, headers, and status footers.
+description: "Chat bubble component for Django: display conversation threads and message interfaces. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django chat component, chat bubble django, daisyui chat django, tailwind chat django, chat django-cotton, django ui chat, message bubble django, django-cotton"
 daisy_ui_component_name: chat
 ---
 

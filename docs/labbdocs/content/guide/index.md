@@ -1,6 +1,7 @@
 ---
 title: Guide
-description: Getting started guides and reference documentation for labb
+description: "labb guides for Django: installation, concepts, CLI, and configuration. Learn django-cotton components, Tailwind CSS, daisyUI 5, and theming on labb.io."
+keywords: "labb guide django, django-cotton guide, labb documentation, django ui tutorial, tailwind django guide, daisyui django"
 doc_show_toc: false
 ---
 

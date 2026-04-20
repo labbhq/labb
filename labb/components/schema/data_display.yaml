@@ -843,7 +843,7 @@ components:
         description: Chat content using chat.image, chat.header, chat.bubble, and chat.footer components
 
   chat.bubble:
-    template: lb/chat/bubble.html
+    template: lb/chat/bubble/index.html
     description: Message bubble that displays the chat message text
     base_classes:
     - chat-bubble
@@ -881,7 +881,7 @@ components:
         description: Message content displayed inside the bubble
 
   chat.image:
-    template: lb/chat/image.html
+    template: lb/chat/image/index.html
     description: Avatar image displayed alongside the chat message
     base_classes:
     - chat-image

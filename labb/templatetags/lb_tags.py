@@ -1,15 +1,329 @@
+import json
 import re
+from functools import lru_cache
 from pathlib import Path
+from threading import local
 
 from django import template
+from django.contrib.staticfiles import finders
+from django.core.signals import request_finished
+from django.dispatch import receiver
+from django.templatetags.static import static as django_static
 from django.urls import NoReverseMatch, reverse
 from django.utils.safestring import mark_safe
 
 from labb.config import load_config
-from labb.django_settings import get_default_theme
+from labb.django_settings import get_default_theme, get_labb_setting
 from labb.shortcuts import get_labb_theme
 
 register = template.Library()
+
+# ---------------------------------------------------------------------------
+# Thread-local stack storage
+# ---------------------------------------------------------------------------
+
+_local = local()
+
+
+def _get_stacks():
+    """Get the current request's component stacks.
+
+    Each named stack is a dict mapping ``path → mode`` where mode is either
+    ``"inline"`` (file content inlined in a <script> tag) or ``"src"`` (served
+    as a cacheable <script src="..."> tag via Django's static files URL).
+    """
+    if not hasattr(_local, "stacks"):
+        _local.stacks = {}
+    return _local.stacks
+
+
+def _clear_stacks():
+    """Clear all stacks (called at end of each request)."""
+    if hasattr(_local, "stacks"):
+        _local.stacks.clear()
+
+
+@receiver(request_finished)
+def clear_stacks_after_request(sender, **kwargs):
+    """Clear stacks after each request to prevent leaking between requests."""
+    _clear_stacks()
+
+
+# ---------------------------------------------------------------------------
+# Stack template tags
+# ---------------------------------------------------------------------------
+
+
+@register.simple_tag
+def lb_push_stack(name, path, mode="inline"):
+    """
+    Register a script path to a named stack.
+
+    mode="inline" (default) — file content is inlined in a <script> tag.
+    mode="src"              — served as <script src="{% static path %}"> for
+                              browser caching; use for large chart bundles.
+
+    Duplicate paths are silently ignored; first push wins.
+
+    Usage:
+        {% lb_push_stack name="components" path="labb/js/alpine/button.js" %}
+        {% lb_push_stack name="components" path="labb/js/chart/chart-core.min.js" mode="src" %}
+    """
+    stacks = _get_stacks()
+    if name not in stacks:
+        stacks[name] = {}
+    if path not in stacks[name]:
+        stacks[name][path] = mode
+    return ""
+
+
+# Static file contents don't change within a server process; cache reads so we
+# don't hit disk on every request for shared helpers like lb-chart-defaults.js.
+@lru_cache(maxsize=None)
+def _read_static_file(path):
+    static_path = finders.find(path)
+    if not static_path:
+        return None
+    try:
+        return Path(static_path).read_text(encoding="utf-8")
+    except Exception:
+        return None
+
+
+def _make_alpine_script_tag():
+    """Return a deferred Alpine script tag resolved from LABB_SETTINGS."""
+    alpine_path = get_labb_setting("ALPINE_JS_PATH", "labb/js/alpine/alpine.min.js")
+    if alpine_path.startswith(("http://", "https://")):
+        src = alpine_path
+    else:
+        src = django_static(alpine_path)
+    return f'<script defer src="{src}"></script>'
+
+
+@register.simple_tag
+def lb_alpine_script():
+    """
+    Emit the deferred Alpine.js script tag resolved from LABB_SETTINGS["ALPINE_JS_PATH"].
+
+    Use this to load Alpine on pages that don't use .x components but still need Alpine.
+    Usage: {% lb_alpine_script %}
+    """
+    return mark_safe(_make_alpine_script_tag())
+
+
+@register.simple_tag
+def lb_chart_deps():
+    """
+    Push the Chart.js bundle, DaisyUI plugin, and global defaults to the
+    components stack as cacheable <script src> / inline files.
+
+    The Chart.js URL is read from LABB_SETTINGS["CHART_JS_PATH"]; defaults to
+    the bundled file shipped with labb. Override to use a CDN:
+
+        LABB_SETTINGS = {"CHART_JS_PATH": "https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"}
+
+    Used by the chart provider (<c-lb.chart />) and every chart sub-component
+    template. Multiple charts on the same page share the same scripts
+    (deduplicated by the stack).
+
+    Usage: {% lb_chart_deps %}
+    """
+    chartjs_path = get_labb_setting("CHART_JS_PATH", "labb/js/chart/chart.umd.min.js")
+    for path, mode in (
+        (chartjs_path, "src"),
+        ("labb/js/chart/lb-daisy-plugin.js", "src"),
+        ("labb/js/chart/lb-chart-defaults.js", "inline"),
+    ):
+        lb_push_stack("components", path, mode)
+    return ""
+
+
+@register.simple_tag
+def lb_load_stack(name, alpine_loaded=False):
+    """
+    Emit all scripts registered to a named stack.
+
+    For each stack, pre-helpers defined in LABB_SETTINGS["STACK_HELPERS"] are
+    inlined first.  The special token "alpine" in the helpers list is resolved
+    to a ``<script defer src="...">`` tag using LABB_SETTINGS["ALPINE_JS_PATH"],
+    and is always placed last so Alpine initialises after all component scripts.
+
+    Pass alpine_loaded=True to suppress the Alpine script tag (e.g. when
+    <c-lb.m.dependencies alpine /> has already emitted it).
+
+    Emission order:
+      1. Pre-helpers (inline)
+      2. mode="src" paths as <script src="..."> tags (sorted)
+      3. mode="inline" component paths (sorted)
+      4. Deferred Alpine <script defer src="..."> (always last)
+
+    Usage: {% lb_load_stack name="components" %}
+    """
+    stacks = _get_stacks()
+    path_modes = stacks.get(name, {})
+
+    if not path_modes:
+        return ""
+
+    stack_helpers_config = get_labb_setting("STACK_HELPERS", {})
+    helpers = stack_helpers_config.get(name, [])
+
+    # Split helpers: inline paths vs the special "alpine" deferred token
+    inline_helpers = [h for h in helpers if h != "alpine"]
+    include_alpine = "alpine" in helpers and not alpine_loaded
+
+    helper_set = set(inline_helpers)
+
+    # Split component paths by mode (exclude helper paths)
+    src_paths = sorted(
+        p for p, m in path_modes.items() if m == "src" and p not in helper_set
+    )
+    inline_paths = sorted(
+        p for p, m in path_modes.items() if m != "src" and p not in helper_set
+    )
+
+    script_tags = []
+
+    # 1. Inline pre-helpers (e.g. labb-component.js)
+    for path in inline_helpers:
+        content = _read_static_file(path)
+        if content is not None:
+            script_tags.append(f"<script>\n{content}\n</script>")
+
+    # 2. src-mode paths as <script src="..."> (cacheable)
+    for path in src_paths:
+        if path.startswith(("http://", "https://")):
+            script_tags.append(f'<script src="{path}"></script>')
+        else:
+            url = django_static(path)
+            script_tags.append(f'<script src="{url}"></script>')
+
+    # 3. Inline component scripts (e.g. Alpine data components)
+    for path in inline_paths:
+        if path.startswith(("http://", "https://")):
+            script_tags.append(f'<script src="{path}"></script>')
+            continue
+        content = _read_static_file(path)
+        if content is not None:
+            script_tags.append(f"<script>\n{content}\n</script>")
+
+    # 4. Deferred Alpine script tag (always last so it initialises after the above)
+    if include_alpine:
+        script_tags.append(_make_alpine_script_tag())
+
+    return mark_safe("\n".join(script_tags))
+
+
+# ---------------------------------------------------------------------------
+# Alpine defaults helpers
+# ---------------------------------------------------------------------------
+
+
+@lru_cache(maxsize=1)
+def _load_component_variables():
+    """Load and cache the component-variables.json lookup file.
+
+    Cached for the life of the process; call ``_load_component_variables.cache_clear()``
+    in tests that regenerate the JSON.
+    """
+    json_path = finders.find("labb/js/alpine/component-variables.json")
+    if json_path:
+        try:
+            return json.loads(Path(json_path).read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {}
+
+
+def parse_attrs_to_dict(attrs):
+    """
+    Parse an HTML attributes string into a dictionary.
+
+    Handles standard attributes, Alpine bindings (x-*, :*, @*), boolean
+    attributes, and unquoted values.
+
+    Returns:
+        dict: attribute name → value (True for boolean attributes)
+    """
+    if not attrs:
+        return {}
+
+    attrs_str = str(attrs).strip()
+    if not attrs_str:
+        return {}
+
+    # Capture the `=` explicitly so we can tell `foo` (bare) from `foo=""` (empty
+    # string) without re-scanning the source string — .find() was mis-detecting
+    # when the same attribute name appears more than once.
+    attr_pattern = r'([@:]?[\w.-]+)(=)?(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))?'
+    result = {}
+
+    for attr_name, eq, double_quoted, single_quoted, unquoted in re.findall(
+        attr_pattern, attrs_str
+    ):
+        attr_value = double_quoted or single_quoted or unquoted or None
+        has_equals = bool(eq)
+
+        if attr_value is None or attr_value == "":
+            result[attr_name] = "" if has_equals else True
+        else:
+            result[attr_name] = attr_value
+
+    return result
+
+
+@register.filter
+def lb_attrs_to_dict(attrs):
+    """
+    Convert an HTML attributes string to a dictionary.
+
+    Usage: {{ attrs|lb_attrs_to_dict }}
+    """
+    return parse_attrs_to_dict(attrs)
+
+
+@register.simple_tag
+def lb_alpine_defaults(attrs, component_name):
+    """
+    Extract schema-relevant props from an attrs string as a JSON string.
+
+    Only includes attributes that exist in the component's schema (loaded from
+    component-variables.json).  Alpine bindings (:attr, @event) are skipped.
+
+    Usage: {% lb_alpine_defaults attrs "button" %}
+    """
+    if not attrs or not component_name:
+        return ""
+
+    variables_map = _load_component_variables()
+    component_vars = variables_map.get(component_name, {})
+    if not component_vars:
+        return ""
+
+    all_attrs = parse_attrs_to_dict(attrs)
+    filtered = {}
+
+    for attr_name, attr_value in all_attrs.items():
+        if attr_name.startswith(":") or attr_name.startswith("@"):
+            continue
+        if attr_name not in component_vars:
+            continue
+
+        var_type = component_vars[attr_name]
+        if var_type == "boolean":
+            if isinstance(attr_value, str) and attr_value.lower() == "false":
+                filtered[attr_name] = False
+            elif isinstance(attr_value, bool):
+                filtered[attr_name] = attr_value
+            else:
+                filtered[attr_name] = True
+        else:
+            filtered[attr_name] = str(attr_value) if attr_value else ""
+
+    try:
+        return mark_safe(json.dumps(filtered))
+    except Exception:
+        return ""
 
 
 @register.filter

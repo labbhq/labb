@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars x-data="lbMaskComp" />
+
+{% lb_push_stack name="components" path="labb/js/alpine/components/mask.js" %}
+
+
+<c-lb.mask
+    x-data="{{ x_data }}"
+    data-lb-defaults="{% lb_alpine_defaults attrs "mask" %}"
+    x-modelable="lbProps"
+    ::class="compClasses"
+    :attrs=attrs
+>
+    {{ slot }}
+</c-lb.mask>

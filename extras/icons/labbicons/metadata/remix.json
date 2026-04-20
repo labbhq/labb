@@ -1,10 +1,10 @@
 {
   "metadata": {
     "name": "Remix Icons",
-    "version": "4.6.0",
-    "total_icons": 1600,
-    "categories": 19,
-    "generated_at": "1754917163.3116913",
+    "version": "4.9.1",
+    "total_icons": 1686,
+    "categories": 20,
+    "generated_at": "1775375739.3893619",
     "pack": "rmx"
   },
   "categories": {
@@ -1099,7 +1099,7 @@
       ]
     },
     "Business": {
-      "count": 105,
+      "count": 110,
       "icons": [
         {
           "name": "advertisement",
@@ -1145,6 +1145,15 @@
           ],
           "template": "archive_stack.html",
           "component_name": "rmx.archive-stack"
+        },
+        {
+          "name": "area-chart",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "area_chart.html",
+          "component_name": "rmx.area-chart"
         },
         {
           "name": "at",
@@ -1534,6 +1543,15 @@
           "component_name": "rmx.global"
         },
         {
+          "name": "global-off",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "global_off.html",
+          "component_name": "rmx.global-off"
+        },
+        {
           "name": "honour",
           "variants": [
             "fill",
@@ -1768,6 +1786,15 @@
           "component_name": "rmx.megaphone"
         },
         {
+          "name": "megaphone-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "megaphone_2.html",
+          "component_name": "rmx.megaphone-2"
+        },
+        {
           "name": "pass-expired",
           "variants": [
             "fill",
@@ -1912,6 +1939,15 @@
           "component_name": "rmx.reply-all"
         },
         {
+          "name": "send-ins",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "send_ins.html",
+          "component_name": "rmx.send-ins"
+        },
+        {
           "name": "send-plane",
           "variants": [
             "line",
@@ -2002,6 +2038,15 @@
           "component_name": "rmx.stack"
         },
         {
+          "name": "stacked-chart",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "stacked_chart.html",
+          "component_name": "rmx.stacked-chart"
+        },
+        {
           "name": "trademark",
           "variants": [
             "fill",
@@ -2049,7 +2094,7 @@
       ]
     },
     "Communication": {
-      "count": 39,
+      "count": 46,
       "icons": [
         {
           "name": "chat-1",
@@ -2095,6 +2140,33 @@
           ],
           "template": "chat_ai.html",
           "component_name": "rmx.chat-ai"
+        },
+        {
+          "name": "chat-ai-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "chat_ai_2.html",
+          "component_name": "rmx.chat-ai-2"
+        },
+        {
+          "name": "chat-ai-3",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "chat_ai_3.html",
+          "component_name": "rmx.chat-ai-3"
+        },
+        {
+          "name": "chat-ai-4",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "chat_ai_4.html",
+          "component_name": "rmx.chat-ai-4"
         },
         {
           "name": "chat-check",
@@ -2259,6 +2331,15 @@
           "component_name": "rmx.chat-smile-ai"
         },
         {
+          "name": "chat-smile-ai-3",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "chat_smile_ai_3.html",
+          "component_name": "rmx.chat-smile-ai-3"
+        },
+        {
           "name": "chat-thread",
           "variants": [
             "fill",
@@ -2358,6 +2439,15 @@
           "component_name": "rmx.message-3"
         },
         {
+          "name": "message-ai-3",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "message_ai_3.html",
+          "component_name": "rmx.message-ai-3"
+        },
+        {
           "name": "question-answer",
           "variants": [
             "fill",
@@ -2394,6 +2484,24 @@
           "component_name": "rmx.speak-ai"
         },
         {
+          "name": "speech-to-text",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "speech_to_text.html",
+          "component_name": "rmx.speech-to-text"
+        },
+        {
+          "name": "text-to-speech",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "text_to_speech.html",
+          "component_name": "rmx.text-to-speech"
+        },
+        {
           "name": "video-chat",
           "variants": [
             "line",
@@ -2405,8 +2513,17 @@
       ]
     },
     "Design": {
-      "count": 108,
+      "count": 118,
       "icons": [
+        {
+          "name": "ai-generate-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "ai_generate_2.html",
+          "component_name": "rmx.ai-generate-2"
+        },
         {
           "name": "align-item-bottom",
           "variants": [
@@ -2561,6 +2678,15 @@
           "component_name": "rmx.brush-ai"
         },
         {
+          "name": "brush-ai-3",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "brush_ai_3.html",
+          "component_name": "rmx.brush-ai-3"
+        },
+        {
           "name": "circle",
           "variants": [
             "fill",
@@ -2712,6 +2838,15 @@
           ],
           "template": "drag_drop.html",
           "component_name": "rmx.drag-drop"
+        },
+        {
+          "name": "draw",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "draw.html",
+          "component_name": "rmx.draw"
         },
         {
           "name": "drop",
@@ -3092,6 +3227,15 @@
           "component_name": "rmx.markup"
         },
         {
+          "name": "mosaic",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "mosaic.html",
+          "component_name": "rmx.mosaic"
+        },
+        {
           "name": "octagon",
           "variants": [
             "line",
@@ -3117,6 +3261,24 @@
           ],
           "template": "paint_brush.html",
           "component_name": "rmx.paint-brush"
+        },
+        {
+          "name": "painting",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "painting.html",
+          "component_name": "rmx.painting"
+        },
+        {
+          "name": "painting-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "painting_ai.html",
+          "component_name": "rmx.painting-ai"
         },
         {
           "name": "palette",
@@ -3153,6 +3315,24 @@
           ],
           "template": "pencil.html",
           "component_name": "rmx.pencil"
+        },
+        {
+          "name": "pencil-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "pencil_ai.html",
+          "component_name": "rmx.pencil-ai"
+        },
+        {
+          "name": "pencil-ai-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "pencil_ai_2.html",
+          "component_name": "rmx.pencil-ai-2"
         },
         {
           "name": "pencil-ruler",
@@ -3207,6 +3387,15 @@
           ],
           "template": "rectangle.html",
           "component_name": "rmx.rectangle"
+        },
+        {
+          "name": "remix",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "remix.html",
+          "component_name": "rmx.remix"
         },
         {
           "name": "ruler",
@@ -3378,11 +3567,20 @@
           ],
           "template": "triangle.html",
           "component_name": "rmx.triangle"
+        },
+        {
+          "name": "wrench",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "wrench.html",
+          "component_name": "rmx.wrench"
         }
       ]
     },
     "Development": {
-      "count": 31,
+      "count": 33,
       "icons": [
         {
           "name": "braces",
@@ -3592,6 +3790,24 @@
           "component_name": "rmx.html5"
         },
         {
+          "name": "issues",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "issues.html",
+          "component_name": "rmx.issues"
+        },
+        {
+          "name": "issues-reopen",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "issues_reopen.html",
+          "component_name": "rmx.issues-reopen"
+        },
+        {
           "name": "javascript",
           "variants": [
             "line",
@@ -3666,7 +3882,7 @@
       ]
     },
     "Device": {
-      "count": 86,
+      "count": 96,
       "icons": [
         {
           "name": "airplay",
@@ -3811,6 +4027,15 @@
           ],
           "template": "computer.html",
           "component_name": "rmx.computer"
+        },
+        {
+          "name": "connector",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "connector.html",
+          "component_name": "rmx.connector"
         },
         {
           "name": "cpu",
@@ -4047,6 +4272,33 @@
           "component_name": "rmx.mouse"
         },
         {
+          "name": "network",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "network.html",
+          "component_name": "rmx.network"
+        },
+        {
+          "name": "network-error",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "network_error.html",
+          "component_name": "rmx.network-error"
+        },
+        {
+          "name": "network-off",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "network_off.html",
+          "component_name": "rmx.network-off"
+        },
+        {
           "name": "phone",
           "variants": [
             "fill",
@@ -4099,6 +4351,15 @@
           ],
           "template": "qr_scan_2.html",
           "component_name": "rmx.qr-scan-2"
+        },
+        {
+          "name": "qr-scan-ai",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "qr_scan_ai.html",
+          "component_name": "rmx.qr-scan-ai"
         },
         {
           "name": "radar",
@@ -4281,6 +4542,42 @@
           "component_name": "rmx.shut-down"
         },
         {
+          "name": "signal-cellular-1",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "signal_cellular_1.html",
+          "component_name": "rmx.signal-cellular-1"
+        },
+        {
+          "name": "signal-cellular-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "signal_cellular_2.html",
+          "component_name": "rmx.signal-cellular-2"
+        },
+        {
+          "name": "signal-cellular-3",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "signal_cellular_3.html",
+          "component_name": "rmx.signal-cellular-3"
+        },
+        {
+          "name": "signal-cellular-off",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "signal_cellular_off.html",
+          "component_name": "rmx.signal-cellular-off"
+        },
+        {
           "name": "signal-wifi",
           "variants": [
             "fill",
@@ -4351,6 +4648,15 @@
           ],
           "template": "sim_card_2.html",
           "component_name": "rmx.sim-card-2"
+        },
+        {
+          "name": "sim-card-warning",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "sim_card_warning.html",
+          "component_name": "rmx.sim-card-warning"
         },
         {
           "name": "smartphone",
@@ -4445,7 +4751,7 @@
       ]
     },
     "Document": {
-      "count": 116,
+      "count": 122,
       "icons": [
         {
           "name": "article",
@@ -4493,6 +4799,15 @@
           "component_name": "rmx.book-3"
         },
         {
+          "name": "book-ai",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "book_ai.html",
+          "component_name": "rmx.book-ai"
+        },
+        {
           "name": "book-marked",
           "variants": [
             "line",
@@ -4527,6 +4842,24 @@
           ],
           "template": "booklet.html",
           "component_name": "rmx.booklet"
+        },
+        {
+          "name": "certificate",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "certificate.html",
+          "component_name": "rmx.certificate"
+        },
+        {
+          "name": "certificate-2",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "certificate_2.html",
+          "component_name": "rmx.certificate-2"
         },
         {
           "name": "clipboard",
@@ -4635,6 +4968,24 @@
           ],
           "template": "file_add.html",
           "component_name": "rmx.file-add"
+        },
+        {
+          "name": "file-ai",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "file_ai.html",
+          "component_name": "rmx.file-ai"
+        },
+        {
+          "name": "file-ai-2",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "file_ai_2.html",
+          "component_name": "rmx.file-ai-2"
         },
         {
           "name": "file-chart",
@@ -4923,6 +5274,15 @@
           ],
           "template": "file_reduce.html",
           "component_name": "rmx.file-reduce"
+        },
+        {
+          "name": "file-scan",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "file_scan.html",
+          "component_name": "rmx.file-scan"
         },
         {
           "name": "file-search",
@@ -5494,7 +5854,7 @@
       ]
     },
     "Editor": {
-      "count": 148,
+      "count": 150,
       "icons": [
         {
           "name": "a-b",
@@ -5505,20 +5865,20 @@
           "component_name": "rmx.a-b"
         },
         {
+          "name": "ai",
+          "variants": [
+            "line"
+          ],
+          "template": "ai.html",
+          "component_name": "rmx.ai"
+        },
+        {
           "name": "ai-generate",
           "variants": [
             "line"
           ],
           "template": "ai_generate.html",
           "component_name": "rmx.ai-generate"
-        },
-        {
-          "name": "ai-generate-2",
-          "variants": [
-            "line"
-          ],
-          "template": "ai_generate_2.html",
-          "component_name": "rmx.ai-generate-2"
         },
         {
           "name": "ai-generate-text",
@@ -5657,6 +6017,14 @@
           "component_name": "rmx.code-view"
         },
         {
+          "name": "cursor-hand",
+          "variants": [
+            "line"
+          ],
+          "template": "cursor_hand.html",
+          "component_name": "rmx.cursor-hand"
+        },
+        {
           "name": "custom-size",
           "variants": [
             "line"
@@ -5777,20 +6145,20 @@
           "component_name": "rmx.font-mono"
         },
         {
-          "name": "font-sans",
-          "variants": [
-            "line"
-          ],
-          "template": "font_sans.html",
-          "component_name": "rmx.font-sans"
-        },
-        {
           "name": "font-sans-serif",
           "variants": [
             "line"
           ],
           "template": "font_sans_serif.html",
           "component_name": "rmx.font-sans-serif"
+        },
+        {
+          "name": "font-serif",
+          "variants": [
+            "line"
+          ],
+          "template": "font_serif.html",
+          "component_name": "rmx.font-serif"
         },
         {
           "name": "font-size",
@@ -5911,6 +6279,14 @@
           ],
           "template": "hand.html",
           "component_name": "rmx.hand"
+        },
+        {
+          "name": "hand-2",
+          "variants": [
+            "line"
+          ],
+          "template": "hand_2.html",
+          "component_name": "rmx.hand-2"
         },
         {
           "name": "hashtag",
@@ -7462,7 +7838,7 @@
       ]
     },
     "Food": {
-      "count": 15,
+      "count": 17,
       "icons": [
         {
           "name": "beer",
@@ -7519,6 +7895,15 @@
           "component_name": "rmx.cake-3"
         },
         {
+          "name": "cookie",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "cookie.html",
+          "component_name": "rmx.cookie"
+        },
+        {
           "name": "cup",
           "variants": [
             "line",
@@ -7564,6 +7949,15 @@
           "component_name": "rmx.goblet-2"
         },
         {
+          "name": "goblet-broken",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "goblet_broken.html",
+          "component_name": "rmx.goblet-broken"
+        },
+        {
           "name": "knife",
           "variants": [
             "fill",
@@ -7601,8 +7995,238 @@
         }
       ]
     },
+    "Game & Sports": {
+      "count": 25,
+      "icons": [
+        {
+          "name": "baseball",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "baseball.html",
+          "component_name": "rmx.baseball"
+        },
+        {
+          "name": "basketball",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "basketball.html",
+          "component_name": "rmx.basketball"
+        },
+        {
+          "name": "billiards",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "billiards.html",
+          "component_name": "rmx.billiards"
+        },
+        {
+          "name": "boxing",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "boxing.html",
+          "component_name": "rmx.boxing"
+        },
+        {
+          "name": "chess",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "chess.html",
+          "component_name": "rmx.chess"
+        },
+        {
+          "name": "dice",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "dice.html",
+          "component_name": "rmx.dice"
+        },
+        {
+          "name": "dice-1",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "dice_1.html",
+          "component_name": "rmx.dice-1"
+        },
+        {
+          "name": "dice-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "dice_2.html",
+          "component_name": "rmx.dice-2"
+        },
+        {
+          "name": "dice-3",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "dice_3.html",
+          "component_name": "rmx.dice-3"
+        },
+        {
+          "name": "dice-4",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "dice_4.html",
+          "component_name": "rmx.dice-4"
+        },
+        {
+          "name": "dice-5",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "dice_5.html",
+          "component_name": "rmx.dice-5"
+        },
+        {
+          "name": "dice-6",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "dice_6.html",
+          "component_name": "rmx.dice-6"
+        },
+        {
+          "name": "football",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "football.html",
+          "component_name": "rmx.football"
+        },
+        {
+          "name": "game",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "game.html",
+          "component_name": "rmx.game"
+        },
+        {
+          "name": "game-2",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "game_2.html",
+          "component_name": "rmx.game-2"
+        },
+        {
+          "name": "golf-ball",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "golf_ball.html",
+          "component_name": "rmx.golf-ball"
+        },
+        {
+          "name": "piano",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "piano.html",
+          "component_name": "rmx.piano"
+        },
+        {
+          "name": "piano-grand",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "piano_grand.html",
+          "component_name": "rmx.piano-grand"
+        },
+        {
+          "name": "ping-pong",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "ping_pong.html",
+          "component_name": "rmx.ping-pong"
+        },
+        {
+          "name": "poker-clubs",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "poker_clubs.html",
+          "component_name": "rmx.poker-clubs"
+        },
+        {
+          "name": "poker-diamonds",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "poker_diamonds.html",
+          "component_name": "rmx.poker-diamonds"
+        },
+        {
+          "name": "poker-hearts",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "poker_hearts.html",
+          "component_name": "rmx.poker-hearts"
+        },
+        {
+          "name": "poker-spades",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "poker_spades.html",
+          "component_name": "rmx.poker-spades"
+        },
+        {
+          "name": "sword",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "sword.html",
+          "component_name": "rmx.sword"
+        },
+        {
+          "name": "target",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "target.html",
+          "component_name": "rmx.target"
+        }
+      ]
+    },
     "Health & Medical": {
-      "count": 38,
+      "count": 42,
       "icons": [
         {
           "name": "aed",
@@ -7623,6 +8247,15 @@
           "component_name": "rmx.aed-electrodes"
         },
         {
+          "name": "atom",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "atom.html",
+          "component_name": "rmx.atom"
+        },
+        {
           "name": "brain",
           "variants": [
             "line",
@@ -7639,6 +8272,33 @@
           ],
           "template": "brain_2.html",
           "component_name": "rmx.brain-2"
+        },
+        {
+          "name": "brain-3",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "brain_3.html",
+          "component_name": "rmx.brain-3"
+        },
+        {
+          "name": "brain-4",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "brain_4.html",
+          "component_name": "rmx.brain-4"
+        },
+        {
+          "name": "brain-ai-3",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "brain_ai_3.html",
+          "component_name": "rmx.brain-ai-3"
         },
         {
           "name": "capsule",
@@ -7949,7 +8609,7 @@
       ]
     },
     "Logos": {
-      "count": 138,
+      "count": 150,
       "icons": [
         {
           "name": "alibaba-cloud",
@@ -8150,6 +8810,24 @@
           "component_name": "rmx.coreos"
         },
         {
+          "name": "cursor-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "cursor_ai.html",
+          "component_name": "rmx.cursor-ai"
+        },
+        {
+          "name": "deepseek",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "deepseek.html",
+          "component_name": "rmx.deepseek"
+        },
+        {
           "name": "dingding",
           "variants": [
             "fill",
@@ -8321,6 +8999,15 @@
           "component_name": "rmx.firefox-browser"
         },
         {
+          "name": "fiverr",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "fiverr.html",
+          "component_name": "rmx.fiverr"
+        },
+        {
           "name": "flickr",
           "variants": [
             "line",
@@ -8366,6 +9053,24 @@
           "component_name": "rmx.gemini"
         },
         {
+          "name": "gitbook",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "gitbook.html",
+          "component_name": "rmx.gitbook"
+        },
+        {
+          "name": "gitee",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "gitee.html",
+          "component_name": "rmx.gitee"
+        },
+        {
           "name": "github",
           "variants": [
             "fill",
@@ -8400,6 +9105,15 @@
           ],
           "template": "google_play.html",
           "component_name": "rmx.google-play"
+        },
+        {
+          "name": "grok-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "grok_ai.html",
+          "component_name": "rmx.grok-ai"
         },
         {
           "name": "honor-of-kings",
@@ -8544,6 +9258,15 @@
           ],
           "template": "microsoft.html",
           "component_name": "rmx.microsoft"
+        },
+        {
+          "name": "microsoft-copilot",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "microsoft_copilot.html",
+          "component_name": "rmx.microsoft-copilot"
         },
         {
           "name": "microsoft-loop",
@@ -8744,6 +9467,15 @@
           "component_name": "rmx.qq"
         },
         {
+          "name": "qwen-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "qwen_ai.html",
+          "component_name": "rmx.qwen-ai"
+        },
+        {
           "name": "reactjs",
           "variants": [
             "fill",
@@ -8760,6 +9492,15 @@
           ],
           "template": "reddit.html",
           "component_name": "rmx.reddit"
+        },
+        {
+          "name": "reddit-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "reddit_2.html",
+          "component_name": "rmx.reddit-2"
         },
         {
           "name": "remix-run",
@@ -8868,6 +9609,15 @@
           ],
           "template": "steam.html",
           "component_name": "rmx.steam"
+        },
+        {
+          "name": "subreddit",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "subreddit.html",
+          "component_name": "rmx.subreddit"
         },
         {
           "name": "supabase",
@@ -9012,6 +9762,15 @@
           ],
           "template": "unsplash.html",
           "component_name": "rmx.unsplash"
+        },
+        {
+          "name": "upwork",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "upwork.html",
+          "component_name": "rmx.upwork"
         },
         {
           "name": "vercel",
@@ -9192,11 +9951,20 @@
           ],
           "template": "zhihu.html",
           "component_name": "rmx.zhihu"
+        },
+        {
+          "name": "zhipu-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "zhipu_ai.html",
+          "component_name": "rmx.zhipu-ai"
         }
       ]
     },
     "Map": {
-      "count": 85,
+      "count": 86,
       "icons": [
         {
           "name": "anchor",
@@ -9802,6 +10570,15 @@
           "component_name": "rmx.space-ship"
         },
         {
+          "name": "space-ship-2",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "space_ship_2.html",
+          "component_name": "rmx.space-ship-2"
+        },
+        {
           "name": "steering",
           "variants": [
             "line",
@@ -9966,7 +10743,7 @@
       ]
     },
     "Media": {
-      "count": 144,
+      "count": 148,
       "icons": [
         {
           "name": "4k",
@@ -10032,6 +10809,15 @@
           "component_name": "rmx.camera-3"
         },
         {
+          "name": "camera-4",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "camera_4.html",
+          "component_name": "rmx.camera-4"
+        },
+        {
           "name": "camera-ai",
           "variants": [
             "fill",
@@ -10039,6 +10825,15 @@
           ],
           "template": "camera_ai.html",
           "component_name": "rmx.camera-ai"
+        },
+        {
+          "name": "camera-ai-2",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "camera_ai_2.html",
+          "component_name": "rmx.camera-ai-2"
         },
         {
           "name": "camera-lens",
@@ -10374,6 +11169,15 @@
           "component_name": "rmx.image-circle-ai"
         },
         {
+          "name": "image-download",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "image_download.html",
+          "component_name": "rmx.image-download"
+        },
+        {
           "name": "image-edit",
           "variants": [
             "fill",
@@ -10381,6 +11185,15 @@
           ],
           "template": "image_edit.html",
           "component_name": "rmx.image-edit"
+        },
+        {
+          "name": "image-upload",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "image_upload.html",
+          "component_name": "rmx.image-upload"
         },
         {
           "name": "landscape",
@@ -11267,7 +12080,7 @@
       ]
     },
     "Others": {
-      "count": 73,
+      "count": 57,
       "icons": [
         {
           "name": "accessibility",
@@ -11279,6 +12092,15 @@
           "component_name": "rmx.accessibility"
         },
         {
+          "name": "ai-generate-3d",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "ai_generate_3d.html",
+          "component_name": "rmx.ai-generate-3d"
+        },
+        {
           "name": "armchair",
           "variants": [
             "fill",
@@ -11286,15 +12108,6 @@
           ],
           "template": "armchair.html",
           "component_name": "rmx.armchair"
-        },
-        {
-          "name": "basketball",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "basketball.html",
-          "component_name": "rmx.basketball"
         },
         {
           "name": "bell",
@@ -11306,13 +12119,13 @@
           "component_name": "rmx.bell"
         },
         {
-          "name": "billiards",
+          "name": "binoculars",
           "variants": [
-            "line",
-            "fill"
+            "fill",
+            "line"
           ],
-          "template": "billiards.html",
-          "component_name": "rmx.billiards"
+          "template": "binoculars.html",
+          "component_name": "rmx.binoculars"
         },
         {
           "name": "book-shelf",
@@ -11351,15 +12164,6 @@
           "component_name": "rmx.box-3"
         },
         {
-          "name": "boxing",
-          "variants": [
-            "line",
-            "fill"
-          ],
-          "template": "boxing.html",
-          "component_name": "rmx.boxing"
-        },
-        {
           "name": "cactus",
           "variants": [
             "fill",
@@ -11385,78 +12189,6 @@
           ],
           "template": "character_recognition.html",
           "component_name": "rmx.character-recognition"
-        },
-        {
-          "name": "chess",
-          "variants": [
-            "line",
-            "fill"
-          ],
-          "template": "chess.html",
-          "component_name": "rmx.chess"
-        },
-        {
-          "name": "dice",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "dice.html",
-          "component_name": "rmx.dice"
-        },
-        {
-          "name": "dice-1",
-          "variants": [
-            "line",
-            "fill"
-          ],
-          "template": "dice_1.html",
-          "component_name": "rmx.dice-1"
-        },
-        {
-          "name": "dice-2",
-          "variants": [
-            "line",
-            "fill"
-          ],
-          "template": "dice_2.html",
-          "component_name": "rmx.dice-2"
-        },
-        {
-          "name": "dice-3",
-          "variants": [
-            "line",
-            "fill"
-          ],
-          "template": "dice_3.html",
-          "component_name": "rmx.dice-3"
-        },
-        {
-          "name": "dice-4",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "dice_4.html",
-          "component_name": "rmx.dice-4"
-        },
-        {
-          "name": "dice-5",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "dice_5.html",
-          "component_name": "rmx.dice-5"
-        },
-        {
-          "name": "dice-6",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "dice_6.html",
-          "component_name": "rmx.dice-6"
         },
         {
           "name": "door",
@@ -11513,15 +12245,6 @@
           "component_name": "rmx.flower"
         },
         {
-          "name": "football",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "football.html",
-          "component_name": "rmx.football"
-        },
-        {
           "name": "fridge",
           "variants": [
             "line",
@@ -11529,15 +12252,6 @@
           ],
           "template": "fridge.html",
           "component_name": "rmx.fridge"
-        },
-        {
-          "name": "game",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "game.html",
-          "component_name": "rmx.game"
         },
         {
           "name": "glasses",
@@ -11565,15 +12279,6 @@
           ],
           "template": "goggles.html",
           "component_name": "rmx.goggles"
-        },
-        {
-          "name": "golf-ball",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "golf_ball.html",
-          "component_name": "rmx.golf-ball"
         },
         {
           "name": "graduation-cap",
@@ -11639,6 +12344,15 @@
           "component_name": "rmx.lightbulb"
         },
         {
+          "name": "lightbulb-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "lightbulb_ai.html",
+          "component_name": "rmx.lightbulb-ai"
+        },
+        {
           "name": "lightbulb-flash",
           "variants": [
             "line",
@@ -11664,15 +12378,6 @@
           ],
           "template": "outlet_2.html",
           "component_name": "rmx.outlet-2"
-        },
-        {
-          "name": "ping-pong",
-          "variants": [
-            "line",
-            "fill"
-          ],
-          "template": "ping_pong.html",
-          "component_name": "rmx.ping-pong"
         },
         {
           "name": "plant",
@@ -11702,40 +12407,13 @@
           "component_name": "rmx.plug-2"
         },
         {
-          "name": "poker-clubs",
+          "name": "plug-3",
           "variants": [
             "fill",
             "line"
           ],
-          "template": "poker_clubs.html",
-          "component_name": "rmx.poker-clubs"
-        },
-        {
-          "name": "poker-diamonds",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "poker_diamonds.html",
-          "component_name": "rmx.poker-diamonds"
-        },
-        {
-          "name": "poker-hearts",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "poker_hearts.html",
-          "component_name": "rmx.poker-hearts"
-        },
-        {
-          "name": "poker-spades",
-          "variants": [
-            "fill",
-            "line"
-          ],
-          "template": "poker_spades.html",
-          "component_name": "rmx.poker-spades"
+          "template": "plug_3.html",
+          "component_name": "rmx.plug-3"
         },
         {
           "name": "police-badge",
@@ -11837,15 +12515,6 @@
           "component_name": "rmx.stairs"
         },
         {
-          "name": "sword",
-          "variants": [
-            "line",
-            "fill"
-          ],
-          "template": "sword.html",
-          "component_name": "rmx.sword"
-        },
-        {
           "name": "t-shirt",
           "variants": [
             "line",
@@ -11929,7 +12598,7 @@
       ]
     },
     "System": {
-      "count": 166,
+      "count": 174,
       "icons": [
         {
           "name": "add",
@@ -12047,6 +12716,15 @@
           ],
           "template": "apps_2_ai.html",
           "component_name": "rmx.apps-2-ai"
+        },
+        {
+          "name": "apps-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "apps_ai.html",
+          "component_name": "rmx.apps-ai"
         },
         {
           "name": "check",
@@ -12454,6 +13132,15 @@
           "component_name": "rmx.function-add"
         },
         {
+          "name": "function-ai",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "function_ai.html",
+          "component_name": "rmx.function-ai"
+        },
+        {
           "name": "history",
           "variants": [
             "fill",
@@ -12688,6 +13375,15 @@
           "component_name": "rmx.loop-left"
         },
         {
+          "name": "loop-left-ai",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "loop_left_ai.html",
+          "component_name": "rmx.loop-left-ai"
+        },
+        {
           "name": "loop-right",
           "variants": [
             "line",
@@ -12695,6 +13391,15 @@
           ],
           "template": "loop_right.html",
           "component_name": "rmx.loop-right"
+        },
+        {
+          "name": "loop-right-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "loop_right_ai.html",
+          "component_name": "rmx.loop-right-ai"
         },
         {
           "name": "menu",
@@ -13010,6 +13715,42 @@
           ],
           "template": "search_2.html",
           "component_name": "rmx.search-2"
+        },
+        {
+          "name": "search-ai",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "search_ai.html",
+          "component_name": "rmx.search-ai"
+        },
+        {
+          "name": "search-ai-2",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "search_ai_2.html",
+          "component_name": "rmx.search-ai-2"
+        },
+        {
+          "name": "search-ai-3",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "search_ai_3.html",
+          "component_name": "rmx.search-ai-3"
+        },
+        {
+          "name": "search-ai-4",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "search_ai_4.html",
+          "component_name": "rmx.search-ai-4"
         },
         {
           "name": "search-eye",
@@ -13428,7 +14169,7 @@
       ]
     },
     "User & Faces": {
-      "count": 61,
+      "count": 65,
       "icons": [
         {
           "name": "account-box",
@@ -13494,6 +14235,15 @@
           "component_name": "rmx.admin"
         },
         {
+          "name": "ai-agent",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "ai_agent.html",
+          "component_name": "rmx.ai-agent"
+        },
+        {
           "name": "aliens",
           "variants": [
             "line",
@@ -13557,6 +14307,15 @@
           "component_name": "rmx.emotion-2"
         },
         {
+          "name": "emotion-add",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "emotion_add.html",
+          "component_name": "rmx.emotion-add"
+        },
+        {
           "name": "emotion-happy",
           "variants": [
             "fill",
@@ -13618,6 +14377,24 @@
           ],
           "template": "ghost_2.html",
           "component_name": "rmx.ghost-2"
+        },
+        {
+          "name": "ghost-3",
+          "variants": [
+            "fill",
+            "line"
+          ],
+          "template": "ghost_3.html",
+          "component_name": "rmx.ghost-3"
+        },
+        {
+          "name": "ghost-4",
+          "variants": [
+            "line",
+            "fill"
+          ],
+          "template": "ghost_4.html",
+          "component_name": "rmx.ghost-4"
         },
         {
           "name": "ghost-smile",

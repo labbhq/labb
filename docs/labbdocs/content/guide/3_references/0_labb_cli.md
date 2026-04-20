@@ -1,6 +1,7 @@
 ---
 title: labb CLI
-description: Complete reference for the labb command-line interface
+description: "Complete reference for the labb CLI: inspect components, search icons, build CSS, and scaffold Django projects with labb and django-cotton."
+keywords: "labb cli, labb components inspect, labb icons search, labb dev, django labb commands"
 ---
 
 The `labb` command-line interface provides a comprehensive set of tools for managing your Django projects using labb.

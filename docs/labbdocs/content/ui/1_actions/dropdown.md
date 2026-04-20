@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.dropdown
 title: Dropdown
-description: Dropdown component that shows content when focused or clicked using CSS focus method
+description: "Dropdown component for Django: build menus and contextual actions with keyboard navigation. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django dropdown component, dropdown django, daisyui dropdown django, tailwind dropdown django, dropdown django-cotton, django ui dropdown, django-cotton"
 daisy_ui_component_name: dropdown
 ---
+
+Dropdown renders a container that reveals a positioned menu when toggled. Use it for navigation submenus, action menus on data rows, or contextual option lists. The trigger can be any element that wraps a `c-lb.dropdown.menu`.
 
 ## Basic Dropdown
 <c-lbdocs.component_example path="dropdown/basic" />
