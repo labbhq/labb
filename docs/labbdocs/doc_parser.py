@@ -214,6 +214,8 @@ class DocParser:
         # Save the HTML content
         with open(template_path, "w", encoding="utf-8") as f:
             f.write(html_content)
+            if not html_content.endswith("\n"):
+                f.write("\n")
 
     def _build_seo_metadata(self, frontmatter_data, url_path):
         """
