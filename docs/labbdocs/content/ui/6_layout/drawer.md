@@ -21,6 +21,9 @@ Drawer renders a CSS-driven slide-out panel using checkbox toggle state — no J
 ## Responsive Layout
 <c-lbdocs.component_example path="drawer/responsive" previewStyle="block" />
 
+## Icon Only Sidebar
+<c-lbdocs.component_example path="drawer/icon-only" previewStyle="block" />
+
 ## Custom Overlay
 <c-lbdocs.component_example path="drawer/with-custom-overlay" />
 

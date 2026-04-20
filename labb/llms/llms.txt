@@ -383,7 +383,7 @@ Props marked with `*` are reactive — they can be changed at runtime via the `.
 **divider**: Divider line to separate content | Vars: variant*: neutral/primary/secondary/accent/info/success/warning/error, class: string, direction*: horizontal/vertical, position*: start/end | 4 examples
 **dock**: Bottom navigation dock component for mobile app-style navigation | Vars: variant*: neutral/primary/secondary/accent/info/success/warning/error, size*: xs/sm/md/lg/xl, class: string | 3 examples
 **dock.label**: Text label for a dock navigation item | Vars: class: string
-**drawer**: Main drawer wrapper component - use with drawer sub-components for full functionality | Vars: drawerId: string, class: string, end*: boolean | 12 examples
+**drawer**: Main drawer wrapper component - use with drawer sub-components for full functionality | Vars: drawerId: string, class: string, end*: boolean | 13 examples
 **drawer.checkbox**: Drawer toggle checkbox input - controls drawer open/close state | Vars: class: string
 **drawer.content**: Drawer main content area - contains the primary page content | Vars: as: div/main/section/article, class: string
 **drawer.overlay**: Drawer overlay label - provides backdrop for closing the drawer | Vars: class: string

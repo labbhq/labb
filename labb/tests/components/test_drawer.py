@@ -475,6 +475,86 @@ class TestDrawerComponentIntegration(ComponentTestBase):
         assert html.count('for="linked-checkbox"') == 2
 
 
+class TestDrawerIconOnlyMode(ComponentTestBase):
+    """Tests for the icon-only collapsible drawer pattern"""
+
+    def test_icon_only_drawer_uses_is_drawer_open_classes(self):
+        """Test icon-only drawer renders with is-drawer-open width transition classes"""
+        template_str = """
+{% load lb_tags %}
+<c-lb.drawer drawerId="icon-only-drawer" class="lg:drawer-open" sideClass="z-99">
+    <c-slot name="sideContent">
+        <ul class="menu bg-base-200 min-h-full p-2 transition-[width] overflow-x-hidden w-16 is-drawer-open:w-64">
+            <li><a href="#"><span class="is-drawer-close:hidden">Home</span></a></li>
+        </ul>
+    </c-slot>
+    <div>Main content</div>
+</c-lb.drawer>
+        """
+
+        html = self.render_template_string(template_str)
+
+        # Should have drawer structure
+        self.assert_classes_present(html, {"drawer", "drawer-side", "drawer-overlay"})
+
+        # Should have the lg:drawer-open responsive class
+        assert "lg:drawer-open" in html
+
+        # Should have icon-only width transition classes
+        assert "is-drawer-open:w-64" in html
+        assert "transition-[width]" in html
+        assert "overflow-x-hidden" in html
+        assert "w-16" in html
+
+    def test_icon_only_drawer_hides_labels_when_closed(self):
+        """Test that text labels use is-drawer-close:hidden to hide when drawer is collapsed"""
+        template_str = """
+{% load lb_tags %}
+<c-lb.drawer drawerId="icon-only-drawer" class="lg:drawer-open">
+    <c-slot name="sideContent">
+        <ul class="menu bg-base-200 min-h-full p-2 w-16 is-drawer-open:w-64">
+            <li><a href="#"><span class="is-drawer-close:hidden">Analytics</span></a></li>
+            <li><a href="#"><span class="is-drawer-close:hidden">Settings</span></a></li>
+        </ul>
+    </c-slot>
+    <div>Content</div>
+</c-lb.drawer>
+        """
+
+        html = self.render_template_string(template_str)
+
+        # Text labels should use is-drawer-close:hidden
+        assert "is-drawer-close:hidden" in html
+        assert html.count("is-drawer-close:hidden") == 2
+
+    def test_icon_only_drawer_toggle_hidden_on_large_screens(self):
+        """Test that the mobile toggle button is hidden on large screens"""
+        template_str = """
+{% load lb_tags %}
+<c-lb.drawer drawerId="icon-only-drawer" class="lg:drawer-open">
+    <c-slot name="sideContent">
+        <ul class="menu bg-base-200 min-h-full p-2 w-16 is-drawer-open:w-64">
+            <li><a href="#">Home</a></li>
+        </ul>
+    </c-slot>
+    <div class="navbar bg-base-300">
+        <div class="lg:hidden">
+            <c-lb.drawer.toggle for="icon-only-drawer" class="btn btn-square btn-ghost">
+                Menu
+            </c-lb.drawer.toggle>
+        </div>
+    </div>
+</c-lb.drawer>
+        """
+
+        html = self.render_template_string(template_str)
+
+        # Toggle button wrapper should be hidden on large screens
+        assert "lg:hidden" in html
+        # Drawer itself should use lg:drawer-open for responsive behaviour
+        assert "lg:drawer-open" in html
+
+
 class TestDrawerSchemaCompliance(ComponentTestBase):
     """Test drawer components against schema definitions"""
 
