@@ -74,6 +74,35 @@ tasks:
     cmds:
       - poetry run python -m labb.llms.generator
 
+  alpine:generate:
+    desc: Generate Alpine.js component JS files from component schemas
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run python -m labb.components.generators.alpine_components {{.CLI_ARGS}}
+      - poetry run python -m labb.components.generators.alpine_x_templates
+    summary: |
+      Generate Alpine.js component files into labb/static/labb/js/alpine/.
+
+      Examples:
+        task alpine:generate                          # Generate all components
+        task alpine:generate -- button               # Generate specific component(s)
+        task alpine:generate -- button modal badge   # Generate multiple components
+
+  alpine:download:
+    desc: Download the Alpine.js minified bundle from CDN into labb/static/labb/js/alpine/
+    cmds:
+      - mkdir -p labb/static/labb/js/alpine
+      - curl -fsSL https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js -o labb/static/labb/js/alpine/alpine.min.js
+      - echo "Downloaded alpine.min.js"
+
+  chart:download:
+    desc: Download the Chart.js UMD bundle from CDN into labb/static/labb/js/chart/
+    cmds:
+      - mkdir -p labb/static/labb/js/chart
+      - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js -o labb/static/labb/js/chart/chart.umd.min.js
+      - echo "Downloaded chart.umd.min.js"
+
   clean:
     desc: Clean up generated files and caches
     cmds:

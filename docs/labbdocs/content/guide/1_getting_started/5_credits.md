@@ -1,6 +1,7 @@
 ---
 title: Credits
-description: The projects and people that make labb possible
+description: "Credits: Django, django-cotton, Tailwind CSS, daisyUI, Alpine.js, and projects behind the labb django component library."
+keywords: "labb credits, django-cotton credits, daisyui tailwind django"
 ---
 
 {% load docs_tags %}

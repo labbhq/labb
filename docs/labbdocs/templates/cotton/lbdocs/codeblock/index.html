@@ -23,5 +23,5 @@
             <span class="text-xs text-base-content/70 hidden absolute top-full right-0 mt-1 whitespace-nowrap bg-base-200 px-2 py-1 rounded copy-notification pointer-events-none">Copied!</span>
         </div>
     {% endif %}
-    <pre class="bg-black text-white rounded-lg overflow-x-auto text-sm overflow-y-auto font-mono scrollbar-thin"><code class="language-{{ language }} scrollbar-thin p-4 code-content {{ codeClass }}">{% if code %}{{ code }}{% else %}{{ slot }}{% endif %}</code></pre>
+    <pre class="border-r-4 border-black bg-black text-white rounded-lg overflow-x-auto text-sm overflow-y-auto font-mono scrollbar-thin"><code class="border-r border-black border-opacity-50 language-{{ language }} scrollbar-thin p-4 code-content {{ codeClass }}">{% if code %}{{ code }}{% else %}{{ slot }}{% endif %}</code></pre>
 </div>

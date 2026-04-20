@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.badge
 title: Badge
-description: Display status, counts, or labels with various styles and colors.
+description: "Badge component for Django: add status indicators, labels, and notification counts. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django badge component, badge django, daisyui badge django, tailwind badge django, badge django-cotton, django ui badge, status badge django, django-cotton"
 daisy_ui_component_name: badge
 ---
+
+Badge renders a small inline label with colour variants matching the daisyUI theme palette. Place them on cards, list items, or navigation elements to indicate status, category, or counts.
 
 ## Basic Badge
 <c-lbdocs.component_example path="badge/basic" />

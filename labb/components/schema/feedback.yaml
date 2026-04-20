@@ -34,7 +34,7 @@ components:
           success: alert-success
           warning: alert-warning
           error: alert-error
-      style:
+      alertStyle:
         type: enum
         values:
         - ''

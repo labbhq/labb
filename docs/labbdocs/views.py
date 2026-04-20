@@ -5,6 +5,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.template import Context, Template
 from django.urls import reverse
+from django.views.decorators.cache import cache_control
 from django_cotton import render_component
 
 from labbicons.metadata import remix
@@ -49,6 +50,7 @@ def _build_docs_context(
     return context
 
 
+@cache_control(max_age=1000, public=True)
 def docs_view(request, doc_name, path=""):
     """
     Generic documentation view that handles documentation based on LABB_DOCS settings.
@@ -161,6 +163,7 @@ def blog_docs(request, path=""):
     return docs_view(request, "blog", path)
 
 
+@cache_control(max_age=3600, public=True)
 def sitemap_view(request):
     """
     Generate XML sitemap for all documentation pages.
@@ -178,6 +181,16 @@ def sitemap_view(request):
 
     # Collect all URLs from all documentation types
     urls = []
+
+    # Homepage (not in YAML-driven doc pages)
+    urls.append(
+        {
+            "loc": f"{site_url}/",
+            "lastmod": datetime.now().strftime("%Y-%m-%d"),
+            "changefreq": "daily",
+            "priority": "1.0",
+        }
+    )
 
     for doc_name, doc_config in doc_types.items():
         yaml_file_path = doc_config.get("config")
@@ -234,6 +247,7 @@ def sitemap_view(request):
     return HttpResponse("\n".join(xml), content_type="application/xml")
 
 
+@cache_control(max_age=86400, public=True)
 def robots_txt_view(request):
     """
     Generate robots.txt file.

@@ -1,0 +1,25 @@
+{% load lb_tags %}
+<c-vars
+    color="base-content"
+    :grid="False"
+    animation
+    updateAnimation
+    fontSize="12"
+    tooltips
+    legend
+    lightAlpha="0.4"
+/>
+{% lb_chart_deps %}
+{% lb_push_stack name="components" path="labb/js/chart/lb-chart-defaults.js" mode="inline" %}
+<script>
+    window.lbChartConfig = {
+        color:           "{{ color }}",
+        grid:            {{ grid|yesno:"true,false" }},
+        animation:       {{ animation|yesno:"true,false" }},
+        updateAnimation: {{ updateAnimation|yesno:"true,false" }},
+        fontSize:        {{ fontSize }},
+        tooltips:        {{ tooltips|yesno:"true,false" }},
+        legend:          {{ legend|yesno:"true,false" }},
+        lightAlpha:      {{ lightAlpha }},
+    };
+</script>

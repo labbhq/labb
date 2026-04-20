@@ -1,0 +1,32 @@
+<div
+    x-data="{ btn: { variant: 'primary', size: 'md' } }"
+    class="flex flex-col items-start gap-6 w-full md:w-96"
+>
+
+    <c-lb.button.x x-model="btn" variant="primary" size="md">
+        Click me — <span x-text="btn.variant"></span>
+    </c-lb.button.x>
+
+    <c-lb.label floating class="w-full">
+        <span>Variant</span>
+        <c-lb.select x-model="btn.variant" size="sm" class="w-full">
+            <option value="">Default</option>
+            <option value="primary">Primary</option>
+            <option value="secondary">Secondary</option>
+            <option value="accent">Accent</option>
+            <option value="error">Error</option>
+        </c-lb.select>
+    </c-lb.label>
+
+    <c-lb.label floating class="w-full">
+        <span>Size</span>
+        <c-lb.select x-model="btn.size" size="sm" class="w-full">
+            <option value="xs">xs</option>
+            <option value="sm">sm</option>
+            <option value="md">md</option>
+            <option value="lg">lg</option>
+            <option value="xl">xl</option>
+        </c-lb.select>
+    </c-lb.label>
+
+</div>

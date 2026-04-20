@@ -1,6 +1,7 @@
 ---
 title: Roadmap
-description: Planned features and future direction for labb
+description: "labb roadmap: planned django ui components, tooling, and docs for the django component library toward v1."
+keywords: "labb roadmap, django ui roadmap, labb future features"
 doc_show_toc: false
 ---
 
@@ -20,27 +21,19 @@ This roadmap outlines the planned direction for labb. Priorities may shift based
             </c-lb.timeline.end>
         </c-slot>
     </c-lb.timeline.item>
-    <c-lb.timeline.item variant="warning" icon="rmx.loader-4">
+    <c-lb.timeline.item variant="success" icon="rmx.checkbox-circle">
         <c-slot name="endSlot">
             <c-lb.timeline.end box class="my-6">
                 <span class="font-bold">v0.4.0</span>
-                <p class="text-sm">AlpineJS integration</p>
+                <p class="text-sm">AlpineJS integration and Charts</p>
             </c-lb.timeline.end>
         </c-slot>
     </c-lb.timeline.item>
-    <c-lb.timeline.item icon="rmx.time">
+    <c-lb.timeline.item variant="warning" icon="rmx.loader-4">
         <c-slot name="endSlot">
             <c-lb.timeline.end box class="my-6">
                 <span class="font-bold">IDE extensions</span>
                 <p class="text-sm">Autocomplete and inline documentation</p>
-            </c-lb.timeline.end>
-        </c-slot>
-    </c-lb.timeline.item>
-    <c-lb.timeline.item icon="rmx.time">
-        <c-slot name="endSlot">
-            <c-lb.timeline.end box class="my-6">
-                <span class="font-bold">Charts</span>
-                <p class="text-sm">Interactive charts and data visualization</p>
             </c-lb.timeline.end>
         </c-slot>
     </c-lb.timeline.item>

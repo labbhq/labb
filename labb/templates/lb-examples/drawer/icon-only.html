@@ -1,0 +1,44 @@
+<c-lb.drawer drawerId="icon-only-drawer" class="lg:drawer-open" sideClass="z-99 lg:z-40 h-full lg:h-96 is-drawer-close:overflow-visible">
+  <c-slot name="sideContent">
+    <div class="flex flex-col items-start h-full bg-base-200 transition-[width] is-drawer-close:w-14 is-drawer-open:w-64">
+      <ul class="menu w-full grow">
+        <li>
+          <a href="#" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Home">
+            <c-lbi n="rmx.home" w="1em" h="1em" class="my-1.5 shrink-0" />
+            <span class="is-drawer-close:hidden">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Analytics">
+            <c-lbi n="rmx.bar-chart-2" w="1em" h="1em" class="my-1.5 shrink-0" />
+            <span class="is-drawer-close:hidden">Analytics</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Reports">
+            <c-lbi n="rmx.file-list" w="1em" h="1em" class="my-1.5 shrink-0" />
+            <span class="is-drawer-close:hidden">Reports</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
+            <c-lbi n="rmx.settings-3" w="1em" h="1em" class="my-1.5 shrink-0" />
+            <span class="is-drawer-close:hidden">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </c-slot>
+
+  <div class="flex flex-col h-full lg:h-96">
+    <nav class="navbar bg-base-300 w-full">
+      <c-lb.drawer.toggle for="icon-only-drawer" class="btn btn-square btn-ghost">
+        <c-lbi n="rmx.sidebar-fold" w="1em" h="1em" />
+      </c-lb.drawer.toggle>
+      <div class="px-4 font-bold">My App</div>
+    </nav>
+    <div class="p-6 flex-1">
+      <p class="text-base-content/70">Main content area. The sidebar collapses to icon-only mode on large screens and can be toggled.</p>
+    </div>
+  </div>
+</c-lb.drawer>

@@ -1,6 +1,7 @@
 ---
 title: Introducing labb, and the roadmap
-description: Meet labb - a modern UI component library for Django, and discover our roadmap for future development.
+description: "Meet labb, a Django UI component library built with django-cotton and daisyUI. Our roadmap for components, docs, and the labb.io django component library."
+keywords: "labb django, django component library, django-cotton, daisyui django, labb roadmap, django ui components"
 published_time: 2025-12-29
 modified_time: 2025-12-29
 author: zadiq
@@ -57,6 +58,6 @@ Pre-built templates and components to kickstart your Django projects even faster
 
 labb is just getting started, and your feedback is invaluable. Try it out in your projects, share your thoughts, share with other developers, and let me know what features and components you need most. Together, we can make building modern Django applications faster and more enjoyable.
 
-Get involved by joining our [GitHub Discussions](https://github.com/labbhq/labb/discussions) or [join our Discord server](https://discord.gg/34eBUJMQv2).
+Get involved by joining our [GitHub Discussions](https://github.com/labbhq/labb/discussions).
 
 Happy labbing! 🚀

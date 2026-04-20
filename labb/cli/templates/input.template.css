@@ -109,5 +109,8 @@
   --tw-shadow-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Alpine.js cloak — hide elements until Alpine initialises */
+[x-cloak] { display: none !important; }
+
 /* Custom project styles (optional) */
 /* Add your custom CSS below this line */

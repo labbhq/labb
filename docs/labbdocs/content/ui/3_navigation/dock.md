@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.dock
 title: Dock
-description: Bottom navigation dock component for mobile app-style navigation.
+description: "Dock component for Django: build bottom navigation bars for mobile-friendly Django apps. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django dock component, dock navigation django, daisyui dock django, tailwind dock django, dock django-cotton, django ui dock, bottom nav django, django-cotton"
 daisy_ui_component_name: dock
 ---
+
+Dock renders a fixed bottom navigation bar suited to mobile layouts. Each `c-lb.dock.item` holds an icon and optional label, with an `active` prop to mark the current section.
 
 ## Basic Dock
 <c-lbdocs.component_example path="dock/basic" previewStyle="block" />

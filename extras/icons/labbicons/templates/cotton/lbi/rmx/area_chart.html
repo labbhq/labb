@@ -1,0 +1,7 @@
+<c-vars w="24" h="24" class line fill />
+
+{% if fill %}
+<svg class="{{ class }}" fill="currentColor" height="{{ h }}" viewbox="0 0 24 24" width="{{ w }}" xmlns="http://www.w3.org/2000/svg"><path d="M15.1162 5.87598L21 3.52344V20H3V4.32324L9.11719 1.87598L15.1162 5.87598ZM5 5.67676V12.2334L8.87988 9.90625L14.9678 11.9355L19 10.3223V6.47656L14.8828 8.12402L8.88281 4.12305L5 5.67676Z"></path></svg>
+{% else %}
+<svg class="{{ class }}" fill="currentColor" height="{{ h }}" viewbox="0 0 24 24" width="{{ w }}" xmlns="http://www.w3.org/2000/svg"><path d="M15.1162 5.87598L21 3.52344V20H3V4.32324L9.11719 1.87598L15.1162 5.87598ZM5 14.5654V18H19V12.4766L15.0312 14.0645L9.12012 12.0938L5 14.5654ZM5 5.67676V12.2334L8.87988 9.90625L14.9678 11.9355L19 10.3223V6.47656L14.8828 8.12402L8.88281 4.12305L5 5.67676Z"></path></svg>
+{% endif %}

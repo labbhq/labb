@@ -1,0 +1,179 @@
+# Component Schema Documentation
+#
+# Each component can have:
+# - base_classes: CSS classes that are always applied when the component renders
+# - optional_base_classes: CSS classes that are conditionally applied based on component state/slots
+#   These classes are not required to be present in all renderings and won't cause test failures
+#
+
+# Shared variable/slot definitions used by all concrete chart sub-components.
+x-chart-sub-variables: &chart_sub_variables
+  class:
+    type: string
+    default: ''
+    description: Additional CSS classes applied to the chart wrapper div
+    required: false
+  height:
+    type: string
+    default: '300'
+    description: Canvas height in pixels
+    required: false
+  legend:
+    type: enum
+    values: ['top', 'bottom', 'left', 'right', 'none']
+    default: top
+    description: Legend position; use 'none' to hide the legend
+    required: false
+  data:
+    type: string
+    default: '{}'
+    description: JSON string — Chart.js data object with labels and datasets
+    required: false
+  options:
+    type: string
+    default: '{}'
+    description: JSON string — Chart.js options object merged on top of labb defaults
+    required: false
+
+x-chart-sub-slots: &chart_sub_slots
+  default:
+    description: Not used — chart is rendered via the data prop
+
+components:
+
+  chart:
+    template: lb/chart/index.html
+    description: Optional page-level provider. Sets Chart.js global defaults and enables live DaisyUI theme switching for all charts on the page.
+    base_classes: []
+    variables:
+      color:
+        type: string
+        default: 'base-content'
+        description: Label colour for axes, legend, and ticks. Accepts a DaisyUI name, CSS variable, or any CSS colour value.
+        required: false
+      grid:
+        type: boolean
+        default: false
+        description: Show grid lines on all charts.
+        required: false
+      animation:
+        type: boolean
+        default: true
+        description: Enable Chart.js entry animations. Set to False for PDF export or large datasets.
+        required: false
+      updateAnimation:
+        type: boolean
+        default: true
+        description: Animate reactive data updates. Set to False for instant redraws (e.g. live feeds).
+        required: false
+      fontSize:
+        type: string
+        default: '12'
+        description: Font size in pixels for axis labels, legend, and tooltips.
+        required: false
+      tooltips:
+        type: boolean
+        default: true
+        description: Show tooltips on hover.
+        required: false
+      legend:
+        type: boolean
+        default: true
+        description: Show chart legends globally.
+        required: false
+
+  chart.instance:
+    template: lb/chart/instance.html
+    description: Generic chart proxy. Renders any Chart.js type via the type prop. Used internally by all chart sub-components.
+    base_classes: []
+    variables:
+      type:
+        type: string
+        default: ''
+        description: Chart.js chart type (e.g. 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea').
+        required: true
+      <<: *chart_sub_variables
+    slots:
+      <<: *chart_sub_slots
+
+  chart.bar:
+    template: lb/chart/bar.html
+    description: Bar chart. Datasets are auto-coloured from the DaisyUI palette. Redraws on theme change.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+    slots:
+      <<: *chart_sub_slots
+
+  chart.line:
+    template: lb/chart/line.html
+    description: Line chart. Smooth lines with point markers. Supports fill areas and auto-palette colouring.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+    slots:
+      <<: *chart_sub_slots
+
+  chart.pie:
+    template: lb/chart/pie.html
+    description: Pie chart. Slices are auto-coloured from the DaisyUI palette.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+    slots:
+      <<: *chart_sub_slots
+
+  chart.doughnut:
+    template: lb/chart/doughnut.html
+    description: Doughnut chart. Slices are auto-coloured from the DaisyUI palette.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+    slots:
+      <<: *chart_sub_slots
+
+  chart.radar:
+    template: lb/chart/radar.html
+    description: Radar (spider) chart. Datasets are auto-coloured from the DaisyUI palette.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+    slots:
+      <<: *chart_sub_slots
+
+  chart.polar-area:
+    template: lb/chart/polar_area.html
+    description: Polar area chart. Slices are auto-coloured from the DaisyUI palette.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+    slots:
+      <<: *chart_sub_slots
+
+  chart.scatter:
+    template: lb/chart/scatter.html
+    description: Scatter chart. Each dataset requires {x, y} point objects. Points are auto-coloured from the DaisyUI palette.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+      data:
+        type: string
+        default: '{}'
+        description: JSON string — Chart.js data object with datasets containing {x, y} point objects. No labels array needed.
+        required: false
+    slots:
+      <<: *chart_sub_slots
+
+  chart.bubble:
+    template: lb/chart/bubble.html
+    description: Bubble chart. Each dataset requires {x, y, r} point objects where r is the radius in pixels. Bubbles are auto-coloured from the DaisyUI palette.
+    base_classes: []
+    variables:
+      <<: *chart_sub_variables
+      data:
+        type: string
+        default: '{}'
+        description: JSON string — Chart.js data object with datasets containing {x, y, r} point objects. No labels array needed.
+        required: false
+    slots:
+      <<: *chart_sub_slots
