@@ -38,6 +38,14 @@ This roadmap outlines the planned direction for labb. Priorities may shift based
         </c-slot>
     </c-lb.timeline.item>
     <c-lb.timeline.item icon="rmx.time">
+        <c-slot name="endSlot">
+            <c-lb.timeline.end box class="my-6">
+                <span class="font-bold">Charts</span>
+                <p class="text-sm">Interactive charts and data visualization</p>
+            </c-lb.timeline.end>
+        </c-slot>
+    </c-lb.timeline.item>
+    <c-lb.timeline.item icon="rmx.time">
     <c-slot name="endSlot">
         <c-lb.timeline.end box class="my-6">
             <span class="font-bold">labbwire</span>
