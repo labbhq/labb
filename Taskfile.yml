@@ -101,6 +101,7 @@ tasks:
     cmds:
       - mkdir -p labb/static/labb/js/chart
       - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js -o labb/static/labb/js/chart/chart.umd.min.js
+      - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js.map -o labb/static/labb/js/chart/chart.umd.min.js.map
       - echo "Downloaded chart.umd.min.js"
 
   clean:
