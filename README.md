@@ -158,7 +158,7 @@ labb ships with 70+ **Django UI components** across eight categories. Every comp
 ### Charts (Chart.js + daisyUI theming)
 `bar`, `bubble`, `doughnut`, `line`, `pie`, `polar-area`, `radar`, `scatter`
 
-Full API references, live examples, and copy-paste snippets for every component: **[labb.io/docs](https://labb.io/docs/)**.
+Full API references, live examples, and copy-paste snippets for every component: **[labb.io/docs/ui](https://labb.io/docs/ui/)**.
 
 ## Features of the labb component library
 
@@ -208,7 +208,7 @@ Yes. labb is MIT-licensed and used in production Django apps. See **[labb.io](ht
 
 Browse components, guides, and the blog at **[labb.io](https://labb.io/)** — the official **django ui components** reference for labb, django-cotton, Tailwind CSS, and daisyUI 5.
 
-- Component reference: [labb.io/docs](https://labb.io/docs/)
+- Component reference: [labb.io/docs/ui](https://labb.io/docs/ui/)
 - Getting started guide: [labb.io/docs/guide](https://labb.io/docs/guide/)
 - Blog and tutorials: [labb.io/blog](https://labb.io/blog/)
 
