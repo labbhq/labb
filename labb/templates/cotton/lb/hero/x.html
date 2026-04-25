@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars x-data="lbHeroComp" />
+
+{% lb_push_stack name="components" path="labb/js/alpine/components/hero.js" %}
+
+
+<c-lb.hero
+    x-data="{{ x_data }}"
+    data-lb-defaults="{% lb_alpine_defaults attrs "hero" %}"
+    x-modelable="lbProps"
+    ::class="compClasses"
+    :attrs=attrs
+>
+    {{ slot }}
+</c-lb.hero>

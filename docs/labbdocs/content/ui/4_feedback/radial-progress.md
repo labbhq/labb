@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.radial-progress
 title: Radial Progress
-description: Circular progress indicator using CSS variables.
+description: "Radial progress component for Django: display percentage completion as a circular gauge. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django radial progress, circular progress django, daisyui radial progress django, tailwind radial progress, radial progress django-cotton, circular chart django"
 daisy_ui_component_name: radial-progress
 ---
+
+Radial Progress renders a CSS circular gauge with a percentage value at its centre. Set `value` (0–100) and optionally `size` and `thickness` to customize the ring.
 
 ## Basic Radial Progress
 <c-lbdocs.component_example path="radial-progress/basic" />

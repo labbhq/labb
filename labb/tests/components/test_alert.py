@@ -187,7 +187,7 @@ class TestAlert(ComponentTestBase):
         styles = ["outline", "dash", "soft"]
         for style in styles:
             html = self.render_component(
-                "alert", style=style, slot_content=f"{style} style alert"
+                "alert", alertStyle=style, slot_content=f"{style} style alert"
             )
             assert f"alert-{style}" in html
             assert f"{style} style alert" in html
@@ -209,7 +209,7 @@ class TestAlert(ComponentTestBase):
         html = self.render_component(
             "alert",
             variant="info",
-            style="outline",
+            alertStyle="outline",
             direction="vertical",
             slot_content="Combined style and direction",
         )
@@ -223,7 +223,7 @@ class TestAlert(ComponentTestBase):
         html = self.render_component(
             "alert",
             variant="success",
-            style="soft",
+            alertStyle="soft",
             direction="horizontal",
             icon="rmx.check",
             class_name="custom-alert",

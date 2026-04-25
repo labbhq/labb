@@ -33,18 +33,19 @@ def generate_component_descriptions() -> str:
 
         for var_name, var_spec in variables.items():
             var_type = var_spec.get("type", "string")
+            reactive = "*" if var_spec.get("css_mapping") else ""
 
             # Format variable info concisely
             if var_type == "enum" and "values" in var_spec:
                 values = [str(v) for v in var_spec["values"] if str(v).strip()]
                 if values:
-                    var_info = f"{var_name}: {'/'.join(values)}"  # Show all values
+                    var_info = f"{var_name}{reactive}: {'/'.join(values)}"
                 else:
                     continue
             elif var_type == "boolean":
-                var_info = f"{var_name}: boolean"
+                var_info = f"{var_name}{reactive}: boolean"
             else:
-                var_info = f"{var_name}: {var_type}"
+                var_info = f"{var_name}{reactive}: {var_type}"
 
             if var_name in priority_vars:
                 key_vars.append(var_info)
@@ -218,19 +219,72 @@ Configure labb settings in your Django `settings.py`:
 
 ```python
 LABB_SETTINGS = {{
-    'DEFAULT_THEME': 'default',  # Default theme for new users
+    'DEFAULT_THEME': 'labb-light',       # Default theme for new users
+    'ALPINE_JS_PATH': 'labb/js/alpine/alpine.min.js',  # or a CDN URL
+    'STACK_HELPERS': {{
+        'components': ['labb/js/alpine/labb-component.js', 'alpine'],
+    }},
 }}
 ```
 
-`DEFAULT_THEME` can be set to `default` or any daisyUI theme configured in your project's `input.css`.
+- `DEFAULT_THEME`: any daisyUI theme defined in your `input.css`. `"__system__"` defers to OS preference.
+- `ALPINE_JS_PATH`: path or full URL to Alpine.js. Defaults to the bundled file.
+- `STACK_HELPERS`: maps stack names to helper scripts. `"alpine"` is a special token that emits a deferred script tag using `ALPINE_JS_PATH`.
 
 **Access settings in code:**
 ```python
 from labb.django_settings import get_labb_setting, get_default_theme
 
-theme = get_labb_setting('DEFAULT_THEME', 'default')
+theme = get_labb_setting('DEFAULT_THEME')
 default_theme = get_default_theme()
 ```
+
+## Reactivity
+labb components are zero-JS by default. Reactivity is opt-in via Alpine.js using `.x` component variants.
+
+**How it works:**
+- Use `<c-lb.button.x>` instead of `<c-lb.button>` to get a reactive version
+- Each `.x` component registers an Alpine data object; use `this.lbProps` inside extended components to read/write reactive props
+- Scripts only load when `.x` components are actually used on the page — Alpine is never included otherwise
+- Props with a CSS class mapping (marked with `*` in these docs) can be changed at runtime
+— For sub-components, use dot notation (e.g. `<c-lb.stat.group.x>`)
+
+**Basic usage:**
+```html
+<!-- Static initial props (server-rendered) -->
+<c-lb.button.x variant="primary" size="lg">Save</c-lb.button.x>
+
+<!-- Runtime binding with x-model -->
+<div x-data="{{ btn: {{ variant: 'primary', size: 'md' }} }}">
+    <c-lb.button.x x-model="btn" variant="primary" size="md">
+        Click me
+    </c-lb.button.x>
+    <select x-model="btn.variant">
+        <option value="primary">Primary</option>
+        <option value="error">Error</option>
+    </select>
+</div>
+```
+
+**Prop format:** plain JS object with camelCase keys matching schema variable names (e.g. `{{ variant: '', btnStyle: '', size: 'md' }}`). Empty string means no value.
+
+**Extending a reactive component** with custom state and methods:
+```js
+document.addEventListener('alpine:init', () => {{
+    Alpine.data('myComp', lb.extendComponent('button', {{
+        loading: false,
+        save() {{ this.lbProps.variant = 'success'; }}
+    }}));
+}});
+```
+Pass the extended factory as `x-data` on the `.x` component. Sub-components use dot notation: `lb.extendComponent('stat.group', {{ ... }})`.
+
+**Force-load Alpine** (for pages using Alpine without `.x` components):
+```html
+<c-lb.m.dependencies alpine />
+```
+
+**Setup:** ensure `<c-lb.m.dependencies />` is in your base `<head>`. No other config needed.
 
 ## General Rules
 - Boolean attributes can be set implicitly to true by just adding them (no need for `="true"`)
@@ -310,7 +364,67 @@ labb components ex --tree
 **Common Errors:**
 - `TypeError: cannot unpack non-iterable NoneType object` at docs or UI routes: Usually caused by an invalid or guessed icon name (e.g. `rmx.rocket-2-line` when the actual icon is `rmx.rocket-2`). Fix: Run `labb icons search "keyword"` or `labb llms` to find the correct icon name; use the exact "Component" value from search results (e.g. `rmx.rocket-2`).
 
+## Charts
+Charts are rendered with Chart.js and themed with DaisyUI. Each chart type has a dedicated component (`<c-lb.chart.bar>`, `<c-lb.chart.line>`, `<c-lb.chart.pie>`, `<c-lb.chart.doughnut>`, `<c-lb.chart.radar>`, `<c-lb.chart.polar-area>`, `<c-lb.chart.scatter>`, `<c-lb.chart.bubble>`) that accepts Chart.js `data` and `options` as JSON strings.
+
+**Basic usage:**
+```html
+<c-lb.chart.bar data='{{
+    "labels": ["Jan", "Feb", "Mar"],
+    "datasets": [{{ "label": "Revenue", "data": [10, 20, 30] }}]
+}}' />
+```
+
+**Dataset colours — DaisyUI name conventions:**
+Pass colour names directly in `backgroundColor` / `borderColor`; they resolve at render time and re-resolve on theme change.
+- `"primary"`, `"secondary"`, `"accent"`, `"info"`, `"success"`, `"warning"`, `"error"`, `"neutral"`, `"base-100"`..`"base-300"`, `"base-content"` — live DaisyUI CSS variable
+- `"primary-light"` (any name + `-light` suffix) — same colour at reduced alpha (controlled by `lightAlpha`, default `0.4`); ideal for fills under a solid `borderColor`
+- `"--color-custom"` — any CSS custom property
+- `"#hex"`, `"rgb(...)"`, `"oklch(...)"`, named CSS colours — passed through unchanged; `-light` suffix also works on raw colours via `color-mix`
+
+**Auto-palette:** if a dataset has no `backgroundColor` / `borderColor`, slices/datasets cycle through `primary → secondary → accent → info → success → warning → error`. `polarArea` and `radar` use `-light` fills + solid borders by default; `pie`, `doughnut`, `bar`, `line` use solid fills.
+
+**Page-level config (`<c-lb.chart />` provider):**
+Drop once on a page (or base template) to override global Chart.js defaults for every chart below it. All props are optional.
+```html
+<c-lb.chart color="base-content" :grid="False" animation updateAnimation
+            fontSize="12" tooltips legend lightAlpha="0.4" />
+```
+- `color` — label/axis/legend text colour (DaisyUI name, `--color-x`, or any CSS colour)
+- `grid` — show grid lines on cartesian scales (default off)
+- `animation` — entry animation (set `:animation="False"` for PDFs / large datasets)
+- `updateAnimation` — animate reactive data updates (set False for live feeds)
+- `fontSize` — pixel font size for axes/legend/tooltips
+- `tooltips`, `legend` — global on/off
+- `lightAlpha` — alpha applied to all `*-light` colour variants
+
+**Per-dataset overrides:**
+Anything you put in `data` or `options` is merged on top of labb's defaults, so you can always opt out. Example — solid vibrant polar slices with no border:
+```html
+<c-lb.chart.polar-area data='{{
+    "labels": ["Design", "Development", "Testing"],
+    "datasets": [{{
+        "data": [40, 75, 60],
+        "backgroundColor": ["primary", "secondary", "accent"],
+        "borderWidth": 0
+    }}]
+}}' />
+```
+
+**Reactivity:**
+Chart components accept `x-model` natively — no `.x` variant needed. Bind to an object with `data`, `options`, and/or `legend`; reassign the whole object to trigger an update.
+```html
+<div x-data="{{ cfg: {{ data: {{ labels: [...], datasets: [...] }} }},
+               randomize() {{ this.cfg = {{ data: {{ ... }} }}; }} }}">
+    <c-lb.button @click="randomize()">Shuffle</c-lb.button>
+    <c-lb.chart.bar x-model="cfg" />
+</div>
+```
+
+**Theme switching:** charts destroy + rebuild automatically when `<html data-theme>` changes, so all DaisyUI-named colours re-resolve without a refresh.
+
 ## Components
+Props marked with `*` are reactive — they can be changed at runtime via the `.x` variant (e.g. `<c-lb.button.x>`).
 {component_descriptions}
 """
 

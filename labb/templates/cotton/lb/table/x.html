@@ -1,0 +1,15 @@
+{% load lb_tags %}
+<c-vars x-data="lbTableComp" />
+
+{% lb_push_stack name="components" path="labb/js/alpine/components/table.js" %}
+
+
+<c-lb.table
+    x-data="{{ x_data }}"
+    data-lb-defaults="{% lb_alpine_defaults attrs "table" %}"
+    x-modelable="lbProps"
+    ::class="compClasses"
+    :attrs=attrs
+>
+    {{ slot }}
+</c-lb.table>

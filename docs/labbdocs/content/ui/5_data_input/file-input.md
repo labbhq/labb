@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.file-input
 title: File Input
-description: Styled file upload input with color and size variants.
+description: "File input component for Django: add styled file upload fields to Django forms. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django file input component, file upload django, daisyui file input django, tailwind file input django, file input django-cotton, django form file upload"
 daisy_ui_component_name: file-input
 ---
+
+File Input renders a styled `<input type='file'>` that matches the daisyUI form palette. Use size and colour variants to keep it consistent with surrounding form elements.
 
 ## Basic File Input
 <c-lbdocs.component_example path="file-input/basic" />

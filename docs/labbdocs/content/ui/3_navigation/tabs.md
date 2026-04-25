@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.tabs
 title: Tabs
-description: Show content in a tabbed interface
+description: "Tabs component for Django: build tabbed interfaces and content switchers. Built with django-cotton, Tailwind CSS, and daisyUI 5. Zero JavaScript by default."
+keywords: "django tabs component, tabs django, daisyui tabs django, tailwind tabs django, tabs django-cotton, django ui tabs, tabbed interface django, django-cotton"
 daisy_ui_component_name: tab
 ---
+
+Tabs renders a daisyUI tab bar with radio-button-driven content switching — no JavaScript needed. Each `c-lb.tabs.tab` is a tab handle, and panels become visible when their associated radio input is checked.
 
 ## Basic Tabs
 <c-lbdocs.component_example path="tabs/basic" style="stacked"/>

@@ -193,7 +193,7 @@ components:
         description: Custom modal box content (overrides default slot)
 
   modal.box:
-    template: lb/modal/box.html
+    template: lb/modal/box/index.html
     description: Main content container for the modal
     base_classes:
     - modal-box
@@ -248,7 +248,7 @@ components:
         required: false
 
   modal.close:
-    template: lb/modal/close.html
+    template: lb/modal/close/index.html
     description: Close button for modal
     base_classes:
     - btn

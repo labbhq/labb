@@ -30,7 +30,16 @@
                             <tbody>
                                 {% for var_name, var_spec in component_spec.variables.items %}
                                     <tr>
-                                        <td class="font-mono text-sm">{{ var_name }}</td>
+                                        <td class="font-mono text-sm">
+                                            <span class="flex items-center gap-1">
+                                                {{ var_name }}
+                                                {% if var_spec.css_mapping %}
+                                                    <span class="tooltip tooltip-right text-xs" data-tip="Reactive via c-lb.{{ component_name }}.x">
+                                                        <c-lbi n="rmx.flashlight" w="0.85em" h="0.85em" class="text-warning" />
+                                                    </span>
+                                                {% endif %}
+                                            </span>
+                                        </td>
                                         <td>
                                             {% if var_spec.type == "enum" %}
                                                 {% if var_spec.values %}

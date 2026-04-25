@@ -157,251 +157,10 @@ jobs:
           echo "$SUB_ISSUES_DATA" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-
-  generate-changelog:
+  build-and-publish:
     needs: [test, checks]
     runs-on: ubuntu-latest
     if: always() && needs.checks.result == 'success'
-    permissions:
-      contents: write
-      issues: read
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-
-      - name: Generate GitHub App token
-        id: generate-token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Fetch all history for proper versioning
-          token: ${{ steps.generate-token.outputs.token }}
-
-      - name: Prepare data for changelog generation
-        id: prepare_data
-        run: |
-          VERSION="${{ needs.checks.outputs.version }}"
-
-          # Get data from previous job - write to temp files to avoid quote escaping issues
-          cat > /tmp/release_issue.json <<'EOF'
-          ${{ needs.checks.outputs.release_issue_data }}
-          EOF
-
-          cat > /tmp/sub_issues.json <<'EOF'
-          ${{ needs.checks.outputs.sub_issues_data }}
-          EOF
-
-          # Extract release issue info from temp file
-          RELEASE_TITLE=$(jq -r '.title' /tmp/release_issue.json)
-          RELEASE_URL=$(jq -r '.url' /tmp/release_issue.json)
-
-          # Extract sub-issues info from temp file
-          SUB_ISSUES=$(jq -r '.[].number' /tmp/sub_issues.json 2>/dev/null | tr '\n' ' ' || echo "")
-
-          if [ -z "$SUB_ISSUES" ] || [ "$SUB_ISSUES" = "" ]; then
-            SUB_ISSUES=""
-          fi
-
-          # Store data for next step
-          echo "sub_issues<<EOF" >> $GITHUB_OUTPUT
-          echo "$SUB_ISSUES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          echo "release_title<<EOF" >> $GITHUB_OUTPUT
-          echo "$RELEASE_TITLE" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          echo "release_url<<EOF" >> $GITHUB_OUTPUT
-          echo "$RELEASE_URL" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Generate changelog from sub-issues
-        id: changelog
-        run: |
-          VERSION="${{ needs.checks.outputs.version }}"
-          RELEASE_TITLE="${{ steps.prepare_data.outputs.release_title }}"
-          RELEASE_URL="${{ steps.prepare_data.outputs.release_url }}"
-          SUB_ISSUES="${{ steps.prepare_data.outputs.sub_issues }}"
-
-          echo "Generating changelog for version $VERSION"
-
-          # Get current date in human-readable format with short month
-          CURRENT_DATE=$(date +"%b %d, %Y")
-
-          # Initialize changelog entry for this version
-          CHANGELOG_ENTRY="## $VERSION ($CURRENT_DATE)\n\n"
-
-          # Create temporary files to store categorized issues (avoids subshell variable issues)
-          TMP_DIR=$(mktemp -d)
-          BUG_FIXES_FILE="$TMP_DIR/bug_fixes.txt"
-          FEATURES_FILE="$TMP_DIR/features.txt"
-          MAINTENANCE_FILE="$TMP_DIR/maintenance.txt"
-          DOCUMENTATION_FILE="$TMP_DIR/documentation.txt"
-          OTHER_FILE="$TMP_DIR/other.txt"
-
-          touch "$BUG_FIXES_FILE" "$FEATURES_FILE" "$MAINTENANCE_FILE" "$DOCUMENTATION_FILE" "$OTHER_FILE"
-
-          # Process sub-issues from the passed data (already validated in checks job)
-          if [ -n "$SUB_ISSUES" ]; then
-            # Recreate the sub_issues.json file if it doesn't exist
-            if [ ! -f /tmp/sub_issues.json ]; then
-              cat > /tmp/sub_issues.json <<'EOF'
-          ${{ needs.checks.outputs.sub_issues_data }}
-          EOF
-            fi
-
-            # Process each sub-issue from the API data
-            jq -r '.[] | @json' /tmp/sub_issues.json | while read -r issue_json; do
-              issue_num=$(echo "$issue_json" | jq -r '.number')
-              title=$(echo "$issue_json" | jq -r '.title')
-              labels=$(echo "$issue_json" | jq -r '.labels[]?.name // empty' | tr '\n' ',' | sed 's/,$//')
-              url=$(echo "$issue_json" | jq -r '.html_url')
-
-              # Categorize based on labels (check new labels first, then fallback to old patterns)
-              if echo "$labels" | grep -qiE "\bfix\b"; then
-                # Match "fix" label (exact word match to avoid matching "prefix" or similar)
-                echo "* $title ([#$issue_num]($url))" >> "$BUG_FIXES_FILE"
-              elif echo "$labels" | grep -qiE "\bfeat\b"; then
-                # Match "feat" label (exact word match)
-                echo "* $title ([#$issue_num]($url))" >> "$FEATURES_FILE"
-              elif echo "$labels" | grep -qiE "\bchore\b"; then
-                # Match "chore" label (exact word match)
-                echo "* $title ([#$issue_num]($url))" >> "$MAINTENANCE_FILE"
-              elif echo "$labels" | grep -qi "bug\|fix"; then
-                # Fallback: old pattern for bug fixes
-                echo "* $title ([#$issue_num]($url))" >> "$BUG_FIXES_FILE"
-              elif echo "$labels" | grep -qi "feature\|enhancement"; then
-                # Fallback: old pattern for features
-                echo "* $title ([#$issue_num]($url))" >> "$FEATURES_FILE"
-              elif echo "$labels" | grep -qi "documentation\|docs"; then
-                # Documentation label
-                echo "* $title ([#$issue_num]($url))" >> "$DOCUMENTATION_FILE"
-              else
-                echo "* $title ([#$issue_num]($url))" >> "$OTHER_FILE"
-              fi
-            done
-          else
-            echo "* No sub-issues found in this release." >> "$OTHER_FILE"
-          fi
-
-          # Build changelog entry from temporary files
-          if [ -s "$FEATURES_FILE" ]; then
-            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Features\n$(cat "$FEATURES_FILE")\n\n"
-          fi
-
-          if [ -s "$BUG_FIXES_FILE" ]; then
-            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Bug Fixes\n$(cat "$BUG_FIXES_FILE")\n\n"
-          fi
-
-          if [ -s "$MAINTENANCE_FILE" ]; then
-            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Maintenance\n$(cat "$MAINTENANCE_FILE")\n\n"
-          fi
-
-          if [ -s "$DOCUMENTATION_FILE" ]; then
-            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Documentation\n$(cat "$DOCUMENTATION_FILE")\n\n"
-          fi
-
-          if [ -s "$OTHER_FILE" ]; then
-            CHANGELOG_ENTRY="${CHANGELOG_ENTRY}### Other\n$(cat "$OTHER_FILE")\n\n"
-          fi
-
-          # Cleanup temporary files
-          rm -rf "$TMP_DIR"
-
-          # Store changelog entry
-          echo "changelog_entry<<EOF" >> $GITHUB_OUTPUT
-          echo -e "$CHANGELOG_ENTRY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          echo "✅ Changelog entry generated"
-
-      - name: Update CHANGELOG.md
-        run: |
-          VERSION="${{ needs.checks.outputs.version }}"
-          CHANGELOG_ENTRY="${{ steps.changelog.outputs.changelog_entry }}"
-
-          # Create empty CHANGELOG.md if it doesn't exist
-          if [ ! -f "CHANGELOG.md" ]; then
-            touch CHANGELOG.md
-            echo "Created new CHANGELOG.md"
-          fi
-
-          # Check if version already exists in changelog and remove it
-          if grep -q "^## $VERSION " CHANGELOG.md; then
-            echo "⚠️  Version $VERSION already exists in CHANGELOG.md, removing old entry..."
-
-            # Remove the existing version entry
-            # This removes from "## VERSION" to the line before the next "## " or "---" or end of file
-            awk -v ver="## $VERSION " '
-              BEGIN { skip=0 }
-              /^## / {
-                if ($0 ~ ver) {
-                  skip=1
-                  next
-                } else if (skip==1) {
-                  skip=0
-                }
-              }
-              /^---$/ {
-                if (skip==1) {
-                  skip=0
-                  next
-                }
-              }
-              skip==0 { print }
-            ' CHANGELOG.md > temp_remove.md
-
-            mv temp_remove.md CHANGELOG.md
-            echo "✅ Removed old entry for v$VERSION"
-          fi
-
-          # Prepend new changelog entry
-          if [ -s "CHANGELOG.md" ]; then
-            # File exists and has content - prepend with separator
-            {
-              echo -e "$CHANGELOG_ENTRY"
-              echo "---"
-              echo ""
-              cat CHANGELOG.md
-            } > temp_changelog.md
-          else
-            # File is empty or new - just add the entry
-            echo -e "$CHANGELOG_ENTRY" > temp_changelog.md
-          fi
-
-          # Replace CHANGELOG.md with updated content
-          mv temp_changelog.md CHANGELOG.md
-
-          echo "✅ CHANGELOG.md updated with v$VERSION"
-
-      - name: Commit and push changelog
-        run: |
-          VERSION="${{ needs.checks.outputs.version }}"
-
-          # Configure git
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
-          # Add changelog file
-          git add "CHANGELOG.md"
-
-          # Commit changelog
-          git commit -m "Add changelog for v$VERSION"
-
-          # Push changelog
-          git push origin main
-
-          echo "✅ CHANGELOG.md committed and pushed"
-
-  build-and-publish:
-    needs: [test, checks, generate-changelog]
-    runs-on: ubuntu-latest
-    if: always() && needs.checks.result == 'success' && needs.generate-changelog.result == 'success'
     environment: pypi
     permissions:
       contents: read
@@ -515,9 +274,9 @@ jobs:
           verbose: true
 
   cleanup:
-    needs: [test, checks, generate-changelog, build-and-publish]
+    needs: [test, checks, build-and-publish]
     runs-on: ubuntu-latest
-    if: always() && needs.checks.result == 'success' && needs.generate-changelog.result == 'success' && needs.build-and-publish.result == 'success'
+    if: always() && needs.checks.result == 'success' && needs.build-and-publish.result == 'success'
     permissions:
       contents: write
       issues: write
@@ -612,31 +371,10 @@ jobs:
 
       #     echo "✅ Labbio deployment triggered"
 
-      - name: Update GitHub release with changelog
-        if: needs.generate-changelog.result == 'success'
-        run: |
-          # Get the release ID
-          RELEASE_ID=$(gh api repos/${{ github.repository }}/releases/tags/v${{ needs.checks.outputs.version }} --jq '.id')
-
-          # Get changelog entry from previous job
-          CHANGELOG_ENTRY="${{ needs.generate-changelog.outputs.changelog_entry }}"
-
-          if [ -n "$CHANGELOG_ENTRY" ]; then
-            # Update release with changelog
-            gh api repos/${{ github.repository }}/releases/$RELEASE_ID \
-              --method PATCH \
-              --field body="$CHANGELOG_ENTRY"
-
-            echo "✅ GitHub release updated with changelog"
-          fi
-
-      - name: Close release issue with changelog
+      - name: Close release issue
         run: |
           RELEASE_ISSUE="${{ github.event.inputs.release-issue }}"
           VERSION="${{ needs.checks.outputs.version }}"
-
-          # Get changelog entry
-          CHANGELOG_ENTRY="${{ needs.generate-changelog.outputs.changelog_entry }}"
 
           # Close the main release issue with release note
           gh issue close "$RELEASE_ISSUE" --comment "🎉 **Released in v$VERSION**
@@ -660,10 +398,6 @@ jobs:
           - [PyPI - labbicons](https://pypi.org/project/labbicons/$VERSION/)
           - [PyPI - labbdocs](https://pypi.org/project/labbdocs/$VERSION/)
           - [PyPI - labbstart](https://pypi.org/project/labbstart/$VERSION/)
-          - [Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
-
-          ### 📝 Changelog
-          $CHANGELOG_ENTRY
 
           ---
 
@@ -672,7 +406,7 @@ jobs:
           echo "✅ Release issue #$RELEASE_ISSUE closed"
 
   notify:
-    needs: [test, checks, generate-changelog, build-and-publish, cleanup]
+    needs: [test, checks, build-and-publish, cleanup]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -680,7 +414,6 @@ jobs:
         if: |
           needs.test.result == 'success' &&
           needs.checks.result == 'success' &&
-          needs.generate-changelog.result == 'success' &&
           needs.build-and-publish.result == 'success' &&
           needs.cleanup.result == 'success'
         run: |
@@ -688,22 +421,18 @@ jobs:
           echo "📦 Packages published to PyPI"
           echo "🏷️  GitHub release created"
           echo "🚀 Tag created and pushed"
-          echo "📋 Changelog generated from release issue #${{ github.event.inputs.release-issue }}"
-          echo "📄 CHANGELOG.md updated with categorized entries"
           echo "🔒 Release issue closed with release notes"
 
       - name: Notify on failure
         if: |
           needs.test.result == 'failure' ||
           needs.checks.result == 'failure' ||
-          needs.generate-changelog.result == 'failure' ||
           needs.build-and-publish.result == 'failure' ||
           needs.cleanup.result == 'failure'
         run: |
           echo "❌ Release failed at one of the following stages:"
           echo "   Test: ${{ needs.test.result }}"
           echo "   Checks: ${{ needs.checks.result }}"
-          echo "   Generate Changelog: ${{ needs.generate-changelog.result }}"
           echo "   Build and Publish: ${{ needs.build-and-publish.result }}"
           echo "   Cleanup: ${{ needs.cleanup.result }}"
           echo ""

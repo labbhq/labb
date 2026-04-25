@@ -214,6 +214,8 @@ class DocParser:
         # Save the HTML content
         with open(template_path, "w", encoding="utf-8") as f:
             f.write(html_content)
+            if not html_content.endswith("\n"):
+                f.write("\n")
 
     def _build_seo_metadata(self, frontmatter_data, url_path):
         """
@@ -230,7 +232,13 @@ class DocParser:
         # Get title
         title = frontmatter_data.get("title", "")
         component = frontmatter_data.get("component", "")
-        meta_title = title or component or "Documentation"
+        doc_layout = frontmatter_data.get("doc_layout", "")
+
+        # Build SEO-friendly title for component docs
+        if doc_layout == "component" and title:
+            meta_title = f"Django {title} Component"
+        else:
+            meta_title = title or component or "Documentation"
 
         # Build page title with site name
         site_name = self.seo_config.get("site_name", "Labb")
@@ -267,7 +275,9 @@ class DocParser:
                 static_url_prefix = f"{base_static_url_prefix.rstrip('/')}/{doc_type}"
 
                 # Generate filename with title prefix and URL hash (no doc type in filename)
-                title_slug = slugify(meta_title) if meta_title else ""
+                # Use original title (not SEO-prefixed meta_title) to keep filenames stable
+                slug_source = title or component or meta_title
+                title_slug = slugify(slug_source) if slug_source else ""
                 # Limit length to keep filenames manageable
                 if title_slug and len(title_slug) > 30:
                     title_slug = title_slug[:30].rstrip("-")

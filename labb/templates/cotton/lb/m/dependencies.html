@@ -3,6 +3,7 @@
 
 <c-vars
     :noGlobalCSS="False"
+    :alpine="False"
     setThemeEndpoint=""
 />
 
@@ -127,5 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endif %}
+
+{% if alpine %}{% lb_alpine_script %}{% endif %}
+{% lb_load_stack name="components" alpine_loaded=alpine %}
 
 {{ slot }}

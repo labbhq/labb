@@ -2,24 +2,28 @@
 doc_layout: component
 component: c-lb.accordion
 title: Accordion
-description: Collapsible content sections with radio button controls
+description: "Accordion component for Django: build collapsible content sections and FAQs. Built with django-cotton, Tailwind CSS, and daisyUI 5. Zero JavaScript by default."
+keywords: "django accordion component, accordion django, daisyui accordion django, tailwind accordion django, accordion django-cotton, django ui accordion, collapsible django, django-cotton"
 daisy_ui_component_name: accordion
 ---
 
+Accordion for Django lets you build collapsible content sections using a simple HTML-like syntax.
+Built on django-cotton, Tailwind CSS, and daisyUI 5, it uses pure CSS checkbox state — no JavaScript
+required. Use it to create FAQs, expandable detail panels, and nested navigation in any Django template.
 
 ## Basic Accordion
 <c-lbdocs.component_example path="accordion/basic" previewStyle="flex-col" />
 
-## With Arrow Icons
+## Accordion with Arrow Icons
 <c-lbdocs.component_example path="accordion/with-arrow" previewStyle="flex-col" />
 
-## With Plus/Minus Icons
+## Accordion with Plus/Minus Icons
 <c-lbdocs.component_example path="accordion/with-plus" previewStyle="flex-col" />
 
 ## Joined Accordion
 <c-lbdocs.component_example path="accordion/joined" previewStyle="flex-col" />
 
-## Custom Content
+## Accordion with Custom Content
 <c-lbdocs.component_example path="accordion/custom-content" previewStyle="flex-col" />
 
 ## API Reference

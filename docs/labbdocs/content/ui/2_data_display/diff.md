@@ -2,9 +2,12 @@
 doc_layout: component
 component: c-lb.diff
 title: Diff
-description: Image comparison component with draggable resizer for before/after views
+description: "Diff component for Django: create before/after comparisons with a draggable slider. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+keywords: "django diff component, diff viewer django, daisyui diff django, tailwind diff django, diff django-cotton, django ui diff, before after django, image comparison django"
 daisy_ui_component_name: diff
 ---
+
+Diff places two content slots side-by-side with a draggable divider, ideal for before/after comparisons. Both panels can hold images, screenshots, or any HTML.
 
 ## Basic Diff
 <c-lbdocs.component_example path="diff/basic" previewStyle="block" />

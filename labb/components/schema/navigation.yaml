@@ -259,7 +259,7 @@ components:
         description: Custom tab content area. Defaults to rendering the default slot
 
   tabs.content:
-    template: lb/tabs/content.html
+    template: lb/tabs/content/index.html
     description: Individual tab content with radio input and content area
     base_classes:
     - tab-content

@@ -8,6 +8,7 @@
     showDrawerToggle
     showTopNav=True
     showFooter=True
+    includeMeta=True
 />
 
 <!DOCTYPE html>
@@ -23,13 +24,43 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'lbdocs/img/labb/favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'lbdocs/img/labb/favicon/site.webmanifest' %}">
 
+    {# Sitewide structured data — Organization + WebSite (all pages) #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "name": "labb",
+                "url": "https://labb.io/",
+                "logo": "https://labb.io/static/lbdocs/img/labb/favicon/apple-touch-icon.png",
+                "sameAs": [
+                    "https://twitter.com/labbhq",
+                    "https://github.com/labbhq/labb"
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "name": "labb",
+                "url": "https://labb.io/",
+                "publisher": { "@type": "Organization", "name": "labb" }
+            }
+        ]
+    }
+    </script>
+
     {# SEO meta tags - conditionally render based on doc_info #}
     {% if doc_info %}
         <c-lbdocs.seo.head :doc_info=doc_info :title=title />
     {% else %}
         <title>{{ title|default:"labb" }}</title>
+        {# includeMeta defaults True (c-vars); set includeMeta=False when the page supplies meta in the head slot (e.g. homepage) #}
+        {% if includeMeta %}
         <meta name="description" content="UI for Django perfectionists with deadlines.">
+        {% endif %}
     {% endif %}
+
+    {{ head }}
 
     <c-lb.m.dependencies
         setThemeEndpoint="{% url 'set_theme' %}"
