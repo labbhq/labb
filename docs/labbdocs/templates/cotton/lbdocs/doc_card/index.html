@@ -5,9 +5,14 @@
     variant=""
     icon=""
     class=""
+    external=""
 />
 
-<a href="{{ href }}" class="block no-underline hover:no-underline {{ class }} group">
+<a
+    href="{{ href }}"
+    class="block no-underline hover:no-underline {{ class }} group"
+    {% if external %}target="_blank" rel="noopener noreferrer"{% endif %}
+>
     <c-lb.card
         class="h-full transition-all duration-300 ease-out hover:shadow-2xl hover:shadow-primary/10 cursor-pointer border-2 border-base-300/50 hover:border-primary/70 bg-gradient-to-br from-base-100 to-base-200/30 hover:from-primary/5 hover:to-primary/10 backdrop-blur-sm overflow-hidden relative"
         variant="{{ variant }}"

@@ -12,14 +12,21 @@ tasks:
     generates:
       - poetry.lock
 
-  update:
-    desc: Update dependencies in labb and all sub-packages
+  deps:update:
+    desc: Update Python dependencies in labb and all sub-packages
     dir: .
     cmds:
       - poetry update --with dev
       - cd docs && poetry update
       - cd extras/icons && poetry update
       - cd extras/start && poetry update
+
+  update:
+    desc: Refresh Python dependencies, Alpine.js CDN bundle, and Chart.js CDN bundle
+    cmds:
+      - task deps:update
+      - task alpine:download
+      - task chart:download
 
   venv:
     desc: Show poetry virtual environment activation instructions

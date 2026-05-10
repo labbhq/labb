@@ -19,8 +19,9 @@ doc_hide_drawer: true
       <c-lbdocs.doc_card
         title="{{ post.title }}"
         summary="{{ post.description }}"
-        href="{{ post.url_path }}"
-        icon="rmx.article"
+        href="{% if post.is_external %}{{ post.external_url }}{% else %}{{ post.url_path }}{% endif %}"
+        {% if post.is_external %}external="1"{% endif %}
+        icon="{{ post.card_icon }}"
       />
     {% endfor %}
   </c-lbdocs.doc_card.grid>

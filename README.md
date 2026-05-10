@@ -8,6 +8,8 @@ If you want a **django component library** that feels like writing HTML — not 
 
 > Build Django frontends fast, without a SPA. Server-rendered HTML, themeable design tokens, and composable components — all from your existing Django templates.
 
+[![BugBytes overview of labb — watch on YouTube](docs/labbdocs/static/lbdocs/img/labb/bugbytes-overview-thumb.png)](https://www.youtube.com/watch?v=ZZd7cvbJ-1w)
+
 ## Table of contents
 
 - [Why labb](#why-labb-for-your-django-ui)
@@ -16,6 +18,7 @@ If you want a **django component library** that feels like writing HTML — not 
 - [Component catalog](#django-ui-components-included-in-labb)
 - [CLI](#labb-cli-for-django-developers)
 - [FAQ](#django-component-library-faq)
+- [Community](#community)
 - [Documentation](#documentation)
 
 ## Why labb for your Django UI?
@@ -203,6 +206,10 @@ Python 3.10 – 3.13 and Django 4.2+.
 
 ### Is labb production-ready?
 Yes. labb is MIT-licensed and used in production Django apps. See **[labb.io](https://labb.io/)** for live examples and case studies.
+
+## Community
+
+**BugBytes** — [overview of labb on YouTube](https://www.youtube.com/watch?v=ZZd7cvbJ-1w).
 
 ## Documentation
 
