@@ -1,6 +1,6 @@
 ---
-title: labb on BugBytes — video overview of the Django UI library
-description: "BugBytes covers labb — django-cotton, Tailwind CSS, and daisyUI for Django."
+title: labb featured on BugBytes
+description: "labb featured on BugBytes — django-cotton, Tailwind CSS, and daisyUI for Django."
 published_time: 2026-05-10
 modified_time: 2026-05-10
 author: zadiq
