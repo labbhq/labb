@@ -1,6 +1,6 @@
 [project]
 name = "labbui"
-version = "0.4.0"
+version = "0.4.1"
 description = "UI components library for Django perfectionists"
 authors = [
     {name = "zadiq", email = "dev@zadiq.com"}
