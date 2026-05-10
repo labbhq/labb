@@ -16,7 +16,7 @@ from rich.prompt import Confirm, Prompt
 console = Console()
 
 # Available options
-DJANGO_VERSIONS = {4: "4.2", 5: "5.1", 6: "6.0"}
+DJANGO_VERSIONS = {4: "4.2", 5: "5.0", 6: "6.0"}
 PACKAGE_MANAGERS = ["poetry", "pip", "uv"]
 AVAILABLE_KITS = ["welcome"]
 
@@ -86,8 +86,8 @@ def get_project_params(
             "Select Django version:",
             choices=[
                 questionary.Choice("Django 4.2 (LTS)", value="4"),
-                questionary.Choice("Django 5.1 (Recommended)", value="5"),
-                questionary.Choice("Django 6.0 (Latest)", value="6"),
+                questionary.Choice("Django 5.x (Recommended)", value="5"),
+                questionary.Choice("Django 6.x (Latest)", value="6"),
             ],
             default="5",
         ).ask()
