@@ -286,6 +286,9 @@ def get_blog_posts(context, doc_name="blog"):
     Get all blog posts sorted by published_time (most recent first).
     Excludes the index page and returns posts with their metadata.
 
+    Each post may include ``card_icon`` (from frontmatter, or inferred:
+    YouTube URL → rmx.youtube, other external → rmx.external-link, else rmx.article).
+
     Usage: {% get_blog_posts as posts %}
     """
     config = context.get("config", {})
@@ -307,6 +310,19 @@ def get_blog_posts(context, doc_name="blog"):
                 "published_time"
             )
 
+            external_url = (frontmatter.get("external_url") or "").strip()
+
+            card_icon = (frontmatter.get("card_icon") or "").strip()
+            if not card_icon:
+                if external_url:
+                    u = external_url.lower()
+                    if "youtube.com" in u or "youtu.be" in u:
+                        card_icon = "rmx.youtube"
+                    else:
+                        card_icon = "rmx.external-link"
+                else:
+                    card_icon = "rmx.article"
+
             posts.append(
                 {
                     "url_path": url_path,
@@ -317,6 +333,9 @@ def get_blog_posts(context, doc_name="blog"):
                     "modified_time": frontmatter.get("modified_time", ""),
                     "tags": frontmatter.get("tags", []),
                     "og_image": seo.get("og_image", ""),
+                    "external_url": external_url,
+                    "is_external": bool(external_url),
+                    "card_icon": card_icon,
                 }
             )
 
