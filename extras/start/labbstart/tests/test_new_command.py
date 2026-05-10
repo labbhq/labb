@@ -429,7 +429,7 @@ class TestSetupPoetryProject:
             project_path = Path(tmpdir)
             mock_run_command.return_value = True
 
-            result = setup_poetry_project(project_path, "5.1")
+            result = setup_poetry_project(project_path, "5.0")
 
             assert result is True
             # Verify README was created
@@ -444,7 +444,7 @@ class TestSetupPoetryProject:
             project_path = Path(tmpdir)
             mock_run_command.return_value = False
 
-            result = setup_poetry_project(project_path, "5.1")
+            result = setup_poetry_project(project_path, "5.0")
 
             assert result is False
 
@@ -463,7 +463,7 @@ class TestSetupPoetryProject:
 
             mock_run_command.side_effect = create_pyproject
 
-            setup_poetry_project(project_path, "5.1")
+            setup_poetry_project(project_path, "5.0")
 
             if pyproject_file.exists():
                 content = pyproject_file.read_text()
@@ -514,7 +514,7 @@ class TestSetupPipProject:
             (venv_bin / "pip").touch()
             (venv_bin / "python").touch()
 
-            result = setup_pip_project(project_path, "5.1")
+            result = setup_pip_project(project_path, "5.0")
 
             assert result is True
             assert (project_path / "requirements.txt").exists()
@@ -543,7 +543,7 @@ class TestSetupPipProject:
             (venv_scripts / "pip").touch()
             (venv_scripts / "python").touch()
 
-            result = setup_pip_project(project_path, "5.1")
+            result = setup_pip_project(project_path, "5.0")
 
             assert result is True
 
@@ -554,7 +554,7 @@ class TestSetupPipProject:
             project_path = Path(tmpdir)
             mock_run_command.return_value = False
 
-            result = setup_pip_project(project_path, "5.1")
+            result = setup_pip_project(project_path, "5.0")
 
             assert result is False
 
@@ -609,7 +609,7 @@ class TestSetupUvProject:
 
             mock_run_command.side_effect = create_pyproject
 
-            result = setup_uv_project(project_path, "5.1")
+            result = setup_uv_project(project_path, "5.0")
 
             assert result is True
 
@@ -620,7 +620,7 @@ class TestSetupUvProject:
             project_path = Path(tmpdir)
             mock_run_command.return_value = False
 
-            result = setup_uv_project(project_path, "5.1")
+            result = setup_uv_project(project_path, "5.0")
 
             assert result is False
 
@@ -640,7 +640,7 @@ class TestSetupUvProject:
 
             mock_run_command.side_effect = create_and_check
 
-            setup_uv_project(project_path, "5.1")
+            setup_uv_project(project_path, "5.0")
 
             if pyproject_file.exists():
                 content = pyproject_file.read_text()
@@ -716,7 +716,7 @@ class TestInstallLabbPackages:
             (venv_bin / "pip").touch()
 
             # Create requirements.txt
-            (project_path / "requirements.txt").write_text("django~=5.1\n")
+            (project_path / "requirements.txt").write_text("django~=5.0\n")
 
             result = install_labb_packages(project_path, "pip")
 
@@ -741,7 +741,7 @@ class TestInstallLabbPackages:
             venv_scripts.mkdir(parents=True)
             (venv_scripts / "pip").touch()
 
-            (project_path / "requirements.txt").write_text("django~=5.1\n")
+            (project_path / "requirements.txt").write_text("django~=5.0\n")
 
             result = install_labb_packages(project_path, "pip")
 
@@ -1103,7 +1103,7 @@ class TestConstants:
         assert 5 in DJANGO_VERSIONS
         assert 6 in DJANGO_VERSIONS
         assert DJANGO_VERSIONS[4] == "4.2"
-        assert DJANGO_VERSIONS[5] == "5.1"
+        assert DJANGO_VERSIONS[5] == "5.0"
         assert DJANGO_VERSIONS[6] == "6.0"
 
     def test_package_managers(self):

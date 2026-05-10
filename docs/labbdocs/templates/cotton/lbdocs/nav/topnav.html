@@ -15,95 +15,100 @@
 
 {% labb_theme_val as theme %}
 
-<c-lb.navbar class="fixed top-0 inset-x-0 z-50 bg-base-100 py-3">
-    <c-lb.navbar.start class="flex items-center gap-2 lg:w-full">
-        {% if showDrawerToggle %}
-            <c-lb.drawer.toggle for="docs-drawer" class="btn btn-ghost btn-sm btn-square lg:hidden">
-                <c-lbi.rmx.menu-4 w="1.75em" h="1.75em" />
-            </c-lb.drawer.toggle>
-        {% endif %}
-        <a class="text-2xl font-bold tracking-widest flex items-center" href="{% url 'index' %}">
-            <c-lbdocs.ui.logo height="26" />
-        </a>
+<div class="fixed top-0 inset-x-0 z-50 bg-base-100 py-1">
+    <div class="flex justify-center">
+        <c-labbio.section.press_callout/>
+    </div>
 
-        {% comment %} Desktop menu {% endcomment %}
-        <c-lb.menu direction="horizontal" class="items-center gap-2 lg:flex hidden">
-            <c-lb.menu.item title="guide" href="{% url 'guide_docs' %}" />
-            <c-lb.menu.item title="ui" href="{% url 'ui_docs' %}" />
-            <c-lb.menu.item title="charts" href="{% doc_url '8_charts/0_charts.md' 'ui' %}" />
-            <c-lb.menu.item title="icons" href="{% url 'icons_docs' %}" />
-            <c-lb.menu.item title="blog" href="{% url 'blog_docs' %}" />
-            {% comment %}
-            <li>
-                <c-lb.dropdown alignment="start" size="sm">
-                    <c-lb.dropdown.trigger class="flex items-center gap-1" style="cursor: pointer; text-decoration: none; color: inherit;">
-                        community
-                    </c-lb.dropdown.trigger>
-                    <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
-                        <c-lb.menu direction="vertical" class="w-full -pl-2">
-                            <c-lb.menu.item class="pr-2" href="{% url 'blog_docs' %}" title="blog" />
-                            <c-lb.menu.item class="pr-2" href="https://github.com/labbhq/labb" target="_blank" title="github" />
-                        </c-lb.menu>
-                    </c-lb.dropdown.content>
-                </c-lb.dropdown>
-            </li>
-            {% endcomment %}
-        </c-lb.menu>
+    <c-lb.navbar>
+        <c-lb.navbar.start class="flex items-center gap-2 lg:w-full">
+            {% if showDrawerToggle %}
+                <c-lb.drawer.toggle for="docs-drawer" class="btn btn-ghost btn-sm btn-square lg:hidden">
+                    <c-lbi.rmx.menu-4 w="1.75em" h="1.75em" />
+                </c-lb.drawer.toggle>
+            {% endif %}
+            <a class="text-2xl font-bold tracking-widest flex items-center" href="{% url 'index' %}">
+                <c-lbdocs.ui.logo height="26" />
+            </a>
 
-    </c-lb.navbar.start>
+            {% comment %} Desktop menu {% endcomment %}
+            <c-lb.menu direction="horizontal" class="items-center gap-2 lg:flex hidden">
+                <c-lb.menu.item title="guide" href="{% url 'guide_docs' %}" />
+                <c-lb.menu.item title="ui" href="{% url 'ui_docs' %}" />
+                <c-lb.menu.item title="charts" href="{% doc_url '8_charts/0_charts.md' 'ui' %}" />
+                <c-lb.menu.item title="icons" href="{% url 'icons_docs' %}" />
+                <c-lb.menu.item title="blog" href="{% url 'blog_docs' %}" />
+                {% comment %}
+                <li>
+                    <c-lb.dropdown alignment="start" size="sm">
+                        <c-lb.dropdown.trigger class="flex items-center gap-1" style="cursor: pointer; text-decoration: none; color: inherit;">
+                            community
+                        </c-lb.dropdown.trigger>
+                        <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
+                            <c-lb.menu direction="vertical" class="w-full -pl-2">
+                                <c-lb.menu.item class="pr-2" href="{% url 'blog_docs' %}" title="blog" />
+                                <c-lb.menu.item class="pr-2" href="https://github.com/labbhq/labb" target="_blank" title="github" />
+                            </c-lb.menu>
+                        </c-lb.dropdown.content>
+                    </c-lb.dropdown>
+                </li>
+                {% endcomment %}
+            </c-lb.menu>
 
-    <c-lb.navbar.center>
-        {% comment %} Mobile menu {% endcomment %}
-        <c-lb.dropdown alignment="center" size="sm" class="lg:hidden">
-            <c-lb.dropdown.trigger class="btn btn-ghost text-base-content/50">
-                <span class="tracking-widest lg:hidden lowercase">{{topnavTitle|default:"Explore"}}</span>
-                <c-lbi.rmx.arrow-down-s w="1em" h="1em" />
-            </c-lb.dropdown.trigger>
-            <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
-                <c-lb.menu class="w-full">
-                    <c-lb.menu.item title="guide" href="{% url 'guide_docs' %}" />
-                    <c-lb.menu.item title="ui" href="{% url 'ui_docs' %}" />
-                    <c-lb.menu.item title="charts" href="{% doc_url '8_charts/0_charts.md' 'ui' %}" />
-                    <c-lb.menu.item title="icons" href="{% url 'icons_docs' %}" />
-                    <c-lb.menu.item title="blog" href="{% url 'blog_docs' %}" />
-                    {% comment %} <c-lb.menu.item type="submenu-details" title="community" open>
-                        <c-lb.menu.item href="{% url 'blog_docs' %}" title="blog" />
-                        <c-lb.menu.item href="https://github.com/labbhq/labb" target="_blank" title="github" />
-                    </c-lb.menu.item> {% endcomment %}
-                </c-lb.menu>
-            </c-lb.dropdown.content>
-        </c-lb.dropdown>
-    </c-lb.navbar.center>
+        </c-lb.navbar.start>
 
-    <c-lb.navbar.end class="flex items-center gap-2">
-        <c-lb.button size="sm" btnStyle="ghost" icon="rmx.search" onclick="search_modal.showModal()">
-            Search
-         </c-lb.button>
-        <c-lb.dropdown alignment="end" size="sm">
-            <c-lb.dropdown.trigger class="btn btn-sm btn-ghost btn-circle">
-                <c-lbi.rmx.sun w="1.25em" h="1.25em" />
-            </c-lb.dropdown.trigger>
-            <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
-                <c-lb.menu class="w-full">
-                    {% for key, value in themeOptions.items %}
-                        <input
-                            type="radio"
-                            name="doc-theme"
-                            value="{{key}}"
-                            class="theme-controller btn btn-ghost btn-sm justify-start"
-                            aria-label="{{value}}"
-                            {% if key == theme %}checked{% endif %}
-                        />
-                    {% endfor %}
-                </c-lb.menu>
-            </c-lb.dropdown.content>
-        </c-lb.dropdown>
-        <c-lb.button as="a" href="https://github.com/labbhq/labb" target="_blank" size="sm" btnStyle="ghost" modifier="circle" class="hidden lg:flex">
-            <c-lbi n="rmx.github" w="1.25em" h="1.25em" />
-        </c-lb.button>
-    </c-lb.navbar.end>
-</c-lb.navbar>
+        <c-lb.navbar.center>
+            {% comment %} Mobile menu {% endcomment %}
+            <c-lb.dropdown alignment="center" size="sm" class="lg:hidden">
+                <c-lb.dropdown.trigger class="btn btn-ghost text-base-content/50">
+                    <span class="tracking-widest lg:hidden lowercase">{{topnavTitle|default:"Explore"}}</span>
+                    <c-lbi.rmx.arrow-down-s w="1em" h="1em" />
+                </c-lb.dropdown.trigger>
+                <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
+                    <c-lb.menu class="w-full">
+                        <c-lb.menu.item title="guide" href="{% url 'guide_docs' %}" />
+                        <c-lb.menu.item title="ui" href="{% url 'ui_docs' %}" />
+                        <c-lb.menu.item title="charts" href="{% doc_url '8_charts/0_charts.md' 'ui' %}" />
+                        <c-lb.menu.item title="icons" href="{% url 'icons_docs' %}" />
+                        <c-lb.menu.item title="blog" href="{% url 'blog_docs' %}" />
+                        {% comment %} <c-lb.menu.item type="submenu-details" title="community" open>
+                            <c-lb.menu.item href="{% url 'blog_docs' %}" title="blog" />
+                            <c-lb.menu.item href="https://github.com/labbhq/labb" target="_blank" title="github" />
+                        </c-lb.menu.item> {% endcomment %}
+                    </c-lb.menu>
+                </c-lb.dropdown.content>
+            </c-lb.dropdown>
+        </c-lb.navbar.center>
 
+        <c-lb.navbar.end class="flex items-center gap-2">
+            <c-lb.button size="sm" btnStyle="ghost" icon="rmx.search" onclick="search_modal.showModal()">
+                Search
+            </c-lb.button>
+            <c-lb.dropdown alignment="end" size="sm">
+                <c-lb.dropdown.trigger class="btn btn-sm btn-ghost btn-circle">
+                    <c-lbi.rmx.sun w="1.25em" h="1.25em" />
+                </c-lb.dropdown.trigger>
+                <c-lb.dropdown.content class="bg-base-100 rounded-box w-52 shadow-md border border-base-200">
+                    <c-lb.menu class="w-full">
+                        {% for key, value in themeOptions.items %}
+                            <input
+                                type="radio"
+                                name="doc-theme"
+                                value="{{key}}"
+                                class="theme-controller btn btn-ghost btn-sm justify-start"
+                                aria-label="{{value}}"
+                                {% if key == theme %}checked{% endif %}
+                            />
+                        {% endfor %}
+                    </c-lb.menu>
+                </c-lb.dropdown.content>
+            </c-lb.dropdown>
+            <c-lb.button as="a" href="https://github.com/labbhq/labb" target="_blank" size="sm" btnStyle="ghost" modifier="circle" class="hidden lg:flex">
+                <c-lbi n="rmx.github" w="1.25em" h="1.25em" />
+            </c-lb.button>
+        </c-lb.navbar.end>
+    </c-lb.navbar>
+</div>
 <c-lb.modal id="search_modal" withBackdrop boxClass="border border-base-200 shadow">
     <h3 class="text-lg font-bold">Search</h3>
     <p class="py-4">Search features are coming soon!</p>
