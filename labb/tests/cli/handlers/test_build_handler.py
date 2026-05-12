@@ -692,3 +692,32 @@ def test_run_build_process_watch_mode_keyboard_interrupt(
     print_calls = mock_console.print.call_args_list
     stop_calls = [call for call in print_calls if "stopped" in str(call).lower()]
     assert len(stop_calls) > 0
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.run")
+@patch("labb.cli.handlers.build_handler.console")
+@patch("labb.cli.handlers.build_handler.sys.platform", "win32")
+def test_check_dependencies_windows_uses_shell(mock_console, mock_run):
+    """On Windows, npx version check must use shell=True so npx.cmd resolves."""
+    mock_run.return_value = Mock(returncode=0)
+    with patch("pathlib.Path.exists", return_value=True):
+        _check_dependencies()
+    _, kwargs = mock_run.call_args
+    assert kwargs.get("shell") is True
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+@patch("labb.cli.handlers.build_handler.sys.platform", "win32")
+def test_run_build_watcher_windows_uses_shell(mock_console, mock_popen):
+    """On Windows, Popen must use shell=True so npx.cmd resolves."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = True
+    mock_process = Mock()
+    mock_process.poll.return_value = 0
+    mock_popen.return_value = mock_process
+
+    _run_build_watcher("input.css", "output.css", False, mock_stop_event)
+
+    _, kwargs = mock_popen.call_args
+    assert kwargs.get("shell") is True

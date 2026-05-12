@@ -155,6 +155,7 @@ def run_command(
             capture_output=True,
             text=True,
             check=False,
+            shell=sys.platform == "win32",
         )
         if result.returncode != 0:
             console.print(f"[red]Error: {result.stderr}[/red]")
@@ -228,7 +229,7 @@ def setup_pip_project(project_path: Path, django_version: str) -> bool:
 
     # Determine pip path
     if sys.platform == "win32":
-        pip_path = venv_path / "Scripts" / "pip"
+        pip_path = venv_path / "Scripts" / "pip.exe"
     else:
         pip_path = venv_path / "bin" / "pip"
 
@@ -293,7 +294,7 @@ def install_labb_packages(project_path: Path, package_manager: str) -> bool:
             project_path
             / "venv"
             / ("Scripts" if sys.platform == "win32" else "bin")
-            / "pip"
+            / ("pip.exe" if sys.platform == "win32" else "pip")
         )
         success = run_command(
             [str(venv_pip), "install", "labbui", "labbicons"], cwd=project_path
@@ -832,7 +833,7 @@ def create_new_project(
                     project_path
                     / "venv"
                     / ("Scripts" if sys.platform == "win32" else "bin")
-                    / "labb"
+                    / ("labb.exe" if sys.platform == "win32" else "labb")
                 )
                 labb_cmd = [str(labb_bin), "init", "--defaults"]
             elif pkg_mgr == "uv":
@@ -856,7 +857,7 @@ def create_new_project(
                     project_path
                     / "venv"
                     / ("Scripts" if sys.platform == "win32" else "bin")
-                    / "labb"
+                    / ("labb.exe" if sys.platform == "win32" else "labb")
                 )
                 labb_setup_cmd = [str(labb_bin), "setup", "--install-deps"]
             elif pkg_mgr == "uv":
@@ -875,7 +876,7 @@ def create_new_project(
                     project_path
                     / "venv"
                     / ("Scripts" if sys.platform == "win32" else "bin")
-                    / "labb"
+                    / ("labb.exe" if sys.platform == "win32" else "labb")
                 )
                 labb_build_cmd = [str(labb_bin), "build"]
             elif pkg_mgr == "uv":

@@ -25,6 +25,7 @@ def _check_dependencies():
             check=True,
             capture_output=True,
             text=True,
+            shell=sys.platform == "win32",
         )
     except (subprocess.CalledProcessError, FileNotFoundError):
         console.print(
@@ -183,7 +184,11 @@ def _run_build_watcher(
     try:
         console.print("[cyan]🎨 CSS watcher started[/cyan]")
         process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            shell=sys.platform == "win32",
         )
 
         while not stop_event.is_set() and process.poll() is None:
@@ -258,13 +263,19 @@ def _run_build_process(
         if watch:
             # For watch mode, run in foreground and handle Ctrl+C
             try:
-                subprocess.run(cmd, check=True)
+                subprocess.run(cmd, check=True, shell=sys.platform == "win32")
             except KeyboardInterrupt:
                 console.print("\n[yellow]⏹️  Build watch stopped[/yellow]")
                 sys.exit(0)
         else:
             # For one-time build, capture output
-            result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+            result = subprocess.run(
+                cmd,
+                check=True,
+                capture_output=True,
+                text=True,
+                shell=sys.platform == "win32",
+            )
 
             if result.returncode == 0:
                 console.print("[green]✅ CSS built successfully![/green]")

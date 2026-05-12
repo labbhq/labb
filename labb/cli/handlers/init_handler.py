@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from pathlib import Path
 
 import typer
@@ -156,6 +157,7 @@ def _init_package_json(current_dir: Path):
                     check=True,
                     capture_output=True,
                     text=True,
+                    shell=sys.platform == "win32",
                 )
                 console.print("[green]✅ Initialized package.json[/green]")
             except subprocess.CalledProcessError as e:

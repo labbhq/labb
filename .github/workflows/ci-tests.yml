@@ -14,3 +14,29 @@ jobs:
     with:
       python-version: ${{ matrix.python-version }}
       upload-coverage: ${{ matrix.python-version == '3.12' }}
+
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install UV
+        run: irm https://astral.sh/uv/install.ps1 | iex
+        shell: pwsh
+
+      - name: Install dependencies
+        run: poetry install --with dev
+
+      - name: Run tests
+        run: poetry run pytest
