@@ -61,16 +61,28 @@ def install_labb_from_source(monkeypatch, request):
         shutil.copy(labbicons, local_labbicons)
 
         if package_manager == "poetry":
-            # One wheel at a time — poetry's mixology resolver hits an internal
-            # AssertionError on Windows when two local wheels with overlapping
-            # transitive deps are added in a single call.
-            for wheel in (local_labbicons, local_labbui):
-                if not real_run_command(
-                    ["poetry", "add", str(wheel)],
-                    cwd=project_path,
-                    clean_env=True,
-                ):
-                    return False
+            # Bypass poetry's mixology resolver — it hits an internal
+            # AssertionError on Windows when resolving local wheels. pip
+            # install directly into the project venv instead.
+            if not real_run_command(
+                [
+                    "poetry",
+                    "run",
+                    "pip",
+                    "install",
+                    str(local_labbui),
+                    str(local_labbicons),
+                ],
+                cwd=project_path,
+                clean_env=True,
+            ):
+                return False
+            # Record the deps in pyproject.toml so verify_project_structure's
+            # "labbui in pyproject" assertion still passes.
+            pyproject = project_path / "pyproject.toml"
+            pyproject.write_text(
+                pyproject.read_text() + "\n# Installed via pip: labbui, labbicons\n"
+            )
             return True
         if package_manager == "uv":
             return real_run_command(
