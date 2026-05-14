@@ -7,6 +7,10 @@ import pytest
 
 from labbstart.cli.handlers.new_handler import create_new_project
 
+# Run serially on one xdist worker — Windows Poetry's shared artifact cache
+# races under parallel installs of the same wheel.
+pytestmark = pytest.mark.xdist_group("labbstart_integration")
+
 
 def verify_project_structure(project_path: Path, project_name: str, app_name: str):
     """Verify that the created project has the expected structure"""
