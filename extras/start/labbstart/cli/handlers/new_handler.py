@@ -158,7 +158,12 @@ def run_command(
             shell=sys.platform == "win32",
         )
         if result.returncode != 0:
-            console.print(f"[red]Error: {result.stderr}[/red]")
+            # Include stdout — labb prints its errors via Rich, which writes to stdout.
+            details = (result.stderr or "").strip()
+            stdout = (result.stdout or "").strip()
+            if stdout:
+                details = f"{details}\n{stdout}" if details else stdout
+            console.print(f"[red]Error: {details}[/red]")
             return False
         return True
     except Exception as e:
@@ -174,24 +179,29 @@ def setup_poetry_project(project_path: Path, django_version: str) -> bool:
     readme_file = project_path / "README.md"
     readme_file.write_text("# Project\n\nSetting up...\n")
 
-    # Initialize poetry project with Python version constraint
+    # Pin the Python constraint via pyproject.toml — passing "^3.10,<4" as an
+    # argv arg breaks under shell=True on Windows because cmd.exe reads `<` as
+    # input redirection.
     if not run_command(
-        ["poetry", "init", "--no-interaction", "--python", "^3.10,<4"],
+        ["poetry", "init", "--no-interaction"],
         cwd=project_path,
         clean_env=True,
     ):
         return False
 
-    # Set package-mode = false (this is a Django project, not a package)
     pyproject_file = project_path / "pyproject.toml"
     if pyproject_file.exists():
         content = pyproject_file.read_text()
-        # Add package-mode = false after [tool.poetry]
         if "[tool.poetry]" in content and "package-mode" not in content:
             content = content.replace(
                 "[tool.poetry]", "[tool.poetry]\npackage-mode = false"
             )
-            pyproject_file.write_text(content)
+        content = re.sub(
+            r'(python\s*=\s*)"[^"]*"',
+            r'\1"^3.10,<4"',
+            content,
+        )
+        pyproject_file.write_text(content)
 
     # Configure poetry to create virtualenv in the project directory
     # This ensures a clean, isolated environment for the new project
@@ -839,7 +849,8 @@ def create_new_project(
             elif pkg_mgr == "uv":
                 labb_cmd = ["uv", "run", "labb", "init", "--defaults"]
 
-            if not run_command(labb_cmd, cwd=project_path):
+            # clean_env drops the outer VIRTUAL_ENV so the project venv is used.
+            if not run_command(labb_cmd, cwd=project_path, clean_env=True):
                 raise Exception("labb init failed")
             progress.remove_task(task)
 
@@ -863,7 +874,7 @@ def create_new_project(
             elif pkg_mgr == "uv":
                 labb_setup_cmd = ["uv", "run", "labb", "setup", "--install-deps"]
 
-            if not run_command(labb_setup_cmd, cwd=project_path):
+            if not run_command(labb_setup_cmd, cwd=project_path, clean_env=True):
                 raise Exception("labb setup failed")
             progress.remove_task(task)
 
@@ -882,7 +893,7 @@ def create_new_project(
             elif pkg_mgr == "uv":
                 labb_build_cmd = ["uv", "run", "labb", "build"]
 
-            if not run_command(labb_build_cmd, cwd=project_path):
+            if not run_command(labb_build_cmd, cwd=project_path, clean_env=True):
                 raise Exception("labb build failed")
             progress.remove_task(task)
 
@@ -890,14 +901,14 @@ def create_new_project(
             task = progress.add_task("Running makemigrations...", total=None)
             python_cmd = get_python_command(project_path, pkg_mgr)
             makemigrations_cmd = python_cmd + ["manage.py", "makemigrations"]
-            if not run_command(makemigrations_cmd, cwd=project_path):
+            if not run_command(makemigrations_cmd, cwd=project_path, clean_env=True):
                 raise Exception("Django makemigrations failed")
             progress.remove_task(task)
 
             # Run Django migrate
             task = progress.add_task("Running migrate...", total=None)
             migrate_cmd = python_cmd + ["manage.py", "migrate"]
-            if not run_command(migrate_cmd, cwd=project_path):
+            if not run_command(migrate_cmd, cwd=project_path, clean_env=True):
                 raise Exception("Django migrate failed")
             progress.remove_task(task)
 
