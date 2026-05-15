@@ -1,6 +1,5 @@
 """Integration tests for labbstart CLI - creates real projects"""
 
-import subprocess
 import tempfile
 from pathlib import Path
 
@@ -8,39 +7,9 @@ import pytest
 
 from labbstart.cli.handlers.new_handler import create_new_project
 
-
-# Helper functions to check tool availability
-def is_poetry_installed():
-    """Check if poetry is installed"""
-    try:
-        result = subprocess.run(
-            ["poetry", "--version"], capture_output=True, text=True, check=False
-        )
-        return result.returncode == 0
-    except FileNotFoundError:
-        return False
-
-
-def is_uv_installed():
-    """Check if uv is installed"""
-    try:
-        result = subprocess.run(
-            ["uv", "--version"], capture_output=True, text=True, check=False
-        )
-        return result.returncode == 0
-    except FileNotFoundError:
-        return False
-
-
-def is_node_installed():
-    """Check if node is installed"""
-    try:
-        result = subprocess.run(
-            ["node", "--version"], capture_output=True, text=True, check=False
-        )
-        return result.returncode == 0
-    except FileNotFoundError:
-        return False
+# Run serially on one xdist worker — Windows Poetry's shared artifact cache
+# races under parallel installs of the same wheel.
+pytestmark = pytest.mark.xdist_group("labbstart_integration")
 
 
 def verify_project_structure(project_path: Path, project_name: str, app_name: str):

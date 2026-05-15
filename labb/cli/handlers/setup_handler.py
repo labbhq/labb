@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -85,6 +86,7 @@ def _install_tailwind_cli(current_dir: Path):
                 check=True,
                 capture_output=True,
                 text=True,
+                shell=sys.platform == "win32",
             )
             console.print(
                 f"[green]✅ Installed tailwindcss@{TAILWIND_VERSION} & @tailwindcss/cli@{TAILWIND_VERSION}[/green]"
@@ -109,6 +111,7 @@ def _install_daisyui(current_dir: Path):
                 check=True,
                 capture_output=True,
                 text=True,
+                shell=sys.platform == "win32",
             )
             console.print(f"[green]✅ Installed daisyui@{DAISYUI_VERSION}[/green]")
         except subprocess.CalledProcessError as e:

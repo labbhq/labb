@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from unittest.mock import Mock, patch
 
 import pytest
@@ -165,6 +166,7 @@ def test_install_tailwind_cli_success(mock_console, mock_run, temp_dir):
         check=True,
         capture_output=True,
         text=True,
+        shell=sys.platform == "win32",
     )
     mock_console.print.assert_called_with(
         f"[green]✅ Installed tailwindcss@{TAILWIND_VERSION} & @tailwindcss/cli@{TAILWIND_VERSION}[/green]"
@@ -199,6 +201,7 @@ def test_install_daisyui_success(mock_console, mock_run, temp_dir):
         check=True,
         capture_output=True,
         text=True,
+        shell=sys.platform == "win32",
     )
     mock_console.print.assert_called_with(
         f"[green]✅ Installed daisyui@{DAISYUI_VERSION}[/green]"
@@ -217,3 +220,25 @@ def test_install_daisyui_error(mock_console, mock_run, temp_dir):
     mock_console.print.assert_called_with(
         "[red]❌ Error installing DaisyUI: Command 'npm' returned non-zero exit status 1.[/red]"
     )
+
+
+@patch("labb.cli.handlers.setup_handler.subprocess.run")
+@patch("labb.cli.handlers.setup_handler.console")
+@patch("labb.cli.handlers.setup_handler.sys.platform", "win32")
+def test_install_tailwind_cli_windows_uses_shell(mock_console, mock_run, temp_dir):
+    """On Windows, subprocess must use shell=True so npm.cmd batch files resolve."""
+    mock_run.return_value = Mock()
+    _install_tailwind_cli(temp_dir)
+    _, kwargs = mock_run.call_args
+    assert kwargs.get("shell") is True
+
+
+@patch("labb.cli.handlers.setup_handler.subprocess.run")
+@patch("labb.cli.handlers.setup_handler.console")
+@patch("labb.cli.handlers.setup_handler.sys.platform", "win32")
+def test_install_daisyui_windows_uses_shell(mock_console, mock_run, temp_dir):
+    """On Windows, subprocess must use shell=True so npm.cmd batch files resolve."""
+    mock_run.return_value = Mock()
+    _install_daisyui(temp_dir)
+    _, kwargs = mock_run.call_args
+    assert kwargs.get("shell") is True

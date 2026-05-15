@@ -14,3 +14,39 @@ jobs:
     with:
       python-version: ${{ matrix.python-version }}
       upload-coverage: ${{ matrix.python-version == '3.12' }}
+
+  test-windows:
+    runs-on: windows-latest
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install UV
+        run: irm https://astral.sh/uv/install.ps1 | iex
+        shell: pwsh
+
+      - name: Add UV to PATH
+        run: echo "$env:USERPROFILE\.local\bin" >> $env:GITHUB_PATH
+        shell: pwsh
+
+      - name: Install dependencies
+        run: poetry install --with dev
+
+      - name: Run tests
+        run: poetry run pytest

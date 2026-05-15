@@ -148,18 +148,9 @@ def test_save_config_default_path(mock_config):
 
 
 def test_save_config_error(temp_dir, mock_config):
-    config_path = temp_dir / "readonly"
-    config_path.mkdir()
-    config_file = config_path / "labb.yaml"
+    config_file = temp_dir / "labb.yaml"
 
-    # Make the parent directory read-only to trigger an exception
-    import os
-
-    os.chmod(config_path, 0o444)  # Read-only directory
-
-    try:
+    # chmod 0o444 on a directory doesn't block writes on Windows; mock instead.
+    with patch("builtins.open", side_effect=OSError("write failed")):
         with pytest.raises(Exception):
             save_config(mock_config, config_file)
-    finally:
-        # Restore permissions for cleanup
-        os.chmod(config_path, 0o755)
