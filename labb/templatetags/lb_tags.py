@@ -494,12 +494,14 @@ def lb_css_path():
     labb_config = load_config(raise_not_found=False)
 
     try:
-        output_path = Path(labb_config.output_file)
-        # Return the path relative to static root (remove leading directories if needed)
-        if str(output_path).startswith("static/"):
-            return str(output_path)[7:]  # Remove 'static/' prefix
-        else:
-            return str(output_path)
+        # Stay POSIX — this string is emitted into an HTML href, not a filesystem path.
+        output_path = labb_config.output_file.replace("\\", "/")
+        if not output_path:
+            return "."
+        output_path = output_path.rstrip("/") or "static"
+        if output_path.startswith("static/"):
+            return output_path[7:]
+        return output_path
     except Exception:
         return "css/output.css"
 

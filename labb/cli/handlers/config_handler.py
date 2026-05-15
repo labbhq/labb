@@ -54,7 +54,7 @@ def _load_config_with_metadata(config_path: Optional[str] = None):
         config_file_path = find_config_file()
 
     if config_file_path and config_file_path.exists():
-        metadata["config_path"] = str(config_file_path)
+        metadata["config_path"] = config_file_path.as_posix()
         metadata["config_exists"] = True
     else:
         metadata["warnings"].append("No configuration file found - using defaults")

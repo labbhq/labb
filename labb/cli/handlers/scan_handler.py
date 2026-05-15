@@ -354,7 +354,7 @@ def _discover_django_app_templates(
             # Apply the patterns to the app's directory
             for pattern in patterns_to_use:
                 # Convert relative patterns to absolute paths within the app
-                app_pattern = str(app_path / pattern)
+                app_pattern = (app_path / pattern).as_posix()
                 matched_files = glob.glob(app_pattern, recursive=True)
                 app_files.update(matched_files)
 
