@@ -75,6 +75,7 @@ include = [
     "labb/components/schema/*.yaml",
     "labb/cli/templates/*.css"
 ]
+exclude = ["labb/tests/**"]
 
 [tool.poetry.group.dev]
 optional = true
