@@ -39,11 +39,7 @@ def labb_wheels(tmp_path_factory):
 
 @pytest.fixture(autouse=True)
 def install_labb_from_source(monkeypatch, request):
-    """Make install_labb_packages use the locally-built wheels so integration
-    tests exercise this branch instead of the published PyPI release."""
-
-    # Only patch for tests that need it — skip the unit suite to keep their
-    # autouse fixture footprint zero.
+    """Install this branch's labbui/labbicons instead of the published release."""
     if "integration" not in request.keywords:
         return
 
@@ -51,8 +47,7 @@ def install_labb_from_source(monkeypatch, request):
     real_run_command = new_handler.run_command
 
     def install_from_wheels(project_path, package_manager):
-        # Copy wheels into the project so package managers reference a stable
-        # local path (poetry add stores the file path verbatim in pyproject.toml).
+        # Copy wheels in-tree so subsequent commands see a stable local path.
         dest_dir = project_path / "_labb_wheels"
         dest_dir.mkdir(exist_ok=True)
         local_labbui = dest_dir / labbui.name
@@ -61,9 +56,8 @@ def install_labb_from_source(monkeypatch, request):
         shutil.copy(labbicons, local_labbicons)
 
         if package_manager == "poetry":
-            # Bypass poetry's mixology resolver — it hits an internal
-            # AssertionError on Windows when resolving local wheels. pip
-            # install directly into the project venv instead.
+            # `poetry add <wheel>` hits an internal AssertionError in mixology
+            # on Windows; pip into the poetry venv instead.
             if not real_run_command(
                 [
                     "poetry",
@@ -77,8 +71,7 @@ def install_labb_from_source(monkeypatch, request):
                 clean_env=True,
             ):
                 return False
-            # Record the deps in pyproject.toml so verify_project_structure's
-            # "labbui in pyproject" assertion still passes.
+            # Keep the "labbui in pyproject" test assertion satisfied.
             pyproject = project_path / "pyproject.toml"
             pyproject.write_text(
                 pyproject.read_text() + "\n# Installed via pip: labbui, labbicons\n"
