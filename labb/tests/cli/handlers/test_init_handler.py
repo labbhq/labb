@@ -1,10 +1,14 @@
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import pytest
 import typer
 
 from labb.cli.handlers.commons import is_django_project as _is_django_project
-from labb.cli.handlers.init_handler import _prompt_for_config, init_project
+from labb.cli.handlers.init_handler import (
+    _init_package_json,
+    _prompt_for_config,
+    init_project,
+)
 
 
 @patch("labb.cli.handlers.init_handler._create_project_structure")
@@ -195,3 +199,14 @@ def test_init_project_existing_yml_config(mock_console, temp_dir):
 
     # Test that the function exits when user chooses not to overwrite
     mock_confirm_init.ask.assert_called_once()
+
+
+@patch("labb.cli.handlers.init_handler.subprocess.run")
+@patch("labb.cli.handlers.init_handler.console")
+@patch("labb.cli.handlers.init_handler.sys.platform", "win32")
+def test_init_package_json_windows_uses_shell(mock_console, mock_run, temp_dir):
+    """On Windows, subprocess must use shell=True so npm.cmd batch files resolve."""
+    mock_run.return_value = Mock()
+    _init_package_json(temp_dir)
+    _, kwargs = mock_run.call_args
+    assert kwargs.get("shell") is True
