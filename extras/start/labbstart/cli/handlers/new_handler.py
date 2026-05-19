@@ -20,6 +20,9 @@ DJANGO_VERSIONS = {4: "4.2", 5: "5.0", 6: "6.0"}
 PACKAGE_MANAGERS = ["poetry", "pip", "uv"]
 AVAILABLE_KITS = ["welcome"]
 
+# Minimum Python version required by each Django version
+DJANGO_MIN_PYTHON = {"4.2": "3.10", "5.0": "3.10", "6.0": "3.12"}
+
 # Placeholder substituted with app name when copying a kit (e.g. __LABBSTART_APP_NAME__ -> "starter")
 LABBSTART_APP_NAME_PLACEHOLDER = "__LABBSTART_APP_NAME__"
 
@@ -249,9 +252,9 @@ def setup_pip_project(project_path: Path, django_version: str) -> bool:
     ):
         return False
 
-    # Create requirements.txt with Python version comment
+    min_python = DJANGO_MIN_PYTHON.get(django_version, "3.10")
     requirements = project_path / "requirements.txt"
-    requirements.write_text(f"# Python >=3.10,<4\ndjango~={django_version}\n")
+    requirements.write_text(f"# Python >={min_python}\ndjango~={django_version}\n")
 
     return True
 
@@ -260,27 +263,28 @@ def setup_uv_project(project_path: Path, django_version: str) -> bool:
     """Initialize project with uv"""
     console.print("[cyan]Setting up uv project...[/cyan]")
 
-    # Initialize uv project with Python version constraint
+    min_python = DJANGO_MIN_PYTHON.get(django_version, "3.10")
+
+    # Initialize uv project pinned to the minimum Python for this Django version
     if not run_command(
-        ["uv", "init", "--no-readme", "--python", "3.10"], cwd=project_path
+        ["uv", "init", "--no-readme", "--python", min_python], cwd=project_path
     ):
         return False
 
-    # Update pyproject.toml to set requires-python
+    # Update pyproject.toml requires-python to match the Django constraint
     pyproject_file = project_path / "pyproject.toml"
     if pyproject_file.exists():
         content = pyproject_file.read_text()
-        # Update or add requires-python
+        requires = f">={min_python}"
         if "requires-python" in content:
             content = re.sub(
                 r'requires-python\s*=\s*"[^"]*"',
-                'requires-python = ">=3.10,<4"',
+                f'requires-python = "{requires}"',
                 content,
             )
         else:
-            # Add it after [project] section
             content = re.sub(
-                r"(\[project\][^\[]*)", r'\1requires-python = ">=3.10,<4"\n', content
+                r"(\[project\][^\[]*)", rf'\1requires-python = "{requires}"\n', content
             )
         pyproject_file.write_text(content)
 

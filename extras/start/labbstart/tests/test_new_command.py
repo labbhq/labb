@@ -9,6 +9,7 @@ import pytest
 
 from labbstart.cli.handlers.new_handler import (
     AVAILABLE_KITS,
+    DJANGO_MIN_PYTHON,
     DJANGO_VERSIONS,
     PACKAGE_MANAGERS,
     append_kit_styles,
@@ -488,6 +489,17 @@ class TestSetupPoetryProject:
             assert add_call is not None
             assert "django~=4.2" in add_call[0][0]
 
+    @patch("labbstart.cli.handlers.new_handler.run_command")
+    @pytest.mark.parametrize("django_version", ["4.2", "5.0", "6.0"])
+    def test_setup_poetry_all_django_versions(self, mock_run_command, django_version):
+        """Test poetry setup across all supported Django versions"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            mock_run_command.return_value = True
+            setup_poetry_project(Path(tmpdir), django_version)
+            add_calls = [c for c in mock_run_command.call_args_list if "add" in c[0][0]]
+            assert add_calls, "poetry add was never called"
+            assert f"django~={django_version}" in add_calls[0][0][0]
+
 
 class TestSetupPipProject:
     """Test pip/venv project setup"""
@@ -588,6 +600,39 @@ class TestSetupPipProject:
             assert "django~=4.2" in content
             assert "Python" in content  # Python version comment
 
+    @patch("labbstart.cli.handlers.new_handler.subprocess.run")
+    @patch("labbstart.cli.handlers.new_handler.run_command")
+    @patch("labbstart.cli.handlers.new_handler.sys")
+    @pytest.mark.parametrize(
+        "django_version,expected_python",
+        [("4.2", "3.10"), ("5.0", "3.10"), ("6.0", "3.12")],
+    )
+    def test_setup_pip_requirements_all_versions(
+        self,
+        mock_sys,
+        mock_run_command,
+        mock_subprocess,
+        django_version,
+        expected_python,
+    ):
+        """Test that requirements.txt records the correct min-python for each Django version"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            project_path = Path(tmpdir)
+            mock_sys.platform = "linux"
+            mock_sys.executable = "/usr/bin/python3"
+            mock_run_command.return_value = True
+            mock_subprocess.return_value = MagicMock(
+                returncode=0, stdout="Python 3.10.0", stderr=""
+            )
+            venv_bin = project_path / "venv" / "bin"
+            venv_bin.mkdir(parents=True)
+            (venv_bin / "pip").touch()
+            (venv_bin / "python").touch()
+            setup_pip_project(project_path, django_version)
+            content = (project_path / "requirements.txt").read_text()
+            assert f"django~={django_version}" in content
+            assert expected_python in content
+
 
 class TestSetupUvProject:
     """Test uv project setup"""
@@ -674,6 +719,36 @@ class TestSetupUvProject:
 
             assert add_call is not None
             assert "django~=6.0" in add_call[0][0]
+
+    @patch("labbstart.cli.handlers.new_handler.run_command")
+    @pytest.mark.parametrize(
+        "django_version,expected_python",
+        [("4.2", "3.10"), ("5.0", "3.10"), ("6.0", "3.12")],
+    )
+    def test_setup_uv_python_version_full_matrix(
+        self, mock_run_command, django_version, expected_python
+    ):
+        """Test that uv init receives the correct --python flag for each Django version"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            project_path = Path(tmpdir)
+            pyproject_file = project_path / "pyproject.toml"
+
+            def mock_command(*args, **kwargs):
+                if "init" in args[0]:
+                    pyproject_file.write_text(
+                        f'[project]\nname = "test"\nrequires-python = ">={expected_python}"\n'
+                    )
+                return True
+
+            mock_run_command.side_effect = mock_command
+            setup_uv_project(project_path, django_version)
+
+            init_call = mock_run_command.call_args_list[0]
+            assert expected_python in init_call[0][0], (
+                f"uv init for Django {django_version} should use Python {expected_python}"
+            )
+            content = pyproject_file.read_text()
+            assert f">={expected_python}" in content
 
 
 # ============================================================================
@@ -1115,6 +1190,19 @@ class TestConstants:
     def test_available_kits(self):
         """Test AVAILABLE_KITS constant"""
         assert "welcome" in AVAILABLE_KITS
+
+    def test_django_min_python(self):
+        """Test that every DJANGO_VERSIONS entry has a DJANGO_MIN_PYTHON mapping"""
+        for version_str in DJANGO_VERSIONS.values():
+            assert version_str in DJANGO_MIN_PYTHON, (
+                f"Django {version_str} missing from DJANGO_MIN_PYTHON"
+            )
+
+    def test_django_min_python_values(self):
+        """Test DJANGO_MIN_PYTHON maps to the correct minimum Python versions"""
+        assert DJANGO_MIN_PYTHON["4.2"] == "3.10"
+        assert DJANGO_MIN_PYTHON["5.0"] == "3.10"
+        assert DJANGO_MIN_PYTHON["6.0"] == "3.12"
 
 
 if __name__ == "__main__":
