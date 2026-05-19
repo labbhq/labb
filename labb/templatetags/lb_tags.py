@@ -519,17 +519,19 @@ def lb_icon_exists(name):
         return True
     except TemplateDoesNotExist:
         if not apps.is_installed("labbicons"):
-            _icon_logger.warning(
-                'Icon "%s" requested but labbicons is not installed. '
-                'Install labbicons and add "labbicons" to '
-                "INSTALLED_APPS to use icons.",
-                name,
+            msg = (
+                f'Icon "{name}" requested but labbicons is not installed. '
+                'Add "labbicons" to INSTALLED_APPS to use icons.'
             )
         else:
-            _icon_logger.warning(
-                'Icon "%s" not found in labbicons. Check the icon name is correct.',
-                name,
+            msg = (
+                f'Icon "{name}" not found in labbicons. Check the icon name is correct.'
             )
+
+        if settings.DEBUG:
+            raise ValueError(msg) from None
+
+        _icon_logger.warning(msg)
         return False
 
 
