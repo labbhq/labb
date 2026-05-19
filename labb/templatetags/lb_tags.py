@@ -1,13 +1,18 @@
 import json
+import logging
 import re
 from functools import lru_cache
 from pathlib import Path
 from threading import local
 
 from django import template
+from django.apps import apps
+from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.signals import request_finished
 from django.dispatch import receiver
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
 from django.templatetags.static import static as django_static
 from django.urls import NoReverseMatch, reverse
 from django.utils.safestring import mark_safe
@@ -15,6 +20,8 @@ from django.utils.safestring import mark_safe
 from labb.config import load_config
 from labb.django_settings import get_default_theme, get_labb_setting
 from labb.shortcuts import get_labb_theme
+
+_icon_logger = logging.getLogger("labb.icons")
 
 register = template.Library()
 
@@ -483,6 +490,47 @@ def strip_icon_attrs(attrs):
     # Clean up whitespace
     s = re.sub(r"\s+", " ", s).strip()
     return mark_safe(s)
+
+
+@register.filter
+def lb_icon_exists(name):
+    """
+    Return True if the named labbicons icon template exists and labbicons is installed.
+
+    Returns False (with a warning logged) when:
+    - name is empty or falsy
+    - labbicons is not in INSTALLED_APPS
+    - the icon template does not exist
+
+    Usage: {% if i.name|lb_icon_exists %}
+    """
+    if not name:
+        return False
+
+    cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
+    # Match cotton's path resolution: dots → slashes, hyphens → underscores (when COTTON_SNAKE_CASED_NAMES is True)
+    icon_tpl_path = str(name).replace(".", "/")
+    if getattr(settings, "COTTON_SNAKE_CASED_NAMES", True):
+        icon_tpl_path = icon_tpl_path.replace("-", "_")
+    icon_path = f"{cotton_dir}/lbi/{icon_tpl_path}.html"
+
+    try:
+        get_template(icon_path)
+        return True
+    except TemplateDoesNotExist:
+        if not apps.is_installed("labbicons"):
+            _icon_logger.warning(
+                'Icon "%s" requested but labbicons is not installed. '
+                'Install labbicons and add "labbicons" to '
+                "INSTALLED_APPS to use icons.",
+                name,
+            )
+        else:
+            _icon_logger.warning(
+                'Icon "%s" not found in labbicons. Check the icon name is correct.',
+                name,
+            )
+        return False
 
 
 @register.simple_tag

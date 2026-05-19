@@ -1,5 +1,6 @@
+{% load lb_tags %}
 <c-vars n w h />
 
-{% if n %}
+{% if n|lb_icon_exists %}
     <c-component is="lbi.{{ n }}" w="{{ w }}" h="{{ h }}" {{ attrs }} />
 {% endif %}
