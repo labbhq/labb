@@ -151,7 +151,39 @@ Add `<c-lb.m.dependencies />` to your base template's `<head>` section:
 <span>Without `<c-lb.m.dependencies />`, components will not have the correct styling and interactive features may not work.</span>
 </c-lb.alert>
 
-### Step 5: Start Developing
+### Step 5: Icons (optional)
+
+To use icons in your components, install **labbicons**:
+
+```bash
+pip install labbicons
+# or together with labb
+pip install labbui[icons]
+```
+
+Add `labbicons` to `INSTALLED_APPS`:
+
+<c-lbdocs.codeblock.title title="settings.py">
+```python
+INSTALLED_APPS = [
+    # ... other apps
+    'django_cotton',
+    'labb',
+    'labbicons',
+]
+```
+</c-lbdocs.codeblock.title>
+
+Then use icons in any component that accepts an `icon` prop, or directly:
+
+```html
+<c-lb.button icon="rmx.heart">Like</c-lb.button>
+<c-lbi.rmx.heart w="24" h="24" />
+```
+
+See the <a href="{% doc_url '1_getting_started/1_introduction.md' 'icons' %}">Icons guide</a> for the full reference.
+
+### Step 6: Start Developing
 
 Start two terminals:
 
