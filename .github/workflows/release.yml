@@ -324,25 +324,10 @@ jobs:
             PRERELEASE_FLAG="--prerelease"
           fi
 
-          # Create the release with GitHub CLI
+          # Create the release with GitHub CLI (auto-generates notes from PRs/commits)
           gh release create "$TAG_NAME" \
             --title "Release $TAG_NAME" \
-            --notes "## Release $TAG_NAME
-
-          ### Installation
-          \`\`\`bash
-          # Core UI components
-          pip install labbui==$VERSION
-
-          # Optional packages
-          pip install labbicons==$VERSION  # Icon components
-          pip install labbdocs==$VERSION   # Documentation
-          pip install labbstart==$VERSION  # Project starter CLI
-          \`\`\`
-
-          ### Documentation
-          - [Documentation](https://labb.io/)
-          - [GitHub Repository](https://github.com/labbhq/labb)" \
+            --generate-notes \
             $PRERELEASE_FLAG
 
           echo "✅ GitHub release created"

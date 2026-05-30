@@ -1,0 +1,15 @@
+changelog:
+  exclude:
+    labels:
+      - release
+      - release-item
+  categories:
+    - title: "Features"
+      labels:
+        - feat
+    - title: "Bug Fixes"
+      labels:
+        - fix
+    - title: "Maintenance"
+      labels:
+        - chore
