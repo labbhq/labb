@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set
 
 from rich.align import Align
-from rich.console import Console
+from rich.console import Group
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
@@ -15,10 +15,8 @@ from rich.syntax import Syntax
 from rich.table import Table
 from rich.text import Text
 
-from labb.cli.handlers.commons import confirm_load_config
+from labb.cli.handlers.commons import confirm_load_config, console
 from labb.components import ComponentRegistry
-
-console = Console()
 
 
 def scan_templates(
@@ -731,23 +729,27 @@ def _create_scan_summary(
             usage_table.add_row(comp_name, str(len(instances)), f"{len(files_used)}")
 
     if for_live_display:
-        # Create layout for live display
-        layout = Layout()
-        layout.split_column(
-            Layout(name="header", size=1),
-            Layout(name="main"),
-            Layout(name="footer", size=1),
-        )
-
-        # Header with timestamp
         header_text = Text("🔍 Labb Template Scanner", style="bold blue")
         if last_update:
             header_text.append(f" • Last update: {last_update}", style="dim")
-        layout["header"].update(Align.center(header_text))
+        header = Align.center(header_text)
 
-        # Main content
+        if watch:
+            footer_text = Text(
+                "👀 Watching for changes... Press Ctrl+C to stop", style="dim"
+            )
+        else:
+            footer_text = Text("✅ Scan complete", style="green")
+        footer = Align.center(footer_text)
+
         if usage_table:
-            # Stack summary and table vertically
+            layout = Layout()
+            layout.split_column(
+                Layout(name="header", size=1),
+                Layout(name="main"),
+                Layout(name="footer", size=1),
+            )
+            layout["header"].update(header)
             layout["main"].split_column(
                 Layout(summary_panel, name="summary", size=10),
                 Layout(
@@ -756,19 +758,11 @@ def _create_scan_summary(
                     ratio=1,
                 ),
             )
-        else:
-            layout["main"].update(summary_panel)
+            layout["footer"].update(footer)
+            return layout
 
-        # Footer with status
-        if watch:
-            footer_text = Text(
-                "👀 Watching for changes... Press Ctrl+C to stop", style="dim"
-            )
-        else:
-            footer_text = Text("✅ Scan complete", style="green")
-        layout["footer"].update(Align.center(footer_text))
-
-        return layout
+        # Group sizes to content; Layout would expand to fill terminal.
+        return Group(header, summary_panel, footer)
     else:
         # Static display for console output
         console.print(summary_panel)
