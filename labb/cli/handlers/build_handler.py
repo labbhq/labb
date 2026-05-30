@@ -5,13 +5,10 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from labb.cli.handlers.commons import confirm_load_config
-
-console = Console()
+from labb.cli.handlers.commons import confirm_load_config, console
 
 
 def _check_dependencies():
@@ -124,18 +121,25 @@ def _run_concurrent_build_and_scan(
     console.print(f"[green]🚀 Watch mode ({mode})[/green]")
     console.print("[dim]Press Ctrl+C to stop[/dim]")
 
-    # Create stop event for coordinating threads
     stop_event = threading.Event()
+    scan_thread = None
 
-    # Start CSS build watcher in a thread
+    def on_build_error(error_lines: list, exit_code: int):
+        # Stop scanner first so the banner lands on a clean line.
+        stop_event.set()
+        if scan_thread and scan_thread.is_alive():
+            scan_thread.join(timeout=3.0)
+        console.print(
+            f"[bold red]❌ CSS watcher crashed (exit code {exit_code}). "
+            f"Fix the error above and restart.[/bold red]"
+        )
+
     build_thread = threading.Thread(
         target=_run_build_watcher,
-        args=(input_path, output_path, should_minify, stop_event),
+        args=(input_path, output_path, should_minify, stop_event, on_build_error),
         daemon=True,
     )
 
-    # Start template scanner in a thread (only if scan is True)
-    scan_thread = None
     if scan:
         scan_thread = threading.Thread(
             target=_run_scan_watcher,
@@ -154,7 +158,6 @@ def _run_concurrent_build_and_scan(
             time.sleep(0.5)  # Small delay to let build start first
             scan_thread.start()
 
-        # Keep main thread alive and handle Ctrl+C
         while build_thread.is_alive() or (scan_thread and scan_thread.is_alive()):
             time.sleep(0.1)
 
@@ -162,7 +165,6 @@ def _run_concurrent_build_and_scan(
         console.print("[yellow]⏹️  Stopping...[/yellow]")
         stop_event.set()
 
-        # Wait for threads to finish
         if build_thread.is_alive():
             build_thread.join(timeout=2)
         if scan_thread and scan_thread.is_alive():
@@ -173,13 +175,32 @@ def _run_concurrent_build_and_scan(
 
 
 def _run_build_watcher(
-    input_path: str, output_path: str, should_minify: bool, stop_event: threading.Event
+    input_path: str,
+    output_path: str,
+    should_minify: bool,
+    stop_event: threading.Event,
+    on_error=None,
 ):
-    """Run CSS build watcher in a thread"""
+    """Run CSS build watcher in a thread."""
     cmd = ["npx", "@tailwindcss/cli", "-i", input_path, "-o", output_path, "--watch"]
 
     if should_minify:
         cmd.append("--minify")
+
+    error_lines: list = []
+
+    def _drain_stream(stream, is_stderr: bool):
+        for line in iter(stream.readline, ""):
+            if stop_event.is_set():
+                break
+            line = line.rstrip("\n")
+            if not line:
+                continue
+            # Tailwind writes progress/timing to stderr too; only flag errors.
+            if is_stderr and "error" in line.lower():
+                error_lines.append(line)
+                console.print(f"[bold red]🚨[/bold red] [red]{line}[/red]")
+        stream.close()
 
     try:
         console.print("[cyan]🎨 CSS watcher started[/cyan]")
@@ -191,12 +212,32 @@ def _run_build_watcher(
             shell=sys.platform == "win32",
         )
 
+        stdout_thread = threading.Thread(
+            target=_drain_stream, args=(process.stdout, False), daemon=True
+        )
+        stderr_thread = threading.Thread(
+            target=_drain_stream, args=(process.stderr, True), daemon=True
+        )
+        stdout_thread.start()
+        stderr_thread.start()
+
         while not stop_event.is_set() and process.poll() is None:
             time.sleep(0.1)
 
         if process.poll() is None:
             process.terminate()
             process.wait()
+        elif process.returncode != 0 and not stop_event.is_set():
+            stdout_thread.join(timeout=2.0)
+            stderr_thread.join(timeout=2.0)
+            if on_error:
+                on_error(error_lines, process.returncode)
+            else:
+                console.print(
+                    f"[bold red]❌ CSS watcher crashed (exit code {process.returncode}). "
+                    f"Fix the error above and restart.[/bold red]"
+                )
+            stop_event.set()
 
     except Exception as e:
         if not stop_event.is_set():
