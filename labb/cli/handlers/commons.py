@@ -6,6 +6,9 @@ from rich.prompt import Confirm
 
 from labb.config import LabbConfig, LabbConfigNotFound, load_config
 
+# Shared so Rich Live can interleave watcher output above scanner display.
+console = Console()
+
 
 def is_django_project(path: Path) -> bool:
     return (path / "manage.py").exists()

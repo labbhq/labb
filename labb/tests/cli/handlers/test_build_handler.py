@@ -1,4 +1,6 @@
+import io
 import subprocess
+import threading
 from unittest.mock import Mock, patch
 
 import pytest
@@ -11,6 +13,35 @@ from labb.cli.handlers.build_handler import (
     _run_scan_watcher,
     build_css,
 )
+
+
+class _SyncThread:
+    """Runs thread target synchronously in start() for deterministic output tests."""
+
+    def __init__(self, target=None, args=(), daemon=False, **kwargs):
+        self._target = target
+        self._args = args
+
+    def start(self):
+        if self._target:
+            self._target(*self._args)
+
+    def join(self, timeout=None):
+        pass
+
+    def is_alive(self):
+        return False
+
+
+def _mock_process(poll_return=None, returncode=0, stdout="", stderr=""):
+    """Build a mock subprocess with StringIO streams so drain threads exit cleanly."""
+    p = Mock()
+    p.poll.return_value = poll_return
+    p.returncode = returncode
+    p.stdout = io.StringIO(stdout)
+    p.stderr = io.StringIO(stderr)
+    return p
+
 
 # Tests for dependency checking
 
@@ -299,9 +330,7 @@ def test_run_build_watcher(mock_console, mock_popen):
     mock_stop_event = Mock()
     mock_stop_event.is_set.side_effect = [False, True]  # Stop after one iteration
 
-    mock_process = Mock()
-    mock_process.poll.return_value = None  # Process still running
-    mock_popen.return_value = mock_process
+    mock_popen.return_value = _mock_process(poll_return=None)
 
     _run_build_watcher("input.css", "output.css", True, mock_stop_event)
 
@@ -507,9 +536,7 @@ def test_run_build_watcher_process_error(mock_console, mock_popen):
     mock_stop_event = Mock()
     mock_stop_event.is_set.return_value = False
 
-    mock_process = Mock()
-    mock_process.poll.return_value = 1  # Process exited with error
-    mock_popen.return_value = mock_process
+    mock_popen.return_value = _mock_process(poll_return=1, returncode=1)
 
     _run_build_watcher("input.css", "output.css", True, mock_stop_event)
 
@@ -539,8 +566,7 @@ def test_run_build_watcher_process_termination(mock_console, mock_popen):
     mock_stop_event = Mock()
     mock_stop_event.is_set.side_effect = [False, True]  # Stop after one iteration
 
-    mock_process = Mock()
-    mock_process.poll.return_value = None  # Process still running
+    mock_process = _mock_process(poll_return=None)
     mock_popen.return_value = mock_process
 
     _run_build_watcher("input.css", "output.css", True, mock_stop_event)
@@ -557,8 +583,7 @@ def test_run_build_watcher_process_already_terminated(mock_console, mock_popen):
     mock_stop_event = Mock()
     mock_stop_event.is_set.side_effect = [False, True]  # Stop after one iteration
 
-    mock_process = Mock()
-    mock_process.poll.return_value = 0  # Process already terminated normally
+    mock_process = _mock_process(poll_return=0, returncode=0)
     mock_popen.return_value = mock_process
 
     _run_build_watcher("input.css", "output.css", True, mock_stop_event)
@@ -713,11 +738,229 @@ def test_run_build_watcher_windows_uses_shell(mock_console, mock_popen):
     """On Windows, Popen must use shell=True so npx.cmd resolves."""
     mock_stop_event = Mock()
     mock_stop_event.is_set.return_value = True
-    mock_process = Mock()
-    mock_process.poll.return_value = 0
-    mock_popen.return_value = mock_process
+    mock_popen.return_value = _mock_process(poll_return=0, returncode=0)
 
     _run_build_watcher("input.css", "output.css", False, mock_stop_event)
 
     _, kwargs = mock_popen.call_args
     assert kwargs.get("shell") is True
+
+
+# _SyncThread runs drain threads synchronously so output assertions are deterministic.
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_normal_output_suppressed(mock_console, mock_popen):
+    """Tailwind progress output (version banner, timing) is suppressed during normal operation."""
+    stop_event = threading.Event()
+    mock_popen.return_value = _mock_process(
+        poll_return=0,
+        returncode=0,
+        stderr="≈ tailwindcss v4.2.1\nDone in 215ms\n",
+        stdout="Rebuilding...\n",
+    )
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, stop_event)
+
+    printed = str(mock_console.print.call_args_list)
+    assert "tailwindcss v4.2.1" not in printed
+    assert "Done in 215ms" not in printed
+    assert "Rebuilding..." not in printed
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_empty_lines_not_printed(mock_console, mock_popen):
+    """Blank lines from the subprocess are silently skipped."""
+    stop_event = threading.Event()
+    mock_popen.return_value = _mock_process(
+        poll_return=0,
+        returncode=0,
+        stdout="\n\n",
+        stderr="\n",
+    )
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, stop_event)
+
+    # Only the "CSS watcher started" startup line should appear.
+    calls = mock_console.print.call_args_list
+    assert len(calls) == 1
+    assert "CSS watcher started" in str(calls[0])
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_error_lines_shown_immediately_during_watch(
+    mock_console, mock_popen
+):
+    """Error lines on stderr are printed in real-time even when the process keeps running (watch mode)."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.side_effect = [
+        False,
+        True,
+    ]  # process still alive, stop after one loop
+    mock_process = _mock_process(
+        poll_return=None, returncode=0, stderr="Error: bad CSS\n"
+    )
+    mock_popen.return_value = mock_process
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, mock_stop_event)
+
+    printed = str(mock_console.print.call_args_list)
+    assert "🚨" in printed
+    assert "bad CSS" in printed
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_crash_uses_fallback_when_no_callback(
+    mock_console, mock_popen
+):
+    """With no on_error callback, error lines (shown in real-time) plus crash banner appear in console."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = False
+    mock_popen.return_value = _mock_process(
+        poll_return=1,
+        returncode=1,
+        stderr="Error: Can't resolve 'tailwindcss'\n",
+    )
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, mock_stop_event)
+
+    printed = str(mock_console.print.call_args_list)
+    assert "Can't resolve" in printed
+    assert "🚨" in printed
+    assert "crashed" in printed.lower()
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_on_error_callback_called(mock_console, mock_popen):
+    """When on_error is supplied it is called with the buffered lines and exit code."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = False
+    mock_popen.return_value = _mock_process(
+        poll_return=1,
+        returncode=1,
+        stderr="Error: bad import\n",
+    )
+    on_error = Mock()
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher(
+            "input.css", "output.css", False, mock_stop_event, on_error=on_error
+        )
+
+    on_error.assert_called_once()
+    error_lines, exit_code = on_error.call_args.args
+    assert any("bad import" in line for line in error_lines)
+    assert exit_code == 1
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_on_error_callback_suppresses_fallback(
+    mock_console, mock_popen
+):
+    """When on_error is provided, the fallback console output is NOT used."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = False
+    mock_popen.return_value = _mock_process(poll_return=1, returncode=1)
+    on_error = Mock()
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher(
+            "input.css", "output.css", False, mock_stop_event, on_error=on_error
+        )
+
+    printed = str(mock_console.print.call_args_list)
+    assert "crashed" not in printed.lower()
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_crash_sets_stop_event(mock_console, mock_popen):
+    """When Tailwind crashes (non-zero exit), stop_event is set to halt other threads."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = False
+    mock_popen.return_value = _mock_process(poll_return=1, returncode=1)
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, mock_stop_event)
+
+    mock_stop_event.set.assert_called_once()
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_crash_shows_exit_code(mock_console, mock_popen):
+    """The crash banner includes the exit code so the developer knows what happened."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = False
+    mock_popen.return_value = _mock_process(poll_return=2, returncode=2)
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, mock_stop_event)
+
+    printed = str(mock_console.print.call_args_list)
+    assert "2" in printed
+    assert "crashed" in printed.lower()
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_crash_suppressed_when_stop_event_already_set(
+    mock_console, mock_popen
+):
+    """If stop_event is already set (intentional shutdown), a non-zero exit is not shown as a crash."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = True
+    mock_popen.return_value = _mock_process(poll_return=1, returncode=1)
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, mock_stop_event)
+
+    mock_stop_event.set.assert_not_called()
+    printed = str(mock_console.print.call_args_list)
+    assert "crashed" not in printed.lower()
+
+
+@patch("labb.cli.handlers.build_handler.subprocess.Popen")
+@patch("labb.cli.handlers.build_handler.console")
+def test_run_build_watcher_clean_exit_does_not_set_stop_event(mock_console, mock_popen):
+    """A clean exit (code 0) does not trigger the crash path or set stop_event."""
+    mock_stop_event = Mock()
+    mock_stop_event.is_set.return_value = False
+    mock_popen.return_value = _mock_process(poll_return=0, returncode=0)
+
+    with patch(
+        "labb.cli.handlers.build_handler.threading.Thread", side_effect=_SyncThread
+    ):
+        _run_build_watcher("input.css", "output.css", False, mock_stop_event)
+
+    mock_stop_event.set.assert_not_called()
+    printed = str(mock_console.print.call_args_list)
+    assert "crashed" not in printed.lower()
