@@ -21,6 +21,10 @@ If you want a **django component library** that feels like writing HTML — not 
 - [Community](#community)
 - [Documentation](#documentation)
 
+🚨 Please note that as labb has not yet reached v1, there might be occasions of breaking releases. I will try my best to minimise such releases but if they do happen, it would be for very good reasons and benefits.
+
+Please subscribe to our [newsletter](https://newsletter.labb.io/) to get updates (max of 2 newsletters per month).
+
 ## Why labb for your Django UI?
 
 Django templates are powerful, but building a consistent UI means repeating markup on every page. **labb components** feel like native HTML tags (`<c-lb.button>`, `<c-lb.card>`, `<c-lb.modal>`) so you get a coherent design system without leaving Django.
