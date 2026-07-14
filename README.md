@@ -1,3 +1,5 @@
+🚨 Please read https://github.com/labbhq/labb/discussions/104 for updates on upcoming v0.5.0 release.
+
 ![labb welcome kit](docs/labbdocs/static/lbdocs/img/labb/labb_welcome_kit.jpg)
 
 # labb — Django UI Component Library
@@ -20,6 +22,12 @@ If you want a **django component library** that feels like writing HTML — not 
 - [FAQ](#django-component-library-faq)
 - [Community](#community)
 - [Documentation](#documentation)
+
+---
+
+🚨 Please note that as labb has not yet reached v1, there might be occasions of breaking releases. I will try my best to minimise such releases but if they do happen, it would be for very good reasons and benefits.
+
+Please subscribe to our [newsletter](https://newsletter.labb.io/) to get updates (max of 2 newsletters per month).
 
 ## Why labb for your Django UI?
 
