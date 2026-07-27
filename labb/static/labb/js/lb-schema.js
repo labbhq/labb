@@ -10,9 +10,6 @@ window.lb._schemas = {
     "base": [
       "collapse"
     ],
-    "checked": {
-      "true": "checked"
-    },
     "style": {
       "arrow": "collapse-arrow",
       "plus": "collapse-plus"
@@ -42,6 +39,26 @@ window.lb._schemas = {
     "direction": {
       "vertical": "alert-vertical",
       "horizontal": "alert-horizontal"
+    }
+  },
+  "aura": {
+    "base": [
+      "aura"
+    ],
+    "variant": {
+      "dual": "aura-dual",
+      "rainbow": "aura-rainbow",
+      "holo": "aura-holo",
+      "gold": "aura-gold",
+      "silver": "aura-silver",
+      "glow": "aura-glow"
+    },
+    "size": {
+      "xs": "aura-xs",
+      "sm": "aura-sm",
+      "md": "aura-md",
+      "lg": "aura-lg",
+      "xl": "aura-xl"
     }
   },
   "avatar": {
@@ -386,9 +403,7 @@ window.lb._schemas = {
   },
   "drawer": {
     "base": [
-      "drawer",
-      "drawer-toggle",
-      "drawer-content"
+      "drawer"
     ],
     "end": {
       "true": "drawer-end"
@@ -696,6 +711,7 @@ window.lb._schemas = {
       "menu"
     ],
     "direction": {
+      "vertical": "menu-vertical",
       "horizontal": "menu-horizontal"
     },
     "size": {
@@ -780,6 +796,31 @@ window.lb._schemas = {
       "top-left": "left-2 top-2",
       "bottom-right": "right-2 bottom-2",
       "bottom-left": "left-2 bottom-2"
+    }
+  },
+  "otp": {
+    "base": [
+      "otp"
+    ],
+    "size": {
+      "xs": "otp-xs",
+      "sm": "otp-sm",
+      "md": "otp-md",
+      "lg": "otp-lg",
+      "xl": "otp-xl"
+    },
+    "variant": {
+      "neutral": "otp-neutral",
+      "primary": "otp-primary",
+      "secondary": "otp-secondary",
+      "accent": "otp-accent",
+      "info": "otp-info",
+      "success": "otp-success",
+      "warning": "otp-warning",
+      "error": "otp-error"
+    },
+    "joined": {
+      "true": "otp-joined"
     }
   },
   "pagination.item": {
@@ -886,6 +927,9 @@ window.lb._schemas = {
       "md": "range-md",
       "lg": "range-lg",
       "xl": "range-xl"
+    },
+    "orientation": {
+      "vertical": "range-vertical"
     },
     "validate": {
       "true": "validator"
@@ -1087,12 +1131,6 @@ window.lb._schemas = {
     "effect": {
       "rotate": "swap-rotate",
       "flip": "swap-flip"
-    },
-    "checked": {
-      "true": "checked"
-    },
-    "disabled": {
-      "true": "disabled"
     }
   },
   "table": {
@@ -1287,12 +1325,6 @@ window.lb._schemas = {
       "lg": "toggle-lg",
       "xl": "toggle-xl"
     },
-    "checked": {
-      "true": "checked"
-    },
-    "disabled": {
-      "true": "disabled"
-    },
     "validate": {
       "true": "validator"
     }
@@ -1306,6 +1338,11 @@ window.lb._schemas = {
       "bottom": "tooltip-bottom",
       "left": "tooltip-left",
       "right": "tooltip-right"
+    },
+    "align": {
+      "start": "tooltip-start",
+      "center": "tooltip-center",
+      "end": "tooltip-end"
     },
     "variant": {
       "neutral": "tooltip-neutral",
