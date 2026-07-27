@@ -10,7 +10,7 @@ The `labb.yaml` configuration file controls most aspects of your labb project. T
 
 ## Default Configuration
 
-Here's the default structure of a `labb.yaml` file when you run `labb init`:
+The default structure of a `labb.yaml` file created by `labb init`:
 
 ```yaml
 css:
@@ -18,9 +18,10 @@ css:
     input: static_src/input.css
     output: static/css/output.css
     minify: true
+  packages:
+    labb: [themes, components]   # CSS groups pulled from installed packages
   scan:
-    output: static_src/labb-classes.txt
-    templates:
+    templates:                   # your own templates, scanned for <c-lb.*> usage
       - templates/**/*.html
       - '*/templates/**/*.html'
       - '**/templates/**/*.html'
@@ -50,38 +51,59 @@ labb build --input src/styles.css --output dist/app.css
 labb build --no-minify
 ```
 
+### CSS Packages Configuration
+
+`css.packages` declares which **installed packages** contribute CSS to your build. A package publishes named **groups**; you subscribe to the ones you need. Everything is import-resolved, so it works whether the package is a path dependency or installed from PyPI. You never hardcode another package's file paths.
+
+```yaml
+css:
+  packages:
+    labb: [themes, blocks]        # named groups from the labb package
+    labbdocs: [docs]
+    other: '*'                    # every group the package publishes
+    custom:                       # raw form (for a package that publishes no groups)
+      components: [templates/**/*.html]   # usage-scanned for <c-lb.*> variant classes
+      literals:   [templates/**/*.html]   # handed to Tailwind as @source (raw utilities)
+      imports:    [css/extra.css]         # package CSS inlined into the build
+```
+
+Each package entry is one of: a **list of group names**, `'*'` (or the `all` alias, or blank) for every group, or a **raw mapping** of `components` / `literals` / `imports`. Selected groups are merged (duplicate globs and imports collapse).
+
+The three contribution kinds:
+
+- **`components`**: templates scanned for `<c-lb.*>` usage; their variant classes go into the safelist (`.labb/labb-component-classes.txt`).
+- **`literals`**: templates handed to Tailwind as `@source`, so the raw utility classes written literally in the markup compile.
+- **`imports`**: CSS files shipped inside the package, inlined into the build (labb's themes arrive this way).
+
+All three land in a single generated `.labb/labb.css`, which your `input.css` pulls in with one line: `@import "../.labb/labb.css";`.
+
+#### Publishing groups (`labb-provides.yaml`)
+
+A package publishes its groups from a `labb-provides.yaml` at its root (see the [full reference]({% doc_url '4_references/5_labb_provides.md' 'guide' %}) and the [Developing packages]({% doc_url '2_concepts/3_developing_packages.md' 'guide' %}) guide):
+
+```yaml
+provides:
+  themes:     { imports: [css/themes.css] }
+  components: { components: [templates/cotton/lb/**/*.html], literals: [templates/cotton/lb/**/*.html] }
+  blocks:     { components: [templates/cotton/lbb/**/*.html], literals: [templates/cotton/lbb/**/*.html] }
+```
+
 ### CSS Scan Configuration
 
-Controls how templates are scanned for labb components when using the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-scan">`labb scan`</a> command:
+`css.scan.templates` lists **your own** template patterns, scanned for `<c-lb.*>` usage:
 
 ```yaml
 css:
   scan:
-    output: static_src/labb-classes.txt  # Classes extraction output file
-    templates:                           # Template file patterns to scan
+    templates:
       - templates/**/*.html
       - '*/templates/**/*.html'
       - '**/templates/**/*.html'
-    apps:                               # Django apps to scan with optional app-specific patterns
-      myapp:                            # Another app (uses default patterns)
-      myapp_with_patterns:              # App with custom patterns
-        - templates/components/**/*.html  # Only component templates
-        - templates/pages/**/*.html       # And page templates
-        - ../glob/pattern/path/**/*.html
 ```
 
-These settings can be overridden using command-line parameters:
-
-```bash
-# Override output file
-labb scan --output src/extracted-classes.txt
-
-# Override template patterns
-labb scan --patterns "templates/**/*.html,components/**/*.html"
-
-# Use watch mode (not in config)
-labb scan --watch
-```
+<c-lb.alert variant="warning" alertStyle="outline" class="my-4">
+  <span>`css.scan.apps` and `css.scan.output` are **deprecated** and replaced by `css.packages` (the safelist now lives in `.labb/`). Run <code>labb migrate</code> to convert an old config. See <a href="{% doc_url '5_about/4_migrating_to_0_5.md' 'guide' %}">Migrating to 0.5</a>.</span>
+</c-lb.alert>
 
 ## Environment Variables
 

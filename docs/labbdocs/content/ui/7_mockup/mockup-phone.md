@@ -5,9 +5,10 @@ title: Phone
 description: "Phone mockup component for Django: wrap content in a mobile phone frame for app demos. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django phone mockup, mobile mockup django, daisyui phone mockup django, tailwind phone mockup, phone mockup django-cotton, smartphone frame django, django-cotton"
 daisy_ui_component_name: mockup-phone
+icon: rmx.smartphone
 ---
 
-Mockup Phone wraps content in a stylised phone outline for showing mobile UI in context. Use it on landing pages or in documentation to demonstrate responsive components.
+Mockup Phone puts content inside a stylised phone outline. It suits mobile app screens and responsive previews on a landing page.
 
 ## Basic Phone Mockup
 <c-lbdocs.component_example path="mockup-phone/basic" previewStyle="block"/>

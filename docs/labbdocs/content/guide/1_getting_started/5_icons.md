@@ -1,12 +1,12 @@
 ---
-title: Installation
-description: "Install labbicons for Django: Remix icon components with django-cotton, Tailwind CSS, and labb UI. pip install labbicons."
-keywords: "labbicons install, django icons pip, remix icons django, labb icon components"
+title: Icons
+description: "Install labbicons for Django: Remix icon components with django-cotton, Tailwind CSS, and labb UI. pip install labbicons, then write <c-lbi.rmx.heart />."
+keywords: "labbicons install, django icons pip, remix icons django, labb icon components, c-lbi"
 ---
 
 {% load docs_tags %}
 
-**labbicons** gives you access to icon packs as simple Django components. Write `<c-lbi.rmx.heart />` instead of copying SVG code. Backend-rendered, accessible, and zero JavaScript required.
+**labbicons** gives you icon packs as Django components. Write `<c-lbi.rmx.heart />` instead of copying SVG code. Backend-rendered, accessible, and zero JavaScript required.
 
 ## Installation
 
@@ -32,7 +32,7 @@ INSTALLED_APPS = [
 
 ## Usage
 
-Icons can be referenced in three ways:
+Reference icons in three ways:
 
 ```html
 <!-- Direct component syntax -->
@@ -41,7 +41,7 @@ Icons can be referenced in three ways:
 <!-- Name attribute syntax -->
 <c-lbi n="rmx.heart" w="24" h="24" class="text-red-500" />
 
-<!-- Inside labb components (if supported) -->
+<!-- Inside labb components that accept an icon prop -->
 <c-lb.button variant="primary" icon="rmx.save">Save</c-lb.button>
 <c-lb.badge variant="info" icon="rmx.information">Info</c-lb.badge>
 ```
@@ -58,9 +58,9 @@ Most icons come in line (outlined) and fill (solid) variants:
 <c-lbi.rmx.camera w="24" h="24" fill />
 ```
 
-## Size and Styling
+## Size and styling
 
-Control size with `w` and `h` attributes. Style with CSS classes:
+Control size with `w` and `h`. Style with CSS classes:
 
 ```html
 <!-- Numeric values (pixels) -->
@@ -74,7 +74,9 @@ Control size with `w` and `h` attributes. Style with CSS classes:
 <c-lbi.rmx.heart w="24" h="24" class="text-red-500 hover:text-red-700 transition-colors" />
 ```
 
-## CLI Commands
+## Find an icon
+
+Browse and copy from the [icon browser]({% url 'icons_docs' %}), or search from the command line:
 
 ```bash
 # Search for icons
@@ -87,4 +89,4 @@ labb icons packs
 labb icons info rmx.arrow-down
 ```
 
-See the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-icons">labb icons command reference</a> for full documentation.
+Remix is the pack available today, with more on the way. See the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-icons">labb icons command reference</a> for full documentation.

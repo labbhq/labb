@@ -2,15 +2,13 @@
 doc_layout: component
 component: c-lb.chart.bar
 title: Bar Chart
-description: "Bar chart component for Django: render vertical bar charts with Chart.js, daisyUI theming, and automatic colour palettes. Server-rendered with django-cotton."
+description: "Compare values across categories in a Django template. Vertical bar charts drawn by Chart.js, coloured from the daisyUI palette, wired up with one django-cotton tag."
 keywords: "django bar chart, bar chart django, chart.js django, daisyui chart django, tailwind chart django, django data visualization, bar chart django-cotton, django analytics"
 daisy_ui_component_name: ""
+icon: rmx.bar-chart
 ---
 
-Bar chart for Django lets you render vertical bar charts using Chart.js with automatic
-daisyUI colour palette integration. Built on django-cotton, it is fully server-rendered:
-pass your data as JSON from any Django view and the chart is ready. Use it to visualise
-comparisons, analytics, and multi-dataset metrics in Django dashboards.
+Reach for a bar chart when you are comparing values across categories: revenue by month, signups by source, requests by endpoint. Pass labels and datasets as JSON and each series picks up a daisyUI palette colour unless you name one yourself. Datasets can also override the chart type individually, which is how the combo examples below plot a target line over the bars.
 
 ## Basic Bar Chart
 <c-lbdocs.component_example path="chart/bar" />

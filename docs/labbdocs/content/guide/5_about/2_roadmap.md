@@ -8,7 +8,7 @@ doc_show_toc: false
 ## Roadmap to v1.0.0
 
 
-This roadmap outlines the planned direction for labb. Priorities may shift based on community feedback. Have a feature request? Open a discussion on [GitHub](https://github.com/labbhq/labb/discussions).
+Priorities may shift based on community feedback. Have a feature request? Open a discussion on [GitHub](https://github.com/labbhq/labb/discussions).
 
 
 <div class="not-prose">

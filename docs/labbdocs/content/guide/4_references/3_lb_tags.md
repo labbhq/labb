@@ -8,7 +8,7 @@ keywords: "labb template tags, labb_theme django, django labb_tags"
 
 ## Overview
 
-labb provides convenient Django template tags through the `lb_tags` module to help integrate integrate with labb components and theming.
+labb ships Django template tags in the `lb_tags` module for working with labb components and theming.
 
 ## Loading Template Tags
 
@@ -67,7 +67,7 @@ With this configuration, you can use all available template tags directly in any
 ### `lb_css_path`
 
 <c-lbdocs.indented_block>
-Returns the CSS output path from your labb configuration, making it easy to include the generated CSS file in your templates.
+Returns the CSS output path from your labb configuration, for linking the generated CSS file in your templates.
 
 **Usage:**
 {% verbatim %}
@@ -198,22 +198,5 @@ Returns the raw theme value from the user's session or the default theme from Dj
 - Debugging theme values
 </c-lbdocs.indented_block>
 
-
-### `lb_alpine_script`
-
-<c-lbdocs.indented_block>
-Emits a deferred Alpine.js `<script>` tag resolved from `LABB_SETTINGS["ALPINE_JS_PATH"]`. Use this when you need Alpine on a page without using `<c-lb.m.dependencies alpine />`.
-
-**Usage:**
-{% verbatim %}
-```html
-{% load lb_tags %}
-{% lb_alpine_script %}
-```
-{% endverbatim %}
-
-**Returns:**
-- `<script defer src="..."></script>` pointing to the configured Alpine path
-</c-lbdocs.indented_block>
 
 See the [configuration documentation]({% doc_url '3_references/1_config_yaml.md' 'guide' %}) and [Django settings documentation]({% doc_url '3_references/2_django_settings.md' 'guide' %}) for more details about using some of these tags.

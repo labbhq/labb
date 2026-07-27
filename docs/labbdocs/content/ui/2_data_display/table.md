@@ -5,6 +5,7 @@ title: Table
 description: "Table component for Django: render data tables with sorting and styling. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django table component, data table django, daisyui table django, tailwind table django, table django-cotton, django ui table, html table django, django-cotton"
 daisy_ui_component_name: table
+icon: rmx.table
 ---
 
 

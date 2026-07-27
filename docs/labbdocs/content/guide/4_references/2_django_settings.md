@@ -12,12 +12,11 @@ All labb-specific settings live under a single `LABB_SETTINGS` dict in your Djan
 ```python
 LABB_SETTINGS = {
     'DEFAULT_THEME': 'labb-light',
-    'ALPINE_JS_PATH': 'https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js',
 }
 ```
 </c-lbdocs.codeblock.title>
 
-Only set what you need — all settings have built-in defaults and are fully optional.
+Only set what you need. Every setting is optional and has a built-in default.
 
 ## Settings Reference
 
@@ -40,28 +39,46 @@ LABB_SETTINGS = {
 
 </c-lbdocs.indented_block>
 
-### `ALPINE_JS_PATH`
+### `CHART_JS_PATH`
 
 <c-lbdocs.indented_block>
 
 | | |
 |---|---|
-| **Default** | `"labb/js/alpine/alpine.min.js"` |
+| **Default** | `"labb/js/vendor/chart.umd.min.js"` |
 | **Type** | `str` |
 
-Path to the Alpine.js file loaded when reactive (`.x`) components are used on a page. By default, labb serves Alpine from its own bundled static file.
-
-- **Static path** — resolved via Django's static files system, emitted as `<script defer src="...">`
-- **Full URL** (`http://` / `https://`) — emitted as-is, useful for CDN or custom builds
+Path to the Chart.js file used by the chart components. By default labb serves its own bundled copy. Set a full URL to load Chart.js from a CDN instead.
 
 ```python
 LABB_SETTINGS = {
-    # Use jsDelivr CDN instead of the bundled file
-    'ALPINE_JS_PATH': 'https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js',
+    'CHART_JS_PATH': 'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js',
 }
 ```
 
-See the [Reactivity guide]({% doc_url '2_concepts/1_reactivity.md' 'guide' %}) for more detail on how Alpine loading works.
+</c-lbdocs.indented_block>
+
+### `REACTIVITY`
+
+<c-lbdocs.indented_block>
+
+Options for how reactive state is stored in the URL when a `c-lbr.signals` uses `syncQuery`.
+
+| Key | Default | Description |
+|---|---|---|
+| `QUERY_KEY` | `"lbr"` | The query-string parameter that holds the synced signals. |
+| `QUERY_ENCODING` | `"flat"` | How the signals are written to the URL: `"flat"` (readable), `"json"`, or `"base64"` (compact). |
+
+```python
+LABB_SETTINGS = {
+    'REACTIVITY': {
+        'QUERY_KEY': 'lbr',
+        'QUERY_ENCODING': 'flat',
+    },
+}
+```
+
+See the [Reactivity guide]({% doc_url '3_reactivity/1_overview.md' 'guide' %}) for how reactivity works.
 
 </c-lbdocs.indented_block>
 
@@ -79,7 +96,7 @@ Retrieves a setting from `LABB_SETTINGS` with fallback to labb's built-in defaul
 from labb.django_settings import get_labb_setting
 
 theme = get_labb_setting('DEFAULT_THEME')
-alpine_path = get_labb_setting('ALPINE_JS_PATH')
+chart_path = get_labb_setting('CHART_JS_PATH')
 ```
 
 **Signature:** `get_labb_setting(key, default=None)`

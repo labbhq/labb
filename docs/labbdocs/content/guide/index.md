@@ -13,14 +13,14 @@ doc_show_toc: false
   <c-lbdocs.doc_card
     title="Introduction"
     summary="Learn about labb and how it simplifies Django UI development"
-    href="{% doc_url '1_getting_started/1_introduction.md' 'guide' %}"
+    href="{% doc_url '1_getting_started/2_introduction.md' 'guide' %}"
     icon="rmx.file-text"
   />
 
   <c-lbdocs.doc_card
     title="Installation"
     summary="Set up labb for new or existing Django projects"
-    href="{% doc_url '1_getting_started/2_installation.md' 'guide' %}"
+    href="{% doc_url '1_getting_started/1_installation.md' 'guide' %}"
     icon="rmx.download"
   />
 </c-lbdocs.doc_card.grid>

@@ -5,9 +5,10 @@ title: Pagination
 description: "Pagination component for Django: add page navigation to querysets and list views. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django pagination component, pagination django, daisyui pagination django, tailwind pagination django, pagination django-cotton, django ui pagination, page navigation django"
 daisy_ui_component_name: pagination
+icon: rmx.pages
 ---
 
-Pagination renders daisyUI-styled page controls. Pass current page, total pages, and a URL pattern — labb generates previous, next, and numbered page links automatically.
+Pagination renders daisyUI-styled page controls. Pass current page, total pages, and a URL pattern, and labb builds the previous, next, and numbered page links for you.
 
 ## Basic Pagination
 <c-lbdocs.component_example path="pagination/basic" />

@@ -5,12 +5,12 @@ title: Button
 description: "Button component for Django: create accessible, styled buttons with variants, sizes, and icons. Built with django-cotton, Tailwind CSS, and daisyUI 5. Zero JavaScript by default."
 keywords: "django button component, button django, daisyui button django, tailwind button django, button django-cotton, django ui button, django-cotton, labb button"
 daisy_ui_component_name: button
+icon: rmx.cursor
 ---
 
-Button for Django lets you create accessible, styled action triggers using a simple HTML-like syntax.
-Built on django-cotton, Tailwind CSS, and daisyUI 5, it supports colour variants, sizes, icons, and
-reactive states, all server-rendered with zero JavaScript by default. Use it to trigger form
-submissions, navigation actions, and modal dialogs in any Django template.
+Button renders an accessible action trigger with colour variants, sizes, and icons. Use it for form
+submissions, navigation actions, and modal dialogs. It is server-rendered with zero JavaScript by
+default, and reactive props let it respond to signal changes.
 
 ## Basic Button
 <c-lbdocs.component_example path="button/basic" />

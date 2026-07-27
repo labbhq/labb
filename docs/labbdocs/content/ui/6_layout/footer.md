@@ -5,6 +5,7 @@ title: Footer
 description: "Footer component for Django: create structured site footers with links and branding. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django footer component, footer django, daisyui footer django, tailwind footer django, footer django-cotton, django ui footer, site footer django, django-cotton"
 daisy_ui_component_name: footer
+icon: rmx.layout-bottom
 ---
 
 

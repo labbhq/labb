@@ -4,7 +4,7 @@ description: "Complete reference for the labb CLI: inspect components, search ic
 keywords: "labb cli, labb components inspect, labb icons search, labb dev, django labb commands"
 ---
 
-The `labb` command-line interface provides a comprehensive set of tools for managing your Django projects using labb.
+The `labb` command-line interface manages labb in your Django project: setup, CSS builds, configuration, component inspection, and icons.
 
 
 
@@ -329,7 +329,7 @@ labb components ex modal basic-modal
 ### `labb icons`
 
 <c-lbdocs.indented_block>
-Search and manage icon packs (requires <a href="{% doc_url '1_getting_started/1_introduction.md' 'icons' %}">labbicons package</a> to be installed).
+Search and manage icon packs (requires <a href="{% doc_url '1_getting_started/5_icons.md' 'guide' %}">labbicons package</a> to be installed).
 
 > *If the `labbicons` package is not installed, the command will show an error with installation instructions.*
 

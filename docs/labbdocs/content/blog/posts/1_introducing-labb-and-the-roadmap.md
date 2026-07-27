@@ -1,6 +1,6 @@
 ---
 title: Introducing labb, and the roadmap
-description: "Meet labb, a Django UI component library built with django-cotton and daisyUI. Our roadmap for components, docs, and the labb.io django component library."
+description: "Why I built labb, a Django UI component library on django-cotton and daisyUI, and what comes next: Alpine.js integration, the full daisyUI component set, more icon packs, and starter blocks."
 keywords: "labb django, django component library, django-cotton, daisyui django, labb roadmap, django ui components"
 published_time: 2025-12-29
 modified_time: 2025-12-29
@@ -17,47 +17,47 @@ tags:
 
 Hi djangonauts,
 
-I have been developing with Django for over 7 years now, both professionally and on the side. I have never felt the need to switch to another framework because I believe Django strikes the right balance between flexibility, extendability, and speed of development.
+I have been developing with Django for over 7 years now, both professionally and on the side. I have never wanted to switch to another framework. Django gets the balance right between flexibility and speed of development.
 
-However, as we all know, building highly interactive web interfaces with Django requires us to dip our feet into the world we djangonauts are not always fond of: the world of JavaScript. This often means setting up full SPA applications and relegating Django to a simple API backend. While this approach works in some cases, it comes at the cost of the simplicity and speed of development that Django provides, and most importantly, server-side rendering.
+Building a highly interactive web interface with Django, though, drags you into the part of the stack most of us would rather avoid: JavaScript. That usually means standing up a full SPA and demoting Django to an API backend. It works in some cases, but you pay for it with the simplicity and speed Django gives you, and you lose server-side rendering.
 
-I've experimented with various Django packages that aim to solve these problems, but I was never truly satisfied until I stumbled upon [Django Cotton](https://django-cotton.com/). This package allows us to write Django templates as if we were writing HTML, but with the full power of Django's templating system. It brings some of the benefits we enjoy from the JavaScript world, such as component-based design. As I was integrating Django Cotton into an existing project, I realized that by blending Cotton with other tools, a solid solution could be developed to build highly interactive web apps that are server-side rendered. Hence the birth of labb.
+I tried several Django packages aimed at this problem and none of them stuck, until I found [Django Cotton](https://django-cotton.com/). Cotton lets you write templates that read like HTML while Django's template system keeps working underneath. It carries over the piece I missed most from the JavaScript world: component-based design. Halfway through adding Cotton to an existing project, I realized that Cotton plus a couple of other tools would let me build interactive web apps that stay server-side rendered. Hence the birth of labb.
 
-By coupling my favorite CSS UI framework, [daisyUI](https://daisyui.com/), with Django Cotton, I've been able to establish a foundation that I can build upon to address these challenges and create modern, dynamic user experiences with Django.
+Pairing Cotton with my favorite CSS UI framework, [daisyUI](https://daisyui.com/), gave me a foundation I can keep building on.
 
 ### A Measured Start
 
-The initial release of labb intentionally comes with a limited set of components and features. This is by design; to gather feedback from the community and understand the real needs of Django developers. The current feature set won't immediately solve all the aforementioned problems, but it lays the groundwork for what's to come.
+The first release of labb ships a small set of components and features. That is deliberate: I want feedback from the community, and a clearer read on what Django developers need day to day. It won't solve the problems I described above, but it is the groundwork for the releases that will.
 
 ### The Roadmap
 
-I'm excited to share what's on the horizon:
+What I'm working on next:
 
 **Alpine.js Integration**
-I've been experimenting with various ways of integrating Alpine.js, including:
+I've been experimenting with several ways of integrating Alpine.js:
 
-- **Reactive component props**: The ability to dynamically change component props from the client side
-- **labbwire**: HTML over the wire, the Django (cotton) way. This will enable us to build highly interactive components that are fully server-side rendered, not the Livewire way, but more aligned with the HTMX philosophy. However, my experiments have shown that Alpine.js is often sufficient for this purpose without requiring additional dependencies. More on this later.
+- **Reactive component props**: change a component's props from the client side
+- **labbwire**: HTML over the wire, the Django (cotton) way. It should let you build interactive components that stay server-side rendered, closer to the HTMX philosophy than to Livewire. So far my experiments suggest Alpine.js on its own covers most of this, with no extra dependencies. More on that later.
 
 **Complete DaisyUI Component Library**
-A comprehensive set of DaisyUI components ready to use in your Django projects.
+The rest of the DaisyUI components, ready to use in your Django projects.
 
 **Expanded Icon Collections**
-Support for additional icon packs including Hero Icons, Tabler Icons, and more.
+Support for more icon packs, including Hero Icons and Tabler Icons.
 
 **IDE Extensions**
-Component names and props autocomplete and documentation support directly in your favorite code editor.
+Autocomplete and documentation for component names and props, in your favorite editor.
 
 **Advanced Components**
-Rich, interactive components including date pickers, calendars, rich text editors, file upload widgets, charts, data visualization tools, and more.
+Date pickers, calendars, rich text editors, file upload widgets, charts, and data visualization tools.
 
 **Starter Kits, Blocks, and Templates**
-Pre-built templates and components to kickstart your Django projects even faster. Also, ready to copy and build upon blocks to build components and pages faster.
+Pre-built templates to start a project from, plus blocks you can copy into a page and build on.
 
 ### Get Involved
 
-labb is just getting started, and your feedback is invaluable. Try it out in your projects, share your thoughts, share with other developers, and let me know what features and components you need most. Together, we can make building modern Django applications faster and more enjoyable.
+labb is early, and your feedback shapes where it goes. Try it in a project, pass it on to other developers, and tell me which components you need most.
 
-Get involved by joining our [GitHub Discussions](https://github.com/labbhq/labb/discussions).
+Come say hello in [GitHub Discussions](https://github.com/labbhq/labb/discussions).
 
 Happy labbing! 🚀

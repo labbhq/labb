@@ -5,6 +5,7 @@ title: Avatar
 description: "Avatar component for Django: display user images, initials, and avatar groups. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django avatar component, avatar django, daisyui avatar django, tailwind avatar django, avatar django-cotton, django ui avatar, user avatar django, avatar group django"
 daisy_ui_component_name: avatar
+icon: rmx.account-circle
 ---
 
 Avatar renders a circular image with optional status badges and group stacking. Use a single avatar for profile headers, or the group variant to stack overlapping avatars for contributor lists and team displays.

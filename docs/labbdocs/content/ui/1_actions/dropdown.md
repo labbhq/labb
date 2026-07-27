@@ -5,6 +5,7 @@ title: Dropdown
 description: "Dropdown component for Django: build menus and contextual actions with keyboard navigation. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django dropdown component, dropdown django, daisyui dropdown django, tailwind dropdown django, dropdown django-cotton, django ui dropdown, django-cotton"
 daisy_ui_component_name: dropdown
+icon: rmx.dropdown-list
 ---
 
 Dropdown renders a container that reveals a positioned menu when toggled. Use it for navigation submenus, action menus on data rows, or contextual option lists. The trigger can be any element that wraps a `c-lb.dropdown.menu`.

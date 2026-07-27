@@ -5,9 +5,10 @@ title: Range
 description: "Range component for Django: add styled sliders for numeric input in Django forms. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django range component, range slider django, daisyui range django, tailwind range django, range django-cotton, django form range, slider input django, django-cotton"
 daisy_ui_component_name: range
+icon: rmx.equalizer
 ---
 
-Range renders a styled `<input type='range'>` slider. Set `min`, `max`, and `step` as attributes — they pass through to the native element. Colour variants follow the daisyUI palette.
+Range renders a styled `<input type='range'>` slider. Set `min`, `max`, and `step` as attributes; they pass through to the native element. Colour variants follow the daisyUI palette.
 
 ## Basic Range
 <c-lbdocs.component_example path="range/basic" previewStyle="block" />
@@ -20,6 +21,10 @@ Range renders a styled `<input type='range'>` slider. Set `min`, `max`, and `ste
 
 ## With Steps
 <c-lbdocs.component_example path="range/with-steps" previewStyle="block" />
+
+## Vertical
+Set `orientation="vertical"` for a vertical slider. Give it a height with a `class` (e.g. `h-48`).
+<c-lbdocs.component_example path="range/vertical" previewStyle="block" />
 
 ## API Reference
 ### `c-lb.range`
