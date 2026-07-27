@@ -1,22 +1,6 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    snap="start"
-    direction="horizontal"
-    :snapClasses="{
-        'start': 'carousel-start',
-        'center': 'carousel-center',
-        'end': 'carousel-end'
-    }"
-    :directionClasses="{
-        'horizontal': '',
-        'vertical': 'carousel-vertical'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "carousel" attrs=attrs as rx %}
 
-<div
-    class="carousel {{ snapClasses|get_dict_item:snap }} {{ directionClasses|get_dict_item:direction }} {{ class }}"
-    {{ attrs }}
->
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </div>

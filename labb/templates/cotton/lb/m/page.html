@@ -1,0 +1,19 @@
+{% load lb_tags %}
+<c-vars
+    title="Block Preview"
+    :datastar="False"
+/>
+<!DOCTYPE html>
+<html lang="en" {% labb_theme %}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <c-lb.m.dependencies :datastar=datastar />
+    {{ head }}
+</head>
+<body class="min-h-screen bg-base-100 antialiased">
+    <div data-on:popstate__window="@get(location.pathname)" hidden></div>
+    {{ slot }}
+</body>
+</html>

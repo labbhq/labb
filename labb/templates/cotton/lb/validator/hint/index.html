@@ -1,3 +1,3 @@
-<c-vars class="" hidden />
-
-<p class="validator-hint {% if hidden %}hidden{% endif %} {{ class }}" {{ attrs }}>{{ slot }}</p>
+{% load lbr_tags %}
+{% lbr_props "validator.hint" attrs=attrs as rx %}
+<p class="{{ rx.classes }}" {{ rx.attrs }}>{{ slot }}</p>

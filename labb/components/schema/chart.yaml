@@ -78,8 +78,8 @@ components:
         required: false
       legend:
         type: boolean
-        default: true
-        description: Show chart legends globally.
+        default: false
+        description: Enable chart legends on the page. Off by default; set legend to turn the subsystem on, then position per chart with the chart's own legend prop.
         required: false
 
   chart.instance:

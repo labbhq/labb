@@ -1,13 +1,6 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    direction="horizontal"
-    :directionClasses="{
-        'horizontal': 'stats-horizontal',
-        'vertical': 'stats-vertical'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "stat.group" attrs=attrs as rx %}
 
-<div class="stats {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </div>

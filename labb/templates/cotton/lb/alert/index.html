@@ -1,28 +1,8 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'info': 'alert-info',
-        'success': 'alert-success',
-        'warning': 'alert-warning',
-        'error': 'alert-error'
-    }"
-    alertStyle=""
-    :styleClasses="{
-        'outline': 'alert-outline',
-        'dash': 'alert-dash',
-        'soft': 'alert-soft'
-    }"
-    direction=""
-    :directionClasses="{
-        'vertical': 'alert-vertical',
-        'horizontal': 'alert-horizontal'
-    }"
-/>
+{% load lb_tags lbr_tags %}
 {% parse_icon attrs as i %}
+{% lbr_props "alert" attrs=attrs as rx %}
 
-<div role="alert" class="alert {{ variantClasses|get_dict_item:variant }} {{ styleClasses|get_dict_item:alertStyle }} {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs|strip_icon_attrs }}>
+<div role="alert" class="{{ rx.classes }}" {{ rx.attrs }}>
     {% if i.name %}
         <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="text-lg {{ i.css_class }}" />
     {% endif %}

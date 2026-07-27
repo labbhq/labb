@@ -1,11 +1,6 @@
-<c-vars
-    class=""
-    as="div"
-/>
-
-<{{ as }}
-    class="navbar {{ class }}"
-    {{ attrs }}
->
+{% load lbr_tags %}
+<c-vars as="div" />
+{% lbr_props "navbar" attrs=attrs as rx %}
+<{{ as }} class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </{{ as }}>

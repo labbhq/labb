@@ -6,6 +6,72 @@
 #   These classes are not required to be present in all renderings and won't cause test failures
 #
 components:
+  otp:
+    template: lb/otp/index.html
+    description: One-time-passcode input — a single native input over fixed cells, for 2FA / verification codes
+    base_classes:
+    - otp
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      length:
+        type: string
+        default: '4'
+        description: Number of code cells (also sets the input maxlength)
+        required: false
+      name:
+        type: string
+        default: otp
+        description: Name attribute for the input
+        required: false
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Cell size
+        css_mapping:
+          xs: otp-xs
+          sm: otp-sm
+          md: otp-md
+          lg: otp-lg
+          xl: otp-xl
+      variant:
+        type: enum
+        values:
+        - ''
+        - neutral
+        - primary
+        - secondary
+        - accent
+        - info
+        - success
+        - warning
+        - error
+        default: ''
+        description: Color variant
+        css_mapping:
+          neutral: otp-neutral
+          primary: otp-primary
+          secondary: otp-secondary
+          accent: otp-accent
+          info: otp-info
+          success: otp-success
+          warning: otp-warning
+          error: otp-error
+      joined:
+        type: boolean
+        default: false
+        description: Render the cells as a connected group
+        css_mapping:
+          true: otp-joined
   toggle:
     template: lb/toggle/index.html
     description: Toggle switch component for boolean input
@@ -62,20 +128,21 @@ components:
         type: boolean
         default: false
         description: Whether the toggle is initially checked
-        css_mapping:
-          true: checked
       disabled:
         type: boolean
         default: false
         description: Whether the toggle is disabled
-        css_mapping:
-          true: disabled
       validate:
         type: boolean
         default: false
         description: Enable validation styling
         css_mapping:
           true: validator
+      bind:
+        type: string
+        default: ''
+        description: Signal path to bind this element to. Accepts a string path ("is_active") or a SignalField from a Signals schema (schema.fields.is_active).
+        required: false
 
   checkbox:
     template: lb/checkbox/index.html
@@ -134,6 +201,11 @@ components:
         description: Enable validation styling
         css_mapping:
           true: validator
+      bind:
+        type: string
+        default: ''
+        description: Signal path to bind this element to. Accepts a string path ("selected") or a SignalField from a Signals schema (schema.fields.is_active).
+        required: false
 
   fieldset:
     template: lb/fieldset/index.html
@@ -456,6 +528,11 @@ components:
         description: Enable validation styling
         css_mapping:
           true: validator
+      bind:
+        type: string
+        default: ''
+        description: Signal path to bind this element to. Accepts a string path ("filters.q") or a SignalField from a Signals schema (schema.fields.q).
+        required: false
 
   textarea:
     template: lb/textarea/index.html
@@ -521,6 +598,11 @@ components:
         description: Enable validation styling
         css_mapping:
           true: validator
+      bind:
+        type: string
+        default: ''
+        description: Signal path to bind this element to. Accepts a string path ("filters.q") or a SignalField from a Signals schema (schema.fields.q).
+        required: false
 
   select:
     template: lb/select/index.html
@@ -586,6 +668,11 @@ components:
         description: Enable validation styling
         css_mapping:
           true: validator
+      bind:
+        type: string
+        default: ''
+        description: Signal path to bind this element to. Accepts a string path ("filters.q") or a SignalField from a Signals schema (schema.fields.q).
+        required: false
     slots:
       default:
         description: Option elements for the select dropdown
@@ -642,12 +729,26 @@ components:
           md: range-md
           lg: range-lg
           xl: range-xl
+      orientation:
+        type: enum
+        values:
+        - horizontal
+        - vertical
+        default: horizontal
+        description: Slider orientation; vertical needs a height set via class
+        css_mapping:
+          vertical: range-vertical
       validate:
         type: boolean
         default: false
         description: Enable validation styling
         css_mapping:
           true: validator
+      bind:
+        type: string
+        default: ''
+        description: Signal path to bind this element to. Accepts a string path ("volume") or a SignalField from a Signals schema (schema.fields.volume).
+        required: false
 
   rating:
     template: lb/rating/index.html

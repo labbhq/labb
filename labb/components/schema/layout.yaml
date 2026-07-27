@@ -11,9 +11,9 @@ components:
     description: Main drawer wrapper component - use with drawer sub-components for full functionality
     base_classes:
     - drawer
+    optional_base_classes:
     - drawer-toggle
     - drawer-content
-    optional_base_classes:
     - drawer-side
     - drawer-overlay
     variables:

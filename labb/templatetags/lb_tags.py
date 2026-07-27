@@ -1,4 +1,3 @@
-import json
 import logging
 import re
 from functools import lru_cache
@@ -15,6 +14,7 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.templatetags.static import static as django_static
 from django.urls import NoReverseMatch, reverse
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from labb.config import load_config
@@ -24,6 +24,25 @@ from labb.shortcuts import get_labb_theme
 _icon_logger = logging.getLogger("labb.icons")
 
 register = template.Library()
+
+# ---------------------------------------------------------------------------
+# Compiled regex patterns
+# ---------------------------------------------------------------------------
+
+# Parses HTML attribute strings: name, optional =, optional quoted/unquoted value.
+_ATTRS_RE = re.compile(
+    r'([@:]?[\w.:-]+)(=)?(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))?'
+)
+# Matches icon dot-notation attr names (icon, icon.fill, icon.class, etc.).
+_ICON_ATTR_RE = re.compile(r"^icon(?:\.[\w.]+)?$")
+# Matches l:name="value" or l:name='value' in serialised attr strings.
+_L_ATTR_RE = re.compile(r'l:(\w+)=["\']([^"\']*)["\']')
+# Strips l:* attrs from a serialised attr string.
+_L_ATTR_STRIP_RE = re.compile(r'\s*l:\w+=["\'][^"\']*["\']')
+# Strips icon* attrs from a serialised attr string (used by remove_l_attrs input).
+_ICON_ATTR_STRIP_RE = re.compile(r'\s*\bicon(?:\.[\w.]+)?\s*=["\'][^"\']*["\']')
+# Collapses runs of whitespace.
+_WHITESPACE_RE = re.compile(r"\s+")
 
 # ---------------------------------------------------------------------------
 # Thread-local stack storage
@@ -73,8 +92,8 @@ def lb_push_stack(name, path, mode="inline"):
     Duplicate paths are silently ignored; first push wins.
 
     Usage:
-        {% lb_push_stack name="components" path="labb/js/alpine/button.js" %}
-        {% lb_push_stack name="components" path="labb/js/chart/chart-core.min.js" mode="src" %}
+        {% lb_push_stack name="components" path="labb/js/vendor/datastar.js" mode="module" %}
+        {% lb_push_stack name="components" path="labb/js/vendor/chart.umd.min.js" mode="src" %}
     """
     stacks = _get_stacks()
     if name not in stacks:
@@ -97,27 +116,6 @@ def _read_static_file(path):
         return None
 
 
-def _make_alpine_script_tag():
-    """Return a deferred Alpine script tag resolved from LABB_SETTINGS."""
-    alpine_path = get_labb_setting("ALPINE_JS_PATH", "labb/js/alpine/alpine.min.js")
-    if alpine_path.startswith(("http://", "https://")):
-        src = alpine_path
-    else:
-        src = django_static(alpine_path)
-    return f'<script defer src="{src}"></script>'
-
-
-@register.simple_tag
-def lb_alpine_script():
-    """
-    Emit the deferred Alpine.js script tag resolved from LABB_SETTINGS["ALPINE_JS_PATH"].
-
-    Use this to load Alpine on pages that don't use .x components but still need Alpine.
-    Usage: {% lb_alpine_script %}
-    """
-    return mark_safe(_make_alpine_script_tag())
-
-
 @register.simple_tag
 def lb_chart_deps():
     """
@@ -135,7 +133,7 @@ def lb_chart_deps():
 
     Usage: {% lb_chart_deps %}
     """
-    chartjs_path = get_labb_setting("CHART_JS_PATH", "labb/js/chart/chart.umd.min.js")
+    chartjs_path = get_labb_setting("CHART_JS_PATH", "labb/js/vendor/chart.umd.min.js")
     for path, mode in (
         (chartjs_path, "src"),
         ("labb/js/chart/lb-daisy-plugin.js", "src"),
@@ -146,23 +144,27 @@ def lb_chart_deps():
 
 
 @register.simple_tag
-def lb_load_stack(name, alpine_loaded=False):
+def lb_stack_has(name, path):
+    """True if `path` is registered in the named stack.
+
+    Lets a head component detect a body-pushed dependency (children render first),
+    e.g. gating the CSRF helper on the reactive bundle actually being loaded.
+    """
+    return path in _get_stacks().get(name, {})
+
+
+@register.simple_tag
+def lb_load_stack(name):
     """
     Emit all scripts registered to a named stack.
 
-    For each stack, pre-helpers defined in LABB_SETTINGS["STACK_HELPERS"] are
-    inlined first.  The special token "alpine" in the helpers list is resolved
-    to a ``<script defer src="...">`` tag using LABB_SETTINGS["ALPINE_JS_PATH"],
-    and is always placed last so Alpine initialises after all component scripts.
-
-    Pass alpine_loaded=True to suppress the Alpine script tag (e.g. when
-    <c-lb.m.dependencies alpine /> has already emitted it).
+    Pre-helpers defined in LABB_SETTINGS["STACK_HELPERS"][name] are inlined first,
+    then src/module paths as cacheable <script> tags, then inline paths.
 
     Emission order:
       1. Pre-helpers (inline)
-      2. mode="src" paths as <script src="..."> tags (sorted)
-      3. mode="inline" component paths (sorted)
-      4. Deferred Alpine <script defer src="..."> (always last)
+      2. mode="src" / mode="module" paths as <script> tags (sorted)
+      3. mode="inline" paths (sorted)
 
     Usage: {% lb_load_stack name="components" %}
     """
@@ -173,39 +175,32 @@ def lb_load_stack(name, alpine_loaded=False):
         return ""
 
     stack_helpers_config = get_labb_setting("STACK_HELPERS", {})
-    helpers = stack_helpers_config.get(name, [])
-
-    # Split helpers: inline paths vs the special "alpine" deferred token
-    inline_helpers = [h for h in helpers if h != "alpine"]
-    include_alpine = "alpine" in helpers and not alpine_loaded
-
+    inline_helpers = stack_helpers_config.get(name, [])
     helper_set = set(inline_helpers)
 
-    # Split component paths by mode (exclude helper paths)
     src_paths = sorted(
-        p for p, m in path_modes.items() if m == "src" and p not in helper_set
+        p for p, m in path_modes.items() if m in ("src", "module") and p not in helper_set
     )
     inline_paths = sorted(
-        p for p, m in path_modes.items() if m != "src" and p not in helper_set
+        p for p, m in path_modes.items() if m not in ("src", "module") and p not in helper_set
     )
 
     script_tags = []
 
-    # 1. Inline pre-helpers (e.g. labb-component.js)
     for path in inline_helpers:
         content = _read_static_file(path)
         if content is not None:
             script_tags.append(f"<script>\n{content}\n</script>")
 
-    # 2. src-mode paths as <script src="..."> (cacheable)
     for path in src_paths:
+        mode = path_modes[path]
+        type_attr = ' type="module"' if mode == "module" else ""
         if path.startswith(("http://", "https://")):
-            script_tags.append(f'<script src="{path}"></script>')
+            script_tags.append(f'<script{type_attr} src="{path}"></script>')
         else:
             url = django_static(path)
-            script_tags.append(f'<script src="{url}"></script>')
+            script_tags.append(f'<script{type_attr} src="{url}"></script>')
 
-    # 3. Inline component scripts (e.g. Alpine data components)
     for path in inline_paths:
         if path.startswith(("http://", "https://")):
             script_tags.append(f'<script src="{path}"></script>')
@@ -214,39 +209,14 @@ def lb_load_stack(name, alpine_loaded=False):
         if content is not None:
             script_tags.append(f"<script>\n{content}\n</script>")
 
-    # 4. Deferred Alpine script tag (always last so it initialises after the above)
-    if include_alpine:
-        script_tags.append(_make_alpine_script_tag())
-
     return mark_safe("\n".join(script_tags))
-
-
-# ---------------------------------------------------------------------------
-# Alpine defaults helpers
-# ---------------------------------------------------------------------------
-
-
-@lru_cache(maxsize=1)
-def _load_component_variables():
-    """Load and cache the component-variables.json lookup file.
-
-    Cached for the life of the process; call ``_load_component_variables.cache_clear()``
-    in tests that regenerate the JSON.
-    """
-    json_path = finders.find("labb/js/alpine/component-variables.json")
-    if json_path:
-        try:
-            return json.loads(Path(json_path).read_text(encoding="utf-8"))
-        except Exception:
-            pass
-    return {}
 
 
 def parse_attrs_to_dict(attrs):
     """
     Parse an HTML attributes string into a dictionary.
 
-    Handles standard attributes, Alpine bindings (x-*, :*, @*), boolean
+    Handles standard attributes, Cotton bindings (:, ::), Datastar bindings (@*, data-*), boolean
     attributes, and unquoted values.
 
     Returns:
@@ -259,15 +229,9 @@ def parse_attrs_to_dict(attrs):
     if not attrs_str:
         return {}
 
-    # Capture the `=` explicitly so we can tell `foo` (bare) from `foo=""` (empty
-    # string) without re-scanning the source string — .find() was mis-detecting
-    # when the same attribute name appears more than once.
-    attr_pattern = r'([@:]?[\w.-]+)(=)?(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))?'
     result = {}
 
-    for attr_name, eq, double_quoted, single_quoted, unquoted in re.findall(
-        attr_pattern, attrs_str
-    ):
+    for attr_name, eq, double_quoted, single_quoted, unquoted in _ATTRS_RE.findall(attrs_str):
         attr_value = double_quoted or single_quoted or unquoted or None
         has_equals = bool(eq)
 
@@ -277,60 +241,6 @@ def parse_attrs_to_dict(attrs):
             result[attr_name] = attr_value
 
     return result
-
-
-@register.filter
-def lb_attrs_to_dict(attrs):
-    """
-    Convert an HTML attributes string to a dictionary.
-
-    Usage: {{ attrs|lb_attrs_to_dict }}
-    """
-    return parse_attrs_to_dict(attrs)
-
-
-@register.simple_tag
-def lb_alpine_defaults(attrs, component_name):
-    """
-    Extract schema-relevant props from an attrs string as a JSON string.
-
-    Only includes attributes that exist in the component's schema (loaded from
-    component-variables.json).  Alpine bindings (:attr, @event) are skipped.
-
-    Usage: {% lb_alpine_defaults attrs "button" %}
-    """
-    if not attrs or not component_name:
-        return ""
-
-    variables_map = _load_component_variables()
-    component_vars = variables_map.get(component_name, {})
-    if not component_vars:
-        return ""
-
-    all_attrs = parse_attrs_to_dict(attrs)
-    filtered = {}
-
-    for attr_name, attr_value in all_attrs.items():
-        if attr_name.startswith(":") or attr_name.startswith("@"):
-            continue
-        if attr_name not in component_vars:
-            continue
-
-        var_type = component_vars[attr_name]
-        if var_type == "boolean":
-            if isinstance(attr_value, str) and attr_value.lower() == "false":
-                filtered[attr_name] = False
-            elif isinstance(attr_value, bool):
-                filtered[attr_name] = attr_value
-            else:
-                filtered[attr_name] = True
-        else:
-            filtered[attr_name] = str(attr_value) if attr_value else ""
-
-    try:
-        return mark_safe(json.dumps(filtered))
-    except Exception:
-        return ""
 
 
 @register.filter
@@ -392,104 +302,65 @@ def is_whole_rate(rate, i):
 
 @register.filter
 def remove_l_attrs(attrs):
-    """
-    Remove all attributes starting with 'l:' from an HTML attributes string.
-
-    This filter is used to clean up attrs before rendering, removing labb-specific
-    attributes (l:*) that are used for URL resolution but shouldn't appear in the final HTML.
-
-    Usage: {{ attrs|remove_l_attrs }}
-
-    Args:
-        attrs (str): HTML attributes string
-
-    Returns:
-        str: Attributes string with l:* attributes removed
-    """
+    """Remove l:* attributes from a serialised HTML attribute string."""
     if not attrs:
         return ""
-
-    # Convert to string in case it's not already
-    attrs_str = str(attrs)
-
-    # Pattern to match l:attrname="value" or l:attrname='value'
-    pattern = r'\s*l:\w+=["\'][^"\']*["\']'
-    cleaned = re.sub(pattern, "", attrs_str)
-    # Clean up any extra whitespace
-    cleaned = re.sub(r"\s+", " ", cleaned).strip()
-    return mark_safe(cleaned)
+    cleaned = _L_ATTR_STRIP_RE.sub("", str(attrs))
+    return mark_safe(_WHITESPACE_RE.sub(" ", cleaned).strip())
 
 
 @register.simple_tag
 def parse_icon(attrs=""):
+    """Parse icon dot-notation keys from a Cotton Attrs mapping or attrs string.
+
+    Supports icon, icon.fill, icon.end, icon.fill.end, icon.end.fill, icon.class.
+    Returns dict: name, fill (bool), end (bool), css_class.
     """
-    Parse icon dot-notation attributes from a cotton attrs string.
-
-    Supports:
-        icon="name"              → icon name, line style, start position
-        icon.fill="name"         → icon name, fill style
-        icon.end="name"          → icon name, end position
-        icon.fill.end="name"     → icon name, fill style, end position
-        icon.end.fill="name"     → icon name, fill style, end position
-        icon.class="classes"     → additional CSS classes for the icon
-
-    Usage:
-        {% parse_icon attrs as i %}
-        {{ i.name }}  {{ i.fill }}  {{ i.end }}  {{ i.css_class }}
-
-    Returns:
-        dict with keys: name (str), fill (bool), end (bool), css_class (str)
-    """
-    result = {
-        "name": "",
-        "fill": False,
-        "end": False,
-        "css_class": "",
-    }
-
+    result = {"name": "", "fill": False, "end": False, "css_class": ""}
     if not attrs:
         return result
-
-    s = str(attrs)
-
-    # Extract icon.class="..."
-    class_match = re.search(r'\bicon\.class=["\']([^"\']*)["\']', s)
-    if class_match:
-        result["css_class"] = class_match.group(1)
-
-    # Extract the main icon attribute: icon[.fill][.end]="name"
-    # Matches: icon="x", icon.fill="x", icon.end="x", icon.fill.end="x", icon.end.fill="x"
-    # Does NOT match icon.class="x" because .class is not .fill or .end
-    main_match = re.search(r'\bicon((?:\.(?:fill|end))*)\s*=["\']([^"\']*)["\']', s)
-    if main_match:
-        modifiers = main_match.group(1) or ""
-        result["name"] = main_match.group(2)
-        result["fill"] = ".fill" in modifiers
-        result["end"] = ".end" in modifiers
-
+    if hasattr(attrs, "attrs_dict"):
+        attrs = attrs.attrs_dict()
+    elif not hasattr(attrs, "get"):
+        attrs = parse_attrs_to_dict(str(attrs))
+    result["css_class"] = str(attrs.get("icon.class") or "")
+    for key in ("icon.fill.end", "icon.end.fill"):
+        if key in attrs:
+            result.update(name=str(attrs[key]), fill=True, end=True)
+            return result
+    if "icon.fill" in attrs:
+        result.update(name=str(attrs["icon.fill"]), fill=True)
+        return result
+    if "icon.end" in attrs:
+        result.update(name=str(attrs["icon.end"]), end=True)
+        return result
+    val = attrs.get("icon")
+    if val and val is not True:
+        result["name"] = str(val)
     return result
 
 
 @register.filter
 def strip_icon_attrs(attrs):
-    """
-    Remove all icon-related attributes from an attrs string.
-
-    Removes attributes matching: icon="...", icon.fill="...", icon.class="...", etc.
-
-    Usage: {{ attrs|strip_icon_attrs }}
-    """
+    """Return Cotton attrs as an HTML string, omitting icon* keys."""
     if not attrs:
         return ""
-
-    s = str(attrs)
-
-    # Remove icon attributes with values: icon="...", icon.fill="...", icon.class="...", etc.
-    s = re.sub(r'\s*\bicon(?:\.[\w.]+)?\s*=["\'][^"\']*["\']', "", s)
-
-    # Clean up whitespace
-    s = re.sub(r"\s+", " ", s).strip()
-    return mark_safe(s)
+    from django.utils.html import escape as _escape
+    if hasattr(attrs, "attrs_dict"):
+        attrs_map = attrs.attrs_dict()
+    elif hasattr(attrs, "items"):
+        attrs_map = attrs
+    else:
+        attrs_map = parse_attrs_to_dict(str(attrs))
+    parts = []
+    for k, v in attrs_map.items():
+        if _ICON_ATTR_RE.match(k):
+            continue
+        if v is True:
+            parts.append(k)
+        else:
+            parts.append(f'{k}="{_escape(str(v))}"')
+    return mark_safe(" ".join(parts))
 
 
 @register.filter
@@ -541,7 +412,7 @@ def lb_css_path():
     Template tag to get the CSS output path from labb configuration.
     Usage: {% lb_css_path %}
     """
-    labb_config = load_config(raise_not_found=False)
+    labb_config = load_config(raise_not_found=False, warn=False)
 
     try:
         # Stay POSIX — this string is emitted into an HTML href, not a filesystem path.
@@ -569,15 +440,17 @@ def labb_theme(context):
     if request:
         theme = get_labb_theme(request)
     else:
-        # Get default theme from Django settings
         theme = get_default_theme()
 
-    # Return empty string for __system__ theme (no data-theme attribute)
     if theme == "__system__" or not theme:
         return ""
 
-    # Return data-theme attribute with theme value
-    return f'data-theme="{theme}"'
+    # format_html, not an f-string: a plain str is autoescaped into
+    # data-theme=&quot;x&quot;, whose attribute value carries literal quotes and
+    # never matches [data-theme="x"]. The theme is unvalidated session input, so
+    # it must still be escaped — format_html marks up the quotes and escapes the
+    # value.
+    return format_html('data-theme="{}"', theme)
 
 
 @register.simple_tag(takes_context=True)
@@ -599,47 +472,17 @@ def labb_theme_val(context):
 
 @register.simple_tag
 def resolve_labb_link(viewname, attrs=""):
-    """
-    Resolve a Django view name to a URL, extracting l: prefixed attributes from attrs.
-
-    Parses the attrs string to find attributes starting with 'l:' and uses them
-    as keyword arguments for Django's reverse() function.
-
-    Args:
-        viewname (str): Django view name (e.g., 'blog:post')
-        attrs (str): HTML attributes string (e.g., 'l:id="1" l:author="sample" class="link"')
-
-    Returns:
-        str: Resolved URL or empty string if viewname is not provided
-
-    Usage:
-        {% resolve_labb_link "blog:post" attrs as resolved_url %}
-        or
-        {% resolve_labb_link "blog:post" 'l:id="1" l:author="sample"' %}
-    """
+    """Resolve a Django view name to a URL using l:* keys from Cotton attrs for kwargs."""
     if not viewname:
         return ""
-
-    # Handle None or empty attrs
-    if not attrs:
-        attrs = ""
-
-    # Parse attrs string to extract l: prefixed attributes
-    # Pattern matches: l:attrname="value" or l:attrname='value'
-    pattern = r'l:(\w+)=["\']([^"\']+)["\']'
-    matches = re.findall(pattern, str(attrs))
-
-    # Build kwargs dictionary from matches
     kwargs = {}
-    for attr_name, attr_value in matches:
-        kwargs[attr_name] = attr_value
-
+    if hasattr(attrs, "items"):
+        kwargs = {k[2:]: str(v) for k, v in attrs.items() if k.startswith("l:")}
+    elif attrs:
+        kwargs = {k: v for k, v in _L_ATTR_RE.findall(str(attrs)) if v}
     try:
-        # Use reverse() to resolve the view name with kwargs
-        if kwargs:
-            return reverse(viewname, kwargs=kwargs)
-        else:
-            return reverse(viewname)
+        return reverse(viewname, kwargs=kwargs) if kwargs else reverse(viewname)
     except NoReverseMatch:
-        # Return empty string if view name cannot be resolved
         return ""
+
+

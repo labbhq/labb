@@ -1,21 +1,8 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'primary': 'text-primary',
-        'secondary': 'text-secondary',
-        'accent': 'text-accent',
-        'neutral': 'text-neutral',
-        'info': 'text-info',
-        'success': 'text-success',
-        'warning': 'text-warning',
-        'error': 'text-error'
-    }"
-/>
+{% load lb_tags lbr_tags %}
 {% parse_icon attrs as i %}
+{% lbr_props "stat.figure" attrs=attrs as rx %}
 
-<div class="stat-figure {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs|strip_icon_attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {% if i.name %}
         <c-component is="lbi" n="{{ i.name }}" w="1.5em" h="1.5em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}

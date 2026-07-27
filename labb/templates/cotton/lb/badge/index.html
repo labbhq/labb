@@ -1,36 +1,7 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'neutral': 'badge-neutral',
-        'primary': 'badge-primary',
-        'secondary': 'badge-secondary',
-        'accent': 'badge-accent',
-        'info': 'badge-info',
-        'success': 'badge-success',
-        'warning': 'badge-warning',
-        'error': 'badge-error'
-    }"
-    style=""
-    :styleClasses="{
-        'outline': 'badge-outline',
-        'dash': 'badge-dash',
-        'soft': 'badge-soft',
-        'ghost': 'badge-ghost'
-    }"
-    size="md"
-    :sizeClasses="{
-        'xs': 'badge-xs',
-        'sm': 'badge-sm',
-        'md': 'badge-md',
-        'lg': 'badge-lg',
-        'xl': 'badge-xl'
-    }"
-/>
+{% load lb_tags lbr_tags %}
 {% parse_icon attrs as i %}
-
-<span class="badge {{ variantClasses|get_dict_item:variant }} {{ styleClasses|get_dict_item:style }} {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs|strip_icon_attrs }}>
+{% lbr_props "badge" attrs=attrs as rx %}
+<span class="{{ rx.classes }}" {{ rx.attrs }}>
     {% if i.name and not i.end %}
         <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}

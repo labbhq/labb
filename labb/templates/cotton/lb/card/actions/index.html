@@ -1,20 +1,9 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    justify=""
-    :justifyClasses="{
-        'start': 'justify-start',
-        'center': 'justify-center',
-        'end': 'justify-end',
-        'between': 'justify-between',
-        'around': 'justify-around',
-        'evenly': 'justify-evenly'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "card.actions" attrs=attrs as rx %}
 
 <div
-    class="card-actions {{ justifyClasses|get_dict_item:justify }} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     {{ slot }}
 </div>

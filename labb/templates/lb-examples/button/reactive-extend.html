@@ -1,37 +1,13 @@
-<script>
-document.addEventListener('alpine:init', () => {
-    Alpine.data('saveBtnComp', lb.extendComponent('button', {
-        state: "initial",
-        async save() {
-            this.lbProps.variant = "info";
-            this.state = "saving";
-            await new Promise(r => setTimeout(r, 2000));
-            this.state = "saved";
-            this.lbProps.variant = "success";
-            await new Promise(r => setTimeout(r, 1000));
-            this.state = "initial";
-            this.lbProps.variant = "primary";
-        },
-    }));
-});
-</script>
+<c-lbr.signals $save.variant="primary" $save.label="Save changes" />
 
 <div class="w-full md:w-96">
-    <c-lb.button.x
-        x-data="saveBtnComp"
-        variant="primary"
-        @click="save()"
+    <c-lb.button
+        variant="$save.variant:primary"
         class="w-full"
-        x-cloak
+        data-on:click="$save.variant = 'info'; $save.label = 'Saving…';
+            setTimeout(() => { $save.variant = 'success'; $save.label = 'Saved'; }, 2000);
+            setTimeout(() => { $save.variant = 'primary'; $save.label = 'Save changes'; }, 3000)"
     >
-        <c-lb.text x-show="state === 'initial'" icon="rmx.save">
-            Save changes
-        </c-lb.text>
-        <c-lb.text x-show="state === 'saving'">
-            Saving <c-lb.loading type="dots" />
-        </c-lb.text>
-        <c-lb.text x-show="state === 'saved'" icon="rmx.checkbox-circle">
-            Saved
-        </c-lb.text>
-    </c-lb.button.x>
+        <span data-text="$save.label"></span>
+    </c-lb.button>
 </div>

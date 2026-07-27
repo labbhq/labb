@@ -1,7 +1,8 @@
-<c-vars class="" as="p" floating />
-
+{% load lbr_tags %}
+<c-vars as="p" floating />
+{% lbr_props "label" attrs=attrs as rx %}
 {% if floating %}
-<label class="floating-label {{ class }}" {{ attrs }}>{{ slot }}</label>
+<label class="floating-label {{ rx.classes }}" {{ rx.attrs }}>{{ slot }}</label>
 {% else %}
-<{{ as }} class="label {{ class }}" {{ attrs }}>{{ slot }}</{{ as }}>
+<{{ as }} class="{{ rx.classes }}" {{ rx.attrs }}>{{ slot }}</{{ as }}>
 {% endif %}

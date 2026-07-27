@@ -1,49 +1,53 @@
-<div x-data="{
-    chartConfig: {
-        data: {
-            labels: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30'],
-            datasets: [
-                { label: 'Live metric', data: [42, 58, 35, 71, 49, 63, 55] }
-            ]
+<script>
+    let liveTimer = null;
+
+    function nextLivePoint(chart, tick) {
+        const pad = n => String(n).padStart(2, '0');
+        const label = pad(Math.floor(tick * 5 / 60)) + ':' + pad((tick * 5) % 60);
+        const series = chart.data.datasets[0].data;
+        const last = series[series.length - 1];
+        const next = Math.round(Math.min(95, Math.max(5, last + (Math.random() * 20 - 10))));
+        let labels = chart.data.labels.concat([label]);
+        let values = series.concat([next]);
+        if (labels.length > 12) {
+            labels = labels.slice(1);
+            values = values.slice(1);
         }
-    },
-    running: false,
-    _timer: null,
-    _tick: 0,
-    toggle() {
-        this.running = !this.running;
-        if (this.running) {
-            var self = this;
-            this._timer = setInterval(function() { self.push(); }, 800);
-        } else {
-            clearInterval(this._timer);
-        }
-    },
-    push() {
-        this._tick++;
-        var pad = function(n) { return String(n).padStart(2, '0'); };
-        var mins = pad(Math.floor(this._tick * 5 / 60));
-        var secs = pad((this._tick * 5) % 60);
-        var labels = this.chartConfig.data.labels.concat([mins + ':' + secs]);
-        var last   = this.chartConfig.data.datasets[0].data.slice(-1)[0];
-        var next   = Math.min(95, Math.max(5, last + (Math.random() * 20 - 10)));
-        var vals   = this.chartConfig.data.datasets[0].data.concat([Math.round(next)]);
-        if (labels.length > 12) { labels = labels.slice(1); vals = vals.slice(1); }
-        this.chartConfig = {
-            data: {
-                labels: labels,
-                datasets: [{ label: 'Live metric', data: vals }]
-            }
-        };
-    },
-    destroy() {
-        clearInterval(this._timer);
+        return { data: { labels, datasets: [{ label: 'Live metric', data: values }] } };
     }
-}">
-    <div class="flex gap-2 mb-4">
-        <c-lb.button size="sm" :btnStyle="running ? 'error' : 'primary'" @click="toggle()">
-            <span x-text="running ? 'Stop' : 'Start live feed'"></span>
+</script>
+
+<c-lbr.signals
+    $running="false"
+    :$tick="0"
+    :$chartData="{
+        'data': {
+            'labels': ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30'],
+            'datasets': [{'label': 'Live metric', 'data': [42, 58, 35, 71, 49, 63, 55]}],
+        }
+    }"
+/>
+
+<div class="flex flex-col gap-3">
+    <div class="flex gap-2">
+        <c-lb.button
+            size="sm"
+            data-class="{'btn-error': $running, 'btn-primary': !$running}"
+            data-on:click="
+                $running = !$running;
+                if ($running) {
+                    liveTimer = setInterval(() => {
+                        $tick = $tick + 1;
+                        $chartData = nextLivePoint($chartData, $tick);
+                    }, 800);
+                } else {
+                    clearInterval(liveTimer);
+                }
+            "
+        >
+            <span data-text="$running ? 'Stop' : 'Start live feed'"></span>
         </c-lb.button>
     </div>
-    <c-lb.chart.line x-model="chartConfig" options='{"animation": false}' />
+
+    <c-lb.chart.line data="$chartData" options='{"animation": false}' />
 </div>

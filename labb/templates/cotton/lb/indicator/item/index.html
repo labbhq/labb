@@ -1,9 +1,7 @@
-{% load lb_tags %}
+{% load lb_tags lbr_tags %}
 <c-vars
-    class=""
     shape="badge"
     variant=""
-    horizontal=""
     :badgeVariantClasses="{
         'neutral': 'badge-neutral',
         'primary': 'badge-primary',
@@ -24,17 +22,6 @@
         'warning': 'status-warning',
         'error': 'status-error'
     }"
-    :horizontalClasses="{
-        'start': 'indicator-start',
-        'center': 'indicator-center',
-        'end': 'indicator-end'
-    }"
-    vertical=""
-    :verticalClasses="{
-        'top': 'indicator-top',
-        'middle': 'indicator-middle',
-        'bottom': 'indicator-bottom'
-    }"
     size=""
     :badgeSizeClasses="{
         'xs': 'badge-xs',
@@ -52,8 +39,9 @@
     }"
 />
 {% parse_icon attrs as i %}
+{% lbr_props "indicator.item" attrs=attrs as rx %}
 
-<span class="indicator-item
+<span class="{{ rx.classes }}
         {% if shape == 'badge' %}
             badge
             {{ badgeVariantClasses|get_dict_item:variant }}
@@ -62,11 +50,8 @@
             status
             {{ statusVariantClasses|get_dict_item:variant }}
             {{ statusSizeClasses|get_dict_item:size }}
-        {% endif %}
-        {{ horizontalClasses|get_dict_item:horizontal }}
-        {{ verticalClasses|get_dict_item:vertical }}
-        {{ class }}"
-    {{ attrs|strip_icon_attrs }}
+        {% endif %}"
+    {{ rx.attrs }}
 >
     {% if i.name %}
         <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />

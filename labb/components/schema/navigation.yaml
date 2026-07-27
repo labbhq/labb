@@ -25,6 +25,7 @@ components:
         default: vertical
         description: Menu direction - vertical (default) or horizontal
         css_mapping:
+          vertical: menu-vertical
           horizontal: menu-horizontal
       size:
         type: enum

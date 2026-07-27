@@ -1,22 +1,9 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'primary': 'chat-bubble-primary',
-        'secondary': 'chat-bubble-secondary',
-        'accent': 'chat-bubble-accent',
-        'neutral': 'chat-bubble-neutral',
-        'info': 'chat-bubble-info',
-        'success': 'chat-bubble-success',
-        'warning': 'chat-bubble-warning',
-        'error': 'chat-bubble-error'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "chat.bubble" attrs=attrs as rx %}
 
 <div
-    class="chat-bubble {{ variantClasses|get_dict_item:variant }} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     {{ slot }}
 </div>

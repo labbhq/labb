@@ -1,60 +1,11 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    as="button"
-    variant=""
-    btnStyle=""
-    behavior=""
-    size="md"
-    modifier=""
-    :variantClasses="{
-        'neutral': 'btn-neutral',
-        'primary': 'btn-primary',
-        'secondary': 'btn-secondary',
-        'accent': 'btn-accent',
-        'info': 'btn-info',
-        'success': 'btn-success',
-        'warning': 'btn-warning',
-        'error': 'btn-error'
-    }"
-    :btnStyleClasses="{
-        'outline': 'btn-outline',
-        'dash': 'btn-dash',
-        'soft': 'btn-soft',
-        'ghost': 'btn-ghost',
-        'link': 'btn-link'
-    }"
-    :behaviorClasses="{
-        'active': 'btn-active',
-        'disabled': 'btn-disabled'
-    }"
-    :sizeClasses="{
-        'xs': 'btn-xs',
-        'sm': 'btn-sm',
-        'md': 'btn-md',
-        'lg': 'btn-lg',
-        'xl': 'btn-xl'
-    }"
-    :modifierClasses="{
-        'wide': 'btn-wide',
-        'block': 'btn-block',
-        'square': 'btn-square',
-        'circle': 'btn-circle'
-    }"
-/>
+{% load lb_tags lbr_tags %}
+<c-vars as="button" btnStyle="" />
 {% parse_icon attrs as i %}
+{% lbr_props "button" attrs=attrs btnStyle=btnStyle as rx %}
 
 <{{ as }}
-    class="
-        {% if btnStyle != 'bare' %}btn
-        {{ variantClasses|get_dict_item:variant }}
-        {{ btnStyleClasses|get_dict_item:btnStyle }}
-        {{ behaviorClasses|get_dict_item:behavior }}
-        {{ sizeClasses|get_dict_item:size }}
-        {{ modifierClasses|get_dict_item:modifier }}{% endif %}
-        {{ class }}
-    "
-    {{ attrs|strip_icon_attrs }}
+    class="{% if btnStyle != 'bare' %}{{ rx.classes }}{% endif %}"
+    {{ rx.attrs }}
 >
     {% if i.name and not i.end %}
         <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />

@@ -1,13 +1,6 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    direction=""
-    :directionClasses="{
-        'horizontal': 'join-horizontal',
-        'vertical': 'join-vertical'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "join" attrs=attrs as rx %}
 
-<div class="join {{ directionClasses|get_dict_item:direction }} {{ class }}" {{ attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </div>

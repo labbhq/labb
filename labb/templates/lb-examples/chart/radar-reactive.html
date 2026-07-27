@@ -1,30 +1,36 @@
-<div x-data="{
-    chartConfig: {
-        data: {
-            labels: ['Speed', 'Reliability', 'Comfort', 'Safety', 'Efficiency'],
-            datasets: [
-                { label: 'Model A', data: [85, 72, 90, 88, 76] },
-                { label: 'Model B', data: [70, 88, 65, 92, 84] }
-            ]
-        }
-    },
-    randomize() {
-        this.chartConfig = {
+<script>
+    function randomizeChart(chart, min, max) {
+        const rand = () => Math.floor(Math.random() * (max - min)) + min;
+        return {
             data: {
-                labels: this.chartConfig.data.labels,
-                datasets: this.chartConfig.data.datasets.map(function(ds) {
-                    return Object.assign({}, ds, {
-                        data: ds.data.map(function() {
-                            return Math.floor(Math.random() * 40) + 55;
-                        })
-                    });
-                })
-            }
+                labels: chart.data.labels,
+                datasets: chart.data.datasets.map(ds => ({ ...ds, data: ds.data.map(rand) })),
+            },
         };
     }
-}">
-    <div class="flex justify-end gap-2 mb-4">
-        <c-lb.button size="sm" variant="primary" icon="rmx.shuffle" @click="randomize()">Randomize</c-lb.button>
+</script>
+
+<c-lbr.signals :$chartData="{
+    'data': {
+        'labels': ['Speed', 'Reliability', 'Comfort', 'Safety', 'Efficiency'],
+        'datasets': [
+            {'label': 'Model A', 'data': [85, 72, 90, 88, 76]},
+            {'label': 'Model B', 'data': [70, 88, 65, 92, 84]},
+        ],
+    }
+}" />
+
+<div class="flex flex-col gap-3">
+    <div class="flex justify-end">
+        <c-lb.button
+            size="sm"
+            variant="primary"
+            icon="rmx.shuffle"
+            data-on:click="$chartData = randomizeChart($chartData, 55, 95)"
+        >
+            Randomize
+        </c-lb.button>
     </div>
-    <c-lb.chart.radar x-model="chartConfig" />
+
+    <c-lb.chart.radar data="$chartData" />
 </div>

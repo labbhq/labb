@@ -1,39 +1,15 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'neutral': 'status-neutral',
-        'primary': 'status-primary',
-        'secondary': 'status-secondary',
-        'accent': 'status-accent',
-        'info': 'status-info',
-        'success': 'status-success',
-        'warning': 'status-warning',
-        'error': 'status-error'
-    }"
-    size="md"
-    :sizeClasses="{
-        'xs': 'status-xs',
-        'sm': 'status-sm',
-        'md': 'status-md',
-        'lg': 'status-lg',
-        'xl': 'status-xl'
-    }"
-    animate=""
-    :animateClasses="{
-        'ping': 'animate-ping',
-        'bounce': 'animate-bounce'
-    }"
-/>
+{% load lbr_tags %}
+<c-vars animate="" />
+{% lbr_props "status" attrs=attrs animate=animate as rx %}
+{% lbr_props "status" attrs=attrs animate="" as rx_base %}
 
 {% if animate == "ping" %}
 <div class="inline-grid *:[grid-area:1/1]">
-    <div class="status {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} animate-ping {{ class }}" {{ attrs }}></div>
-    <div class="status {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {{ class }}"></div>
+    <div class="{{ rx.classes }}" {{ rx.attrs }}></div>
+    <div class="{{ rx_base.classes }}"></div>
 </div>
 {% elif animate == "bounce" %}
-<div class="status {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} animate-bounce {{ class }}" {{ attrs }}></div>
+<div class="{{ rx.classes }}" {{ rx.attrs }}></div>
 {% else %}
-<div class="status {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs }}></div>
+<div class="{{ rx.classes }}" {{ rx.attrs }}></div>
 {% endif %}

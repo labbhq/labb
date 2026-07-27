@@ -15,6 +15,30 @@ class TestChartConfigProvider(ComponentTestBase):
         # Allow empty or whitespace-only output (script stack tags are removed)
         assert html.strip() == "" or "<div" not in html
 
+    @staticmethod
+    def _config(html):
+        import re
+        return re.sub(r"[ \t]+", " ", html)
+
+    def test_bare_chart_defaults(self):
+        """A bare <c-lb.chart> matches its schema: tooltips and animation default
+        on; legend and grid default off. Regression for the template/schema
+        mismatch that used to render tooltips/animation off."""
+        config = self._config(self.render_component("chart"))
+        assert "tooltips: true" in config
+        assert "animation: true" in config
+        assert "updateAnimation: true" in config
+        assert "legend: false" in config
+        assert "grid: false" in config
+
+    def test_legend_defaults_off_and_opts_in(self):
+        assert "legend: false" in self._config(self.render_component("chart"))
+        assert "legend: true" in self._config(self.render_component("chart", legend=True))
+
+    def test_grid_defaults_off_and_opts_in(self):
+        assert "grid: false" in self._config(self.render_component("chart"))
+        assert "grid: true" in self._config(self.render_component("chart", grid=True))
+
 
 class TestChartBarSubComponent(ComponentTestBase):
     """c-lb.chart.bar — bar chart sub-component."""
@@ -29,7 +53,7 @@ class TestChartBarSubComponent(ComponentTestBase):
 
     def test_bar_x_data_attribute(self):
         html = self.render_component("chart.bar")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
     def test_bar_chart_type(self):
         html = self.render_component("chart.bar")
@@ -67,7 +91,7 @@ class TestChartBarSubComponent(ComponentTestBase):
 
     def test_bar_x_ref_canvas(self):
         html = self.render_component("chart.bar")
-        assert 'x-ref="canvas"' in html
+        assert '<canvas' in html
 
 
 class TestChartLineSubComponent(ComponentTestBase):
@@ -87,7 +111,7 @@ class TestChartLineSubComponent(ComponentTestBase):
 
     def test_line_x_data_attribute(self):
         html = self.render_component("chart.line")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
 
 class TestChartPieSubComponent(ComponentTestBase):
@@ -103,7 +127,7 @@ class TestChartPieSubComponent(ComponentTestBase):
 
     def test_pie_x_data_attribute(self):
         html = self.render_component("chart.pie")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
 
 class TestChartDoughnutSubComponent(ComponentTestBase):
@@ -119,7 +143,7 @@ class TestChartDoughnutSubComponent(ComponentTestBase):
 
     def test_doughnut_x_data_attribute(self):
         html = self.render_component("chart.doughnut")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
 
 class TestChartRadarSubComponent(ComponentTestBase):
@@ -135,7 +159,7 @@ class TestChartRadarSubComponent(ComponentTestBase):
 
     def test_radar_x_data_attribute(self):
         html = self.render_component("chart.radar")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
 
 class TestChartPolarAreaSubComponent(ComponentTestBase):
@@ -151,7 +175,7 @@ class TestChartPolarAreaSubComponent(ComponentTestBase):
 
     def test_polar_area_x_data_attribute(self):
         html = self.render_component("chart.polar-area")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
 
 class TestChartScatterSubComponent(ComponentTestBase):
@@ -167,7 +191,7 @@ class TestChartScatterSubComponent(ComponentTestBase):
 
     def test_scatter_x_data_attribute(self):
         html = self.render_component("chart.scatter")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
     def test_scatter_default_height(self):
         html = self.render_component("chart.scatter")
@@ -191,7 +215,7 @@ class TestChartBubbleSubComponent(ComponentTestBase):
 
     def test_bubble_x_data_attribute(self):
         html = self.render_component("chart.bubble")
-        assert 'x-data="lbChartComp"' in html
+        assert 'data-init="lbChart.initFromEl(el)"' in html
 
     def test_bubble_default_height(self):
         html = self.render_component("chart.bubble")
@@ -200,3 +224,23 @@ class TestChartBubbleSubComponent(ComponentTestBase):
     def test_bubble_wrapper_class(self):
         html = self.render_component("chart.bubble")
         assert "lb-chart" in html
+
+
+class TestChartElementReference(ComponentTestBase):
+    """Datastar exposes the element as `el`, never `$el` (which reads a signal).
+
+    A regression guard: `$el` parses as the signal $['el'], so both chart paths
+    threw `el.querySelector is not a function` and no chart rendered.
+    """
+
+    def test_static_uses_bare_el_not_signal(self):
+        html = self.render_component("chart.bar")
+        assert 'lbChart.initFromEl(el)' in html
+        assert '$el' not in html
+
+    def test_reactive_binding_uses_data_effect_with_bare_el(self):
+        # A `$signal` data prop takes the reactive branch (data-effect), not data-init.
+        html = self.render_component("chart.bar", data="$chartData")
+        assert 'data-effect="lbChart.handle(el, $chartData)"' in html
+        assert 'data-init' not in html
+        assert '$el' not in html

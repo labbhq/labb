@@ -1,6 +1,5 @@
-{% load lb_tags %}
+{% load lb_tags lbr_tags %}
 <c-vars
-    class=""
     size="md"
     :sizeClasses="{
         'xs': 'w-8 text-xs',
@@ -27,11 +26,6 @@
         'pentagon': 'mask mask-pentagon',
         'diamond': 'mask mask-diamond',
         'star': 'mask mask-star'
-    }"
-    status=""
-    :statusClasses="{
-        'online': 'avatar-online',
-        'offline': 'avatar-offline'
     }"
     placeholder
     ring
@@ -62,10 +56,11 @@
     }"
 />
 {% parse_icon attrs as i %}
+{% lbr_props "avatar" attrs=attrs placeholder=placeholder size="" rounded="" mask="" ring="" ringColor="" bgColor="" as rx %}
 
 <div
-    class="avatar {{ statusClasses|get_dict_item:status }} {% if placeholder %}avatar-placeholder{% endif %} {{ class }}"
-    {{ attrs|strip_icon_attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     {% if slot %}
         {{ slot }}

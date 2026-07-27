@@ -9,13 +9,81 @@ extraction testing.
 import os
 import re
 import tempfile
+import uuid
 from pathlib import Path
 
 import pytest
 from django.conf import settings
+from django.template import engines
 from django.template.loader import render_to_string
 
 from labb.components.registry import ComponentRegistry
+
+
+def _worker_template_dir() -> Path:
+    """Return a per-worker directory for temporary test templates.
+
+    Under ``pytest -n auto`` (pytest-xdist) each worker is a separate process,
+    but they all share the system temp dir. Writing temp templates there — and
+    mutating ``settings.TEMPLATES[0]["DIRS"]`` per render — let one worker's
+    cleanup clobber another's in-flight lookup, producing intermittent
+    "template not found" failures. Giving each worker its own dedicated dir
+    (keyed on ``PYTEST_XDIST_WORKER``) removes the cross-worker interference.
+    """
+    worker = os.environ.get("PYTEST_XDIST_WORKER", "master")
+    template_dir = Path(tempfile.gettempdir()) / f"labb-test-templates-{worker}"
+    template_dir.mkdir(parents=True, exist_ok=True)
+    return template_dir
+
+
+def _ensure_template_dir(template_dir: Path) -> None:
+    """Keep the worker dir on the live template engine.
+
+    Registering it in ``settings.TEMPLATES`` is not enough on its own: any test
+    that uses ``override_settings`` restores the original TEMPLATES on exit and
+    rebuilds the engines, silently dropping the dir. So re-add it when missing
+    and invalidate the engine cache, rather than assuming a one-time setup holds.
+    """
+    template_dir_str = str(template_dir)
+
+    # DIRS entries may be Path or str — compare as strings.
+    dirs = [str(d) for d in settings.TEMPLATES[0]["DIRS"]]
+    if template_dir_str not in dirs:
+        settings.TEMPLATES[0]["DIRS"] = [template_dir_str, *settings.TEMPLATES[0]["DIRS"]]
+
+    # Check the live engine, not just settings: override_settings rebuilds the
+    # engines from the restored TEMPLATES, so settings can look right while the
+    # engine actually in use has already dropped the dir. Both the built engines
+    # and the parsed config are cached, so clear both.
+    engine_dirs = [str(d) for d in engines["django"].engine.dirs]
+    if template_dir_str not in engine_dirs:
+        engines._engines = {}
+        engines.__dict__.pop("templates", None)
+
+
+def _render_isolated(template_content: str, context: dict, error_label: str) -> str:
+    """Render ``template_content`` from a uniquely-named file in the worker dir.
+
+    The worker dir is registered in ``TEMPLATES[0]["DIRS"]`` once and left in
+    place (no per-call insert/restore churn); the unique per-render filename
+    avoids any template-cache collisions.
+    """
+    template_dir = _worker_template_dir()
+    tmp_name = f"{uuid.uuid4().hex}.html"
+    tmp_path = template_dir / tmp_name
+    tmp_path.write_text(template_content)
+
+    _ensure_template_dir(template_dir)
+
+    try:
+        return render_to_string(tmp_name, context).strip()
+    except Exception as e:
+        return f"<!-- {error_label}: {e} -->"
+    finally:
+        try:
+            tmp_path.unlink()
+        except OSError:
+            pass
 
 
 class ComponentTestBase:
@@ -91,38 +159,7 @@ class ComponentTestBase:
         # Create template context - no need for element_type anymore
         context = {}
 
-        # Create temporary template file
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".html", delete=False
-        ) as tmp_file:
-            tmp_file.write(template_content)
-            tmp_file_path = tmp_file.name
-
-        try:
-            # Get the template name relative to template directories
-            tmp_filename = os.path.basename(tmp_file_path)
-
-            # Add the temp directory to template dirs temporarily
-            temp_dir = os.path.dirname(tmp_file_path)
-            current_template_dirs = list(settings.TEMPLATES[0]["DIRS"])
-            settings.TEMPLATES[0]["DIRS"].insert(0, temp_dir)
-
-            try:
-                # Render the template
-                html = render_to_string(tmp_filename, context)
-                return html.strip()
-            finally:
-                # Restore original template dirs
-                settings.TEMPLATES[0]["DIRS"] = current_template_dirs
-
-        except Exception as e:
-            return f"<!-- Component rendering error: {e} -->"
-        finally:
-            # Clean up temp file
-            try:
-                os.unlink(tmp_file_path)
-            except OSError:
-                pass
+        return _render_isolated(template_content, context, "Component rendering error")
 
     def render_template_string(self, template_str, context=None):
         """
@@ -142,38 +179,7 @@ class ComponentTestBase:
         if context is None:
             context = {}
 
-        # Create temporary template file
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".html", delete=False
-        ) as tmp_file:
-            tmp_file.write(template_str.strip())
-            tmp_file_path = tmp_file.name
-
-        try:
-            # Get the template name relative to template directories
-            tmp_filename = os.path.basename(tmp_file_path)
-
-            # Add the temp directory to template dirs temporarily
-            temp_dir = os.path.dirname(tmp_file_path)
-            current_template_dirs = list(settings.TEMPLATES[0]["DIRS"])
-            settings.TEMPLATES[0]["DIRS"].insert(0, temp_dir)
-
-            try:
-                # Render the template
-                html = render_to_string(tmp_filename, context)
-                return html.strip()
-            finally:
-                # Restore original template dirs
-                settings.TEMPLATES[0]["DIRS"] = current_template_dirs
-
-        except Exception as e:
-            return f"<!-- Template rendering error: {e} -->"
-        finally:
-            # Clean up temp file
-            try:
-                os.unlink(tmp_file_path)
-            except OSError:
-                pass
+        return _render_isolated(template_str.strip(), context, "Template rendering error")
 
     def get_component_schema(self, component_name):
         """

@@ -6,6 +6,78 @@
 #   These classes are not required to be present in all renderings and won't cause test failures
 #
 components:
+  countdown:
+    template: lb/countdown/index.html
+    description: Animated rolling number for timers and counters (values 0-999)
+    base_classes:
+    - countdown
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      value:
+        type: string
+        default: '0'
+        description: Current number to display (0-999); animate by re-rendering with a new value
+        required: false
+      digits:
+        type: string
+        default: ''
+        description: Reserve a fixed width for this many digits (blank = auto-size)
+        required: false
+      ariaLabel:
+        type: string
+        default: ''
+        description: Accessible label for the value (defaults to the value)
+        required: false
+  aura:
+    template: lb/aura/index.html
+    description: Animated conic-gradient glow border wrapping any element
+    base_classes:
+    - aura
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - dual
+        - rainbow
+        - holo
+        - gold
+        - silver
+        - glow
+        default: ''
+        description: Glow colour style
+        css_mapping:
+          dual: aura-dual
+          rainbow: aura-rainbow
+          holo: aura-holo
+          gold: aura-gold
+          silver: aura-silver
+          glow: aura-glow
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Glow spread size
+        css_mapping:
+          xs: aura-xs
+          sm: aura-sm
+          md: aura-md
+          lg: aura-lg
+          xl: aura-xl
   table:
     template: lb/table/index.html
     description: DaisyUI Table component with support for zebra, pinning, and sizes.
@@ -338,8 +410,6 @@ components:
         type: boolean
         default: false
         description: Whether this accordion item is initially open
-        css_mapping:
-          true: checked
       title:
         type: string
         default: ''

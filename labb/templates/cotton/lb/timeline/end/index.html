@@ -1,9 +1,6 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    box
-/>
+{% load lbr_tags %}
+{% lbr_props "timeline.end" attrs=attrs as rx %}
 
-<div class="timeline-end {% if box %}timeline-box{% endif %} {{ class }}" {{ attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </div>

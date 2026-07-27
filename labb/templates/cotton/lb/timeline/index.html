@@ -1,15 +1,6 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    direction=""
-    :directionClasses="{
-        'horizontal': 'timeline-horizontal',
-        'vertical': 'timeline-vertical'
-    }"
-    compact
-    snap
-/>
+{% load lbr_tags %}
+{% lbr_props "timeline" attrs=attrs as rx %}
 
-<ul class="timeline {{ directionClasses|get_dict_item:direction }} {% if compact %}timeline-compact{% endif %} {% if snap %}timeline-snap-icon{% endif %} {{ class }}" {{ attrs }}>
+<ul class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </ul>

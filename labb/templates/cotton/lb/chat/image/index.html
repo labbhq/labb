@@ -1,6 +1,5 @@
-{% load lb_tags %}
+{% load lb_tags lbr_tags %}
 <c-vars
-    class=""
     src=""
     alt="Avatar"
     size="md"
@@ -10,10 +9,11 @@
         'lg': 'w-12'
     }"
 />
+{% lbr_props "chat.image" attrs=attrs size="" as rx %}
 
 <div
-    class="chat-image avatar {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     <div class="{{ sizeClasses|get_dict_item:size }} rounded-full">
         {% if src %}

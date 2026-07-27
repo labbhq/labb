@@ -1,11 +1,6 @@
-<c-vars
-    class=""
-    as="figure"
-/>
-
-<{{ as }}
-    class="hover-gallery {{ class }}"
-    {{ attrs }}
->
+{% load lbr_tags %}
+<c-vars as="figure" />
+{% lbr_props "hover-gallery" attrs=attrs as rx %}
+<{{ as }} class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </{{ as }}>
