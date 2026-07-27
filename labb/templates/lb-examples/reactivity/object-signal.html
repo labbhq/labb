@@ -1,0 +1,24 @@
+<script>
+    function nextOrder(current) {
+        const steps = {
+            pending:   { status: 'pending',   variant: 'warning', label: 'Pending' },
+            shipped:   { status: 'shipped',   variant: 'info',    label: 'Shipped' },
+            delivered: { status: 'delivered', variant: 'success', label: 'Delivered' },
+        };
+        const order = ['pending', 'shipped', 'delivered'];
+        const next = order[(order.indexOf(current.status) + 1) % order.length];
+        return steps[next];
+    }
+</script>
+
+<c-lbr.signals :$order="{'status': 'pending', 'variant': 'warning', 'label': 'Pending'}" />
+
+<div class="flex items-center gap-4">
+    <c-lb.badge variant="$order.variant:warning" size="lg">
+        <span data-text="$order.label"></span>
+    </c-lb.badge>
+    <span class="text-sm opacity-70">
+        status: <span class="font-mono" data-text="$order.status"></span>
+    </span>
+    <c-lb.button size="sm" data-on:click="$order = nextOrder($order)">Advance</c-lb.button>
+</div>

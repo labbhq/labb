@@ -1,0 +1,18 @@
+<c-lbr.signals $open="false" $name="" />
+
+<div class="flex flex-col gap-4 w-full md:w-96">
+
+    <c-lb.input placeholder="Type your name" bind="name" />
+    <p class="text-sm">
+        Hello, <span class="font-semibold" data-text="$name || 'stranger'"></span>
+    </p>
+
+    <c-lb.button btnStyle="soft" data-on:click="$open = !$open">
+        <span data-text="$open ? 'Hide details' : 'Show details'"></span>
+    </c-lb.button>
+
+    <c-lb.alert variant="info" alertStyle="soft" data-show="$open">
+        <span>These details are shown and hidden entirely in the browser.</span>
+    </c-lb.alert>
+
+</div>

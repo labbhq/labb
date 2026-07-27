@@ -1,0 +1,12 @@
+{% load lbr_tags %}
+<c-vars
+    class=""
+    value="0"
+    digits=""
+    ariaLabel=""
+/>
+
+{% lbr_style_vars value=value digits=digits as sv %}
+{% lbr_reactive_text value as rt %}
+
+<span class="countdown {{ class }}" {{ attrs }}><span style="{{ sv.style }}" {{ sv.attrs }} aria-live="polite" aria-label="{{ ariaLabel|default:rt.text }}" {{ rt.attrs }}>{{ rt.text }}</span></span>

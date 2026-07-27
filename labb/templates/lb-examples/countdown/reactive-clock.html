@@ -1,0 +1,19 @@
+<c-lbr.signals $clock.h="1" $clock.m="59" $clock.s="45" />
+
+<div class="flex flex-col items-start gap-4">
+
+    <div class="flex items-center gap-1 font-mono text-3xl">
+        <c-lb.countdown value="$clock.h:1" digits="2" />
+        <span>:</span>
+        <c-lb.countdown value="$clock.m:59" digits="2" />
+        <span>:</span>
+        <c-lb.countdown value="$clock.s:45" digits="2" />
+    </div>
+
+    <div data-on-interval__duration.1s="
+        $clock.s = $clock.s > 0 ? $clock.s - 1 : 59;
+        if ($clock.s === 59) { $clock.m = $clock.m > 0 ? $clock.m - 1 : 59 }
+        if ($clock.m === 59 && $clock.s === 59) { $clock.h = $clock.h > 0 ? $clock.h - 1 : 0 }
+    "></div>
+
+</div>
