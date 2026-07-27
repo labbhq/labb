@@ -12,7 +12,8 @@ from labb.components.registry import (
 )
 from labbicons.metadata import remix
 
-from ..doc_parser import resolve_file_path_to_url
+from ..constants import DEFAULT_BANNER_ID, DISMISSED_BANNERS_SESSION_KEY
+from ..doc_parser import DocRender, resolve_file_path_to_url
 from ..seo_utils import (
     SEOMetadata,
     generate_article_schema,
@@ -21,6 +22,31 @@ from ..seo_utils import (
 )
 
 register = template.Library()
+
+
+@register.simple_tag(takes_context=True)
+def labb_docs_banner(context):
+    """
+    Return the announcement banner config from LABB_DOCS["banner"], or None.
+
+    Dismissal is persisted server-side (session), so a dismissed banner is not
+    re-emitted — a Datastar full-page morph therefore cannot bring it back.
+
+    Usage: {% labb_docs_banner as banner %}
+    """
+    labb_docs = getattr(settings, "LABB_DOCS", {})
+    banner = labb_docs.get("banner") or None
+    if not banner or not banner.get("text"):
+        return None
+    request = context.get("request")
+    if request is not None and banner.get("dismissible"):
+        banner_id = banner.get("id", DEFAULT_BANNER_ID)
+        dismissed = getattr(request, "session", {}).get(
+            DISMISSED_BANNERS_SESSION_KEY, []
+        )
+        if banner_id in dismissed:
+            return None
+    return banner
 
 
 @register.filter
@@ -32,34 +58,36 @@ def get_component_spec(component_name):
     return load_component_spec(component_name)
 
 
-@register.simple_tag
-def show_component_example(path, style="tab", previewStyle="flex-center"):
+@register.simple_tag(takes_context=True)
+def show_component_example(context, path, style="", previewStyle="flex-center"):
     """
     Show a component example by reading from a template file and rendering it.
 
     Args:
         path (str): Path to the example template relative to lb-examples/
-        style (str): Style to display the example (default: "tab")
+        style (str): Style to display the example. When empty, the default is
+            chosen by doc type: guide docs render "stacked" (preview above code),
+            everything else (ui component docs) renders "tab". An explicit style
+            passed on the usage always wins.
 
     Returns:
         str: Rendered component example
     """
-    # Get the template for rendering
+    if not style:
+        style = "stacked" if context.get("doc_name") == "guide" else "tab"
+
     template = get_template(f"lb-examples/{path}.html")
     rendered_content = template.render({})
 
-    # Get raw content from the registry
     registry = ComponentRegistry()
     raw_content = registry.get_example_raw_content(path)
     if raw_content is None:
         raise ValueError(f"Template does not exist: {path}")
 
-    # Load the component_example template
     component_example_template = get_template(
         f"cotton/lbdocs/component_example/style/{style}.html"
     )
 
-    # Create context for the component_example template
     context = {
         "slot": rendered_content,
         "code": raw_content,
@@ -67,7 +95,6 @@ def show_component_example(path, style="tab", previewStyle="flex-center"):
         "previewStyle": previewStyle,
     }
 
-    # Render the component_example template with the context
     return component_example_template.render(context)
 
 
@@ -85,7 +112,6 @@ def load_icon_metadata():
 
     if icons_data is None:
         icons_data = remix()
-        # Cache for 1 hour (or longer in production)
         cache.set(cache_key, icons_data, 3600)
 
     return icons_data
@@ -101,29 +127,52 @@ def get_all_component_names():
     return sorted(names)
 
 
-@register.simple_tag(takes_context=True)
-def get_components_menu(context):
-    """
-    Get high-level components from the Components menu in the doc config.
-    Returns a list of dicts with 'title' and 'path' keys.
-    Usage: {% get_components_menu as components %}
-    """
-    config = context.get("config", {})
-    menu = config.get("menu", [])
+# Stands in for a component whose doc page has no `icon:` frontmatter. Deliberately
+# plain, so a missing icon reads as unfinished rather than as a choice.
+COMPONENT_FALLBACK_ICON = "rmx.square"
 
-    # Collect components from all category sections (top-level menu items)
+
+def _doc_config(doc_name):
+    """Load a doc type's config by name.
+
+    DocRender holds an mtime-checked module-level cache, so this is an in-memory
+    dict lookup after the first call.
+    """
+    labb_docs = getattr(settings, "LABB_DOCS", {})
+    yaml_file_path = labb_docs.get("types", {}).get(doc_name, {}).get("config")
+    if not yaml_file_path:
+        return {}
+    return DocRender(yaml_file_path).docs_data
+
+
+@register.simple_tag(takes_context=True)
+def get_components_menu(context, doc_name):
+    """
+    Get high-level components from the Components menu of a doc type's config.
+    Returns a list of dicts with 'title', 'path' and 'icon' keys, sorted by title.
+
+    The context `config` is used when it already holds the requested doc type
+    (a doc page rendering its own grid); otherwise the config is loaded. This
+    lets surfaces without a doc context — the homepage — render the same grid.
+
+    Usage: {% get_components_menu "ui" as components %}
+    """
+    config = context.get("config") or {}
+    if config.get("doc_name") != doc_name:
+        config = _doc_config(doc_name)
+
     components = []
-    for category in menu:
+    for category in config.get("menu", []):
         for component in category.get("children", []):
             if component.get("path"):
                 components.append(
                     {
                         "title": component.get("title", ""),
                         "path": component.get("path", ""),
+                        "icon": component.get("icon") or COMPONENT_FALLBACK_ICON,
                     }
                 )
 
-    # Sort by title
     return sorted(components, key=lambda x: x["title"])
 
 
@@ -143,10 +192,8 @@ def doc_url(context, file_path, doc_name=None):
     Returns:
         str: URL path (e.g., "/docs/ui/getting-started/installation/")
     """
-    # Get the doc_name from context to determine URL prefix
     doc_name = doc_name or context.get("doc_name")
 
-    # Map view names to URL prefixes
     url_prefix_map = {
         "ui": "/docs/ui",
         "guide": "/docs/guide",
@@ -158,10 +205,7 @@ def doc_url(context, file_path, doc_name=None):
             f"Invalid doc_name: {doc_name} when resolving doc_url for {file_path}"
         )
 
-    url_prefix = url_prefix_map[doc_name]
-
-    # Use the extracted function from doc_parser
-    return resolve_file_path_to_url(file_path, url_prefix)
+    return resolve_file_path_to_url(file_path, url_prefix_map[doc_name])
 
 
 @register.simple_tag
@@ -196,28 +240,22 @@ def get_seo_metadata(context, doc_info=None):
     doc_info = doc_info or context.get("doc_info", {})
     request = context.get("request")
 
-    # Get site URL from request
     site_url = ""
     if request:
         protocol = "https" if request.is_secure() else "http"
         site_url = f"{protocol}://{request.get_host()}"
 
-    # Get SEO configuration from LABB_DOCS.seo
     labb_docs = getattr(settings, "LABB_DOCS", {})
     seo_config = labb_docs.get("seo", {})
 
-    # Use pre-computed SEO data from YAML
     metadata = doc_info.get("seo", {}).copy()
 
-    # Make canonical URL absolute
     if metadata.get("canonical_url"):
         metadata["canonical_url"] = site_url + metadata["canonical_url"]
 
-    # Add site-level twitter handles if not set
     if not metadata.get("twitter_site"):
         metadata["twitter_site"] = seo_config.get("twitter_site")
 
-    # Add site name and locale
     metadata["site_name"] = seo_config.get("site_name", "Labb")
     metadata["locale"] = seo_config.get("default_locale", "en_US")
 
@@ -233,13 +271,11 @@ def generate_structured_data(context, doc_info=None):
     doc_info = doc_info or context.get("doc_info", {})
     request = context.get("request")
 
-    # Get site URL from request
     site_url = ""
     if request:
         protocol = "https" if request.is_secure() else "http"
         site_url = f"{protocol}://{request.get_host()}"
 
-    # Get SEO configuration from LABB_DOCS.seo
     labb_docs = getattr(settings, "LABB_DOCS", {})
     seo_config = labb_docs.get("seo", {})
 
@@ -248,7 +284,6 @@ def generate_structured_data(context, doc_info=None):
     default_author = seo_config.get("default_author", "Labb Team")
     default_locale = seo_config.get("default_locale", "en_US")
 
-    # Create SEO metadata
     seo = SEOMetadata(
         doc_info=doc_info,
         site_name=site_name,
@@ -260,21 +295,17 @@ def generate_structured_data(context, doc_info=None):
 
     schemas = []
 
-    # Add breadcrumb schema
     url_path = doc_info.get("url_path", "")
     if url_path:
         schemas.append(generate_breadcrumb_schema(url_path, site_url))
 
-    # Add article schema
     schemas.append(generate_article_schema(seo, site_url))
 
-    # Add software schema for component pages
     frontmatter = doc_info.get("frontmatter", {})
     if component_name := frontmatter.get("component"):
         description = frontmatter.get("description", "")
         schemas.append(generate_software_schema(component_name, description, site_url))
 
-    # Convert to JSON
     json_ld = json.dumps(schemas, indent=2)
 
     return mark_safe(f'<script type="application/ld+json">\n{json_ld}\n</script>')
@@ -296,16 +327,13 @@ def get_blog_posts(context, doc_name="blog"):
 
     posts = []
     for url_path, page_data in pages.items():
-        # Skip the index page
         if url_path.endswith("/index/"):
             continue
 
-        # Only include posts (pages under /blog/posts/)
         if "/posts/" in url_path:
             frontmatter = page_data.get("frontmatter", {})
             seo = page_data.get("seo", {})
 
-            # Get published_time for sorting (use seo data if available, fallback to frontmatter)
             published_time = seo.get("published_time") or frontmatter.get(
                 "published_time"
             )
@@ -339,31 +367,23 @@ def get_blog_posts(context, doc_name="blog"):
                 }
             )
 
-    # Sort by published_time (most recent first)
-    # Posts without published_time go to the end
     def sort_key(post):
+        """Sort newest first; undated posts sort to the end."""
         published = post.get("published_time") or ""
         if not published:
-            # Posts without dates go to the end
             return (False, "")
 
-        # Handle both date objects and strings
         from datetime import date, datetime
 
         if isinstance(published, (date, datetime)):
-            # Convert date/datetime object to string for sorting
             date_str = published.strftime("%Y-%m-%d")
         elif isinstance(published, str):
-            # Extract date portion for consistent sorting (handle datetime strings)
             date_str = published[:10] if len(published) >= 10 else published
         else:
-            # Fallback: convert to string
             date_str = (
                 str(published)[:10] if len(str(published)) >= 10 else str(published)
             )
 
-        # Return tuple: (has_date, date_string) for proper sorting
-        # Reverse=True will put newest dates first
         return (True, date_str)
 
     posts.sort(key=sort_key, reverse=True)

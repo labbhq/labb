@@ -1,5 +1,6 @@
 {% load static %}
 {% load lb_tags %}
+{% load docs_tags %}
 
 <c-vars
     title
@@ -11,8 +12,10 @@
     includeMeta=True
 />
 
+{% labb_docs_banner as banner %}
+
 <!DOCTYPE html>
-<html lang="en" {% labb_theme %} class="scroll-smooth scroll-pt-20">
+<html lang="en" {% labb_theme %} class="scroll-smooth{% if banner %} lb-has-banner {% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +27,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'lbdocs/img/labb/favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'lbdocs/img/labb/favicon/site.webmanifest' %}">
 
-    {# Sitewide structured data — Organization + WebSite (all pages) #}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -49,12 +51,10 @@
     }
     </script>
 
-    {# SEO meta tags - conditionally render based on doc_info #}
     {% if doc_info %}
         <c-lbdocs.seo.head :doc_info=doc_info :title=title />
     {% else %}
         <title>{{ title|default:"labb" }}</title>
-        {# includeMeta defaults True (c-vars); set includeMeta=False when the page supplies meta in the head slot (e.g. homepage) #}
         {% if includeMeta %}
         <meta name="description" content="UI for Django perfectionists with deadlines.">
         {% endif %}
@@ -71,6 +71,18 @@
     <link rel="stylesheet" href="{% static 'lbdocs/css/highlight-custom.css' %}">
     <script src="{% static 'lbdocs/js/highlight.min.js' %}" defer></script>
     <script src="{% static 'lbdocs/js/common.js' %}" defer></script>
+
+    <style>
+        :root { --lb-header-h: 5rem; }
+        :root.lb-has-banner { --lb-header-h: 6.75rem; }
+        html { scroll-padding-top: var(--lb-header-h); }
+        .lb-doc-main { padding-top: var(--lb-header-h); }
+        .docs-sidebar-container {
+            top: var(--lb-header-h);
+            max-height: calc(100vh - var(--lb-header-h));
+        }
+        .lb-toc-sticky { top: var(--lb-header-h); }
+    </style>
 </head>
 
 <body class="min-h-screen">
@@ -80,12 +92,14 @@
         <c-lbdocs.nav.topnav :topnavTitle=topnavTitle :showDrawerToggle=showDrawerToggle />
     {% endif %}
 
-    <main class="{{ class }} pt-20">
+    <main class="{{ class }} lb-doc-main">
         {{ slot }}
     </main>
 
     {% if showFooter %}
         <c-lbdocs.nav.footer />
     {% endif %}
+
+    <c-search.palette />
 </body>
 </html>

@@ -5,10 +5,8 @@
     title
 />
 
-{# Generate SEO metadata from doc_info #}
 {% get_seo_metadata doc_info as seo %}
 
-{# Basic meta tags #}
     <title>{{ seo.title }}</title>
     <meta name="description" content="{{ seo.description }}">
     {% if seo.keywords %}
@@ -17,12 +15,10 @@
     <meta name="robots" content="{{ seo.robots }}">
     <meta name="author" content="{{ seo.author }}">
 
-    {# Canonical URL #}
     {% if seo.canonical_url %}
     <link rel="canonical" href="{{ seo.canonical_url }}">
     {% endif %}
 
-    {# Open Graph tags #}
     <meta property="og:type" content="{{ seo.og_type }}">
     <meta property="og:title" content="{{ seo.meta_title }}">
     <meta property="og:description" content="{{ seo.description }}">
@@ -54,7 +50,6 @@
     {% endfor %}
     {% endif %}
 
-    {# Twitter Card tags #}
     <meta name="twitter:card" content="{{ seo.twitter_card }}">
     <meta name="twitter:title" content="{{ seo.meta_title }}">
     <meta name="twitter:description" content="{{ seo.description }}">
@@ -73,5 +68,4 @@
     <meta name="twitter:creator" content="{{ seo.twitter_creator }}">
     {% endif %}
 
-    {# JSON-LD Structured Data #}
     {% generate_structured_data doc_info %}

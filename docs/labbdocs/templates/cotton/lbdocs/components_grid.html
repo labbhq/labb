@@ -1,0 +1,17 @@
+{% load docs_tags %}
+<c-vars docName="ui" />
+{% get_components_menu docName as components %}
+
+<div class="not-prose grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-1">
+    {% for component in components %}
+        <a
+            href="{{ component.path }}"
+            class="group flex items-center gap-3 rounded-xl px-4 py-3 transition-colors hover:bg-base-200/50"
+        >
+            <span class="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-base-200/60 text-base-content/50 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                <c-lbi n="{{ component.icon }}" w="1.1em" h="1.1em" />
+            </span>
+            <span class="truncate text-sm font-medium">{{ component.title }}</span>
+        </a>
+    {% endfor %}
+</div>
