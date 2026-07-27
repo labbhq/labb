@@ -1,0 +1,43 @@
+<c-vars id="block-viewer" :tabs="[]" :tree="[]" height="600" />
+
+{% if tabs %}
+{% with idsafe=id|cut:"-" %}
+<div class="lbb-source flex flex-col h-full" id="{{ id }}-source">
+
+<c-lbr.signals id="{{ id }}-source-signals"
+               data-signals='{"activeFile_{{ idsafe }}":"{{ tabs.0.fname }}"}' />
+
+<div class="flex items-center justify-between px-3 h-9 shrink-0 border-b border-base-200 bg-base-100">
+    <div class="flex items-center gap-2 flex-1 min-w-0">
+        <c-lbi n="rmx.file-code" w="12" h="12" class="shrink-0 text-base-content/60" />
+        <span class="font-mono text-xs text-base-content/60 truncate"
+              data-text="$activeFile_{{ idsafe }}"></span>
+    </div>
+    <c-lb.button modifier="square" size="xs" btnStyle="ghost" class="tooltip tooltip-left" data-tip="Copy code"
+                 data-on:click="lbbCopyCode(el)">
+        <span class="i-copy"><c-lbi n="rmx.clipboard" w="13" h="13" class="text-base-content/60" /></span>
+        <span class="i-check" style="display:none"><c-lbi n="rmx.check" w="13" h="13" class="text-success" /></span>
+    </c-lb.button>
+</div>
+
+<div class="flex flex-1 min-h-0">
+
+    <div class="w-52 shrink-0 overflow-y-auto border-r border-base-200">
+        <c-lb.menu size="xs" class="p-1 gap-px w-full">
+            <c-lbb.renderer.source.tree :nodes=tree idsafe="{{ idsafe }}" />
+        </c-lb.menu>
+    </div>
+
+    <div class="flex-1 overflow-auto bg-base-100 font-mono">
+        {% for tab in tabs %}
+        <div class="src-tab" data-file="{{ tab.fname }}" data-show="$activeFile_{{ idsafe }} === '{{ tab.fname }}'"{% if not forloop.first %} style="display:none"{% endif %}>
+            <pre class="py-4 pl-2 pr-5 text-xs leading-relaxed"><code>{{ tab.content }}</code></pre>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</div>
+{% endwith %}
+{% endif %}

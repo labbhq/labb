@@ -1,0 +1,22 @@
+<c-lbb.page title="{{ slug }} — Block Preview">
+    <main class="container mx-auto px-4 py-6 max-w-7xl">
+
+        <div class="flex items-center gap-2 mb-4">
+            <c-lb.button as="a" href="/" btnStyle="ghost" size="xs">← Gallery</c-lb.button>
+            <span class="text-base-content/30">/</span>
+            <span class="text-sm font-medium">{{ slug }}</span>
+            <c-lb.badge size="xs" variant="neutral">{{ meta.type }}</c-lb.badge>
+        </div>
+
+        <c-lbb.renderer.viewer
+            slug="{{ slug }}"
+            description="{{ meta.description }}"
+            type="{{ meta.type }}"
+            preview_url="{{ preview_url }}"
+            install_cmd="labb block add {{ vendor }}/{{ category }}/{{ slug }}"
+            :tabs=tabs
+            :tree=tree
+        />
+
+    </main>
+</c-lbb.page>

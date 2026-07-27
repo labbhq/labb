@@ -1,0 +1,61 @@
+<style>
+    .lbb-thumb-dark { display: none; }
+    [data-theme="labb-dark"] .lbb-thumb-light,
+    [data-theme="dark"] .lbb-thumb-light { display: none; }
+    [data-theme="labb-dark"] .lbb-thumb-dark,
+    [data-theme="dark"] .lbb-thumb-dark { display: block; }
+</style>
+<c-lbb.page title="Block Gallery">
+    <main class="w-full px-6 lg:px-10 py-8">
+
+        <div class="mb-8">
+            <h1 class="text-xl font-semibold tracking-tight">Blocks</h1>
+        </div>
+
+        {% for cat, blocks in categories %}
+        <section class="mb-12">
+            <h2 class="text-xs font-semibold uppercase tracking-widest text-base-content/50 mb-4">
+                {{ cat }} <span class="text-base-content/30 ml-1">{{ blocks|length }}</span>
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
+                {% for block in blocks %}
+                <a href="/{{ block.vendor }}/{{ block.category }}/{{ block.slug }}/"
+                   class="group block rounded-xl border border-base-300 bg-base-100 overflow-hidden
+                          hover:border-base-content/30 hover:shadow-md transition">
+
+                    <div class="aspect-[16/10] bg-base-200/40 overflow-hidden border-b border-base-200">
+                        {% if block.thumbnail_url %}
+                        <img src="{{ block.thumbnail_url }}" alt="{{ block.name }} preview" loading="lazy"
+                             class="lbb-thumb lbb-thumb-light w-full h-full object-cover object-top
+                                    group-hover:scale-[1.02] transition-transform duration-200" />
+                        {% if block.thumbnail_url_dark %}
+                        <img src="{{ block.thumbnail_url_dark }}" alt="" aria-hidden="true" loading="lazy"
+                             class="lbb-thumb lbb-thumb-dark w-full h-full object-cover object-top
+                                    group-hover:scale-[1.02] transition-transform duration-200" />
+                        {% endif %}
+                        {% else %}
+                        <div class="w-full h-full grid place-items-center text-base-content/30">
+                            <c-lbi n="rmx.image-2" w="22" h="22" />
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="px-3.5 py-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-medium truncate">{{ block.name }}</span>
+                            <c-lb.badge size="xs" variant="neutral" class="shrink-0 ml-auto">{{ block.type }}</c-lb.badge>
+                        </div>
+                        {% if block.description %}
+                        <p class="mt-0.5 text-xs text-base-content/50 line-clamp-1">{{ block.description }}</p>
+                        {% endif %}
+                    </div>
+
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+
+    </main>
+</c-lbb.page>

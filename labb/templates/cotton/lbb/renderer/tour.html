@@ -1,0 +1,58 @@
+<c-vars id="" idsafe="" :tour="[]" />
+
+<c-lbr.signals id="{{ id }}-tour-signals" data-signals='{"tourStep_{{ idsafe }}":0}' />
+
+<div class="flex flex-col h-full">
+
+    <div class="flex items-center h-9 px-3 shrink-0 border-b border-base-200 text-xs font-semibold uppercase tracking-wider text-base-content/50">
+        Guided tour
+    </div>
+
+    <ol class="flex-1 overflow-y-auto p-2 flex flex-col gap-1"
+        data-on:keydown="
+            const k = evt.key;
+            if (k !== 'ArrowDown' && k !== 'ArrowUp' && k !== 'Home' && k !== 'End') return;
+            evt.preventDefault();
+            const len = {{ tour|length }};
+            const cur = $tourStep_{{ idsafe }};
+            const t = k === 'ArrowDown' ? (cur >= len ? 1 : cur + 1)
+                    : k === 'ArrowUp' ? (cur <= 1 ? len : cur - 1)
+                    : k === 'Home' ? 1 : len;
+            const btn = el.querySelector('[data-tour-step=' + t + ']');
+            if (btn) { btn.click(); btn.focus(); }">
+        {% for step in tour %}
+        <li class="rounded-lg border transition"
+            data-class='{"border-primary/40 bg-base-100 shadow-sm": $tourStep_{{ idsafe }} === {{ step.n }}, "border-transparent hover:bg-base-200": $tourStep_{{ idsafe }} !== {{ step.n }}}'>
+
+            <button type="button"
+                    data-tour-step="{{ step.n }}"
+                    data-attr:tabindex="$tourStep_{{ idsafe }} === {{ step.n }}{% if forloop.first %} || $tourStep_{{ idsafe }} === 0{% endif %} ? 0 : -1"
+                    data-attr:aria-current="$tourStep_{{ idsafe }} === {{ step.n }} ? 'step' : null"
+                    class="flex w-full items-start gap-2 px-2.5 py-2 text-left cursor-pointer"
+                    data-on:click="$tourStep_{{ idsafe }} = {{ step.n }}; $view_{{ idsafe }} = 'code'{% if step.start_line %}; $activeFile_{{ idsafe }} = '{{ step.file|escapejs }}'; lbbTourHighlight('{{ id }}', '{{ step.file|escapejs }}', {{ step.start_line }}, {{ step.end_line }}){% endif %}">
+                <span class="mt-0.5 inline-flex w-5 h-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium tabular-nums transition"
+                      data-class='{"bg-primary text-primary-content": $tourStep_{{ idsafe }} === {{ step.n }}, "bg-base-200 text-base-content/70": $tourStep_{{ idsafe }} !== {{ step.n }}}'>{{ step.n }}</span>
+                <span class="flex-1 text-sm font-medium leading-snug">{{ step.title }}</span>
+                <c-lbi n="rmx.arrow-down-s" w="15" h="15"
+                       class="mt-0.5 shrink-0 text-base-content/40 transition-transform"
+                       data-class='{"rotate-180": $tourStep_{{ idsafe }} === {{ step.n }}}' />
+            </button>
+
+            <div class="px-2.5 pb-2.5 pl-9" data-show="$tourStep_{{ idsafe }} === {{ step.n }}" style="display:none">
+                {% if step.body %}
+                <p class="text-xs leading-relaxed text-base-content/60">{{ step.body }}</p>
+                {% endif %}
+                {% if step.teaches %}
+                <div class="mt-2 flex flex-wrap gap-1">
+                    {% for cap in step.teaches %}
+                    <span class="rounded bg-base-200 px-1.5 py-0.5 text-[10px] font-medium text-base-content/60">{{ cap }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+        </li>
+        {% endfor %}
+    </ol>
+
+</div>
