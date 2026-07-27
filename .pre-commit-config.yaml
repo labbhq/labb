@@ -9,10 +9,10 @@ repos:
         pass_filenames: false
         always_run: true
 
-      - id: alpine-generate
-        name: Generate Alpine.js component JS files
+      - id: lb-schema-generate
+        name: Generate lb-schema.js
         entry: task
-        args: ["alpine:generate"]
+        args: ["lb-schema:generate"]
         language: system
         pass_filenames: false
         always_run: true
