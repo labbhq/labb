@@ -128,6 +128,39 @@ def test_map_attributes_to_classes_with_defaults(mock_components_registry):
     assert result == expected
 
 
+def test_parse_component_attributes_preserves_binding_colon():
+    """A Cotton :binding keeps its leading colon so it can be told from a literal."""
+    result = _parse_component_attributes(':variant="v" size="lg"')
+    assert result[":variant"] == "v"
+    assert result["size"] == "lg"
+    assert "variant" not in result
+
+
+def test_map_reactive_prop_emits_all_variant_classes(mock_components_registry):
+    """A reactive $signal prop has an unknown runtime value, so every variant is emitted."""
+    result = _map_attributes_to_classes(
+        "button", {"variant": "$status:primary"}, mock_components_registry
+    )
+    assert {"btn-primary", "btn-secondary", "btn-success", "btn-error"} <= result
+
+
+def test_map_bound_prop_emits_all_variant_classes(mock_components_registry):
+    """A Cotton :binding is also dynamic, so every variant is emitted."""
+    result = _map_attributes_to_classes(
+        "button", {":variant": "some_var"}, mock_components_registry
+    )
+    assert {"btn-primary", "btn-secondary", "btn-success", "btn-error"} <= result
+
+
+def test_map_literal_prop_unaffected_by_expansion(mock_components_registry):
+    """A literal prop still resolves to only its own variant class."""
+    result = _map_attributes_to_classes(
+        "button", {"variant": "primary"}, mock_components_registry
+    )
+    assert "btn-primary" in result
+    assert "btn-secondary" not in result
+
+
 def test_map_attributes_to_classes_unknown_component(mock_components_registry):
     attributes = {"variant": "primary"}
 
@@ -503,6 +536,7 @@ def test_scan_multiple_template_files_aggregation(
         "tabs-box",
         "drawer-side",
         "menu",
+        "menu-vertical",
         "btn-block",
         "drawer-content",
     }
@@ -1613,3 +1647,125 @@ def test_scan_templates_watch_with_django_apps_config(temp_dir):
                 True,
                 scan_apps=mock_config.scan_apps,
             )
+
+
+# ── css.packages resolver + generator ────────────────────────────────────────
+
+def test_load_package_provides_reads_labb_groups():
+    from labb.cli.handlers.scan_handler import load_package_provides
+
+    provides = load_package_provides("labb")
+    assert set(provides) == {"themes", "components", "reactivity", "blocks", "examples"}
+    assert provides["themes"].imports == ["css/themes.css"]
+    assert provides["blocks"].literals == ["templates/cotton/lbb/**/*.html"]
+
+
+def test_resolve_package_css_expands_and_merges_groups():
+    from labb.cli.handlers.scan_handler import resolve_package_css
+    from labb.config import _parse_package_spec
+
+    pc = resolve_package_css("labb", _parse_package_spec(["themes", "blocks"]))
+    assert pc.imports == ["css/themes.css"]
+    assert pc.components == ["templates/cotton/lbb/**/*.html"]
+    assert pc.literals == ["templates/cotton/lbb/**/*.html"]
+
+
+def test_resolve_package_css_all_groups():
+    from labb.cli.handlers.scan_handler import resolve_package_css
+    from labb.config import _parse_package_spec
+
+    # "*" (and the "all" alias, and blank) select every published group
+    for wildcard in ("*", "all"):
+        pc = resolve_package_css("labb", _parse_package_spec(wildcard))
+        assert "templates/cotton/lb/**/*.html" in pc.components
+        assert "templates/lb-examples/**/*.html" in pc.components
+        assert "css/themes.css" in pc.imports
+
+
+def test_resolve_package_css_explicit_passthrough():
+    from labb.cli.handlers.scan_handler import resolve_package_css
+    from labb.config import _parse_package_spec
+
+    pc = resolve_package_css("labb", _parse_package_spec({"literals": ["x/**"]}))
+    assert pc.literals == ["x/**"]
+    assert pc.components == []
+
+
+def test_resolve_package_css_unknown_group_errors():
+    from labb.cli.handlers.scan_handler import resolve_package_css
+    from labb.config import LabbConfigError, _parse_package_spec
+
+    with pytest.raises(LabbConfigError):
+        resolve_package_css("labb", _parse_package_spec(["nope"]))
+
+
+def test_generate_css_artifacts_writes_single_seam(tmp_path):
+    from labb.cli.handlers.scan_handler import generate_css_artifacts
+    from labb.config import LabbConfig
+
+    cfg = LabbConfig.from_dict({"css": {"packages": {"labb": ["themes", "blocks"]}}})
+    generate_css_artifacts(cfg, root=str(tmp_path))
+    labb_dir = tmp_path / ".labb"
+    labb_css = (labb_dir / "labb.css").read_text()
+    classes = (labb_dir / "labb-component-classes.txt").read_text()
+    # one seam holds all three contributions
+    assert "daisyui/theme" in labb_css          # themes inlined (imports)
+    assert "@import " not in labb_css            # inlined, never @import'd
+    assert "cotton/lbb" in labb_css              # literal @source glob
+    assert '@source "labb-component-classes.txt";' in labb_css  # sibling safelist
+    assert "do not edit" in labb_css.lower()
+    assert len(classes.strip().splitlines()) > 3  # scanned component classes
+
+
+def test_generate_css_artifacts_header_only_when_empty(tmp_path):
+    from labb.cli.handlers.scan_handler import generate_css_artifacts
+    from labb.config import LabbConfig
+
+    cfg = LabbConfig.from_dict({"css": {}})  # no packages
+    generate_css_artifacts(cfg, root=str(tmp_path))
+    labb_css = (tmp_path / ".labb" / "labb.css").read_text()
+    # file exists (so the import never dangles); only the safelist @source, no
+    # literal globs and no inlined package CSS
+    assert "daisyui" not in labb_css
+    assert "cotton/" not in labb_css
+    assert '@source "labb-component-classes.txt";' in labb_css
+    assert "do not edit" in labb_css.lower()
+
+
+def test_package_css_merge_dedups_shared_entries():
+    from labb.config import PackageCss
+
+    a = PackageCss(components=["x/**"], literals=["u/**"], imports=["css/themes.css"])
+    b = PackageCss(components=["x/**", "y/**"], literals=["u/**"], imports=["css/themes.css"])
+    merged = a.merged_with(b)
+    assert merged.components == ["x/**", "y/**"]          # x/** not repeated
+    assert merged.literals == ["u/**"]
+    assert merged.imports == ["css/themes.css"]            # themes not inlined twice
+
+
+def test_resolve_packages_errors_on_unimportable_package(tmp_path):
+    from labb.cli.handlers.scan_handler import generate_css_artifacts
+    from labb.config import LabbConfig, LabbConfigError
+
+    cfg = LabbConfig.from_dict({"css": {"packages": {"nosuchpkg": ["themes"]}}})
+    with pytest.raises(LabbConfigError, match="can't be imported"):
+        generate_css_artifacts(cfg, root=str(tmp_path))
+
+
+def test_resolve_packages_errors_on_unknown_group(tmp_path):
+    from labb.cli.handlers.scan_handler import generate_css_artifacts
+    from labb.config import LabbConfig, LabbConfigError
+
+    cfg = LabbConfig.from_dict({"css": {"packages": {"labb": ["bogus"]}}})
+    with pytest.raises(LabbConfigError, match="does not provide group 'bogus'"):
+        generate_css_artifacts(cfg, root=str(tmp_path))
+
+
+def test_resolve_packages_errors_when_package_publishes_no_groups(tmp_path):
+    from labb.cli.handlers.scan_handler import generate_css_artifacts
+    from labb.config import LabbConfig, LabbConfigError
+
+    # 'yaml' imports fine but ships no labb-provides.yaml
+    cfg = LabbConfig.from_dict({"css": {"packages": {"yaml": ["docs"]}}})
+    with pytest.raises(LabbConfigError, match="publishes no CSS groups"):
+        generate_css_artifacts(cfg, root=str(tmp_path))

@@ -5,7 +5,45 @@ from django.template import Context, Template
 from django.test import RequestFactory
 
 from labb.shortcuts import DEFAULT_THEME, set_labb_theme
-from labb.templatetags.lb_tags import labb_theme, lb_css_path
+from labb.templatetags.lb_tags import labb_theme, lb_css_path, parse_attrs_to_dict
+
+
+class TestParseAttrsToDict:
+    """Test parse_attrs_to_dict correctly handles colon-containing attribute names."""
+
+    def test_simple_attr(self):
+        assert parse_attrs_to_dict('class="foo"') == {"class": "foo"}
+
+    def test_boolean_attr(self):
+        assert parse_attrs_to_dict("disabled") == {"disabled": True}
+
+    def test_datastar_data_on_colon(self):
+        """data-on:click must be kept as a single key, not split at the colon."""
+        result = parse_attrs_to_dict('data-on:click="$view = \'code\'"')
+        assert "data-on:click" in result
+        assert "data-on" not in result
+        assert ":click" not in result
+
+    def test_datastar_data_bind_colon(self):
+        """data-bind:value must not be split."""
+        result = parse_attrs_to_dict('data-bind:value="$name"')
+        assert "data-bind:value" in result
+        assert result["data-bind:value"] == "$name"
+
+    def test_cotton_colon_prefix_still_works(self):
+        """:prop (Cotton dynamic binding) must still parse with the leading colon."""
+        result = parse_attrs_to_dict(':items=my_list')
+        assert ":items" in result
+
+    def test_mixed_attrs(self):
+        """Multiple attrs including a mid-colon name all parse correctly."""
+        result = parse_attrs_to_dict(
+            'class="btn" data-on:click="$x=1" disabled data-show="$y"'
+        )
+        assert result["class"] == "btn"
+        assert "data-on:click" in result
+        assert result["disabled"] is True
+        assert result["data-show"] == "$y"
 
 
 class TestLbCssPath:
@@ -194,7 +232,13 @@ class TestLbTags:
         assert theme == 'data-theme="labb-light"'  # fallback default
 
     def test_labb_theme_tag_in_template(self):
-        """Test labb_theme tag in a template."""
+        """The rendered attribute must be usable, not entity-escaped.
+
+        This previously asserted `data-theme=&quot;labb-dark&quot;`, pinning a
+        bug: the escaped form gives an attribute value containing literal quote
+        characters, so [data-theme="labb-dark"] never matches and a persisted
+        theme silently fails to apply on page load.
+        """
         request = self._get_request_with_session()
         set_labb_theme(request, "labb-dark")
 
@@ -202,7 +246,7 @@ class TestLbTags:
         context = Context({"request": request})
 
         result = template.render(context)
-        assert result == "data-theme=&quot;labb-dark&quot;"
+        assert result == 'data-theme="labb-dark"'
 
     def test_labb_theme_tag_fallback(self):
         """Test labb_theme tag fallback when no request."""
@@ -210,4 +254,4 @@ class TestLbTags:
         context = Context({})
 
         result = template.render(context)
-        assert result == "data-theme=&quot;labb-light&quot;"
+        assert result == 'data-theme="labb-light"'

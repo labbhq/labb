@@ -42,3 +42,35 @@ def confirm_load_config(console: Console) -> LabbConfig:
     if use_defaults:
         return LabbConfig()
     raise typer.Exit(0)
+
+
+DEFAULT_BLOCKS_DIR = "blocks"
+
+
+def blocks_root(repo_root: Path) -> Path:
+    """The directory inside a block source repo that holds the categories.
+
+    Read from blocks.yaml `blocks_dir`. Repos written before the key existed
+    keep their categories at the repo root, so absence means ".".
+    """
+    import yaml
+
+    blocks_yaml = repo_root / "blocks.yaml"
+    if not blocks_yaml.exists():
+        return repo_root
+
+    data = yaml.safe_load(blocks_yaml.read_text()) or {}
+    return repo_root / (data.get("blocks_dir") or ".")
+
+
+COMMONS_DIR = "commons"
+
+
+def commons_dir(blocks_dir: Path) -> Path:
+    """Components shared by every block in a source repo.
+
+    `commons/templates/cotton/` is merged into the dev-server template tree and
+    copied alongside each block on `block add`/`sync`, so a component several
+    blocks depend on is authored once and still travels with any single block.
+    """
+    return blocks_dir / COMMONS_DIR

@@ -38,7 +38,10 @@ def get_labb_theme(request):
     Returns:
         str: Current theme name, or DEFAULT_THEME if none is set
     """
-    return request.session.get(THEME_SESSION_KEY, get_default_theme())
+    session = getattr(request, "session", None)
+    if session is None:
+        return get_default_theme()
+    return session.get(THEME_SESSION_KEY, get_default_theme())
 
 
 @require_http_methods(["POST"])

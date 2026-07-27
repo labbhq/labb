@@ -5,7 +5,14 @@ from unittest.mock import mock_open, patch
 import pytest
 import yaml
 
-from labb.config import LabbConfig, find_config_file, load_config, save_config
+from labb.config import (
+    BlockSource,
+    LabbConfig,
+    LabbConfigError,
+    find_config_file,
+    load_config,
+    save_config,
+)
 
 
 def test_labb_config_defaults():
@@ -154,3 +161,140 @@ def test_save_config_error(temp_dir, mock_config):
     with patch("builtins.open", side_effect=OSError("write failed")):
         with pytest.raises(Exception):
             save_config(mock_config, config_file)
+
+
+# ---------------------------------------------------------------------------
+# blocks: section tests
+# ---------------------------------------------------------------------------
+
+
+def test_blocks_config_absent():
+    """Config without blocks: key parses fine; config.blocks is None."""
+    config = LabbConfig.from_dict({"css": {}})
+    assert config.blocks is None
+
+
+def test_blocks_config_with_collections_and_sources(temp_dir):
+    """Full parse populates collections and sources correctly."""
+    data = {
+        "blocks": {
+            "collections": [
+                {"name": "blocks", "path": "./blocks", "default": True},
+                {"name": "premium", "path": "./premium-blocks", "default": False},
+            ],
+            "sources": [
+                {"name": "labbhq", "url": "https://github.com/labbhq/blocks"},
+                {"name": "local", "path": "./my-custom-blocks"},
+            ],
+        }
+    }
+    config = LabbConfig.from_dict(data, config_dir=temp_dir)
+
+    assert config.blocks is not None
+    assert len(config.blocks.collections) == 2
+    assert len(config.blocks.sources) == 2
+
+    blocks_col = config.blocks.get_collection("blocks")
+    assert blocks_col is not None
+    assert blocks_col.default is True
+    assert blocks_col.path == str((temp_dir / "./blocks").resolve())
+
+    premium_col = config.blocks.get_collection("premium")
+    assert premium_col is not None
+    assert premium_col.default is False
+
+    labbhq = config.blocks.sources[0]
+    assert labbhq.name == "labbhq"
+    assert labbhq.url == "https://github.com/labbhq/blocks"
+    assert labbhq.path is None
+
+    local = config.blocks.sources[1]
+    assert local.name == "local"
+    assert local.path == "./my-custom-blocks"
+    assert local.url is None
+
+
+def test_blocks_config_get_default_collection(temp_dir):
+    """get_default_collection returns the collection marked default=True."""
+    data = {
+        "blocks": {
+            "collections": [
+                {"name": "blocks", "path": "./blocks", "default": True},
+                {"name": "premium", "path": "./premium-blocks", "default": False},
+            ],
+            "sources": [],
+        }
+    }
+    config = LabbConfig.from_dict(data, config_dir=temp_dir)
+    default = config.blocks.get_default_collection()
+    assert default is not None
+    assert default.name == "blocks"
+
+
+def test_blocks_config_single_collection_is_default(temp_dir):
+    """A single collection without default=True is still returned by get_default_collection."""
+    data = {
+        "blocks": {
+            "collections": [
+                {"name": "only", "path": "./blocks"},
+            ],
+            "sources": [],
+        }
+    }
+    config = LabbConfig.from_dict(data, config_dir=temp_dir)
+    default = config.blocks.get_default_collection()
+    assert default is not None
+    assert default.name == "only"
+
+
+def test_blocks_config_multiple_defaults_raises(temp_dir):
+    """Two collections both default=True raises LabbConfigError."""
+    data = {
+        "blocks": {
+            "collections": [
+                {"name": "a", "path": "./a", "default": True},
+                {"name": "b", "path": "./b", "default": True},
+            ],
+            "sources": [],
+        }
+    }
+    with pytest.raises(LabbConfigError):
+        LabbConfig.from_dict(data, config_dir=temp_dir)
+
+
+def test_blocks_source_remote_vs_local():
+    """Source with url is_remote=True; source with path is_local=True."""
+    remote = BlockSource(name="remote", url="https://github.com/example/blocks")
+    local = BlockSource(name="local", path="./my-blocks")
+
+    assert remote.is_remote is True
+    assert remote.is_local is False
+
+    assert local.is_local is True
+    assert local.is_remote is False
+
+
+def test_blocks_config_round_trip(temp_dir):
+    """from_dict → to_dict produces equivalent structure."""
+    data = {
+        "blocks": {
+            "collections": [
+                {"name": "blocks", "path": "./blocks", "default": True},
+            ],
+            "sources": [
+                {"name": "labbhq", "url": "https://github.com/labbhq/blocks"},
+            ],
+        }
+    }
+    config = LabbConfig.from_dict(data, config_dir=temp_dir)
+    result = config.to_dict()
+
+    assert "blocks" in result
+    assert len(result["blocks"]["collections"]) == 1
+    assert result["blocks"]["collections"][0]["name"] == "blocks"
+    assert result["blocks"]["collections"][0]["default"] is True
+
+    assert len(result["blocks"]["sources"]) == 1
+    assert result["blocks"]["sources"][0]["name"] == "labbhq"
+    assert result["blocks"]["sources"][0]["url"] == "https://github.com/labbhq/blocks"
+    assert "path" not in result["blocks"]["sources"][0]
