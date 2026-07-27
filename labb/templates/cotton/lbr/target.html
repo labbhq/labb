@@ -1,0 +1,11 @@
+{% load lb_tags %}
+{% lb_push_stack name="components" path="labb/js/vendor/datastar.js" mode="module" %}
+<c-vars
+    name=""
+    tag="div"
+/>
+
+<{{ tag }}
+    data-lbr-target="{{ name }}"
+    {{ attrs }}
+>{{ slot }}</{{ tag }}>

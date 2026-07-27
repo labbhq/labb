@@ -1,0 +1,23 @@
+{% load lbr_tags lb_tags %}
+{% lb_push_stack name="components" path="labb/js/lb-schema.js" mode="src" %}
+{% lb_push_stack name="components" path="labb/js/vendor/datastar.js" mode="module" %}
+<c-vars
+    syncQuery=""
+    schema=""
+/>
+
+{% lbr_query_sync_js attrs schema as sync_js %}
+
+<div
+    {% if schema %}
+        data-signals='{{ schema|lbr_signals_json }}'
+    {% else %}
+        {% lbr_build_signals attrs %}
+    {% endif %}
+    {{ attrs|strip_signal_attrs }}
+    {% if syncQuery %}
+        data-init='{{ sync_js }}'
+        data-on-signal-patch='{{ sync_js }}'
+    {% endif %}
+    hidden
+></div>
