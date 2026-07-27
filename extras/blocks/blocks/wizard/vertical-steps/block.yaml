@@ -1,0 +1,59 @@
+name: Vertical steps
+ref: lb/wizard/vertical-steps
+type: fe
+labb_version: ">=0.5.0"
+description: "Workspace setup with a step rail down the side — the rail, the panel and every answer read one client signal, with no server behind them"
+category: wizard
+thumbnail: thumbnails/vertical-steps.png
+status: launch
+tags:
+  - wizard
+  - multi-step
+  - reactive
+  - zero-server
+  - onboarding
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  step: 1
+  form:
+    company: ""
+    slug: ""
+    currency: "USD"
+    region: "eu-west-1"
+    contact: ""
+    invite1: ""
+    invite2: ""
+    role: "member"
+  steps:
+    - n: 1
+      label: "Workspace"
+      hint: "Name, address and region"
+    - n: 2
+      label: "Billing"
+      hint: "Currency and the person we invoice"
+    - n: 3
+      label: "Team"
+      hint: "Who joins you on day one"
+  regions:
+    - value: "eu-west-1"
+      name: "EU West · Ireland"
+      note: "Data stays in the EU. Chosen by 61% of Arden workspaces."
+    - value: "us-east-1"
+      name: "US East · Virginia"
+      note: "Lowest latency for North American billing systems."
+    - value: "ap-south-1"
+      name: "Asia Pacific · Mumbai"
+      note: "For teams billing mainly in INR, SGD and AUD."
+  currencies:
+    - ["USD", "USD — US Dollar"]
+    - ["EUR", "EUR — Euro"]
+    - ["GBP", "GBP — Pound Sterling"]
+  roles:
+    - ["member", "Member — sees revenue, cannot change billing"]
+    - ["admin", "Admin — invites people and changes billing"]
+    - ["billing", "Billing — invoices and payment methods only"]
+    - ["viewer", "Viewer — read-only dashboards"]

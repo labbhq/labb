@@ -1,0 +1,47 @@
+<c-vars :stats="[]" />
+
+<div class="flex flex-col gap-10 border-t border-base-300 pt-10">
+
+    <div class="grid gap-8 md:grid-cols-3">
+        {% for stat in stats %}
+        <div class="flex flex-col gap-1">
+            <span class="text-3xl font-bold tracking-tight tabular-nums">{{ stat.value }}</span>
+            <span class="text-sm text-base-content/60">{{ stat.label }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-3 items-center">
+
+        <c-lb.card class="md:col-span-2 bg-base-200/50">
+            <c-lb.card.body class="gap-4 p-6">
+                <p class="text-sm leading-relaxed">
+                    “Growth was the right call on day one and we have never had a reason
+                    to move. The renewal alerts alone caught two contracts we had
+                    forgotten were up.”
+                </p>
+                <div class="flex items-center gap-3">
+                    <c-lb.avatar placeholder initials="TN" bgColor="primary" size="sm" />
+                    <div class="text-xs">
+                        <div class="font-medium">Tomas Neary</div>
+                        <div class="text-base-content/50">VP Finance, Northwind Co</div>
+                    </div>
+                </div>
+            </c-lb.card.body>
+        </c-lb.card>
+
+        <div class="flex flex-col gap-3">
+            <p class="text-xs uppercase tracking-wider text-base-content/40">
+                Also using Arden
+            </p>
+            <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-base-content/50">
+                <span>AtlasForge</span>
+                <span>Kite &amp; Bell</span>
+                <span>Verity Labs</span>
+                <span>Ironvale Group</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>

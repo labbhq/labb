@@ -1,0 +1,65 @@
+steps:
+  - title: The view state is a signal bag
+    file: templates/pages/index.html
+    match: '<c-lbr.signals id="customer-query"'
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      Search, status filter, sort and page live in signals, declared once from the
+      schema the view hands over. Every request the table makes carries the whole
+      bag, so no action ever has to rebuild the state it is acting on.
+
+  - title: Search is a GET to an ordinary view
+    file: templates/cotton/customers/toolbar.html
+    match: 'on="input__debounce.300ms"'
+    through: ':bind=signals.fields.q'
+    teaches: [binding, server-actions, morphing]
+    docs: [reactivity/events-and-bindings, reactivity/server-actions]
+    body: |
+      The input binds to the `filters.q` signal; a debounced GET carries it to the
+      same view that renders the page. The view filters the queryset and returns
+      the whole page — Datastar morphs the diff. There is no partial endpoint and
+      no JSON API here, just Django.
+
+  - title: Sort and paginate by moving a signal first
+    file: templates/cotton/customers/sort_header.html
+    match: "before=\"$sort.field="
+    teaches: [signals, server-actions]
+    docs: [reactivity/server-actions]
+    body: |
+      `before` runs before the request fires, so a column header only has to say
+      what it wants the state to become. The same trick pages the table and closes
+      the inline editor — one view, one context builder, no special cases.
+
+  - title: The URL is the state
+    file: templates/pages/index.html
+    match: "<c-lbr.replace-url"
+    teaches: [replace-url]
+    docs: [reactivity/patterns]
+    body: |
+      The view builds one canonical URL for whatever it just rendered, and
+      replace-url writes it into the address bar on every morph — no extra request,
+      no history spam. Filter the table and the link in your address bar is the
+      filtered table.
+
+  - title: A shared link comes back to life
+    file: views.py
+    match: "QuerySignals.from_query(request)"
+    teaches: [replace-url, signals]
+    docs: [reactivity/signals]
+    body: |
+      The other half of that promise. A Datastar request arrives with the signal
+      bag, so QuerySignals(request) is enough. A cold load of a pasted link arrives
+      with nothing but the query string, so from_query() reads it back into the same
+      signals — each field's query= key names the clean param it restores from. That
+      is what makes the reload land on the exact view you shared.
+
+  - title: Edit and delete over the same view
+    file: templates/cotton/customers/row.html
+    match: "<c-lbr.delete"
+    teaches: [server-actions, morphing]
+    docs: [reactivity/server-actions]
+    body: |
+      Row actions hit real Django views that mutate and re-render. Because the row
+      carries a stable `id`, the morph touches only the row that changed — and the
+      summary above the table recomputes in the same response, for free.

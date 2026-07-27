@@ -1,0 +1,23 @@
+<c-vars :step=1 :total_steps=3 />
+
+<div class="flex items-center justify-between border-t border-base-300 pt-5">
+
+    {% if step > 1 %}
+    <c-lbr.post to="block_wizard_onboarding:prev" tag="div" on="click">
+        <c-lb.button type="button" btnStyle="ghost" icon="rmx.arrow-left">Back</c-lb.button>
+    </c-lbr.post>
+    {% else %}
+    <span class="text-xs text-base-content/40">Step {{ step }} of {{ total_steps }}</span>
+    {% endif %}
+
+    {% if step < total_steps %}
+    <c-lbr.post to="block_wizard_onboarding:next" tag="div" on="click">
+        <c-lb.button type="button" variant="primary" icon.end="rmx.arrow-right">Continue</c-lb.button>
+    </c-lbr.post>
+    {% else %}
+    <c-lbr.post to="block_wizard_onboarding:submit" tag="div" on="click">
+        <c-lb.button type="button" variant="primary">Create workspace</c-lb.button>
+    </c-lbr.post>
+    {% endif %}
+
+</div>

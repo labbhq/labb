@@ -1,0 +1,59 @@
+<c-lb.card id="magic-sent" border class="bg-base-100 shadow-sm" data-show="$sent" style="display: none">
+    <c-lb.card.body class="gap-5 p-7">
+
+        <div class="flex items-center gap-2">
+            <c-arden.mark size="xs" />
+            <span class="text-base font-semibold tracking-tight">Arden</span>
+        </div>
+
+        <div class="flex flex-col items-start gap-4">
+
+            <div class="rounded-xl bg-primary/10 p-3 text-primary">
+                <c-lbi n="rmx.mail-check" w="24" h="24" />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <h1 class="text-2xl font-semibold tracking-tight">Check your inbox</h1>
+                <p class="text-sm text-base-content/60">
+                    We sent a sign-in link to
+                    <span id="magic-recipient"
+                          class="font-medium text-base-content/80"
+                          data-text="$email">your work email</span>.
+                    Open it on this device and you are in.
+                </p>
+            </div>
+
+        </div>
+
+        <c-lb.alert alertStyle="soft" icon="rmx.time">
+            <span class="text-sm">The link works once and expires after 10 minutes.</span>
+        </c-lb.alert>
+
+        <div class="flex flex-col gap-2">
+            <c-lb.button
+                id="magic-resend"
+                type="button"
+                btnStyle="outline"
+                modifier="block"
+                icon="rmx.refresh"
+                behavior="disabled">
+                Send it again in 60 seconds
+            </c-lb.button>
+
+            <c-lb.button
+                id="magic-back"
+                type="button"
+                btnStyle="ghost"
+                modifier="block"
+                size="sm"
+                data-on:click="$sent = false">
+                Use a different email
+            </c-lb.button>
+        </div>
+
+        <p class="text-center text-xs text-base-content/50">
+            Nothing yet? It usually lands within a minute — check spam before trying again.
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

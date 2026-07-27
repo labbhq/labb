@@ -1,0 +1,25 @@
+name: Centred card
+ref: lb/auth/centred-card
+type: fe
+labb_version: ">=0.5.0"
+description: "The workhorse sign-in — a centred card with OAuth, a trust footer, and a password reveal driven by one client signal"
+category: auth
+status: launch
+thumbnail: thumbnails/centred-card.png
+tags:
+  - auth
+  - sign-in
+  - oauth
+  - reactive
+  - zero-server
+preview_context: {}
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+allow_fixed_colours:
+  - "#8b5cf6"
+  - "#d946ef"
+  - "#f472b6"
+  - "#fb923c"

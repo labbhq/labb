@@ -1,0 +1,48 @@
+steps:
+  - title: The answers and the price list are both signals
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals, multi-step]
+    docs: [reactivity/signals]
+    body: |
+      `form` holds what the user types, `plans` holds the price list, `seatprice` the
+      per-seat rate. Putting the price list in the signal bag is what lets the summary
+      be an expression instead of an endpoint.
+
+  - title: A summary line is a derived value
+    file: templates/cotton/summary_wizard/summary.html
+    match: "data-text=\"$plans[$form.plan].name\""
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      The plan name is read out of the price-list signal, keyed by the plan the user
+      chose. Nothing stores it. Change the radio and the line follows.
+
+  - title: The total is arithmetic over the bag
+    file: templates/cotton/summary_wizard/summary.html
+    match: 'data-text="$plans[$form.plan].base + Math.max(0, Number($form.seats)'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Base price, plus every seat over the allowance at the seat rate. The server
+      renders the opening figure so the page is correct before any JavaScript runs,
+      and the browser takes it from there. The dollar sign lives in the markup, never
+      in the expression — inside one, `$1` would read as a signal.
+
+  - title: Seats bind to the same bag the summary reads
+    file: templates/cotton/summary_wizard/step_plan.html
+    match: 'bind="form.seats"'
+    teaches: [binding]
+    docs: [reactivity/binding]
+    body: |
+      One input, two readers: the step you are on and the panel beside it. That is the
+      whole trick of a checkout-shaped wizard, and it needs no state management.
+
+  - title: Going back keeps every figure
+    file: templates/cotton/summary_wizard/nav.html
+    match: 'data-on:click="$step = Math.max($step - 1, 1)"'
+    teaches: [multi-step, signals]
+    docs: [reactivity/patterns]
+    body: |
+      Back changes one number. The summary is unaffected because it never depended on
+      the step — only on the answers, which are still there.

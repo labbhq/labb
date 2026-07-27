@@ -1,0 +1,25 @@
+name: Two-column visual
+ref: lb/auth/two-column-visual
+type: fe
+labb_version: ">=0.5.0"
+description: "Sign-in beside a framed product shot built from components, not a screenshot — no image asset and no JavaScript"
+category: auth
+status: launch
+thumbnail: thumbnails/two-column-visual.png
+tags:
+  - auth
+  - sign-in
+  - oauth
+  - static
+  - zero-js
+preview_context: {}
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+allow_fixed_colours:
+  - "#8b5cf6"
+  - "#d946ef"
+  - "#f472b6"
+  - "#fb923c"

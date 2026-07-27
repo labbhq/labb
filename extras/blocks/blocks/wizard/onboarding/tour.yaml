@@ -1,0 +1,65 @@
+steps:
+  - title: One signal bag for the whole wizard
+    file: views.py
+    match: "class OnboardingSignals"
+    through: 'plan           = Str(path="form.plan"'
+    teaches: [signals, multi-step]
+    docs: [reactivity/signals]
+    body: |
+      Every answer the wizard collects lives in one signal bag, and so does the
+      step counter. There is no session, no hidden form, no per-step storage:
+      the bag travels with each request, which is the whole trick.
+
+  - title: Declare the signals once
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      The schema the view hands over becomes client state. Every step reads the
+      same bag, so the fields on step 1 are still there when step 3 is on screen.
+
+  - title: Bind the inputs, and the state carries itself
+    file: templates/cotton/onboarding/step_workspace.html
+    match: ":bind=signals.fields.workspace_name"
+    teaches: [binding, multi-step]
+    docs: [reactivity/binding]
+    body: |
+      The input writes straight into the signal. Nothing saves it on the way to
+      step 2, and nothing restores it on the way back — going back is just
+      another request carrying the same bag.
+
+  - title: Validate while they type
+    file: templates/cotton/onboarding/step_workspace.html
+    match: "<c-lbr.post to=\"block_wizard_onboarding:validate\""
+    teaches: [server-actions, morphing, live-validation]
+    docs: [reactivity/actions, reactivity/morphing]
+    body: |
+      A debounced POST sends the bag to an ordinary Django view, which checks
+      the name and the address (including whether it is already taken) and
+      re-renders the page. Datastar morphs the diff. No partial endpoint, no
+      JSON API, and the address check needs the database — so it belongs on the
+      server anyway.
+
+  - title: A step that will not let you past it
+    file: views.py
+    match: "def next_step"
+    through: "s.step = min(s.step + 1, TOTAL_STEPS)"
+    teaches: [multi-step, live-validation, server-actions]
+    docs: [reactivity/actions]
+    body: |
+      Advancing is a server decision. The view validates the step the user is
+      on, and only increments the counter if it passes — so an invalid step
+      re-renders with its errors instead of moving on. The client cannot skip it,
+      because the client is not the one counting.
+
+  - title: The last step reads the earlier ones
+    file: views.py
+    match: "people = _people(s)"
+    teaches: [multi-step]
+    docs: [reactivity/signals]
+    body: |
+      The seat check compares the plan chosen on step 3 against the invites typed
+      on step 2. That is only possible because the invites never left — they are
+      still in the bag when the plan is picked, and again when the final POST
+      creates the workspace and the invited members.

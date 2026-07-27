@@ -1,0 +1,25 @@
+<c-lbr.signals id="centred-card-ui" $reveal="false" />
+
+<main class="relative isolate overflow-hidden min-h-screen flex items-center justify-center px-4 py-12 bg-base-100">
+
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-[30rem] -z-10"
+         style="background:
+            radial-gradient(46% 60% at 28% 0%, #8b5cf6 0%, transparent 66%),
+            radial-gradient(44% 58% at 58% 0%, #d946ef 0%, transparent 66%),
+            radial-gradient(42% 56% at 85% 8%, #f472b6 0%, transparent 66%);
+            opacity: 0.10;
+            -webkit-mask-image: linear-gradient(black, transparent);
+            mask-image: linear-gradient(black, transparent);"
+         aria-hidden="true"></div>
+
+    <div class="w-full max-w-md flex flex-col gap-6">
+
+        <c-centred-card.mark />
+
+        <c-centred-card.card />
+
+        <c-centred-card.assurance />
+
+    </div>
+
+</main>

@@ -1,0 +1,72 @@
+name: Three-tier toggle
+ref: lb/pricing/three-tier-toggle
+type: fe
+labb_version: ">=0.5.0"
+description: "Three plans with a monthly/annual toggle — every price re-renders from one client signal, with no server round-trip"
+category: pricing
+status: launch
+thumbnail: thumbnails/three-tier-toggle.png
+tags:
+  - pricing
+  - reactive
+  - reactive-props
+  - zero-server
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's canonical reactive-props demo"
+
+preview_context:
+  period:
+    annual: false
+    monthlyStyle: ""
+    annualStyle: "ghost"
+    suffix: "/month"
+    saveVariant: "neutral"
+    saveLabel: "2 months free"
+    note: "Billed monthly. Cancel any time."
+  plans:
+    - name: "Starter"
+      tagline: "For founders closing their first hundred customers."
+      monthly: "49"
+      annual: "490"
+      cta: "Start free trial"
+      featured: false
+      features:
+        - "3 seats"
+        - "1,000 tracked customers"
+        - "MRR, churn and cohort dashboards"
+        - "Stripe and Chargebee sync"
+        - "CSV export"
+      excluded:
+        - "Revenue forecasting"
+        - "SSO and audit log"
+    - name: "Growth"
+      tagline: "For teams with a forecast to hit."
+      monthly: "149"
+      annual: "1,490"
+      cta: "Start free trial"
+      featured: true
+      features:
+        - "10 seats"
+        - "10,000 tracked customers"
+        - "Revenue forecasting and scenarios"
+        - "Renewal and churn-risk alerts"
+        - "Slack and HubSpot sync"
+        - "Priority support, next business day"
+      excluded:
+        - "SSO and audit log"
+    - name: "Scale"
+      tagline: "For finance teams that answer to a board."
+      monthly: "449"
+      annual: "4,490"
+      cta: "Talk to sales"
+      featured: false
+      features:
+        - "25 seats"
+        - "Unlimited tracked customers"
+        - "Custom revenue models"
+        - "SSO, SCIM and audit log"
+        - "Dedicated success manager"
+        - "99.9% uptime SLA"
+      excluded: []

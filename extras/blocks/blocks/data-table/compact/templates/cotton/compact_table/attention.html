@@ -1,0 +1,35 @@
+<c-vars :invoices="[]" />
+
+<section class="rounded-box border border-base-300 bg-base-100">
+
+    <header class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-2.5">
+        <div class="flex items-center gap-2">
+            <c-lbi.rmx.receipt w="16" h="16" class="text-base-content/40" />
+            <h2 class="text-sm font-semibold tracking-tight">Needs attention</h2>
+        </div>
+        <span class="text-xs text-base-content/50 tabular-nums">{{ invoices|length }} overdue</span>
+    </header>
+
+    {% if invoices %}
+    <c-lb.table size="xs" class="align-middle">
+        <tbody>
+            {% for invoice in invoices %}
+            <tr class="border-base-300">
+                <td class="font-medium">{{ invoice.company }}</td>
+                <td class="text-base-content/60 tabular-nums">{{ invoice.number }}</td>
+                <td class="text-end tabular-nums">${{ invoice.amount }}</td>
+                <td class="text-end tabular-nums text-error">{{ invoice.days }} days late</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </c-lb.table>
+    {% else %}
+    <c-compact-table.empty
+        id="compact-attention-empty"
+        icon="rmx.checkbox-circle"
+        title="Nothing overdue"
+        body="Every invoice raised against this workspace is paid or still inside its terms. A run appears here the day it slips."
+        action="Review payment terms" />
+    {% endif %}
+
+</section>

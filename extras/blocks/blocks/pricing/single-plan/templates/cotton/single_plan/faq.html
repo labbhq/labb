@@ -1,0 +1,27 @@
+<c-vars :faqs="[]" />
+
+<div class="flex flex-col gap-6">
+
+    <div class="flex flex-col gap-2">
+        <h2 class="text-2xl font-semibold tracking-tight">Before you ask</h2>
+        <p class="text-sm text-base-content/60">
+            The five questions that come up on every call. Still stuck?
+            <a href="#" class="link link-primary">Email a human</a> — no demo required.
+        </p>
+    </div>
+
+    <c-lb.accordion join>
+        {% for faq in faqs %}
+        <c-lb.accordion.item
+            name="arden-faq"
+            style="arrow"
+            border
+            :checked=forloop.first
+            title="{{ faq.q }}"
+        >
+            <p class="text-sm text-base-content/70 leading-relaxed">{{ faq.a }}</p>
+        </c-lb.accordion.item>
+        {% endfor %}
+    </c-lb.accordion>
+
+</div>

@@ -1,0 +1,65 @@
+[project]
+name = "labbblocks"
+version = "0.1.0"
+description = "Official labb block collection (vendor: lb)"
+authors = [
+    {name = "zadiq", email = "dev@zadiq.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Framework :: Django",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "django",
+    "ui",
+    "components",
+    "blocks",
+    "labb",
+    "django-cotton",
+    "tailwind",
+    "daisyui",
+    "datastar",
+]
+requires-python = ">=3.10,<4"
+dependencies = [
+    "django (>=5.0)",
+    "labbui (>=0.4.4,<1.0.0)",
+    "labbicons (>=0.4.4,<1.0.0)",
+]
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.1.1,<10.0.0)",
+    "pytest-django (>=4.12.0,<5.0.0)",
+    "pytest-playwright (>=0.8.0,<0.9.0)"
+]
+
+[project.urls]
+Documentation = "https://labb.io"
+Source = "https://github.com/labbhq/labb/tree/main/extras/blocks"
+Discussions = "https://github.com/labbhq/labb/discussions"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [{include = "lb"}]
+
+[tool.poetry.group.local]
+optional = true
+
+[tool.poetry.group.local.dependencies]
+labbui = {path = "../..", develop = true}
+labbicons = {path = "../icons", develop = true}

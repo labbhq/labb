@@ -1,0 +1,21 @@
+<c-vars today="" />
+
+<header class="flex flex-wrap items-end justify-between gap-4 border-b border-base-300 pb-5">
+
+    <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-2">
+            <c-arden.mark size="xs" />
+            <span class="text-sm font-medium text-base-content/50">Arden · Beacon Labs</span>
+        </div>
+        <h1 class="mt-1 text-2xl font-semibold tracking-tight">What changed</h1>
+        <p class="text-sm text-base-content/60">
+            Every upgrade, payment and risk flag, newest first. {{ today }}.
+        </p>
+    </div>
+
+    <div class="flex items-center gap-2">
+        <c-lb.badge style="soft" size="sm" icon="rmx.time">Last 3 days</c-lb.badge>
+        <c-lb.button size="sm" btnStyle="outline" icon="rmx.mail">Email me this</c-lb.button>
+    </div>
+
+</header>

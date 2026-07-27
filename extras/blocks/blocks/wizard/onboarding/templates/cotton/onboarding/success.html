@@ -1,0 +1,67 @@
+<c-vars :workspace="None" :invites="[]" :selected_plan="None" :trial_days=14 />
+
+<c-lb.card class="border border-base-300 shadow-sm">
+    <c-lb.card.body class="gap-6">
+
+        <div class="flex items-center gap-4">
+            <c-lb.avatar placeholder icon="rmx.check" bgColor="success" size="lg" rounded="full" />
+            <div>
+                <h2 class="text-2xl font-semibold tracking-tight">{{ workspace.name }} is live.</h2>
+                <p class="text-sm text-base-content/60 mt-1">
+                    Your team signs in at
+                    <span class="font-mono">arden.app/{{ workspace.slug }}</span>.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3 text-sm">
+            <div class="rounded-box border border-base-300 p-3">
+                <div class="text-base-content/50 text-xs">Plan</div>
+                <div class="font-medium mt-0.5">{{ selected_plan.name }}</div>
+                <div class="text-xs text-base-content/50 tabular-nums">
+                    {{ selected_plan.seats_included }} seats
+                </div>
+            </div>
+            <div class="rounded-box border border-base-300 p-3">
+                <div class="text-base-content/50 text-xs">Trial ends</div>
+                <div class="font-medium mt-0.5">{{ workspace.trial_ends_on|date:"j M Y" }}</div>
+                <div class="text-xs text-base-content/50 tabular-nums">
+                    {{ trial_days }} days from today
+                </div>
+            </div>
+            <div class="rounded-box border border-base-300 p-3">
+                <div class="text-base-content/50 text-xs">Region</div>
+                <div class="font-medium mt-0.5">{{ workspace.region }}</div>
+                <div class="text-xs text-base-content/50">Data stays here</div>
+            </div>
+        </div>
+
+        <div>
+            <p class="text-xs uppercase tracking-wider text-base-content/40 mb-3">
+                Invites sent ({{ invites|length }})
+            </p>
+            <div class="grid gap-2">
+                {% for invite in invites %}
+                <div class="flex items-center gap-3 text-sm">
+                    <c-lb.avatar placeholder :initials=invite.initials bgColor="secondary" size="sm" rounded="lg" />
+                    <div class="flex-1">
+                        <div class="font-medium">{{ invite.name }}</div>
+                        <div class="text-xs text-base-content/50">{{ invite.email }}</div>
+                    </div>
+                    <c-lb.badge variant="warning" style="soft" size="sm">Invited</c-lb.badge>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between border-t border-base-300 pt-5">
+            <p class="text-sm text-base-content/60">
+                Next: connect Stripe and Arden backfills your revenue history.
+            </p>
+            <c-lb.button as="a" href="{% url 'block_wizard_onboarding:index' %}" btnStyle="ghost" size="sm">
+                Start over
+            </c-lb.button>
+        </div>
+
+    </c-lb.card.body>
+</c-lb.card>

@@ -1,0 +1,485 @@
+blocks:
+- ref: lb/auth/centred-card
+  name: Centred card
+  type: fe
+  description: The workhorse sign-in — a centred card with OAuth, a trust footer,
+    and a password reveal driven by one client signal
+  category: auth
+  tags:
+  - auth
+  - sign-in
+  - oauth
+  - reactive
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/centred-card.png
+- ref: lb/auth/magic-link
+  name: Magic link
+  type: fe
+  description: Passwordless sign-in — the form becomes a 'check your inbox' state
+    from one client signal, with no server behind it
+  category: auth
+  tags:
+  - auth
+  - sign-in
+  - passwordless
+  - reactive
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/magic-link.png
+- ref: lb/auth/social-proof
+  name: Social proof
+  type: fe
+  description: Sign-in under a logo cloud and a rating strip — conversion-shaped,
+    and it ships no JavaScript at all
+  category: auth
+  tags:
+  - auth
+  - sign-in
+  - oauth
+  - static
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/social-proof.png
+- ref: lb/auth/split-brand
+  name: Split brand
+  type: fullstack
+  description: Sign-in and sign-up on a split brand layout, with live per-field validation
+    over an ordinary Django view
+  category: auth
+  tags:
+  - reactive
+  - validation
+  - form
+  - auth
+  - oauth
+  status: launch
+  thumbnail: thumbnails/split-brand.png
+- ref: lb/auth/two-column-visual
+  name: Two-column visual
+  type: fe
+  description: Sign-in beside a framed product shot built from components, not a screenshot
+    — no image asset and no JavaScript
+  category: auth
+  tags:
+  - auth
+  - sign-in
+  - oauth
+  - static
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/two-column-visual.png
+- ref: lb/dashboard/activity-feed
+  name: Activity feed
+  type: fe
+  description: Today's revenue numbers beside the event log that produced them — a
+    timeline dashboard with no JavaScript
+  category: dashboard
+  tags:
+  - dashboard
+  - timeline
+  - static
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/activity-feed.png
+- ref: lb/dashboard/compact-kpi
+  name: Compact KPI grid
+  type: fe
+  description: A dense KPI board with inline sparklines — eight metrics, a segment
+    table, and not one byte of JavaScript
+  category: dashboard
+  tags:
+  - dashboard
+  - kpi
+  - static
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/compact-kpi.png
+- ref: lb/dashboard/first-run
+  name: First run
+  type: fe
+  description: The empty dashboard, designed on purpose — a day-one workspace with
+    a setup path instead of a wall of zeroes
+  category: dashboard
+  tags:
+  - dashboard
+  - empty-state
+  - onboarding
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/first-run.png
+- ref: lb/dashboard/overview
+  name: Revenue overview
+  type: fullstack
+  description: A revenue dashboard whose charts are signals — server-driven series
+    switching, live theming, and a metric streaming in over SSE
+  category: dashboard
+  tags:
+  - reactive
+  - charts
+  - sse
+  - theming
+  - dashboard
+  status: launch
+  thumbnail: thumbnails/overview.png
+- ref: lb/dashboard/split-charts
+  name: Split charts
+  type: fe
+  description: A two-column analytics dashboard whose 7/30/90-day switch redraws every
+    chart from one client signal — no server, no chart endpoint
+  category: dashboard
+  tags:
+  - dashboard
+  - charts
+  - reactive
+  - reactive-props
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/split-charts.png
+- ref: lb/data-table/card-grid
+  name: Account card grid
+  type: fe
+  description: The same account records as a responsive card grid instead of rows,
+    for screens where a table would be read on a phone
+  category: data-table
+  tags:
+  - datatable
+  - cards
+  - responsive
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/card-grid.png
+- ref: lb/data-table/compact
+  name: Compact table
+  type: fe
+  description: 'A dense account table for data-heavy screens: eight columns, tight
+    rows, tabular figures and zero JavaScript'
+  category: data-table
+  tags:
+  - datatable
+  - compact
+  - zero-js
+  - static
+  status: launch
+  thumbnail: thumbnails/compact.png
+- ref: lb/data-table/customers
+  name: Customers table
+  type: fullstack
+  description: Customer table with search, sort, pagination, inline row edit and bulk
+    delete — all over ordinary Django views, with the view state kept in a shareable
+    URL
+  category: data-table
+  tags:
+  - reactive
+  - datatable
+  - search
+  - sort
+  - pagination
+  - crud
+  - url-state
+  status: launch
+  thumbnail: thumbnails/customers.png
+- ref: lb/data-table/expandable-rows
+  name: Expandable rows
+  type: fe
+  description: Rows that open a detail panel in place from a client signal — the invoices,
+    the owner and the activity, without leaving the table
+  category: data-table
+  tags:
+  - datatable
+  - expandable
+  - reactive
+  - signals
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/expandable-rows.png
+- ref: lb/data-table/with-filters
+  name: Table with filters
+  type: fe
+  description: A filter toolbar whose chips narrow the table from a client signal
+    — no endpoint, no query string, nothing on the wire
+  category: data-table
+  tags:
+  - datatable
+  - filters
+  - reactive
+  - signals
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/with-filters.png
+- ref: lb/hero/app-screenshot
+  name: App screenshot
+  type: fe
+  description: Centred copy above a full-bleed framed product shot, drawn as live
+    markup rather than an image
+  category: hero
+  tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/app-screenshot.png
+- ref: lb/hero/centred-bold
+  name: Centred bold
+  type: fe
+  description: Large centred type with paired CTAs, an avatar-backed social proof
+    row and a one-line customer quote
+  category: hero
+  tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/centred-bold.png
+- ref: lb/hero/gradient-mesh
+  name: Gradient mesh
+  type: fe
+  description: A hero crowned by a deliberate fixed-colour mesh gradient that renders
+    identically in every theme, over content built from daisyUI tokens
+  category: hero
+  tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+  - theming
+  status: launch
+  thumbnail: thumbnails/gradient-mesh.png
+- ref: lb/hero/split-visual
+  name: Split visual
+  type: fe
+  description: Hero copy beside a framed product shot, built from theme tokens — no
+    image asset and no JavaScript
+  category: hero
+  tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+  status: launch
+  thumbnail: thumbnails/split-visual.png
+- ref: lb/hero/with-logos
+  name: With logos
+  type: fe
+  description: Hero above a customer logo cloud, with the marks drawn from labb's
+    own icon pack — no third-party assets
+  category: hero
+  tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+  - social-proof
+  status: launch
+  thumbnail: thumbnails/with-logos.png
+- ref: lb/pricing/comparison-table
+  name: Comparison table
+  type: fe
+  description: Full feature matrix across three plans, with a monthly/annual toggle
+    that re-prices the header from one client signal
+  category: pricing
+  tags:
+  - pricing
+  - reactive
+  - reactive-props
+  - table
+  status: launch
+  thumbnail: thumbnails/comparison-table.png
+- ref: lb/pricing/highlight-tiers
+  name: Highlight tiers
+  type: fe
+  description: Three plans with the middle one raised on a theme-token gradient —
+    static, and ships zero JavaScript
+  category: pricing
+  tags:
+  - pricing
+  - static
+  - zero-js
+  - theming
+  status: launch
+  thumbnail: thumbnails/highlight-tiers.png
+- ref: lb/pricing/single-plan
+  name: Single plan
+  type: fe
+  description: One plan, everything included, with an FAQ underneath — a static page
+    that ships zero JavaScript
+  category: pricing
+  tags:
+  - pricing
+  - static
+  - zero-js
+  - faq
+  status: launch
+  thumbnail: thumbnails/single-plan.png
+- ref: lb/pricing/three-tier-toggle
+  name: Three-tier toggle
+  type: fe
+  description: Three plans with a monthly/annual toggle — every price re-renders from
+    one client signal, with no server round-trip
+  category: pricing
+  tags:
+  - pricing
+  - reactive
+  - reactive-props
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/three-tier-toggle.png
+- ref: lb/pricing/usage-calculator
+  name: Usage calculator
+  type: fe
+  description: A seat slider that reprices the plan live from derived signals — the
+    whole calculation runs in the browser, with no server
+  category: pricing
+  tags:
+  - pricing
+  - reactive
+  - reactive-props
+  - calculator
+  status: launch
+  thumbnail: thumbnails/usage-calculator.png
+- ref: lb/settings/billing
+  name: Billing settings
+  type: fe
+  description: Plan, payment method and invoice history — a dense billing page that
+    ships zero JavaScript, drawn from the same Arden invoices as the data table
+  category: settings
+  tags:
+  - settings
+  - billing
+  - invoices
+  - zero-js
+  - static
+  status: launch
+  thumbnail: thumbnails/billing.png
+- ref: lb/settings/profile
+  name: Profile settings
+  type: fe
+  description: Personal details with an avatar upload that previews in the browser
+    — the chosen file becomes an object URL held in a signal, so nothing is uploaded
+    until the form is saved
+  category: settings
+  tags:
+  - settings
+  - profile
+  - reactive
+  - upload
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/profile.png
+- ref: lb/settings/sidebar-nav
+  name: Settings with sidebar nav
+  type: fe
+  description: A settings shell with a vertical nav — switching section is one client
+    signal, so the whole page is rendered once and nothing is fetched again
+  category: settings
+  tags:
+  - settings
+  - reactive
+  - zero-server
+  - navigation
+  status: launch
+  thumbnail: thumbnails/sidebar-nav.png
+- ref: lb/settings/team-members
+  name: Team members
+  type: fe
+  description: A member list with editable roles and an invite row — every role dropdown
+    binds to a client signal, and the unsaved-changes bar is derived from the difference
+  category: settings
+  tags:
+  - settings
+  - team
+  - reactive
+  - roles
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/team-members.png
+- ref: lb/settings/workspace
+  name: Workspace settings
+  type: fullstack
+  description: Tabbed workspace settings where saving one section re-renders only
+    that section
+  category: settings
+  tags:
+  - reactive
+  - settings
+  - scoped-morph
+  - toast
+  - validation
+  - team
+  status: launch
+  thumbnail: thumbnails/workspace.png
+- ref: lb/wizard/horizontal-steps
+  name: Horizontal steps
+  type: fe
+  description: Three-step workspace setup with a numbered stepper across the top —
+    the step and every answer live in client signals, so nothing touches the wire
+    and going back loses nothing
+  category: wizard
+  tags:
+  - wizard
+  - multi-step
+  - reactive
+  - zero-server
+  - onboarding
+  status: launch
+  thumbnail: thumbnails/horizontal-steps.png
+- ref: lb/wizard/onboarding
+  name: Onboarding
+  type: fullstack
+  description: Multi-step workspace onboarding — state carried across steps in signals,
+    per-step validation, one final submit to a real Django view
+  category: wizard
+  tags:
+  - reactive
+  - multi-step
+  - validation
+  - form
+  - onboarding
+  status: launch
+  thumbnail: thumbnails/onboarding.png
+- ref: lb/wizard/progress-minimal
+  name: Progress minimal
+  type: fe
+  description: A four-question setup with nothing but a bar and a count — the bar's
+    value and its colour are both driven by one client signal, with no server behind
+    it
+  category: wizard
+  tags:
+  - wizard
+  - multi-step
+  - reactive
+  - reactive-props
+  - zero-server
+  status: launch
+  thumbnail: thumbnails/progress-minimal.png
+- ref: lb/wizard/vertical-steps
+  name: Vertical steps
+  type: fe
+  description: Workspace setup with a step rail down the side — the rail, the panel
+    and every answer read one client signal, with no server behind them
+  category: wizard
+  tags:
+  - wizard
+  - multi-step
+  - reactive
+  - zero-server
+  - onboarding
+  status: launch
+  thumbnail: thumbnails/vertical-steps.png
+- ref: lb/wizard/with-summary
+  name: Steps with summary
+  type: fe
+  description: A checkout-shaped setup wizard whose summary panel is derived live
+    from the answers — plan, seats and monthly total recompute from signals with no
+    server round-trip
+  category: wizard
+  tags:
+  - wizard
+  - multi-step
+  - reactive
+  - zero-server
+  - checkout
+  status: launch
+  thumbnail: thumbnails/with-summary.png

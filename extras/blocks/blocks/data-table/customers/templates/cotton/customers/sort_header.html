@@ -1,0 +1,20 @@
+<c-vars field="" label="" next_dir="asc" sort_field="" sort_dir="" numeric />
+
+<c-lbr.get
+    to="block_data_table_customers:index"
+    before="$sort.field='{{ field }}'; $sort.dir='{{ next_dir }}'; $page=1"
+    class="{% if numeric %}flex justify-end{% endif %}">
+    <c-lb.button
+        btnStyle="ghost"
+        size="xs"
+        class="gap-1 px-1 font-semibold {% if sort_field == field %}text-primary{% else %}text-base-content/60{% endif %}">
+        {{ label }}
+        {% if sort_field == field %}
+            {% if sort_dir == "asc" %}
+            <c-lbi.rmx.arrow-up-s w="3.5" h="3.5" />
+            {% else %}
+            <c-lbi.rmx.arrow-down-s w="3.5" h="3.5" />
+            {% endif %}
+        {% endif %}
+    </c-lb.button>
+</c-lbr.get>

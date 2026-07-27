@@ -1,0 +1,47 @@
+<c-vars :status_chips="[]" :health_chips="[]" :total=0 />
+
+<div class="flex flex-col gap-3 rounded-box border border-base-300 bg-base-100 px-4 py-3">
+
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-medium text-base-content/50">Status</span>
+            <div class="flex flex-wrap items-center gap-1">
+                {% for chip in status_chips %}
+                <c-filter-table.chip group="status" :value=chip.value :label=chip.label />
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-medium text-base-content/50">Health</span>
+            <div class="flex flex-wrap items-center gap-1">
+                {% for chip in health_chips %}
+                <c-filter-table.chip group="health" :value=chip.value :label=chip.label />
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-base-300 pt-3">
+        <p class="text-xs text-base-content/50">
+            Filtering runs in the browser. Nothing here touches the server.
+        </p>
+        <div class="flex items-center gap-2">
+            <c-lb.badge
+                id="filter-tone"
+                variant="$filters.tone:neutral"
+                style="soft"
+                size="sm"
+                data-text="$filters.summary"
+            >All accounts</c-lb.badge>
+            <span
+                id="filter-count"
+                class="text-xs tabular-nums text-base-content/60"
+                data-text="ardenVisible($filters) + ' of {{ total }} shown'"
+            >{{ total }} of {{ total }} shown</span>
+        </div>
+    </div>
+
+</div>

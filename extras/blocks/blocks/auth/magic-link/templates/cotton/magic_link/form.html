@@ -1,0 +1,54 @@
+<c-lb.card id="magic-form" border class="bg-base-100 shadow-sm" data-show="!$sent">
+    <c-lb.card.body class="gap-5 p-7">
+
+        <div class="flex items-center gap-2">
+            <c-arden.mark size="xs" />
+            <span class="text-base font-semibold tracking-tight">Arden</span>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+            <h1 class="text-2xl font-semibold tracking-tight">Sign in without a password</h1>
+            <p class="text-sm text-base-content/60">
+                Give us the email on your workspace and we will send a one-time link.
+                Nothing to remember, nothing to leak.
+            </p>
+        </div>
+
+        <div class="flex flex-col gap-4">
+
+            <div class="flex flex-col gap-1">
+                <label for="magic-email" class="label label-text text-sm font-medium">Work email</label>
+                <c-lb.input
+                    id="magic-email"
+                    type="email"
+                    name="email"
+                    class="w-full"
+                    autocomplete="username"
+                    placeholder="you@company.com"
+                    bind="email" />
+            </div>
+
+            <c-lb.button
+                id="magic-send"
+                type="button"
+                variant="primary"
+                modifier="block"
+                icon="rmx.mail-send"
+                data-attr:disabled="!$email"
+                data-on:click="$sent = true">
+                Email me a sign-in link
+            </c-lb.button>
+
+        </div>
+
+        <c-lb.divider class="my-0 text-xs text-base-content/40">or continue with</c-lb.divider>
+
+        <c-magic-link.oauth />
+
+        <p class="text-center text-sm text-base-content/60">
+            Prefer a password?
+            <a href="#" class="link link-primary">Use your workspace credentials</a>
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

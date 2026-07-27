@@ -1,0 +1,29 @@
+<c-vars :summary="{}" :total=0 :searching="False" />
+
+<c-lb.stat.group class="mt-6 w-full border border-base-300 bg-base-100 shadow-none">
+
+    <c-lb.stat>
+        <c-lb.stat.title>{% if searching %}Matching customers{% else %}Customers{% endif %}</c-lb.stat.title>
+        <c-lb.stat.value class="tabular-nums text-2xl">{{ total }}</c-lb.stat.value>
+        <c-lb.stat.desc class="tabular-nums">{{ summary.seats }} seats billed</c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.title>Monthly recurring</c-lb.stat.title>
+        <c-lb.stat.value variant="primary" class="tabular-nums text-2xl">${{ summary.mrr }}</c-lb.stat.value>
+        <c-lb.stat.desc>{% if searching %}Across the current filter{% else %}Across the whole book{% endif %}</c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.title>At risk</c-lb.stat.title>
+        <c-lb.stat.value variant="{% if summary.at_risk %}error{% else %}success{% endif %}" class="tabular-nums text-2xl">{{ summary.at_risk }}</c-lb.stat.value>
+        <c-lb.stat.desc>Flagged by health score</c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.title>Overdue invoices</c-lb.stat.title>
+        <c-lb.stat.value variant="{% if summary.overdue %}warning{% else %}success{% endif %}" class="tabular-nums text-2xl">{{ summary.overdue }}</c-lb.stat.value>
+        <c-lb.stat.desc>Past their due date</c-lb.stat.desc>
+    </c-lb.stat>
+
+</c-lb.stat.group>

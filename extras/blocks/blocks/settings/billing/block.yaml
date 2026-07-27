@@ -1,0 +1,108 @@
+name: Billing settings
+ref: lb/settings/billing
+type: fe
+labb_version: ">=0.5.0"
+description: "Plan, payment method and invoice history — a dense billing page that ships zero JavaScript, drawn from the same Arden invoices as the data table"
+category: settings
+thumbnail: thumbnails/billing.png
+status: launch
+tags:
+  - settings
+  - billing
+  - invoices
+  - zero-js
+  - static
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  workspace:
+    name: "Beacon Labs"
+    slug: "beacon-labs"
+    currency: "USD"
+    billing_email: "billing@beaconlabs.com"
+    address: "12 Hanover Quay, Dublin 2, D02 XY44, Ireland"
+    tax_id: "IE 3487219 KH"
+    seats_used: 12
+    seats_total: 25
+    seats_pct: 48
+  plan:
+    name: "Arden Scale"
+    price_monthly: "449"
+    price_yearly: "4,490"
+    tagline: "For finance and RevOps running the whole book of business."
+    renews_on: "1 August 2026"
+    features:
+      - "Unlimited tracked customers"
+      - "Multi-entity consolidation"
+      - "SSO, SCIM and the audit log"
+      - "Dedicated success manager"
+  card:
+    brand: "Visa"
+    last4: "4242"
+    expires: "09 / 2028"
+    holder: "Beacon Labs Ltd"
+  totals:
+    next_amount: "449.00"
+    outstanding: "1,023.00"
+    paid_this_year: "18,412.00"
+  invoices:
+    - number: "ARD-2026-0026"
+      customer: "Verity Labs"
+      period: "Jul 2026"
+      issued: "06/07/2026"
+      due: "20/07/2026"
+      amount: "468.00"
+      status: "Open"
+      tone: "info"
+    - number: "ARD-2026-0013"
+      customer: "Kite & Bell"
+      period: "Jul 2026"
+      issued: "02/07/2026"
+      due: "16/07/2026"
+      amount: "555.00"
+      status: "Open"
+      tone: "info"
+    - number: "ARD-2026-0019"
+      customer: "Northwind Co"
+      period: "Jun 2026"
+      issued: "25/06/2026"
+      due: "09/07/2026"
+      amount: "2,278.00"
+      status: "Void"
+      tone: "neutral"
+    - number: "ARD-2026-0006"
+      customer: "AtlasForge"
+      period: "Jun 2026"
+      issued: "18/06/2026"
+      due: "02/07/2026"
+      amount: "2,927.00"
+      status: "Paid"
+      tone: "success"
+    - number: "ARD-2026-0012"
+      customer: "Kite & Bell"
+      period: "Jun 2026"
+      issued: "02/06/2026"
+      due: "16/06/2026"
+      amount: "555.00"
+      status: "Paid"
+      tone: "success"
+    - number: "ARD-2026-0005"
+      customer: "AtlasForge"
+      period: "May 2026"
+      issued: "18/05/2026"
+      due: "01/06/2026"
+      amount: "2,927.00"
+      status: "Void"
+      tone: "neutral"
+  contacts:
+    - name: "Priya Raghunathan"
+      initials: "PR"
+      title: "Finance Lead"
+      email: "priya.raghunathan@beaconlabs.com"
+    - name: "Callum Rennie"
+      initials: "CR"
+      title: "Controller"
+      email: "callum.rennie@beaconlabs.com"

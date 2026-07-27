@@ -1,0 +1,12 @@
+<c-vars :stats="[]" />
+
+<c-lb.stat.group id="activity-stats" class="w-full border border-base-300 bg-base-100">
+    {% for stat in stats %}
+    <c-lb.stat>
+        <c-lb.stat.figure variant="{{ stat.tone }}" icon="{{ stat.icon }}" />
+        <c-lb.stat.title>{{ stat.label }}</c-lb.stat.title>
+        <c-lb.stat.value id="stat-{{ stat.id }}" class="tabular-nums">{{ stat.value }}</c-lb.stat.value>
+        <c-lb.stat.desc class="tabular-nums">{{ stat.caption }}</c-lb.stat.desc>
+    </c-lb.stat>
+    {% endfor %}
+</c-lb.stat.group>

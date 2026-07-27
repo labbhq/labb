@@ -1,0 +1,29 @@
+steps:
+  - title: The page is an outline
+    file: templates/pages/index.html
+    match: "<c-single-plan.pitch />"
+    teaches: [zero-js]
+    docs: [guide/components]
+    body: |
+      Three components and a grid. The pitch, the plan and the FAQ each own their own
+      markup, so the page reads as what it is rather than as a wall of divs.
+
+  - title: Zero JavaScript, and that is the feature
+    file: templates/cotton/single_plan/faq.html
+    match: "<c-lb.accordion join>"
+    teaches: [zero-js]
+    docs: [guide/zero-js]
+    body: |
+      The FAQ opens and closes with no script on the page. Nothing in this block loads
+      Datastar, because nothing in it needs to — reactivity in labb is opt-in, so a
+      static pricing page ships as a static pricing page.
+
+  - title: Priced in theme tokens
+    file: templates/cotton/single_plan/card.html
+    match: 'class="border-primary border-2 shadow-lg"'
+    teaches: [theming]
+    docs: [guide/theming]
+    body: |
+      The highlight is `primary`, not a hex value. Drop this block into any daisyUI
+      theme and the card still looks deliberate — which is the whole reason blocks
+      are forbidden from hardcoding a colour.

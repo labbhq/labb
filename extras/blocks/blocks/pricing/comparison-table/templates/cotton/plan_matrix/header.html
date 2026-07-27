@@ -1,0 +1,35 @@
+<div class="flex flex-col items-center gap-5 text-center">
+
+    <h1 class="text-4xl font-semibold tracking-tight text-balance">
+        Compare every Arden plan
+    </h1>
+
+    <p class="max-w-xl text-base-content/60">
+        The same revenue graph underneath all three. What changes is how much of it you
+        can automate, and who you can hand it to.
+    </p>
+
+    <c-lb.join class="mt-2 p-1 bg-base-200 rounded-lg">
+        <c-lb.button
+            type="button"
+            class="join-item"
+            size="sm"
+            variant="primary"
+            btnStyle="$period.monthlyStyle:"
+            data-on:click="$period = ardenPeriod(false)"
+        >Monthly</c-lb.button>
+        <c-lb.button
+            type="button"
+            class="join-item"
+            size="sm"
+            variant="primary"
+            btnStyle="$period.annualStyle:ghost"
+            data-on:click="$period = ardenPeriod(true)"
+        >Annual</c-lb.button>
+    </c-lb.join>
+
+    <p class="text-xs text-base-content/50" data-text="$period.note">
+        Billed monthly. Cancel any time.
+    </p>
+
+</div>

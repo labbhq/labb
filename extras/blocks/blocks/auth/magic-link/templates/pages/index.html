@@ -1,0 +1,26 @@
+<c-lbr.signals id="magic-link-ui" $email="" $sent="false" />
+
+<main class="relative isolate overflow-hidden min-h-screen flex items-center px-4 py-12 lg:px-10 bg-base-100">
+
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-[32rem] -z-10"
+         style="background:
+            radial-gradient(44% 60% at 22% 0%, #8b5cf6 0%, transparent 66%),
+            radial-gradient(44% 58% at 55% 0%, #d946ef 0%, transparent 66%),
+            radial-gradient(42% 56% at 82% 8%, #f472b6 0%, transparent 66%);
+            opacity: 0.10;
+            -webkit-mask-image: linear-gradient(black, transparent);
+            mask-image: linear-gradient(black, transparent);"
+         aria-hidden="true"></div>
+
+    <div class="container mx-auto max-w-5xl grid items-center gap-12 lg:grid-cols-2">
+
+        <div class="w-full max-w-md mx-auto lg:mx-0">
+            <c-magic-link.form />
+            <c-magic-link.sent />
+        </div>
+
+        <c-magic-link.aside />
+
+    </div>
+
+</main>

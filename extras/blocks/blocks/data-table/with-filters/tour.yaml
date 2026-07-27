@@ -1,0 +1,51 @@
+steps:
+  - title: One signal holds the whole filter state
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      Status, health, the badge tone and the summary label all live in one client signal,
+      declared in prop mode from the object the page was rendered with. There is no view
+      behind this block because there is nothing for a server to do.
+
+  - title: A chip is a signal assignment
+    file: templates/cotton/filter_table/chip.html
+    match: "data-on:click=\"$filters = ardenFilters('{{ value }}', $filters.health)\""
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Clicking a chip replaces the filter object through one helper. That is the entire
+      interaction. Open the network tab, click every chip in the toolbar, and it stays
+      empty: the rows were already in the page.
+
+  - title: Rows filter themselves
+    file: templates/cotton/filter_table/row.html
+    match: 'data-show="ardenMatches('
+    teaches: [signals]
+    docs: [reactivity/events-and-bindings]
+    body: |
+      Each row carries its own status and health, and shows itself when the filter agrees.
+      No list is re-rendered and no DOM is rebuilt, so the table cannot flicker or lose
+      your scroll position.
+
+  - title: The badge is a reactive prop
+    file: templates/cotton/filter_table/toolbar.html
+    match: 'variant="$filters.tone:neutral"'
+    teaches: [reactive-props]
+    docs: [reactivity/reactive-props]
+    body: |
+      Prefix any component prop with `$` and it tracks a signal. The part after the colon
+      is what the server renders, so the badge is right before a byte of JavaScript runs.
+      A reactive prop takes a signal path, never an expression, which is why the tone is
+      computed into the signal rather than in the attribute.
+
+  - title: The zero-result state is a real state
+    file: templates/cotton/filter_table/empty.html
+    match: 'data-show="ardenVisible($filters) === 0"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Filter to Churned and Watch and the book has nothing to show you. The empty state is
+      shipped with the block, driven by the same signal as the rows, and it offers the one
+      action worth offering: put the filters back.

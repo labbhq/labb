@@ -1,0 +1,50 @@
+steps:
+  - title: Two signals hold the whole flow
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      `email` and `sent`. That is the entire state of a passwordless sign-in, and it
+      lives in the browser. There is no view behind this block, no endpoint, and no
+      session to keep — the server is not involved at all.
+
+  - title: The email input writes into the signal
+    file: templates/cotton/magic_link/form.html
+    match: 'bind="email"'
+    teaches: [signals]
+    docs: [reactivity/binding]
+    body: |
+      One prop. No change handler, no listener, no framework state to wire up — the
+      field simply is the signal, which is what lets the next screen greet the user
+      by the address they typed.
+
+  - title: Sending is a signal assignment
+    file: templates/cotton/magic_link/form.html
+    match: 'data-on:click="$sent = true"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      The click flips one boolean. Open the network tab first: the page changes
+      state and the wire stays silent. Point the button at a `c-lbr.post` when you
+      wire it to a real mailer, and everything else here stays as it is.
+
+  - title: Two panels, one boolean
+    file: templates/cotton/magic_link/sent.html
+    match: 'data-show="$sent"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Both states are rendered by the server and the signal decides which one is on
+      screen. The sent card reads the address straight out of `$email`, so it is
+      personal without ever having asked a server who is signing in.
+
+  - title: A flow, not a field
+    file: templates/cotton/magic_link/aside.html
+    match: '<div id="magic-aside"'
+    teaches: [theming]
+    docs: [ui/theming]
+    body: |
+      Passwordless sign-in asks the visitor to trust something unfamiliar, so the
+      block answers the question rather than leaving it. The steps and the security
+      note are the surrounding matter — and they cost nothing at runtime.

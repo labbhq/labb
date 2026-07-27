@@ -1,0 +1,25 @@
+name: Split brand
+ref: lb/auth/split-brand
+type: fullstack
+labb_version: ">=0.5.0"
+description: "Sign-in and sign-up on a split brand layout, with live per-field validation over an ordinary Django view"
+category: auth
+status: launch
+anchor: true
+thumbnail: thumbnails/split-brand.png
+tags:
+  - reactive
+  - validation
+  - form
+  - auth
+  - oauth
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's auth anchor and premium exemplar"
+
+allow_fixed_colours:
+  - "#8b5cf6"
+  - "#d946ef"
+  - "#f472b6"
+  - "#fb923c"

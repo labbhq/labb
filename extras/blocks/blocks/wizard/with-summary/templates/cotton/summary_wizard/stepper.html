@@ -1,0 +1,31 @@
+<c-vars :steps="[]" />
+
+<div class="flex flex-col gap-4">
+
+    <div>
+        <h1 class="text-2xl font-semibold tracking-tight">Set up Arden</h1>
+        <p class="text-sm text-base-content/60 mt-1">
+            Three steps, and the price on the right follows what you pick.
+        </p>
+    </div>
+
+    <div class="flex items-center gap-2">
+        {% for s in steps %}
+        <div
+            id="sw-tab-{{ s.n }}"
+            class="flex items-center gap-2 rounded-full border border-base-300 px-3 py-1.5"
+            data-class="{'border-primary bg-primary/5': $step === {{ s.n }}, 'border-base-300': $step !== {{ s.n }}}"
+        >
+            <span
+                class="w-5 h-5 rounded-full text-[11px] font-semibold tabular-nums flex items-center justify-center bg-base-300 text-base-content/50"
+                data-class="{'bg-primary text-primary-content': $step === {{ s.n }}, 'bg-success text-success-content': $step > {{ s.n }}, 'bg-base-300 text-base-content/50': $step < {{ s.n }}}"
+            >{{ s.n }}</span>
+            <span class="text-xs font-medium whitespace-nowrap">{{ s.label }}</span>
+        </div>
+        {% if not forloop.last %}
+        <div class="h-px flex-1 bg-base-300"></div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+</div>

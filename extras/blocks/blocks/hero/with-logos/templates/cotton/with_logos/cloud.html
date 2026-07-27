@@ -1,0 +1,22 @@
+<c-vars :customers="[]" />
+
+<section class="mt-20 flex flex-col items-center gap-8 border-t border-base-300 pt-12">
+
+    <p class="text-xs uppercase tracking-wider text-base-content/40">
+        The teams closing their quarter on Arden
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+        {% for customer in customers %}
+        <c-with-logos.logo name="{{ customer.name }}" icon="{{ customer.icon }}" />
+        {% endfor %}
+    </div>
+
+    <p class="text-sm text-base-content/60 text-center max-w-lg text-balance">
+        <span class="font-semibold tabular-nums text-base-content">$2.4B</span> in ARR
+        tracked across
+        <span class="font-semibold tabular-nums text-base-content">2,400</span>
+        workspaces, reconciled nightly.
+    </p>
+
+</section>

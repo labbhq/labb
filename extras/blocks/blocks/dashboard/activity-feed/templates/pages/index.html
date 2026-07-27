@@ -1,0 +1,22 @@
+<main class="container mx-auto max-w-6xl px-4 py-10 flex flex-col gap-6">
+
+    <c-activity-feed.header :today=today />
+
+    <c-activity-feed.stats :stats=stats />
+
+    <section class="grid gap-6 lg:grid-cols-3 items-start">
+
+        <div id="activity-log" class="lg:col-span-2 flex flex-col gap-6">
+            {% for group in groups %}
+            <c-activity-feed.day :day=group.day :events=group.events />
+            {% endfor %}
+        </div>
+
+        <div class="flex flex-col gap-6">
+            <c-activity-feed.team :team=team />
+            <c-activity-feed.digest />
+        </div>
+
+    </section>
+
+</main>

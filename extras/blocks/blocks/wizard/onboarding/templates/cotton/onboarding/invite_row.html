@@ -1,0 +1,15 @@
+<c-vars :invite="{}" />
+
+<div class="flex items-start gap-3" id="invite-{{ invite.n }}">
+
+    {% if invite.initials %}
+    <c-lb.avatar placeholder :initials=invite.initials bgColor="secondary" size="sm" rounded="lg" class="mt-1" />
+    {% else %}
+    <c-lb.avatar placeholder icon="rmx.user-add" bgColor="neutral" size="sm" rounded="lg" class="mt-1 opacity-40" />
+    {% endif %}
+
+    <c-onboarding.field class="flex-1" :error=invite.error>
+        <c-lb.input type="email" class="w-full" :placeholder=invite.placeholder :bind=invite.path />
+    </c-onboarding.field>
+
+</div>

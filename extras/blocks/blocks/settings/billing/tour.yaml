@@ -1,0 +1,39 @@
+steps:
+  - title: A page, and not one byte of JavaScript
+    file: templates/pages/index.html
+    match: "<c-billing-panel.header"
+    teaches: [zero-js]
+    docs: [guide/reactivity]
+    body: |
+      There is no `c-lbr.*` here and no reactive prop, so labb loads no runtime at
+      all. A billing page is read far more often than it is clicked, and this one is
+      pure HTML: view the source and there is no script tag with a src.
+
+  - title: The same invoices the data table shows
+    file: templates/cotton/billing_panel/invoices.html
+    match: "{{ invoice.number }}</td>"
+    teaches: [zero-js]
+    docs: [guide/blocks]
+    body: |
+      ARD-2026-0026, Verity Labs, 468.00. These are the Arden invoices the data-table
+      block sorts and filters — one fixture universe, so the gallery reads as one
+      product rather than eight demos.
+
+  - title: Digits that line up
+    file: templates/cotton/billing_panel/invoices.html
+    match: '<td class="text-right tabular-nums font-medium whitespace-nowrap">'
+    teaches: [theming]
+    docs: [ui/typography]
+    body: |
+      `tabular-nums` on every column of figures. It is the cheapest thing on this
+      page and the most obvious difference between a template and a product.
+
+  - title: A card built from theme tokens
+    file: templates/cotton/billing_panel/method.html
+    match: 'class="rounded-box bg-base-200'
+    teaches: [theming]
+    docs: [ui/theming]
+    body: |
+      The payment card is a `base-200` panel with a `base-300` hairline, not a fixed
+      brand colour, so it recolours with the theme instead of fighting it. No hex ever
+      appears in a block.

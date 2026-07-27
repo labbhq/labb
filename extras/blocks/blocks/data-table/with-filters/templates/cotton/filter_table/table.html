@@ -1,0 +1,28 @@
+<c-vars :customers="[]" />
+
+<div class="rounded-box border border-base-300 bg-base-100">
+
+    <div class="overflow-x-auto">
+        <c-lb.table size="sm" class="align-middle">
+            <thead>
+                <tr class="border-base-300">
+                    <th class="font-medium text-base-content/50">Account</th>
+                    <th class="font-medium text-base-content/50">Plan</th>
+                    <th class="font-medium text-base-content/50">Status</th>
+                    <th class="font-medium text-base-content/50">Health</th>
+                    <th class="font-medium text-base-content/50 text-end">MRR</th>
+                    <th class="font-medium text-base-content/50 text-end">Seats</th>
+                    <th class="font-medium text-base-content/50 text-end">Renews</th>
+                </tr>
+            </thead>
+            <tbody id="filter-rows">
+                {% for customer in customers %}
+                <c-filter-table.row :customer=customer />
+                {% endfor %}
+            </tbody>
+        </c-lb.table>
+    </div>
+
+    <c-filter-table.empty />
+
+</div>

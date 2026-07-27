@@ -1,0 +1,28 @@
+steps:
+  - title: Type does the work, not JavaScript
+    file: templates/pages/index.html
+    match: "text-4xl sm:text-5xl lg:text-6xl"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      A centred hero has one job: the sentence. It scales with the viewport and
+      ships as plain HTML — no bundle, no hydration, nothing to wait for.
+
+  - title: The proof row is the block
+    file: templates/pages/index.html
+    match: "<c-centred-bold.proof"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      A centred card has nowhere to hide, which is why most centred heroes read
+      as templates. The rating strip, the avatar group and the customer quote are
+      what make this one a page.
+
+  - title: Avatars without an asset
+    file: templates/cotton/centred_bold/proof.html
+    match: '<c-lb.avatar.group'
+    teaches: [theming]
+    docs: [ui/components/avatar]
+    body: |
+      Initials on a themed background. No image files to redistribute, no licence
+      to inherit, and the whole group recolours when the theme does.

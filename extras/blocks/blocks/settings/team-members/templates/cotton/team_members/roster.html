@@ -1,0 +1,46 @@
+<c-vars :members="[]" :role_options="[]" />
+
+<div class="rounded-box border border-base-300 divide-y divide-base-300">
+    {% for member in members %}
+    <div
+        id="row-{{ member.key }}"
+        class="flex flex-wrap items-center gap-4 p-4"
+        data-class="{'bg-warning/5': $roles.{{ member.key }} !== $saved.{{ member.key }}}"
+    >
+
+        <c-lb.avatar placeholder initials="{{ member.initials }}" bgColor="{{ member.tone }}" size="sm" />
+
+        <div class="min-w-0 flex-1">
+            <div class="text-sm font-medium truncate">{{ member.name }}</div>
+            <div class="text-xs text-base-content/50 truncate">{{ member.title }} · {{ member.email }}</div>
+        </div>
+
+        <div class="hidden lg:block text-xs text-base-content/45 tabular-nums w-28 text-right">
+            {{ member.last_seen }}
+        </div>
+
+        <c-lb.badge size="sm" style="outline" variant="{{ member.status_tone }}">
+            {{ member.status }}
+        </c-lb.badge>
+
+        <c-lb.select
+            id="role-{{ member.key }}"
+            size="sm"
+            class="w-36"
+            bind="roles.{{ member.key }}"
+        >
+            {% for value, label in role_options %}
+            <option value="{{ value }}" {% if value == member.role %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </c-lb.select>
+
+        <span
+            id="changed-{{ member.key }}"
+            class="text-xs text-warning font-medium w-16"
+            data-show="$roles.{{ member.key }} !== $saved.{{ member.key }}"
+            style="display:none"
+        >Changed</span>
+
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,34 @@
+<c-vars :team="[]" />
+
+<c-lb.card border class="bg-base-100">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <div>
+            <h2 class="font-semibold tracking-tight">Who is on the book</h2>
+            <p class="text-xs text-base-content/50 mt-0.5">
+                Three people, one ledger. Every event above carries the name of whoever caused it.
+            </p>
+        </div>
+
+        <ul id="team-list" class="flex flex-col divide-y divide-base-200">
+            {% for member in team %}
+            <li class="flex items-center gap-3 py-2.5">
+                <c-lb.avatar
+                    placeholder
+                    size="sm"
+                    rounded="full"
+                    bgColor="{{ member.tone }}"
+                    initials="{{ member.initials }}" />
+
+                <div class="min-w-0 flex-1 leading-tight">
+                    <p class="truncate text-sm font-medium">{{ member.name }}</p>
+                    <p class="text-xs text-base-content/50">{{ member.role }}</p>
+                </div>
+
+                <c-lb.badge style="soft" size="xs">{{ member.note }}</c-lb.badge>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </c-lb.card.body>
+</c-lb.card>

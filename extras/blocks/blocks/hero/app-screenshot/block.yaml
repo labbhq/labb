@@ -1,0 +1,24 @@
+name: App screenshot
+ref: lb/hero/app-screenshot
+type: fe
+labb_version: ">=0.5.0"
+description: "Centred copy above a full-bleed framed product shot, drawn as live markup rather than an image"
+category: hero
+status: launch
+thumbnail: thumbnails/app-screenshot.png
+tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+preview_context: {}
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+allow_fixed_colours:
+  - "#8b5cf6"
+  - "#d946ef"
+  - "#f472b6"
+  - "#fb923c"

@@ -1,0 +1,23 @@
+<c-vars aside="" />
+
+<main class="min-h-screen grid lg:grid-cols-3">
+
+    <aside class="relative isolate overflow-hidden hidden lg:flex flex-col justify-between gap-10 p-10
+                  bg-base-200 border-r border-base-300">
+        <div class="pointer-events-none absolute inset-0 -z-10"
+             style="background:
+                radial-gradient(60% 45% at 12% 0%, #8b5cf6 0%, transparent 68%),
+                radial-gradient(60% 45% at 92% 22%, #f472b6 0%, transparent 68%),
+                radial-gradient(75% 60% at 50% 105%, #fb923c 0%, transparent 72%);
+                opacity: 0.13;"
+             aria-hidden="true"></div>
+        {{ aside }}
+    </aside>
+
+    <section class="lg:col-span-2 flex justify-center p-6 sm:p-12 bg-base-100">
+        <div class="w-full max-w-2xl">
+            {{ slot }}
+        </div>
+    </section>
+
+</main>

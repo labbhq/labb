@@ -1,0 +1,20 @@
+name: Workspace settings
+ref: lb/settings/workspace
+type: fullstack
+labb_version: ">=0.5.0"
+description: "Tabbed workspace settings where saving one section re-renders only that section"
+category: settings
+status: launch
+anchor: true
+thumbnail: thumbnails/workspace.png
+tags:
+  - reactive
+  - settings
+  - scoped-morph
+  - toast
+  - validation
+  - team
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's settings anchor and its only scoped-morph demo"

@@ -1,0 +1,70 @@
+<c-vars :selected_plan="None" :invites="[]" :people=1 :trial_days=14 />
+
+<div>
+    <div class="flex items-center gap-3">
+        <c-arden.mark size="sm" />
+        <span class="text-lg font-semibold tracking-tight">Arden</span>
+    </div>
+
+    <h1 class="mt-8 text-3xl font-semibold tracking-tight text-balance">
+        Set up your workspace.
+    </h1>
+    <p class="mt-2 text-sm text-base-content/60">
+        Three steps. Most teams are looking at their MRR inside ten minutes.
+    </p>
+</div>
+
+<c-lb.card class="bg-base-100/70 backdrop-blur border border-base-300 shadow-sm">
+    <c-lb.card.body class="p-5 gap-3">
+        <p class="text-xs uppercase tracking-wider text-base-content/40">So far</p>
+
+        <div class="flex items-baseline justify-between gap-3 text-sm">
+            <span class="text-base-content/50">Workspace</span>
+            <span class="font-medium text-right truncate"
+                  data-text="$form.workspace_name || 'Untitled workspace'"></span>
+        </div>
+
+        <div class="flex items-baseline justify-between gap-3 text-sm">
+            <span class="text-base-content/50">Address</span>
+            <span class="font-mono text-xs text-right truncate"
+                  data-text="'arden.app/' + ($form.workspace_slug || 'your-team')"></span>
+        </div>
+
+        <div class="flex items-baseline justify-between gap-3 text-sm">
+            <span class="text-base-content/50">Team</span>
+            <span class="font-medium tabular-nums">
+                {{ people }} {% if people == 1 %}seat{% else %}seats{% endif %}
+                <span class="text-base-content/40 font-normal">(you{% if invites %} + {{ invites|length }}{% endif %})</span>
+            </span>
+        </div>
+
+        <div class="flex items-baseline justify-between gap-3 text-sm">
+            <span class="text-base-content/50">Plan</span>
+            {% if selected_plan %}
+            <span class="font-medium">
+                {{ selected_plan.name }}
+                <span class="text-base-content/40 font-normal tabular-nums">${{ selected_plan.price_monthly|floatformat:0 }}/mo</span>
+            </span>
+            {% else %}
+            <span class="text-base-content/40">Not chosen yet</span>
+            {% endif %}
+        </div>
+    </c-lb.card.body>
+</c-lb.card>
+
+<div class="space-y-4">
+    <div class="flex gap-3 text-sm text-base-content/40">
+        <c-lbi n="rmx.shield-check" w="18" h="18" class="mt-0.5 shrink-0" />
+        <p class="text-base-content/60">
+            {{ trial_days }} days free, no card. Nothing bills until you connect your first
+            payment provider.
+        </p>
+    </div>
+
+    <p class="text-xs uppercase tracking-wider text-base-content/40">Set up this month</p>
+    <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-base-content/50">
+        <span>Kite &amp; Bell</span>
+        <span>Northwind Co</span>
+        <span>Verity Labs</span>
+    </div>
+</div>

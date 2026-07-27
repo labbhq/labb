@@ -1,0 +1,45 @@
+<c-lbr.signals id="customer-query" :schema=query_signals />
+<c-lbr.signals id="customer-ui" :schema=ui_signals />
+<c-lbr.replace-url :to=canonical_url />
+
+<main class="container mx-auto max-w-7xl px-4 py-10">
+
+    <c-customers.masthead :total=total />
+
+    <c-customers.summary :summary=summary :total=total :searching=searching />
+
+    <c-customers.toolbar
+        :signals=query_signals
+        :status_choices=status_choices />
+
+    <div id="customer-table" class="mt-5">
+        <c-customers.table
+            :customers=customers
+            :plans=plans
+            :status_choices=status_choices
+            :editing_pk=editing_pk
+            :update_url=update_url
+            :sort_field=sort_field
+            :sort_dir=sort_dir
+            :next_dir=next_dir
+            :page_pks=page_pks
+            :searching=searching />
+    </div>
+
+    {% if total %}
+    <c-customers.pager
+        :page=page
+        :total_pages=total_pages
+        :prev_page=prev_page
+        :next_page=next_page
+        :first_index=first_index
+        :last_index=last_index
+        :total=total />
+    {% endif %}
+
+    <p class="mt-6 text-xs text-base-content/40 max-w-2xl">
+        Billed to date counts paid invoices only; open and overdue runs are excluded.
+        Renewal dates come from the customer's current plan term.
+    </p>
+
+</main>

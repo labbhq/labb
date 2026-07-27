@@ -1,0 +1,25 @@
+<c-lbr.signals id="auth-signals" :schema=signals />
+
+<c-split-brand.shell>
+
+    <c-slot name="brand">
+        <c-split-brand.brand
+            headline="Know your revenue."
+            sub="Every customer, invoice and renewal in one place." />
+    </c-slot>
+
+    {% if submitted %}
+    <c-split-brand.success :member=member />
+    {% else %}
+    <c-split-brand.form
+        title="Welcome back to Arden"
+        lede="Sign in with your workspace credentials."
+        action="block_auth_split_brand:submit"
+        validateTo="block_auth_split_brand:validate"
+        cta="Sign in"
+        :signals=signals
+        :errors=errors
+        :failed=failed />
+    {% endif %}
+
+</c-split-brand.shell>

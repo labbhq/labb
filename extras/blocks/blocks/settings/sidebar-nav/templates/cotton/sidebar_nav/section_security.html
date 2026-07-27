@@ -1,0 +1,59 @@
+<c-vars :workspace="{}" />
+
+<c-sidebar-nav.panel
+    title="Security"
+    desc="Who can get in, and what {{ workspace.name }} keeps a record of.">
+
+    <div class="rounded-box border border-base-300 divide-y divide-base-300">
+
+        <div class="flex items-center justify-between gap-4 p-4">
+            <div>
+                <div class="text-sm font-medium">Two-factor authentication</div>
+                <div class="text-xs text-base-content/55 mt-0.5">
+                    Required for the owner, admin and billing roles.
+                </div>
+            </div>
+            <c-lb.badge size="sm" style="soft" variant="success" icon="rmx.shield-check">Enforced</c-lb.badge>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 p-4">
+            <div>
+                <div class="text-sm font-medium">SAML single sign-on</div>
+                <div class="text-xs text-base-content/55 mt-0.5">
+                    Included on {{ workspace.plan }}. Okta, Entra ID and Google Workspace.
+                </div>
+            </div>
+            <c-lb.button btnStyle="outline" size="sm">Configure</c-lb.button>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 p-4">
+            <div>
+                <div class="text-sm font-medium">Audit log</div>
+                <div class="text-xs text-base-content/55 mt-0.5 tabular-nums">
+                    18,942 events kept for 24 months. Exportable as CSV.
+                </div>
+            </div>
+            <c-lb.button btnStyle="ghost" size="sm" icon="rmx.download">Export</c-lb.button>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 p-4">
+            <div>
+                <div class="text-sm font-medium">Session timeout</div>
+                <div class="text-xs text-base-content/55 mt-0.5">
+                    Members are signed out after 14 days of inactivity.
+                </div>
+            </div>
+            <c-lb.badge size="sm" style="outline" class="tabular-nums">14 days</c-lb.badge>
+        </div>
+
+    </div>
+
+    <div class="flex items-start gap-2 text-xs text-base-content/50">
+        <c-lbi n="rmx.information" w="1em" h="1em" class="size-4 mt-0.5 shrink-0" />
+        <span>
+            Ilse Bergman was suspended on 11 May 2026 and keeps no access. Suspended members
+            still appear in the audit log.
+        </span>
+    </div>
+
+</c-sidebar-nav.panel>

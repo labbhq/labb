@@ -1,0 +1,84 @@
+<c-vars :customer="{}" />
+
+<tr
+    id="expando-detail-{{ customer.id }}"
+    class="border-base-300 bg-base-200/30"
+    style="display:none"
+    data-show="$open === {{ customer.id }}"
+>
+    <td colspan="7" class="p-0">
+        <div class="grid gap-6 px-6 py-5 lg:grid-cols-3">
+
+            <div class="flex flex-col gap-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/50">Who to call</h3>
+                <div class="flex items-center gap-3">
+                    <c-lb.avatar placeholder initials="{{ customer.initials }}" bgColor="secondary" size="sm" rounded="md" />
+                    <div class="min-w-0 leading-tight">
+                        <div class="text-sm font-medium truncate">{{ customer.contact }}</div>
+                        <div class="text-xs text-base-content/50 truncate">{{ customer.title }}</div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1 text-xs text-base-content/60">
+                    <span class="truncate">{{ customer.email }}</span>
+                    <span>Owned by {{ customer.owner }} · Customer since {{ customer.since }}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <c-lb.button btnStyle="outline" size="xs" icon="rmx.mail">Email</c-lb.button>
+                    <c-lb.button btnStyle="ghost" size="xs">Open account</c-lb.button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/50">Where it stands</h3>
+                <dl class="flex flex-col gap-1.5 text-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <dt class="text-base-content/60">Plan</dt>
+                        <dd class="font-medium">{{ customer.plan }}</dd>
+                    </div>
+                    <div class="flex items-center justify-between gap-3">
+                        <dt class="text-base-content/60">Seats in use</dt>
+                        <dd class="font-medium tabular-nums">{{ customer.seats_used }} of {{ customer.seats }}</dd>
+                    </div>
+                    <div class="flex items-center justify-between gap-3">
+                        <dt class="text-base-content/60">Run rate</dt>
+                        <dd class="font-medium tabular-nums">${{ customer.mrr }} / month</dd>
+                    </div>
+                    <div class="flex items-center justify-between gap-3">
+                        <dt class="text-base-content/60">Renews</dt>
+                        <dd class="font-medium tabular-nums">{{ customer.renews }}</dd>
+                    </div>
+                </dl>
+                <p class="text-xs text-base-content/60">{{ customer.activity }}</p>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/50">Recent invoices</h3>
+                {% if customer.invoices %}
+                <div class="flex flex-col divide-y divide-base-300 rounded-box border border-base-300 bg-base-100">
+                    {% for invoice in customer.invoices %}
+                    <div class="flex items-center justify-between gap-3 px-3 py-2">
+                        <div class="leading-tight">
+                            <div class="text-sm font-medium tabular-nums">{{ invoice.number }}</div>
+                            <div class="text-xs text-base-content/50 tabular-nums">{{ invoice.issued }}</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm tabular-nums">${{ invoice.amount }}</span>
+                            <c-lb.badge variant="{{ invoice.state_variant }}" style="soft" size="xs">{{ invoice.state }}</c-lb.badge>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="rounded-box border border-dashed border-base-300 bg-base-100">
+                    <c-expando-table.empty
+                        id="expando-invoices-empty-{{ customer.id }}"
+                        icon="rmx.receipt"
+                        title="No invoices yet"
+                        body="{{ customer.company }} is still on trial. The first invoice is raised the day the plan starts, on {{ customer.renews }}." />
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </td>
+</tr>

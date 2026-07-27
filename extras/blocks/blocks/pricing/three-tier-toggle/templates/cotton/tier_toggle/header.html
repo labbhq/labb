@@ -1,0 +1,41 @@
+<div class="flex flex-col items-center gap-5 text-center">
+
+    <c-lb.badge style="soft" size="sm" icon="rmx.line-chart">Arden pricing</c-lb.badge>
+
+    <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight text-balance">
+        Pricing that follows your revenue
+    </h1>
+
+    <p class="max-w-xl text-base-content/60">
+        Every plan includes the full revenue graph — customers, invoices, renewals and
+        events. You are only ever paying for the seats and the volume you actually use.
+    </p>
+
+    <c-lb.join class="mt-2 p-1 bg-base-200 rounded-lg">
+        <c-lb.button
+            type="button"
+            class="join-item"
+            size="sm"
+            variant="primary"
+            btnStyle="$period.monthlyStyle:"
+            data-on:click="$period = ardenPeriod(false)"
+        >Monthly</c-lb.button>
+        <c-lb.button
+            type="button"
+            class="join-item"
+            size="sm"
+            variant="primary"
+            btnStyle="$period.annualStyle:ghost"
+            data-on:click="$period = ardenPeriod(true)"
+        >Annual</c-lb.button>
+    </c-lb.join>
+
+    <c-lb.badge
+        id="period-note"
+        size="sm"
+        style="soft"
+        variant="$period.saveVariant:neutral"
+        data-text="$period.saveLabel"
+    >2 months free</c-lb.badge>
+
+</div>

@@ -1,0 +1,129 @@
+name: Compact KPI grid
+ref: lb/dashboard/compact-kpi
+type: fe
+labb_version: ">=0.5.0"
+description: "A dense KPI board with inline sparklines — eight metrics, a segment table, and not one byte of JavaScript"
+category: dashboard
+status: launch
+thumbnail: thumbnails/compact-kpi.png
+tags:
+  - dashboard
+  - kpi
+  - static
+  - zero-js
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  period: "June 2026"
+  synced: "04:00 UTC"
+  kpis:
+    - id: mrr
+      label: "MRR"
+      value: "$412,900"
+      delta: "+4.2%"
+      tone: "success"
+      caption: "vs $396,160 in May"
+      points: "0,26 14,24 28,25 42,20 56,18 70,15 84,9 100,5"
+    - id: arr
+      label: "ARR run rate"
+      value: "$4,954,800"
+      delta: "+4.2%"
+      tone: "success"
+      caption: "MRR × 12, unadjusted"
+      points: "0,27 14,25 28,26 42,21 56,19 70,15 84,10 100,5"
+    - id: net-new
+      label: "Net new MRR"
+      value: "$16,740"
+      delta: "+11.6%"
+      tone: "success"
+      caption: "Expansion less churn"
+      points: "0,22 14,17 28,24 42,14 56,19 70,11 84,15 100,7"
+    - id: expansion
+      label: "Expansion MRR"
+      value: "$38,100"
+      delta: "+9.4%"
+      tone: "success"
+      caption: "31 accounts upgraded or added seats"
+      points: "0,24 14,21 28,22 42,16 56,17 70,12 84,13 100,6"
+    - id: churned
+      label: "Churned MRR"
+      value: "$21,360"
+      delta: "-2.8%"
+      tone: "error"
+      caption: "6 accounts lost, 3 contracted"
+      points: "0,10 14,14 28,11 42,17 56,15 70,20 84,18 100,24"
+    - id: logo-churn
+      label: "Logo churn"
+      value: "1.9%"
+      delta: "-0.4pt"
+      tone: "success"
+      caption: "Trailing 3 months"
+      points: "0,12 14,16 28,13 42,18 56,17 70,21 84,20 100,25"
+    - id: arpa
+      label: "ARPA"
+      value: "$3,226"
+      delta: "+1.1%"
+      tone: "primary"
+      caption: "Across 128 paying accounts"
+      points: "0,21 14,22 28,19 42,20 56,17 70,18 84,14 100,13"
+    - id: accounts
+      label: "Paying accounts"
+      value: "128"
+      delta: "+6"
+      tone: "primary"
+      caption: "14 in trial, 4 past due"
+      points: "0,25 14,23 28,23 42,20 56,18 70,17 84,13 100,10"
+  segments:
+    - name: "Enterprise"
+      accounts: "18"
+      mrr: "$196,400"
+      net_new: "+$8,900"
+      churn: "0.6%"
+      tone: "success"
+    - name: "Mid-market"
+      accounts: "41"
+      mrr: "$142,700"
+      net_new: "+$6,120"
+      churn: "1.4%"
+      tone: "success"
+    - name: "SMB"
+      accounts: "52"
+      mrr: "$58,300"
+      net_new: "+$2,410"
+      churn: "3.1%"
+      tone: "warning"
+    - name: "Self-serve"
+      accounts: "17"
+      mrr: "$15,500"
+      net_new: "-$690"
+      churn: "6.8%"
+      tone: "error"
+  accounts:
+    - name: "AtlasForge"
+      plan: "Scale"
+      mrr: "$12,400"
+      health: "Healthy"
+      tone: "success"
+    - name: "Verity Labs"
+      plan: "Scale"
+      mrr: "$9,650"
+      health: "Expanding"
+      tone: "info"
+    - name: "Northwind Co"
+      plan: "Growth"
+      mrr: "$7,480"
+      health: "Healthy"
+      tone: "success"
+    - name: "Ironvale Group"
+      plan: "Growth"
+      mrr: "$6,120"
+      health: "Card expiring"
+      tone: "warning"
+    - name: "Kite & Bell"
+      plan: "Growth"
+      mrr: "$5,940"
+      health: "At risk"
+      tone: "error"

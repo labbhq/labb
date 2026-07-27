@@ -1,0 +1,33 @@
+<c-lbr.signals id="onboarding-signals" :schema=signals />
+
+<c-onboarding.shell>
+
+    <c-slot name="aside">
+        <c-onboarding.summary
+            :selected_plan=selected_plan
+            :invites=invites
+            :people=people
+            :trial_days=trial_days />
+    </c-slot>
+
+    {% if created %}
+    <c-onboarding.success
+        :workspace=workspace
+        :invites=invites
+        :selected_plan=selected_plan
+        :trial_days=trial_days />
+    {% else %}
+    <c-onboarding.wizard
+        :signals=signals
+        :step=step
+        :total_steps=total_steps
+        :regions=regions
+        :roles=roles
+        :plans=plans
+        :selected_plan=selected_plan
+        :invite_slots=invite_slots
+        :people=people
+        :errors=errors />
+    {% endif %}
+
+</c-onboarding.shell>

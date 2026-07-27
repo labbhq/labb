@@ -1,0 +1,53 @@
+<c-vars title="" lede="" action="" validateTo="" cta="Continue" withName :signals="{}" :errors="{}" failed="" />
+
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-2xl font-semibold tracking-tight">{{ title }}</h2>
+        <p class="text-base-content/60 text-sm mt-1">{{ lede }}</p>
+    </div>
+
+    {% if failed %}
+    <c-lb.alert variant="error" alertStyle="soft" icon="rmx.error-warning">
+        {{ failed }}
+    </c-lb.alert>
+    {% endif %}
+
+    <c-lbr.post :to=action before="$submitted = true" class="flex flex-col gap-5">
+
+        {% if withName %}
+        <c-split-brand.field label="Full name" required :error=errors.name :validateTo=validateTo>
+            <c-lb.input placeholder="Mira Chen" class="w-full" autocomplete="name" :bind=signals.fields.name />
+        </c-split-brand.field>
+        {% endif %}
+
+        <c-split-brand.field label="Work email" required :error=errors.email :validateTo=validateTo>
+            <c-lb.input type="email" placeholder="you@company.com" class="w-full"
+                        autocomplete="username" :bind=signals.fields.email />
+        </c-split-brand.field>
+
+        <c-split-brand.field label="Password" hint="(8+ characters)" required :error=errors.password :validateTo=validateTo>
+            <c-lb.input type="password" placeholder="••••••••" class="w-full"
+                        autocomplete="{% if withName %}new-password{% else %}current-password{% endif %}"
+                        :bind=signals.fields.password />
+        </c-split-brand.field>
+
+        <c-lb.button type="submit" variant="primary" modifier="block">{{ cta }}</c-lb.button>
+
+    </c-lbr.post>
+
+    <c-lb.divider class="text-xs text-base-content/40">or continue with</c-lb.divider>
+
+    <c-split-brand.oauth />
+
+    <p class="text-center text-sm text-base-content/60">
+        {% if withName %}
+        Already on Arden?
+        <a href="{% url 'block_auth_split_brand:index' %}" class="link link-primary">Sign in</a>
+        {% else %}
+        New to Arden?
+        <a href="{% url 'block_auth_split_brand:sign_up' %}" class="link link-primary">Create an account</a>
+        {% endif %}
+    </p>
+
+</div>

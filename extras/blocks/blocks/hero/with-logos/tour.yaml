@@ -1,0 +1,29 @@
+steps:
+  - title: The logo cloud is the point
+    file: templates/pages/index.html
+    match: "<c-with-logos.cloud"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      A hero that only asserts is a template. This one shows who already agreed.
+      The cloud is the block's surrounding matter, and it is still just HTML.
+
+  - title: Customer marks come from labb's icon pack
+    file: templates/cotton/with_logos/logo.html
+    match: "<c-lbi n="
+    teaches: [theming]
+    docs: [icons/getting-started]
+    body: |
+      Each mark is an `rmx` icon named by the data, so the block carries no image
+      files, no CDN call and no third-party licence into the project that installs
+      it. Swap in real SVG logos when you have them.
+
+  - title: The list lives in block.yaml
+    file: templates/cotton/with_logos/cloud.html
+    match: '<c-vars :customers="[]" />'
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      The customers come from `preview_context` in the manifest, so the block has
+      no view and no Python at all. Point the loop at your own queryset when you
+      wire it up.

@@ -1,0 +1,48 @@
+<c-vars :regions="[]" />
+
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Name your workspace</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            This is what your team sees when they sign in to Arden. You can rename it later.
+        </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+        <c-horizontal-steps.field label="Workspace name">
+            <c-lb.input
+                id="hz-company"
+                type="text"
+                placeholder="Kite &amp; Bell"
+                class="w-full"
+                bind="form.company" />
+        </c-horizontal-steps.field>
+
+        <c-horizontal-steps.field label="Workspace address" hint="(arden.app/…)">
+            <c-lb.input
+                id="hz-slug"
+                type="text"
+                placeholder="kite-and-bell"
+                class="w-full font-mono"
+                bind="form.slug" />
+        </c-horizontal-steps.field>
+    </div>
+
+    <c-horizontal-steps.field label="Data region" hint="(where your revenue data is stored)">
+        <c-lb.select id="hz-region" class="w-full" bind="form.region">
+            {% for value, label in regions %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </c-lb.select>
+    </c-horizontal-steps.field>
+
+    <div class="flex items-start gap-2 text-xs text-base-content/50">
+        <c-lbi n="rmx.shield-check" w="1em" h="1em" class="size-4 mt-0.5 shrink-0" />
+        <span>
+            Revenue data never leaves the region you pick. Beacon Labs, Northwind Co and
+            2,400 other teams run on EU West.
+        </span>
+    </div>
+
+</div>

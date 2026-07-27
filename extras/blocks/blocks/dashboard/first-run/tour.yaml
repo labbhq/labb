@@ -1,0 +1,30 @@
+steps:
+  - title: An empty state is a screen, not an accident
+    file: templates/cotton/first_run/empty.html
+    match: "Your revenue graph starts with one connection."
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      Day one is the state every product hits and almost no template ships. This one
+      says what is missing, why that is expected, what happens when you fix it, and how
+      long it takes — then gives you exactly one thing to click.
+
+  - title: The panel is theme tokens, not an image
+    file: templates/cotton/first_run/empty.html
+    match: "border-t border-base-300 bg-base-200"
+    teaches: [theming]
+    docs: [guide/theming]
+    body: |
+      The panel that carries the empty state is a `base-200` fill with a `base-300`
+      hairline. No asset to redistribute, no licence to inherit, and it recolours in
+      every daisyUI theme instead of only looking right in one.
+
+  - title: Placeholders that refuse to guess
+    file: templates/cotton/first_run/placeholders.html
+    match: 'class="flex flex-col gap-3 rounded-lg border border-dashed border-base-300'
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      The four tiles you will live in are shown dashed and empty, each saying what it is
+      waiting for. Zeroes would be a lie — an empty MRR tile reading $0 looks like a
+      business that lost all its revenue, not one that has not connected billing yet.

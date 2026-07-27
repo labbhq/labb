@@ -1,0 +1,79 @@
+<c-vars :workspace="{}" :invoices="[]" :totals="{}" />
+
+<c-lb.card class="border border-base-300 shadow-sm">
+    <c-lb.card.body class="gap-4 p-6 sm:p-8">
+
+        <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+                <h2 class="text-lg font-semibold tracking-tight">Invoice history</h2>
+                <p class="text-sm text-base-content/60 mt-1">
+                    Every billing run Arden has made for {{ workspace.name }}.
+                </p>
+            </div>
+            <c-lb.button btnStyle="outline" size="sm" icon="rmx.download">Download all</c-lb.button>
+        </div>
+
+        {% if invoices %}
+        <div class="overflow-x-auto border border-base-300 rounded-box">
+            <c-lb.table size="sm" class="w-full">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Customer</th>
+                        <th>Period</th>
+                        <th>Issued</th>
+                        <th>Due</th>
+                        <th class="text-right">Amount</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td class="font-medium tabular-nums whitespace-nowrap">{{ invoice.number }}</td>
+                        <td class="whitespace-nowrap">{{ invoice.customer }}</td>
+                        <td class="text-base-content/60 whitespace-nowrap">{{ invoice.period }}</td>
+                        <td class="tabular-nums text-base-content/60 whitespace-nowrap">{{ invoice.issued }}</td>
+                        <td class="tabular-nums text-base-content/60 whitespace-nowrap">{{ invoice.due }}</td>
+                        <td class="text-right tabular-nums font-medium whitespace-nowrap">
+                            {{ workspace.currency }} {{ invoice.amount }}
+                        </td>
+                        <td>
+                            <c-lb.badge size="sm" style="soft" variant="{{ invoice.tone }}">
+                                {{ invoice.status }}
+                            </c-lb.badge>
+                        </td>
+                        <td class="text-right">
+                            <c-lb.button
+                                btnStyle="ghost"
+                                size="xs"
+                                modifier="square"
+                                icon="rmx.download"
+                                aria-label="Download {{ invoice.number }}" />
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </c-lb.table>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-base-content/50 tabular-nums">
+                {{ workspace.currency }} {{ totals.outstanding }} outstanding. Voided runs are kept
+                for the audit log and are never charged.
+            </span>
+            <a class="link link-hover text-base-content/50">See all 327 invoices</a>
+        </div>
+
+        {% else %}
+        <div class="border border-dashed border-base-300 rounded-box p-10 text-center">
+            <p class="font-medium">No invoices yet.</p>
+            <p class="text-sm text-base-content/60 mt-1">
+                The first one appears the day after your first customer renews.
+            </p>
+        </div>
+        {% endif %}
+
+    </c-lb.card.body>
+</c-lb.card>

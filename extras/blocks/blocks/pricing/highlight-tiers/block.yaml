@@ -1,0 +1,65 @@
+name: Highlight tiers
+ref: lb/pricing/highlight-tiers
+type: fe
+labb_version: ">=0.5.0"
+description: "Three plans with the middle one raised on a theme-token gradient — static, and ships zero JavaScript"
+category: pricing
+status: launch
+thumbnail: thumbnails/highlight-tiers.png
+tags:
+  - pricing
+  - static
+  - zero-js
+  - theming
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  plans:
+    - name: "Starter"
+      monthly: "49"
+      annual: "490"
+      cta: "Start free trial"
+      featured: false
+      lede: "Everything you need to stop exporting Stripe into a spreadsheet."
+      features:
+        - "3 seats"
+        - "1,000 tracked customers"
+        - "MRR, churn and cohort dashboards"
+        - "Stripe and Chargebee sync"
+        - "CSV export"
+    - name: "Growth"
+      monthly: "149"
+      annual: "1,490"
+      cta: "Start free trial"
+      featured: true
+      lede: "Where most teams land, and where forecasting starts paying for itself."
+      features:
+        - "10 seats"
+        - "10,000 tracked customers"
+        - "Revenue forecasting and scenarios"
+        - "Renewal and churn-risk alerts"
+        - "Slack and HubSpot sync"
+        - "Priority support, next business day"
+    - name: "Scale"
+      monthly: "449"
+      annual: "4,490"
+      cta: "Talk to sales"
+      featured: false
+      lede: "Governance, custom models and someone who knows your account by name."
+      features:
+        - "25 seats"
+        - "Unlimited tracked customers"
+        - "Custom revenue models"
+        - "SSO, SCIM and audit log"
+        - "Dedicated success manager"
+        - "99.9% uptime SLA"
+  stats:
+    - value: "4 min"
+      label: "Median time from connecting Stripe to a populated dashboard"
+    - value: "2,400+"
+      label: "Finance and ops teams running their board numbers out of Arden"
+    - value: "$1.9B"
+      label: "Annual recurring revenue tracked across every Arden workspace"

@@ -1,0 +1,33 @@
+<c-lbr.signals id="settings-nav" $section="profile" />
+
+<main class="container mx-auto max-w-6xl px-4 py-10 sm:py-14">
+
+    <div class="grid lg:grid-cols-[17rem_1fr] gap-8 lg:gap-12">
+
+        <c-sidebar-nav.rail :workspace=workspace :sections=sections />
+
+        <div>
+            <div data-show="$section === 'profile'">
+                <c-sidebar-nav.section-workspace :workspace=workspace :regions=regions />
+            </div>
+
+            <div data-show="$section === 'team'" style="display:none">
+                <c-sidebar-nav.section-team :workspace=workspace :members=members />
+            </div>
+
+            <div data-show="$section === 'billing'" style="display:none">
+                <c-sidebar-nav.section-billing :workspace=workspace :invoices=invoices />
+            </div>
+
+            <div data-show="$section === 'notifications'" style="display:none">
+                <c-sidebar-nav.section-notifications :notifications=notifications />
+            </div>
+
+            <div data-show="$section === 'security'" style="display:none">
+                <c-sidebar-nav.section-security :workspace=workspace />
+            </div>
+        </div>
+
+    </div>
+
+</main>

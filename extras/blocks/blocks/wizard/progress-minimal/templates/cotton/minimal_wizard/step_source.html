@@ -1,0 +1,21 @@
+<c-vars :sources="[]" />
+
+<div class="flex flex-col gap-4">
+
+    <h2 class="text-xl font-semibold tracking-tight">Where does the revenue data live?</h2>
+    <p class="text-sm text-base-content/60">
+        The first sync backfills 24 months, so your dashboards are not empty on day one.
+    </p>
+
+    <c-lb.select id="mw-source" size="lg" class="w-full" bind="form.source">
+        {% for value, label in sources %}
+        <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+    </c-lb.select>
+
+    <div class="flex items-start gap-2 text-xs text-base-content/50">
+        <c-lbi n="rmx.shield-check" w="1em" h="1em" class="size-4 mt-0.5 shrink-0" />
+        <span>Arden reads your billing system. It never writes to it.</span>
+    </div>
+
+</div>

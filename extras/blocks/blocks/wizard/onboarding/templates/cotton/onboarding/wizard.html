@@ -1,0 +1,19 @@
+<c-vars :signals="{}" :step=1 :total_steps=3 :regions="[]" :roles="[]" :plans="[]" :selected_plan="None" :invite_slots="[]" :people=1 :errors="{}" />
+
+<c-lb.card id="onboarding-card" class="border border-base-300 shadow-sm">
+    <c-lb.card.body class="gap-7">
+
+        <c-onboarding.stepper :step=step :total_steps=total_steps />
+
+        {% if step == 1 %}
+        <c-onboarding.step-workspace :signals=signals :regions=regions :errors=errors />
+        {% elif step == 2 %}
+        <c-onboarding.step-team :signals=signals :roles=roles :invite_slots=invite_slots :errors=errors />
+        {% elif step == 3 %}
+        <c-onboarding.step-plan :signals=signals :plans=plans :selected_plan=selected_plan :people=people :errors=errors />
+        {% endif %}
+
+        <c-onboarding.nav :step=step :total_steps=total_steps />
+
+    </c-lb.card.body>
+</c-lb.card>

@@ -1,0 +1,66 @@
+steps:
+  - title: Every chart is a signal
+    file: templates/pages/index.html
+    match: ":$revenueChart=revenue_chart"
+    through: ":$planChart=plan_chart"
+    teaches: [signals, charts]
+    docs: [reactivity/signals, ui/chart]
+    body: |
+      The three charts on this page are three signals, declared once. The view
+      builds ordinary Python dicts of Chart.js data and hands them over with a
+      Cotton `:` binding — nothing on the client knows where they came from.
+
+  - title: Bind the chart to the signal
+    file: templates/pages/index.html
+    match: 'data="$revenueChart"'
+    teaches: [charts, reactive-props]
+    docs: [ui/chart, reactivity/reactive-props]
+    body: |
+      `data="$revenueChart"` is the whole reactive-chart API. The chart renders
+      from the signal on load and updates in place whenever it changes — Chart.js
+      animates to the new series instead of the canvas being torn down.
+
+  - title: Switch the series on the server
+    file: templates/cotton/overview/switcher.html
+    match: "before=\"$series = '{{ key }}'\""
+    teaches: [server-actions, morphing, charts]
+    docs: [reactivity/actions, reactivity/morphing]
+    body: |
+      The switch sets the `series` signal, then GETs the same index view. The view
+      rebuilds the chart dict for that series and returns the whole page; Datastar
+      morphs it, the chart signal lands with a new value, and the chart redraws.
+      No partial endpoint, no chart JSON API.
+
+  - title: The view reads the signal
+    file: views.py
+    match: "series = signals.series if signals.series in SERIES else"
+    teaches: [signals, server-actions]
+    docs: [reactivity/signals, reactivity/actions]
+    body: |
+      Client state arrives as `request.signals`, typed by a `Signals` schema. The
+      view branches on it and picks which series to build. This is the whole
+      round trip — a normal Django view reading a normal Python value.
+
+  - title: Stream a live metric over SSE
+    file: views.py
+    match: "return SSEResponse"
+    teaches: [sse, signals]
+    docs: [reactivity/streaming]
+    body: |
+      A `c-lbr.get` with `on="init"` opens a GET to the stream view on page load;
+      the view returns an `SSEResponse` and holds it open, settling today's open
+      invoices one at a time and pushing a signal patch down the stream on each
+      tick. The card is bound to that signal, so it counts up on its own — and
+      because the live signals are declared apart from the chart signals, a series
+      switch morphs the page without resetting the stream.
+
+  - title: Theme the charts, live
+    file: templates/cotton/overview/header.html
+    match: "data-on:click=\"document.documentElement.dataset.theme"
+    teaches: [theming, charts]
+    docs: [ui/chart, guide/theming]
+    body: |
+      No chart on this page names a colour. Series are labelled with theme tokens
+      (`primary`, `success`, `error`), resolved from CSS custom properties at draw
+      time. Flip `data-theme` and every chart rebuilds against the new palette —
+      which is also why a block can never ship a fixed hex.

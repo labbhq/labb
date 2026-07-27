@@ -1,0 +1,31 @@
+<c-vars :member="{}" :sessions="[]" />
+
+<c-lb.card class="border border-base-300">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold">Security</h2>
+            <c-lb.badge size="sm" style="soft" variant="success" icon="rmx.shield-check">2FA on</c-lb.badge>
+        </div>
+
+        <div class="flex flex-col gap-3">
+            {% for session in sessions %}
+            <div class="flex items-start gap-2">
+                <div class="mt-1 size-2 rounded-full shrink-0 {% if session.current %}bg-success{% else %}bg-base-300{% endif %}"></div>
+                <div class="text-xs min-w-0">
+                    <div class="font-medium truncate">{{ session.device }}</div>
+                    <div class="text-base-content/45 truncate">{{ session.note }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <c-lb.button btnStyle="outline" size="sm" class="w-full">Sign out other devices</c-lb.button>
+
+        <p class="text-xs text-base-content/45 border-t border-base-300 pt-3">
+            As {{ member.role|lower }} of {{ member.workspace }}, two-factor is enforced and
+            cannot be turned off.
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

@@ -1,0 +1,74 @@
+{% if workspace %}
+<c-lbr.signals id="ws-profile" :schema=profile_signals />
+<c-lbr.signals id="ws-invite" :schema=invite_signals />
+
+<main class="container mx-auto max-w-5xl px-4 py-10 sm:py-14">
+
+    <c-workspace.header />
+
+    <c-lb.tabs name="ws_settings" style="lift" class="mt-8">
+
+        <c-lb.tabs.content
+            name="ws_settings"
+            title="Profile"
+            icon="rmx.building"
+            checked
+            class="border-base-300 bg-base-100">
+            <c-lbr.target name="section-profile" tag="div">
+                <c-workspace.profile
+                    :workspace=profile.workspace
+                    :signals=profile.signals
+                    :errors=profile.errors
+                    :regions=profile.regions />
+            </c-lbr.target>
+        </c-lb.tabs.content>
+
+        <c-lb.tabs.content
+            name="ws_settings"
+            title="Team"
+            icon="rmx.team"
+            class="border-base-300 bg-base-100">
+            <c-lbr.target name="section-team" tag="div">
+                <c-workspace.team
+                    :members=team.members
+                    :seats_used=team.seats_used
+                    :seats_total=team.seats_total
+                    :seats_left=team.seats_left
+                    :seats_full=team.seats_full
+                    :seats_pct=team.seats_pct
+                    :plan=team.plan
+                    :signals=team.signals
+                    :errors=team.errors
+                    :roles=team.roles />
+            </c-lbr.target>
+        </c-lb.tabs.content>
+
+        <c-lb.tabs.content
+            name="ws_settings"
+            title="Billing"
+            icon="rmx.bank-card"
+            class="border-base-300 bg-base-100">
+            <c-lbr.target name="section-billing" tag="div">
+                <c-workspace.billing
+                    :workspace=billing.workspace
+                    :plan=billing.plan
+                    :plans=billing.plans
+                    :invoices=billing.invoices
+                    :outstanding=billing.outstanding
+                    :billing_contacts=billing.billing_contacts
+                    :failed=billing.failed />
+            </c-lbr.target>
+        </c-lb.tabs.content>
+
+    </c-lb.tabs>
+
+    <c-lbr.target name="toast" tag="div"></c-lbr.target>
+
+</main>
+{% else %}
+<main class="container mx-auto max-w-2xl px-4 py-20">
+    <c-lb.alert variant="info" alertStyle="soft" icon="rmx.information">
+        This workspace has no data yet. Load the sample workspace to see its settings.
+    </c-lb.alert>
+</main>
+{% endif %}

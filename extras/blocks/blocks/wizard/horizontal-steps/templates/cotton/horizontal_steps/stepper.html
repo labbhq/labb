@@ -1,0 +1,37 @@
+<c-vars :steps="[]" />
+
+<div class="flex items-start gap-1">
+    {% for s in steps %}
+    <div class="flex items-start gap-1 {% if not forloop.last %}flex-1{% endif %}">
+
+        <div class="flex flex-col items-center gap-1.5 w-28">
+            <div
+                id="step-dot-{{ s.n }}"
+                class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold tabular-nums bg-base-300 text-base-content/50"
+                data-class="{'bg-primary text-primary-content': $step === {{ s.n }}, 'bg-success text-success-content': $step > {{ s.n }}, 'bg-base-300 text-base-content/50': $step < {{ s.n }}}"
+            >
+                <span data-show="$step > {{ s.n }}" style="display:none">
+                    <c-lbi n="rmx.check" w="16" h="16" />
+                </span>
+                <span data-show="$step <= {{ s.n }}">{{ s.n }}</span>
+            </div>
+
+            <div class="text-center">
+                <div
+                    class="text-xs font-medium"
+                    data-class="{'text-base-content': $step >= {{ s.n }}, 'text-base-content/40': $step < {{ s.n }}}"
+                >{{ s.label }}</div>
+                <div class="text-[11px] text-base-content/40 hidden sm:block">{{ s.hint }}</div>
+            </div>
+        </div>
+
+        {% if not forloop.last %}
+        <div
+            class="flex-1 h-0.5 mt-4 bg-base-300"
+            data-class="{'bg-success': $step > {{ s.n }}, 'bg-base-300': $step <= {{ s.n }}}"
+        ></div>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+</div>

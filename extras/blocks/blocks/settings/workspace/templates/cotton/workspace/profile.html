@@ -1,0 +1,103 @@
+<c-vars :workspace="None" :signals="{}" :errors="{}" :regions="[]" />
+
+<c-workspace.section
+    title="{{ workspace.name }}"
+    desc="Created {{ workspace.created_at|date:'j M Y' }} · billed in {{ workspace.currency }}">
+
+    <c-slot name="actions">
+        <c-lbr.post to="block_settings_workspace:profile_save" tag="div" on="click">
+            <c-lb.button type="button" variant="primary" size="sm">Save changes</c-lb.button>
+        </c-lbr.post>
+    </c-slot>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+
+        <div class="lg:col-span-2 grid sm:grid-cols-2 gap-5">
+
+            <c-workspace.field
+                label="Workspace name"
+                required
+                :error=errors.name
+                validateTo="block_settings_workspace:profile_validate">
+                <c-lb.input
+                    class="w-full"
+                    placeholder="Beacon Labs"
+                    autocomplete="off"
+                    :bind=signals.fields.name />
+            </c-workspace.field>
+
+            <c-workspace.field
+                label="Billing email"
+                hint="— invoices go here"
+                required
+                :error=errors.email
+                validateTo="block_settings_workspace:profile_validate">
+                <c-lb.input
+                    type="email"
+                    class="w-full"
+                    placeholder="billing@beaconlabs.com"
+                    autocomplete="off"
+                    :bind=signals.fields.email />
+            </c-workspace.field>
+
+            <c-workspace.field
+                label="Workspace address"
+                required
+                :error=errors.slug
+                validateTo="block_settings_workspace:profile_validate">
+                <c-lb.input
+                    class="w-full"
+                    placeholder="beacon-labs"
+                    autocomplete="off"
+                    :bind=signals.fields.slug />
+                <p class="text-xs text-base-content/50 mt-1">
+                    arden.app/w/<span class="font-medium text-base-content/80" data-text="$profile.slug"></span>
+                </p>
+            </c-workspace.field>
+
+            <c-workspace.field
+                label="Data residency"
+                :error=errors.region
+                on="change"
+                validateTo="block_settings_workspace:profile_validate">
+                <c-lb.select class="w-full" :bind=signals.fields.region>
+                    {% for value, label in regions %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </c-lb.select>
+                <p class="text-xs text-base-content/50 mt-1">
+                    Customer records never leave this region.
+                </p>
+            </c-workspace.field>
+
+        </div>
+
+        <c-lb.card class="border border-base-300 bg-base-200/40 h-fit">
+            <c-lb.card.body class="p-5 gap-4">
+                <div class="text-xs uppercase tracking-wider text-base-content/40">
+                    Workspace at a glance
+                </div>
+
+                <div class="flex justify-between text-sm">
+                    <span class="text-base-content/50">Workspace ID</span>
+                    <span class="font-medium tabular-nums">ws_{{ workspace.pk }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-base-content/50">Created</span>
+                    <span class="font-medium tabular-nums">{{ workspace.created_at|date:"d/m/Y" }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-base-content/50">Currency</span>
+                    <span class="font-medium">{{ workspace.currency }}</span>
+                </div>
+
+                <p class="text-xs text-base-content/50 leading-relaxed border-t border-base-300 pt-3">
+                    Renaming a workspace changes its address. Old links keep working
+                    for 30 days, then stop.
+                </p>
+            </c-lb.card.body>
+        </c-lb.card>
+
+    </div>
+
+</c-workspace.section>

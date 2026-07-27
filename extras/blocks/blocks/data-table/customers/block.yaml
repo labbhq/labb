@@ -1,0 +1,21 @@
+name: Customers table
+ref: lb/data-table/customers
+type: fullstack
+labb_version: ">=0.5.0"
+description: "Customer table with search, sort, pagination, inline row edit and bulk delete — all over ordinary Django views, with the view state kept in a shareable URL"
+category: data-table
+status: launch
+anchor: true
+thumbnail: thumbnails/customers.png
+tags:
+  - reactive
+  - datatable
+  - search
+  - sort
+  - pagination
+  - crud
+  - url-state
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's data-table anchor"

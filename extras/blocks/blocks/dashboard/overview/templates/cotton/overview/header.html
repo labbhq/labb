@@ -1,0 +1,27 @@
+<c-vars :workspace="None" period="" />
+
+<header class="flex flex-wrap items-end justify-between gap-4">
+
+    <div class="flex items-center gap-3">
+        <c-arden.mark size="sm" />
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Revenue overview</h1>
+            <p class="text-sm text-base-content/60">
+                {{ workspace.name }} · {{ workspace.plan.name }} · {{ period }}
+            </p>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+        <c-lb.badge style="soft" size="sm" icon="rmx.time">Synced 2 min ago</c-lb.badge>
+        <c-lb.button
+            id="theme-toggle"
+            btnStyle="ghost"
+            size="sm"
+            icon="rmx.contrast"
+            data-on:click="document.documentElement.dataset.theme = (document.documentElement.dataset.theme === 'labb-dark' ? 'labb-light' : 'labb-dark')">
+            Theme
+        </c-lb.button>
+    </div>
+
+</header>

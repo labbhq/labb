@@ -1,0 +1,41 @@
+<header class="flex flex-wrap items-end justify-between gap-4 border-b border-base-300 pb-5">
+
+    <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-2">
+            <c-arden.mark size="xs" />
+            <span class="text-sm font-medium text-base-content/50">Arden · Analytics</span>
+        </div>
+        <h1 class="mt-1 text-2xl font-semibold tracking-tight">Revenue movement</h1>
+        <p id="range-note" class="text-sm text-base-content/60 max-w-xl" data-text="$view.note">
+            Thirty days to 9 July 2026. The step on 22 June is the Ironvale Group renewal.
+        </p>
+    </div>
+
+    <c-lb.join id="range-switch" class="p-1 bg-base-200 rounded-lg">
+        <c-lb.button
+            type="button"
+            class="join-item"
+            size="sm"
+            variant="primary"
+            btnStyle="$view.d7Style:ghost"
+            data-on:click="$view = ardenRange('7d')"
+        >7 days</c-lb.button>
+        <c-lb.button
+            type="button"
+            class="join-item"
+            size="sm"
+            variant="primary"
+            btnStyle="$view.d30Style:"
+            data-on:click="$view = ardenRange('30d')"
+        >30 days</c-lb.button>
+        <c-lb.button
+            type="button"
+            class="join-item"
+            size="sm"
+            variant="primary"
+            btnStyle="$view.d90Style:ghost"
+            data-on:click="$view = ardenRange('90d')"
+        >90 days</c-lb.button>
+    </c-lb.join>
+
+</header>

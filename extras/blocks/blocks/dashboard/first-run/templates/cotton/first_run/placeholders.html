@@ -1,0 +1,38 @@
+<c-vars :placeholders="[]" :sources="[]" />
+
+<section id="sample-data" class="flex flex-col gap-4">
+
+    <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+            <h2 class="font-semibold tracking-tight">The board you are about to have</h2>
+            <p class="text-xs text-base-content/50 mt-0.5">
+                These four tiles are the dashboard's home screen. They stay empty until the
+                first sync, and they will not guess.
+            </p>
+        </div>
+        <c-lb.button size="sm" btnStyle="ghost" icon="rmx.sparkling">Fill them with sample data</c-lb.button>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {% for tile in placeholders %}
+        <article id="placeholder-{{ tile.id }}" class="flex flex-col gap-3 rounded-lg border border-dashed border-base-300 bg-base-200/30 p-4">
+            <span class="text-xs font-medium uppercase tracking-wide text-base-content/50">{{ tile.label }}</span>
+            <p class="text-2xl font-semibold tabular-nums leading-none text-base-content/30" aria-hidden="true">—</p>
+            <div class="h-8 rounded bg-base-300/40" aria-hidden="true"></div>
+            <p class="text-xs text-base-content/40">{{ tile.caption }}</p>
+        </article>
+        {% endfor %}
+    </div>
+
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-lg border border-base-300 bg-base-200/40 px-4 py-3">
+        <span class="text-xs font-medium text-base-content/60">Arden reads from</span>
+        {% for source in sources %}
+        <span class="flex items-center gap-2 text-sm text-base-content/70">
+            <c-component is="lbi" n="{{ source.icon }}" w="16" h="16" />
+            {{ source.name }}
+        </span>
+        {% endfor %}
+        <span class="text-xs text-base-content/40">Read-only keys. Arden never writes to your billing system.</span>
+    </div>
+
+</section>

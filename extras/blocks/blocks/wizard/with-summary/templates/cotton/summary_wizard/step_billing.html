@@ -1,0 +1,45 @@
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Who do we invoice?</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            Nothing is charged during the trial. This is where the first invoice goes when it ends.
+        </p>
+    </div>
+
+    <div class="grid gap-4">
+        <c-summary-wizard.field label="Billing email">
+            <c-lb.input
+                id="sw-contact"
+                type="email"
+                placeholder="finance@ironvale.com"
+                class="w-full"
+                bind="form.contact" />
+        </c-summary-wizard.field>
+
+        <c-summary-wizard.field label="Purchase order number" hint="(optional)">
+            <c-lb.input
+                id="sw-po"
+                type="text"
+                placeholder="PO-2026-114"
+                class="w-full font-mono"
+                bind="form.po" />
+        </c-summary-wizard.field>
+    </div>
+
+    <div class="rounded-box border border-base-300 divide-y divide-base-300 text-sm">
+        <div class="flex items-center justify-between p-4">
+            <span class="text-base-content/60">Trial ends</span>
+            <span class="tabular-nums font-medium">28 July 2026</span>
+        </div>
+        <div class="flex items-center justify-between p-4">
+            <span class="text-base-content/60">First invoice</span>
+            <span class="tabular-nums font-medium">29 July 2026</span>
+        </div>
+        <div class="flex items-center justify-between p-4">
+            <span class="text-base-content/60">Payment terms</span>
+            <span class="font-medium">Net 14</span>
+        </div>
+    </div>
+
+</div>

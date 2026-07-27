@@ -1,0 +1,28 @@
+<c-vars :step=1 :total_steps=3 :labels="['Workspace', 'Team', 'Plan']" />
+
+<div class="flex items-start gap-1">
+    {% for label in labels %}
+    {% with n=forloop.counter %}
+    <div class="flex items-start {% if not forloop.last %}flex-1{% endif %} gap-1">
+        <div class="flex flex-col items-center gap-1.5 w-24">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold
+                        {% if n < step %}bg-success text-success-content
+                        {% elif n == step %}bg-primary text-primary-content
+                        {% else %}bg-base-300 text-base-content/40{% endif %}">
+                {% if n < step %}
+                <c-lbi n="rmx.check" w="16" h="16" />
+                {% else %}
+                {{ n }}
+                {% endif %}
+            </div>
+            <span class="text-xs {% if n == step %}font-semibold{% else %}text-base-content/50{% endif %}">
+                {{ label }}
+            </span>
+        </div>
+        {% if not forloop.last %}
+        <div class="flex-1 h-0.5 mt-4 {% if n < step %}bg-success{% else %}bg-base-300{% endif %}"></div>
+        {% endif %}
+    </div>
+    {% endwith %}
+    {% endfor %}
+</div>

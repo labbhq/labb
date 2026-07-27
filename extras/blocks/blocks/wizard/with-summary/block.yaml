@@ -1,0 +1,71 @@
+name: Steps with summary
+ref: lb/wizard/with-summary
+type: fe
+labb_version: ">=0.5.0"
+description: "A checkout-shaped setup wizard whose summary panel is derived live from the answers — plan, seats and monthly total recompute from signals with no server round-trip"
+category: wizard
+thumbnail: thumbnails/with-summary.png
+status: launch
+tags:
+  - wizard
+  - multi-step
+  - reactive
+  - zero-server
+  - checkout
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  step: 1
+  seat_price: 12
+  form:
+    company: ""
+    slug: ""
+    plan: "growth"
+    seats: 8
+    contact: ""
+    po: ""
+  plans:
+    starter:
+      name: "Arden Starter"
+      base: 49
+      seats: 3
+      tagline: "For a founder who needs the numbers out of a spreadsheet."
+    growth:
+      name: "Arden Growth"
+      base: 149
+      seats: 10
+      tagline: "For the revenue team that has outgrown guesswork."
+    scale:
+      name: "Arden Scale"
+      base: 449
+      seats: 25
+      tagline: "For finance and RevOps running the whole book of business."
+  plan_list:
+    - key: "starter"
+      name: "Arden Starter"
+      base: 49
+      seats: 3
+      tagline: "For a founder who needs the numbers out of a spreadsheet."
+      featured: false
+    - key: "growth"
+      name: "Arden Growth"
+      base: 149
+      seats: 10
+      tagline: "For the revenue team that has outgrown guesswork."
+      featured: true
+    - key: "scale"
+      name: "Arden Scale"
+      base: 449
+      seats: 25
+      tagline: "For finance and RevOps running the whole book of business."
+      featured: false
+  steps:
+    - n: 1
+      label: "Workspace"
+    - n: 2
+      label: "Plan and seats"
+    - n: 3
+      label: "Billing"

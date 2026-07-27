@@ -1,0 +1,9 @@
+<c-vars value="" />
+
+{% if value == "yes" %}
+<c-lbi n="rmx.checkbox-circle" w="18" h="18" class="inline-block text-success" />
+{% elif value == "no" %}
+<c-lbi n="rmx.subtract" w="18" h="18" class="inline-block text-base-content/25" />
+{% else %}
+<span class="text-sm tabular-nums text-base-content/80">{{ value }}</span>
+{% endif %}

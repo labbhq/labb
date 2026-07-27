@@ -1,0 +1,30 @@
+steps:
+  - title: A dashboard that ships no JavaScript
+    file: templates/pages/index.html
+    match: '<section id="kpi-grid"'
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      Eight KPIs, eight sparklines and two tables, and the page downloads nothing.
+      Reactivity in labb is opt-in: no signal, no action, no bundle. A board that
+      only ever reports last night's close has no reason to pay for a framework.
+
+  - title: The sparkline is an SVG, not a chart library
+    file: templates/cotton/compact_kpi/spark.html
+    match: 'stroke="currentColor"'
+    teaches: [theming, zero-js]
+    docs: [guide/theming]
+    body: |
+      The trend line is a polyline drawn from points the view already had. It takes
+      its colour from `currentColor`, so a theme token on the wrapper decides how it
+      renders — and it recolours with the theme like everything else.
+
+  - title: Digits that line up
+    file: templates/cotton/compact_kpi/tile.html
+    match: "text-2xl font-semibold tracking-tight tabular-nums"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      `tabular-nums` on every figure, in the tiles and in both tables. It is the
+      cheapest thing on this page and the one people feel: columns of money that
+      do not shuffle sideways as the digits change.

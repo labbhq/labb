@@ -1,0 +1,39 @@
+steps:
+  - title: One signal names the section
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      A string. That is the entire state of this settings shell — declared in prop
+      mode, with no schema and no view behind it.
+
+  - title: The nav writes it, the body reads it
+    file: templates/cotton/sidebar_nav/rail.html
+    match: "data-on:click=\"$section = '{{ item.key }}'\""
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Clicking a nav item assigns the signal, and `data-class` marks the active row
+      from the same value. Open the network tab and click every section: nothing is
+      sent.
+
+  - title: Every section is already on the page
+    file: templates/pages/index.html
+    match: "data-show=\"$section === 'billing'\""
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Settings pages are small. Rendering all five sections once and showing one is
+      faster than five round-trips, and it means a half-typed field survives a trip
+      to Billing and back.
+
+  - title: Where the server belongs
+    file: templates/cotton/sidebar_nav/section_workspace.html
+    match: '<c-lb.button variant="primary" size="sm">Save changes</c-lb.button>'
+    teaches: [signals]
+    docs: [reactivity/actions]
+    body: |
+      Navigation is a client concern; saving is not. Wrap this button in a
+      `c-lbr.post` and it becomes an ordinary Django view — which is exactly what the
+      workspace anchor does.

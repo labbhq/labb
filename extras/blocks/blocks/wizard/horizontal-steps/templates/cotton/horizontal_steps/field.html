@@ -1,0 +1,11 @@
+<c-vars label="" hint="" class="" />
+
+<div class="{{ class }}">
+    {% if label %}
+    <label class="label label-text text-sm font-medium mb-1">
+        {{ label }}
+        {% if hint %}<span class="text-base-content/40 font-normal">{{ hint }}</span>{% endif %}
+    </label>
+    {% endif %}
+    {{ slot }}
+</div>

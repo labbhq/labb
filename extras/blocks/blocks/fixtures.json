@@ -1,0 +1,7863 @@
+[
+  {
+    "model": "lb.lbplan",
+    "pk": 1,
+    "fields": {
+      "name": "Arden Starter",
+      "slug": "starter",
+      "tagline": "For a founder who needs the numbers to stop living in a spreadsheet.",
+      "price_monthly": "49.00",
+      "price_yearly": "490.00",
+      "seats_included": 3,
+      "is_featured": false,
+      "features": [
+        "Up to 3 seats",
+        "500 tracked customers",
+        "MRR and churn dashboard",
+        "Stripe and Paddle sync",
+        "CSV export",
+        "Email support"
+      ]
+    }
+  },
+  {
+    "model": "lb.lbplan",
+    "pk": 2,
+    "fields": {
+      "name": "Arden Growth",
+      "slug": "growth",
+      "tagline": "For the revenue team that has outgrown guesswork.",
+      "price_monthly": "149.00",
+      "price_yearly": "1490.00",
+      "seats_included": 10,
+      "is_featured": true,
+      "features": [
+        "Up to 10 seats",
+        "10,000 tracked customers",
+        "Cohort and retention analysis",
+        "Revenue forecasting",
+        "Slack and HubSpot sync",
+        "Custom invoice branding",
+        "Priority support"
+      ]
+    }
+  },
+  {
+    "model": "lb.lbplan",
+    "pk": 3,
+    "fields": {
+      "name": "Arden Scale",
+      "slug": "scale",
+      "tagline": "For finance and RevOps running the whole book of business.",
+      "price_monthly": "449.00",
+      "price_yearly": "4490.00",
+      "seats_included": 25,
+      "is_featured": false,
+      "features": [
+        "Unlimited seats",
+        "Unlimited customers",
+        "Multi-entity consolidation",
+        "SSO and SCIM provisioning",
+        "Audit log and data residency",
+        "Dedicated success manager",
+        "99.9% uptime SLA"
+      ]
+    }
+  },
+  {
+    "model": "lb.lbworkspace",
+    "pk": 1,
+    "fields": {
+      "name": "Beacon Labs",
+      "slug": "beacon-labs",
+      "plan": 3,
+      "region": "eu-west-1",
+      "currency": "USD",
+      "billing_email": "billing@beaconlabs.com",
+      "trial_ends_on": null,
+      "created_at": "2023-02-06T11:20:00Z"
+    }
+  },
+  {
+    "model": "lb.lbworkspace",
+    "pk": 2,
+    "fields": {
+      "name": "Tidewater Group",
+      "slug": "tidewater-group",
+      "plan": 2,
+      "region": "us-east-1",
+      "currency": "USD",
+      "billing_email": "accounts@tidewatergroup.com",
+      "trial_ends_on": "2026-07-28",
+      "created_at": "2026-06-30T16:05:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 1,
+    "fields": {
+      "workspace": 1,
+      "name": "Nadia Kessler",
+      "email": "nadia.kessler@beaconlabs.com",
+      "title": "Founder & CEO",
+      "role": "owner",
+      "status": "active",
+      "two_factor": true,
+      "joined_on": "2023-02-06",
+      "last_active_at": "2026-07-12T17:00:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 2,
+    "fields": {
+      "workspace": 1,
+      "name": "Tom Ainsworth",
+      "email": "tom.ainsworth@beaconlabs.com",
+      "title": "Head of Revenue",
+      "role": "admin",
+      "status": "active",
+      "two_factor": true,
+      "joined_on": "2023-03-14",
+      "last_active_at": "2026-07-10T18:41:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 3,
+    "fields": {
+      "workspace": 1,
+      "name": "Priya Raghunathan",
+      "email": "priya.raghunathan@beaconlabs.com",
+      "title": "Finance Lead",
+      "role": "billing",
+      "status": "active",
+      "two_factor": true,
+      "joined_on": "2023-05-02",
+      "last_active_at": "2026-07-13T08:41:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 4,
+    "fields": {
+      "workspace": 1,
+      "name": "Marcus Oduya",
+      "email": "marcus.oduya@beaconlabs.com",
+      "title": "RevOps Manager",
+      "role": "admin",
+      "status": "active",
+      "two_factor": false,
+      "joined_on": "2023-09-11",
+      "last_active_at": "2026-07-11T18:00:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 5,
+    "fields": {
+      "workspace": 1,
+      "name": "Jenny Faulkner",
+      "email": "jenny.faulkner@beaconlabs.com",
+      "title": "Account Executive",
+      "role": "member",
+      "status": "active",
+      "two_factor": false,
+      "joined_on": "2024-01-22",
+      "last_active_at": "2026-07-08T09:41:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 6,
+    "fields": {
+      "workspace": 1,
+      "name": "Rafael Sorensen",
+      "email": "rafael.sorensen@beaconlabs.com",
+      "title": "Account Executive",
+      "role": "member",
+      "status": "active",
+      "two_factor": false,
+      "joined_on": "2024-04-08",
+      "last_active_at": "2026-07-05T09:12:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 7,
+    "fields": {
+      "workspace": 1,
+      "name": "Hana Ishikawa",
+      "email": "hana.ishikawa@beaconlabs.com",
+      "title": "Customer Success",
+      "role": "member",
+      "status": "active",
+      "two_factor": true,
+      "joined_on": "2024-06-17",
+      "last_active_at": "2026-07-09T18:55:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 8,
+    "fields": {
+      "workspace": 1,
+      "name": "Owen Brackley",
+      "email": "owen.brackley@beaconlabs.com",
+      "title": "Data Analyst",
+      "role": "member",
+      "status": "active",
+      "two_factor": false,
+      "joined_on": "2024-11-04",
+      "last_active_at": "2026-07-02T10:00:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 9,
+    "fields": {
+      "workspace": 1,
+      "name": "Sofia Almeida",
+      "email": "sofia.almeida@beaconlabs.com",
+      "title": "Support Engineer",
+      "role": "member",
+      "status": "active",
+      "two_factor": false,
+      "joined_on": "2025-02-19",
+      "last_active_at": "2026-07-06T11:55:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 10,
+    "fields": {
+      "workspace": 1,
+      "name": "Callum Rennie",
+      "email": "callum.rennie@beaconlabs.com",
+      "title": "Controller",
+      "role": "billing",
+      "status": "active",
+      "two_factor": true,
+      "joined_on": "2025-05-27",
+      "last_active_at": "2026-06-23T16:00:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 11,
+    "fields": {
+      "workspace": 1,
+      "name": "Yusuf Demir",
+      "email": "yusuf.demir@beaconlabs.com",
+      "title": "Board Observer",
+      "role": "viewer",
+      "status": "active",
+      "two_factor": false,
+      "joined_on": "2025-08-13",
+      "last_active_at": "2026-06-14T17:41:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 12,
+    "fields": {
+      "workspace": 1,
+      "name": "Elise Vandermeer",
+      "email": "elise.vandermeer@beaconlabs.com",
+      "title": "Sales Development",
+      "role": "member",
+      "status": "invited",
+      "two_factor": false,
+      "joined_on": "2026-07-09",
+      "last_active_at": null
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 13,
+    "fields": {
+      "workspace": 1,
+      "name": "Gabriel Nunes",
+      "email": "gabriel.nunes@beaconlabs.com",
+      "title": "Growth Marketer",
+      "role": "member",
+      "status": "invited",
+      "two_factor": false,
+      "joined_on": "2026-07-11",
+      "last_active_at": null
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 14,
+    "fields": {
+      "workspace": 1,
+      "name": "Ilse Bergman",
+      "email": "ilse.bergman@beaconlabs.com",
+      "title": "Contractor, Data",
+      "role": "viewer",
+      "status": "suspended",
+      "two_factor": false,
+      "joined_on": "2025-10-06",
+      "last_active_at": "2026-05-11T10:27:00Z"
+    }
+  },
+  {
+    "model": "lb.lbmember",
+    "pk": 15,
+    "fields": {
+      "workspace": 2,
+      "name": "Denise Halloran",
+      "email": "denise.halloran@tidewatergroup.com",
+      "title": "Operations Director",
+      "role": "owner",
+      "status": "active",
+      "two_factor": false,
+      "joined_on": "2026-06-30",
+      "last_active_at": "2026-07-13T15:42:00Z"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 1,
+    "fields": {
+      "workspace": 1,
+      "company": "AtlasForge",
+      "contact_name": "Dana Whitfield",
+      "email": "dana@atlasforge.com",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "2927.00",
+      "seats": 42,
+      "industry": "Manufacturing",
+      "country": "United States",
+      "signed_up_on": "2023-04-18",
+      "renews_on": "2026-08-18"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 2,
+    "fields": {
+      "workspace": 1,
+      "company": "Kite & Bell",
+      "contact_name": "Rosa Linden",
+      "email": "rosa@kiteandbell.co",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "555.00",
+      "seats": 14,
+      "industry": "Retail",
+      "country": "United Kingdom",
+      "signed_up_on": "2023-06-02",
+      "renews_on": "2026-08-02"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 3,
+    "fields": {
+      "workspace": 1,
+      "company": "Northwind Co",
+      "contact_name": "Peter Vance",
+      "email": "peter.vance@northwind.co",
+      "plan": 3,
+      "status": "active",
+      "health": "watch",
+      "mrr": "2278.00",
+      "seats": 31,
+      "industry": "Logistics",
+      "country": "United States",
+      "signed_up_on": "2023-07-25",
+      "renews_on": "2026-08-25"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 4,
+    "fields": {
+      "workspace": 1,
+      "company": "Verity Labs",
+      "contact_name": "Ingrid Solheim",
+      "email": "ingrid@veritylabs.io",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "468.00",
+      "seats": 11,
+      "industry": "Biotech",
+      "country": "Norway",
+      "signed_up_on": "2023-09-06",
+      "renews_on": "2026-08-06"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 5,
+    "fields": {
+      "workspace": 1,
+      "company": "Halloway & Finch",
+      "contact_name": "Julian Finch",
+      "email": "julian@hallowayfinch.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "410.00",
+      "seats": 9,
+      "industry": "Legal",
+      "country": "United Kingdom",
+      "signed_up_on": "2023-10-30",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 6,
+    "fields": {
+      "workspace": 1,
+      "company": "Brightmoor Studio",
+      "contact_name": "Alice Brightmoor",
+      "email": "alice@brightmoor.studio",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "85.00",
+      "seats": 3,
+      "industry": "Media",
+      "country": "Canada",
+      "signed_up_on": "2023-11-14",
+      "renews_on": "2026-08-14"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 7,
+    "fields": {
+      "workspace": 1,
+      "company": "Ironvale Group",
+      "contact_name": "Sean Kavanagh",
+      "email": "sean.kavanagh@ironvale.com",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "2042.00",
+      "seats": 27,
+      "industry": "Construction",
+      "country": "Ireland",
+      "signed_up_on": "2024-01-09",
+      "renews_on": "2026-08-09"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 8,
+    "fields": {
+      "workspace": 1,
+      "company": "Copperline Digital",
+      "contact_name": "Maya Okonkwo",
+      "email": "maya@copperline.digital",
+      "plan": 2,
+      "status": "active",
+      "health": "watch",
+      "mrr": "497.00",
+      "seats": 12,
+      "industry": "Agency",
+      "country": "United States",
+      "signed_up_on": "2024-01-23",
+      "renews_on": "2026-08-23"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 9,
+    "fields": {
+      "workspace": 1,
+      "company": "Marlow Analytics",
+      "contact_name": "Ben Marlow",
+      "email": "ben@marlowanalytics.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "381.00",
+      "seats": 8,
+      "industry": "Data",
+      "country": "United Kingdom",
+      "signed_up_on": "2024-02-11",
+      "renews_on": "2026-08-11"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 10,
+    "fields": {
+      "workspace": 1,
+      "company": "Sable & Stone",
+      "contact_name": "Fiona Sable",
+      "email": "fiona@sableandstone.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "97.00",
+      "seats": 4,
+      "industry": "Architecture",
+      "country": "United States",
+      "signed_up_on": "2024-02-27",
+      "renews_on": "2026-08-27"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 11,
+    "fields": {
+      "workspace": 1,
+      "company": "Pinewatch Media",
+      "contact_name": "Grant Aldridge",
+      "email": "grant@pinewatch.tv",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "584.00",
+      "seats": 15,
+      "industry": "Media",
+      "country": "Australia",
+      "signed_up_on": "2024-03-12",
+      "renews_on": "2026-08-12"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 12,
+    "fields": {
+      "workspace": 1,
+      "company": "Orrery Systems",
+      "contact_name": "Lena Torvald",
+      "email": "lena@orrerysystems.com",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "2455.00",
+      "seats": 34,
+      "industry": "Software",
+      "country": "Sweden",
+      "signed_up_on": "2024-03-29",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 13,
+    "fields": {
+      "workspace": 1,
+      "company": "Thistledown Foods",
+      "contact_name": "Erin Cassidy",
+      "email": "erin@thistledownfoods.com",
+      "plan": 1,
+      "status": "past_due",
+      "health": "at_risk",
+      "mrr": "109.00",
+      "seats": 5,
+      "industry": "Food & Beverage",
+      "country": "Ireland",
+      "signed_up_on": "2024-04-16",
+      "renews_on": "2026-08-16"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 14,
+    "fields": {
+      "workspace": 1,
+      "company": "Granton Freight",
+      "contact_name": "Hugo Bassi",
+      "email": "hugo@grantonfreight.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "439.00",
+      "seats": 10,
+      "industry": "Logistics",
+      "country": "Italy",
+      "signed_up_on": "2024-05-03",
+      "renews_on": "2026-08-03"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 15,
+    "fields": {
+      "workspace": 1,
+      "company": "Bellweather Health",
+      "contact_name": "Dr. Amara Osei",
+      "email": "amara@bellweatherhealth.com",
+      "plan": 3,
+      "status": "active",
+      "health": "watch",
+      "mrr": "2160.00",
+      "seats": 29,
+      "industry": "Healthcare",
+      "country": "United States",
+      "signed_up_on": "2024-05-21",
+      "renews_on": "2026-08-21"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 16,
+    "fields": {
+      "workspace": 1,
+      "company": "Cartwright & Vale",
+      "contact_name": "Neil Cartwright",
+      "email": "neil@cartwrightvale.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "352.00",
+      "seats": 7,
+      "industry": "Consulting",
+      "country": "United Kingdom",
+      "signed_up_on": "2024-06-07",
+      "renews_on": "2026-08-07"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 17,
+    "fields": {
+      "workspace": 1,
+      "company": "Lantern Row",
+      "contact_name": "Bea Nakamura",
+      "email": "bea@lanternrow.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "73.00",
+      "seats": 2,
+      "industry": "Hospitality",
+      "country": "Japan",
+      "signed_up_on": "2024-06-24",
+      "renews_on": "2026-08-24"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 18,
+    "fields": {
+      "workspace": 1,
+      "company": "Deepfield Robotics",
+      "contact_name": "Anders Vinter",
+      "email": "anders@deepfieldrobotics.com",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "1747.00",
+      "seats": 22,
+      "industry": "Robotics",
+      "country": "Denmark",
+      "signed_up_on": "2024-07-11",
+      "renews_on": "2026-08-11"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 19,
+    "fields": {
+      "workspace": 1,
+      "company": "Quillon Software",
+      "contact_name": "Ravi Shanbhag",
+      "email": "ravi@quillon.dev",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "526.00",
+      "seats": 13,
+      "industry": "Software",
+      "country": "India",
+      "signed_up_on": "2024-08-02",
+      "renews_on": "2026-08-02"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 20,
+    "fields": {
+      "workspace": 1,
+      "company": "Rookwood Interactive",
+      "contact_name": "Kate Rookwood",
+      "email": "kate@rookwood.games",
+      "plan": 2,
+      "status": "churned",
+      "health": "at_risk",
+      "mrr": "0.00",
+      "seats": 6,
+      "industry": "Gaming",
+      "country": "Canada",
+      "signed_up_on": "2024-08-19",
+      "renews_on": null
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 21,
+    "fields": {
+      "workspace": 1,
+      "company": "Silverbeck Logistics",
+      "contact_name": "Pia Lindqvist",
+      "email": "pia@silverbeck.com",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "1924.00",
+      "seats": 25,
+      "industry": "Logistics",
+      "country": "Germany",
+      "signed_up_on": "2024-09-05",
+      "renews_on": "2026-08-05"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 22,
+    "fields": {
+      "workspace": 1,
+      "company": "Tanner & Roe",
+      "contact_name": "Michael Roe",
+      "email": "michael@tannerroe.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "85.00",
+      "seats": 3,
+      "industry": "Legal",
+      "country": "United States",
+      "signed_up_on": "2024-09-23",
+      "renews_on": "2026-08-23"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 23,
+    "fields": {
+      "workspace": 1,
+      "company": "Ashgrove Ventures",
+      "contact_name": "Claudia Ashgrove",
+      "email": "claudia@ashgrove.vc",
+      "plan": 2,
+      "status": "active",
+      "health": "watch",
+      "mrr": "410.00",
+      "seats": 9,
+      "industry": "Finance",
+      "country": "United Kingdom",
+      "signed_up_on": "2024-10-08",
+      "renews_on": "2026-08-08"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 24,
+    "fields": {
+      "workspace": 1,
+      "company": "Everline Networks",
+      "contact_name": "Tobias Krause",
+      "email": "tobias@everline.net",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "2691.00",
+      "seats": 38,
+      "industry": "Telecom",
+      "country": "Germany",
+      "signed_up_on": "2024-10-29",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 25,
+    "fields": {
+      "workspace": 1,
+      "company": "Foxglove Design",
+      "contact_name": "Nora Foxglove",
+      "email": "nora@foxglove.design",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "97.00",
+      "seats": 4,
+      "industry": "Agency",
+      "country": "New Zealand",
+      "signed_up_on": "2024-11-18",
+      "renews_on": "2026-08-18"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 26,
+    "fields": {
+      "workspace": 1,
+      "company": "Harborview Labs",
+      "contact_name": "Elliot Chen",
+      "email": "elliot@harborviewlabs.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "497.00",
+      "seats": 12,
+      "industry": "Biotech",
+      "country": "United States",
+      "signed_up_on": "2024-12-04",
+      "renews_on": "2026-08-04"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 27,
+    "fields": {
+      "workspace": 1,
+      "company": "Inkwell Publishing",
+      "contact_name": "Rosalind Pike",
+      "email": "rosalind@inkwellpublishing.com",
+      "plan": 1,
+      "status": "churned",
+      "health": "at_risk",
+      "mrr": "0.00",
+      "seats": 3,
+      "industry": "Publishing",
+      "country": "United Kingdom",
+      "signed_up_on": "2025-01-08",
+      "renews_on": null
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 28,
+    "fields": {
+      "workspace": 1,
+      "company": "Juniper Freight",
+      "contact_name": "Sam Okafor",
+      "email": "sam@juniperfreight.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "468.00",
+      "seats": 11,
+      "industry": "Logistics",
+      "country": "United States",
+      "signed_up_on": "2025-01-27",
+      "renews_on": "2026-08-27"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 29,
+    "fields": {
+      "workspace": 1,
+      "company": "Keeler & Sons",
+      "contact_name": "Arthur Keeler",
+      "email": "arthur@keelerandsons.com",
+      "plan": 1,
+      "status": "active",
+      "health": "watch",
+      "mrr": "109.00",
+      "seats": 5,
+      "industry": "Manufacturing",
+      "country": "United States",
+      "signed_up_on": "2025-02-12",
+      "renews_on": "2026-08-12"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 30,
+    "fields": {
+      "workspace": 1,
+      "company": "Lundqvist Marine",
+      "contact_name": "Sigrid Lundqvist",
+      "email": "sigrid@lundqvistmarine.se",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "439.00",
+      "seats": 10,
+      "industry": "Shipping",
+      "country": "Sweden",
+      "signed_up_on": "2025-02-28",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 31,
+    "fields": {
+      "workspace": 1,
+      "company": "Mossgate Energy",
+      "contact_name": "Declan Byrne",
+      "email": "declan@mossgate.energy",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "2219.00",
+      "seats": 30,
+      "industry": "Energy",
+      "country": "Ireland",
+      "signed_up_on": "2025-03-17",
+      "renews_on": "2026-08-17"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 32,
+    "fields": {
+      "workspace": 1,
+      "company": "Newbury Optics",
+      "contact_name": "Wendy Salter",
+      "email": "wendy@newburyoptics.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "97.00",
+      "seats": 4,
+      "industry": "Hardware",
+      "country": "United Kingdom",
+      "signed_up_on": "2025-04-01",
+      "renews_on": "2026-08-01"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 33,
+    "fields": {
+      "workspace": 1,
+      "company": "Oakhurst Retail",
+      "contact_name": "Franco Ricci",
+      "email": "franco@oakhurstretail.com",
+      "plan": 2,
+      "status": "past_due",
+      "health": "at_risk",
+      "mrr": "381.00",
+      "seats": 8,
+      "industry": "Retail",
+      "country": "Italy",
+      "signed_up_on": "2025-04-22",
+      "renews_on": "2026-08-22"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 34,
+    "fields": {
+      "workspace": 1,
+      "company": "Pemberton Legal",
+      "contact_name": "Adaeze Pemberton",
+      "email": "adaeze@pembertonlegal.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "410.00",
+      "seats": 9,
+      "industry": "Legal",
+      "country": "United States",
+      "signed_up_on": "2025-05-09",
+      "renews_on": "2026-08-09"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 35,
+    "fields": {
+      "workspace": 1,
+      "company": "Quarrywood Tools",
+      "contact_name": "Ivan Petrov",
+      "email": "ivan@quarrywoodtools.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "85.00",
+      "seats": 3,
+      "industry": "Manufacturing",
+      "country": "Poland",
+      "signed_up_on": "2025-05-26",
+      "renews_on": "2026-08-26"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 36,
+    "fields": {
+      "workspace": 1,
+      "company": "Redfern Insurance",
+      "contact_name": "Talia Redfern",
+      "email": "talia@redfern.insure",
+      "plan": 3,
+      "status": "active",
+      "health": "watch",
+      "mrr": "1983.00",
+      "seats": 26,
+      "industry": "Insurance",
+      "country": "Australia",
+      "signed_up_on": "2025-06-10",
+      "renews_on": "2026-08-10"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 37,
+    "fields": {
+      "workspace": 1,
+      "company": "Stonebridge Capital",
+      "contact_name": "Henry Voss",
+      "email": "henry@stonebridgecap.com",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "1865.00",
+      "seats": 24,
+      "industry": "Finance",
+      "country": "Switzerland",
+      "signed_up_on": "2025-06-30",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 38,
+    "fields": {
+      "workspace": 1,
+      "company": "Tessellate Studio",
+      "contact_name": "Kaori Mizuno",
+      "email": "kaori@tessellate.studio",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "73.00",
+      "seats": 2,
+      "industry": "Agency",
+      "country": "Japan",
+      "signed_up_on": "2025-07-15",
+      "renews_on": "2026-08-15"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 39,
+    "fields": {
+      "workspace": 1,
+      "company": "Underhill Farms",
+      "contact_name": "Gordon Underhill",
+      "email": "gordon@underhillfarms.com",
+      "plan": 1,
+      "status": "churned",
+      "health": "at_risk",
+      "mrr": "0.00",
+      "seats": 3,
+      "industry": "Agriculture",
+      "country": "Canada",
+      "signed_up_on": "2025-08-04",
+      "renews_on": null
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 40,
+    "fields": {
+      "workspace": 1,
+      "company": "Vantage Freight",
+      "contact_name": "Nour El-Masri",
+      "email": "nour@vantagefreight.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "526.00",
+      "seats": 13,
+      "industry": "Logistics",
+      "country": "Egypt",
+      "signed_up_on": "2025-08-21",
+      "renews_on": "2026-08-21"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 41,
+    "fields": {
+      "workspace": 1,
+      "company": "Westmarch Interactive",
+      "contact_name": "Colin Reese",
+      "email": "colin@westmarch.io",
+      "plan": 2,
+      "status": "active",
+      "health": "watch",
+      "mrr": "352.00",
+      "seats": 7,
+      "industry": "Gaming",
+      "country": "United States",
+      "signed_up_on": "2025-09-08",
+      "renews_on": "2026-08-08"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 42,
+    "fields": {
+      "workspace": 1,
+      "company": "Yarrow & Sage",
+      "contact_name": "Delphine Roux",
+      "email": "delphine@yarrowsage.fr",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "97.00",
+      "seats": 4,
+      "industry": "Cosmetics",
+      "country": "France",
+      "signed_up_on": "2025-09-29",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 43,
+    "fields": {
+      "workspace": 1,
+      "company": "Zephyr Cloudworks",
+      "contact_name": "Emeka Balogun",
+      "email": "emeka@zephyrcloud.works",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "497.00",
+      "seats": 12,
+      "industry": "Software",
+      "country": "Nigeria",
+      "signed_up_on": "2025-10-14",
+      "renews_on": "2026-08-14"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 44,
+    "fields": {
+      "workspace": 1,
+      "company": "Ashbury Grain",
+      "contact_name": "Martha Ashbury",
+      "email": "martha@ashburygrain.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "85.00",
+      "seats": 3,
+      "industry": "Agriculture",
+      "country": "United States",
+      "signed_up_on": "2025-10-31",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 45,
+    "fields": {
+      "workspace": 1,
+      "company": "Clearwater Dental",
+      "contact_name": "Dr. Owen Pryce",
+      "email": "owen@clearwaterdental.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "109.00",
+      "seats": 5,
+      "industry": "Healthcare",
+      "country": "United States",
+      "signed_up_on": "2025-11-17",
+      "renews_on": "2026-08-17"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 46,
+    "fields": {
+      "workspace": 1,
+      "company": "Drayton Motors",
+      "contact_name": "Silvia Moreno",
+      "email": "silvia@draytonmotors.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "439.00",
+      "seats": 10,
+      "industry": "Automotive",
+      "country": "Spain",
+      "signed_up_on": "2025-12-03",
+      "renews_on": "2026-08-03"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 47,
+    "fields": {
+      "workspace": 1,
+      "company": "Elmwood Schools",
+      "contact_name": "Rachel Odom",
+      "email": "rachel@elmwoodschools.org",
+      "plan": 2,
+      "status": "active",
+      "health": "watch",
+      "mrr": "613.00",
+      "seats": 16,
+      "industry": "Education",
+      "country": "United States",
+      "signed_up_on": "2025-12-19",
+      "renews_on": "2026-08-19"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 48,
+    "fields": {
+      "workspace": 1,
+      "company": "Fernhall Security",
+      "contact_name": "Kwame Mensah",
+      "email": "kwame@fernhallsecurity.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "410.00",
+      "seats": 9,
+      "industry": "Security",
+      "country": "Ghana",
+      "signed_up_on": "2026-01-12",
+      "renews_on": "2026-08-12"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 49,
+    "fields": {
+      "workspace": 1,
+      "company": "Greymoor Ceramics",
+      "contact_name": "Anja Bauer",
+      "email": "anja@greymoor.ceramics",
+      "plan": 1,
+      "status": "trial",
+      "health": "watch",
+      "mrr": "0.00",
+      "seats": 2,
+      "industry": "Manufacturing",
+      "country": "Austria",
+      "signed_up_on": "2026-06-22",
+      "renews_on": null
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 50,
+    "fields": {
+      "workspace": 1,
+      "company": "Hollowbrook Cider",
+      "contact_name": "Tess Callaghan",
+      "email": "tess@hollowbrookcider.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "85.00",
+      "seats": 3,
+      "industry": "Food & Beverage",
+      "country": "Ireland",
+      "signed_up_on": "2026-02-04",
+      "renews_on": "2026-08-04"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 51,
+    "fields": {
+      "workspace": 1,
+      "company": "Ivory Lane Fashion",
+      "contact_name": "Zainab Farouk",
+      "email": "zainab@ivorylane.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "381.00",
+      "seats": 8,
+      "industry": "Fashion",
+      "country": "United Arab Emirates",
+      "signed_up_on": "2026-02-23",
+      "renews_on": "2026-08-23"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 52,
+    "fields": {
+      "workspace": 1,
+      "company": "Jarrow Biotech",
+      "contact_name": "Dr. Lin Wei",
+      "email": "lin.wei@jarrowbio.com",
+      "plan": 3,
+      "status": "active",
+      "health": "good",
+      "mrr": "1688.00",
+      "seats": 21,
+      "industry": "Biotech",
+      "country": "Singapore",
+      "signed_up_on": "2026-03-09",
+      "renews_on": "2026-08-09"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 53,
+    "fields": {
+      "workspace": 1,
+      "company": "Kestrel Aviation",
+      "contact_name": "Diego Fuentes",
+      "email": "diego@kestrelaviation.com",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "468.00",
+      "seats": 11,
+      "industry": "Aviation",
+      "country": "Chile",
+      "signed_up_on": "2026-03-30",
+      "renews_on": "2026-08-28"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 54,
+    "fields": {
+      "workspace": 1,
+      "company": "Larkspur Wellness",
+      "contact_name": "Molly Trent",
+      "email": "molly@larkspurwellness.com",
+      "plan": 1,
+      "status": "trial",
+      "health": "good",
+      "mrr": "0.00",
+      "seats": 2,
+      "industry": "Healthcare",
+      "country": "United States",
+      "signed_up_on": "2026-07-01",
+      "renews_on": null
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 55,
+    "fields": {
+      "workspace": 1,
+      "company": "Mistral Renewables",
+      "contact_name": "Yves Bonnet",
+      "email": "yves@mistralrenewables.fr",
+      "plan": 2,
+      "status": "active",
+      "health": "good",
+      "mrr": "555.00",
+      "seats": 14,
+      "industry": "Energy",
+      "country": "France",
+      "signed_up_on": "2026-04-20",
+      "renews_on": "2026-08-20"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 56,
+    "fields": {
+      "workspace": 1,
+      "company": "Norbury Print",
+      "contact_name": "Stella Grimes",
+      "email": "stella@norburyprint.com",
+      "plan": 1,
+      "status": "past_due",
+      "health": "at_risk",
+      "mrr": "85.00",
+      "seats": 3,
+      "industry": "Printing",
+      "country": "United Kingdom",
+      "signed_up_on": "2026-05-06",
+      "renews_on": "2026-08-06"
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 57,
+    "fields": {
+      "workspace": 1,
+      "company": "Ospreyline Travel",
+      "contact_name": "Karim Haddad",
+      "email": "karim@ospreyline.travel",
+      "plan": 2,
+      "status": "trial",
+      "health": "good",
+      "mrr": "0.00",
+      "seats": 6,
+      "industry": "Travel",
+      "country": "Jordan",
+      "signed_up_on": "2026-06-29",
+      "renews_on": null
+    }
+  },
+  {
+    "model": "lb.lbcustomer",
+    "pk": 58,
+    "fields": {
+      "workspace": 1,
+      "company": "Pellworth Audio",
+      "contact_name": "Jonas Riedel",
+      "email": "jonas@pellworthaudio.com",
+      "plan": 1,
+      "status": "active",
+      "health": "good",
+      "mrr": "97.00",
+      "seats": 4,
+      "industry": "Hardware",
+      "country": "Germany",
+      "signed_up_on": "2026-05-26",
+      "renews_on": "2026-08-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 1,
+    "fields": {
+      "customer": 1,
+      "number": "ARD-2026-0001",
+      "amount": "2927.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-18",
+      "due_on": "2026-02-01",
+      "paid_on": "2026-01-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 2,
+    "fields": {
+      "customer": 1,
+      "number": "ARD-2026-0002",
+      "amount": "2927.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-18",
+      "due_on": "2026-03-04",
+      "paid_on": "2026-02-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 3,
+    "fields": {
+      "customer": 1,
+      "number": "ARD-2026-0003",
+      "amount": "3045.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-18",
+      "due_on": "2026-04-01",
+      "paid_on": "2026-03-23"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 4,
+    "fields": {
+      "customer": 1,
+      "number": "ARD-2026-0004",
+      "amount": "2927.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-18",
+      "due_on": "2026-05-02",
+      "paid_on": "2026-04-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 5,
+    "fields": {
+      "customer": 1,
+      "number": "ARD-2026-0005",
+      "amount": "2927.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "May 2026",
+      "issued_on": "2026-05-18",
+      "due_on": "2026-06-01",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 6,
+    "fields": {
+      "customer": 1,
+      "number": "ARD-2026-0006",
+      "amount": "2927.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-18",
+      "due_on": "2026-07-02",
+      "paid_on": "2026-06-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 7,
+    "fields": {
+      "customer": 2,
+      "number": "ARD-2026-0007",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-02",
+      "due_on": "2026-01-16",
+      "paid_on": "2026-01-07"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 8,
+    "fields": {
+      "customer": 2,
+      "number": "ARD-2026-0008",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-02",
+      "due_on": "2026-02-16",
+      "paid_on": "2026-02-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 9,
+    "fields": {
+      "customer": 2,
+      "number": "ARD-2026-0009",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-02",
+      "due_on": "2026-03-16",
+      "paid_on": "2026-03-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 10,
+    "fields": {
+      "customer": 2,
+      "number": "ARD-2026-0010",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-02",
+      "due_on": "2026-04-16",
+      "paid_on": "2026-04-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 11,
+    "fields": {
+      "customer": 2,
+      "number": "ARD-2026-0011",
+      "amount": "613.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-02",
+      "due_on": "2026-05-16",
+      "paid_on": "2026-05-07"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 12,
+    "fields": {
+      "customer": 2,
+      "number": "ARD-2026-0012",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-02",
+      "due_on": "2026-06-16",
+      "paid_on": "2026-06-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 13,
+    "fields": {
+      "customer": 2,
+      "number": "ARD-2026-0013",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-02",
+      "due_on": "2026-07-16",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 14,
+    "fields": {
+      "customer": 3,
+      "number": "ARD-2026-0014",
+      "amount": "2278.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-25",
+      "due_on": "2026-02-08",
+      "paid_on": "2026-01-31"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 15,
+    "fields": {
+      "customer": 3,
+      "number": "ARD-2026-0015",
+      "amount": "2278.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-25",
+      "due_on": "2026-03-11",
+      "paid_on": "2026-03-07"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 16,
+    "fields": {
+      "customer": 3,
+      "number": "ARD-2026-0016",
+      "amount": "2278.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-25",
+      "due_on": "2026-04-08",
+      "paid_on": "2026-04-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 17,
+    "fields": {
+      "customer": 3,
+      "number": "ARD-2026-0017",
+      "amount": "2278.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-25",
+      "due_on": "2026-05-09",
+      "paid_on": "2026-04-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 18,
+    "fields": {
+      "customer": 3,
+      "number": "ARD-2026-0018",
+      "amount": "2278.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-25",
+      "due_on": "2026-06-08",
+      "paid_on": "2026-05-31"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 19,
+    "fields": {
+      "customer": 3,
+      "number": "ARD-2026-0019",
+      "amount": "2278.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-25",
+      "due_on": "2026-07-09",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 20,
+    "fields": {
+      "customer": 4,
+      "number": "ARD-2026-0020",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-06",
+      "due_on": "2026-01-20",
+      "paid_on": "2026-01-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 21,
+    "fields": {
+      "customer": 4,
+      "number": "ARD-2026-0021",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-06",
+      "due_on": "2026-02-20",
+      "paid_on": "2026-02-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 22,
+    "fields": {
+      "customer": 4,
+      "number": "ARD-2026-0022",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-06",
+      "due_on": "2026-03-20",
+      "paid_on": "2026-03-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 23,
+    "fields": {
+      "customer": 4,
+      "number": "ARD-2026-0023",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-06",
+      "due_on": "2026-04-20",
+      "paid_on": "2026-04-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 24,
+    "fields": {
+      "customer": 4,
+      "number": "ARD-2026-0024",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-06",
+      "due_on": "2026-05-20",
+      "paid_on": "2026-05-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 25,
+    "fields": {
+      "customer": 4,
+      "number": "ARD-2026-0025",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-06",
+      "due_on": "2026-06-20",
+      "paid_on": "2026-06-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 26,
+    "fields": {
+      "customer": 4,
+      "number": "ARD-2026-0026",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-06",
+      "due_on": "2026-07-20",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 27,
+    "fields": {
+      "customer": 5,
+      "number": "ARD-2026-0027",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-28",
+      "due_on": "2026-02-11",
+      "paid_on": "2026-02-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 28,
+    "fields": {
+      "customer": 5,
+      "number": "ARD-2026-0028",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-28",
+      "due_on": "2026-03-14",
+      "paid_on": "2026-03-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 29,
+    "fields": {
+      "customer": 5,
+      "number": "ARD-2026-0029",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-28",
+      "due_on": "2026-04-11",
+      "paid_on": "2026-04-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 30,
+    "fields": {
+      "customer": 5,
+      "number": "ARD-2026-0030",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-04-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 31,
+    "fields": {
+      "customer": 5,
+      "number": "ARD-2026-0031",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": "2026-05-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 32,
+    "fields": {
+      "customer": 5,
+      "number": "ARD-2026-0032",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-07-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 33,
+    "fields": {
+      "customer": 6,
+      "number": "ARD-2026-0033",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-14",
+      "due_on": "2026-01-28",
+      "paid_on": "2026-01-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 34,
+    "fields": {
+      "customer": 6,
+      "number": "ARD-2026-0034",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-14",
+      "due_on": "2026-02-28",
+      "paid_on": "2026-02-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 35,
+    "fields": {
+      "customer": 6,
+      "number": "ARD-2026-0035",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-14",
+      "due_on": "2026-03-28",
+      "paid_on": "2026-03-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 36,
+    "fields": {
+      "customer": 6,
+      "number": "ARD-2026-0036",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-14",
+      "due_on": "2026-04-28",
+      "paid_on": "2026-04-25"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 37,
+    "fields": {
+      "customer": 6,
+      "number": "ARD-2026-0037",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-14",
+      "due_on": "2026-05-28",
+      "paid_on": "2026-05-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 38,
+    "fields": {
+      "customer": 6,
+      "number": "ARD-2026-0038",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-14",
+      "due_on": "2026-06-28",
+      "paid_on": "2026-06-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 39,
+    "fields": {
+      "customer": 6,
+      "number": "ARD-2026-0039",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-14",
+      "due_on": "2026-07-28",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 40,
+    "fields": {
+      "customer": 7,
+      "number": "ARD-2026-0040",
+      "amount": "2042.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-09",
+      "due_on": "2026-01-23",
+      "paid_on": "2026-01-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 41,
+    "fields": {
+      "customer": 7,
+      "number": "ARD-2026-0041",
+      "amount": "2160.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-09",
+      "due_on": "2026-02-23",
+      "paid_on": "2026-02-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 42,
+    "fields": {
+      "customer": 7,
+      "number": "ARD-2026-0042",
+      "amount": "2101.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-09",
+      "due_on": "2026-03-23",
+      "paid_on": "2026-03-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 43,
+    "fields": {
+      "customer": 7,
+      "number": "ARD-2026-0043",
+      "amount": "2042.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-09",
+      "due_on": "2026-04-23",
+      "paid_on": "2026-04-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 44,
+    "fields": {
+      "customer": 7,
+      "number": "ARD-2026-0044",
+      "amount": "2042.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-09",
+      "due_on": "2026-05-23",
+      "paid_on": "2026-05-22"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 45,
+    "fields": {
+      "customer": 7,
+      "number": "ARD-2026-0045",
+      "amount": "2042.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-09",
+      "due_on": "2026-06-23",
+      "paid_on": "2026-06-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 46,
+    "fields": {
+      "customer": 7,
+      "number": "ARD-2026-0046",
+      "amount": "2042.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-09",
+      "due_on": "2026-07-23",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 47,
+    "fields": {
+      "customer": 8,
+      "number": "ARD-2026-0047",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-23",
+      "due_on": "2026-02-06",
+      "paid_on": "2026-01-28"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 48,
+    "fields": {
+      "customer": 8,
+      "number": "ARD-2026-0048",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-23",
+      "due_on": "2026-03-09",
+      "paid_on": "2026-02-28"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 49,
+    "fields": {
+      "customer": 8,
+      "number": "ARD-2026-0049",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-23",
+      "due_on": "2026-04-06",
+      "paid_on": "2026-04-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 50,
+    "fields": {
+      "customer": 8,
+      "number": "ARD-2026-0050",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-23",
+      "due_on": "2026-05-07",
+      "paid_on": "2026-04-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 51,
+    "fields": {
+      "customer": 8,
+      "number": "ARD-2026-0051",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-23",
+      "due_on": "2026-06-06",
+      "paid_on": "2026-05-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 52,
+    "fields": {
+      "customer": 8,
+      "number": "ARD-2026-0052",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-23",
+      "due_on": "2026-07-07",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 53,
+    "fields": {
+      "customer": 9,
+      "number": "ARD-2026-0053",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-11",
+      "due_on": "2026-01-25",
+      "paid_on": "2026-01-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 54,
+    "fields": {
+      "customer": 9,
+      "number": "ARD-2026-0054",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-11",
+      "due_on": "2026-02-25",
+      "paid_on": "2026-02-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 55,
+    "fields": {
+      "customer": 9,
+      "number": "ARD-2026-0055",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-11",
+      "due_on": "2026-03-25",
+      "paid_on": "2026-03-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 56,
+    "fields": {
+      "customer": 9,
+      "number": "ARD-2026-0056",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-11",
+      "due_on": "2026-04-25",
+      "paid_on": "2026-04-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 57,
+    "fields": {
+      "customer": 9,
+      "number": "ARD-2026-0057",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-11",
+      "due_on": "2026-05-25",
+      "paid_on": "2026-05-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 58,
+    "fields": {
+      "customer": 9,
+      "number": "ARD-2026-0058",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-11",
+      "due_on": "2026-06-25",
+      "paid_on": "2026-06-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 59,
+    "fields": {
+      "customer": 9,
+      "number": "ARD-2026-0059",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-11",
+      "due_on": "2026-07-25",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 60,
+    "fields": {
+      "customer": 10,
+      "number": "ARD-2026-0060",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-27",
+      "due_on": "2026-02-10",
+      "paid_on": "2026-01-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 61,
+    "fields": {
+      "customer": 10,
+      "number": "ARD-2026-0061",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-27",
+      "due_on": "2026-03-13",
+      "paid_on": "2026-03-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 62,
+    "fields": {
+      "customer": 10,
+      "number": "ARD-2026-0062",
+      "amount": "121.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-27",
+      "due_on": "2026-04-10",
+      "paid_on": "2026-04-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 63,
+    "fields": {
+      "customer": 10,
+      "number": "ARD-2026-0063",
+      "amount": "121.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-27",
+      "due_on": "2026-05-11",
+      "paid_on": "2026-04-28"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 64,
+    "fields": {
+      "customer": 10,
+      "number": "ARD-2026-0064",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-27",
+      "due_on": "2026-06-10",
+      "paid_on": "2026-06-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 65,
+    "fields": {
+      "customer": 10,
+      "number": "ARD-2026-0065",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-27",
+      "due_on": "2026-07-11",
+      "paid_on": "2026-07-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 66,
+    "fields": {
+      "customer": 11,
+      "number": "ARD-2026-0066",
+      "amount": "584.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-12",
+      "due_on": "2026-01-26",
+      "paid_on": "2026-01-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 67,
+    "fields": {
+      "customer": 11,
+      "number": "ARD-2026-0067",
+      "amount": "584.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-12",
+      "due_on": "2026-02-26",
+      "paid_on": "2026-02-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 68,
+    "fields": {
+      "customer": 11,
+      "number": "ARD-2026-0068",
+      "amount": "642.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-12",
+      "due_on": "2026-03-26",
+      "paid_on": "2026-03-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 69,
+    "fields": {
+      "customer": 11,
+      "number": "ARD-2026-0069",
+      "amount": "584.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-12",
+      "due_on": "2026-04-26",
+      "paid_on": "2026-04-20"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 70,
+    "fields": {
+      "customer": 11,
+      "number": "ARD-2026-0070",
+      "amount": "584.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-12",
+      "due_on": "2026-05-26",
+      "paid_on": "2026-05-22"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 71,
+    "fields": {
+      "customer": 11,
+      "number": "ARD-2026-0071",
+      "amount": "642.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-12",
+      "due_on": "2026-06-26",
+      "paid_on": "2026-06-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 72,
+    "fields": {
+      "customer": 11,
+      "number": "ARD-2026-0072",
+      "amount": "613.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-12",
+      "due_on": "2026-07-26",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 73,
+    "fields": {
+      "customer": 12,
+      "number": "ARD-2026-0073",
+      "amount": "2455.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-28",
+      "due_on": "2026-02-11",
+      "paid_on": "2026-02-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 74,
+    "fields": {
+      "customer": 12,
+      "number": "ARD-2026-0074",
+      "amount": "2455.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-28",
+      "due_on": "2026-03-14",
+      "paid_on": "2026-03-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 75,
+    "fields": {
+      "customer": 12,
+      "number": "ARD-2026-0075",
+      "amount": "2514.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-28",
+      "due_on": "2026-04-11",
+      "paid_on": "2026-04-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 76,
+    "fields": {
+      "customer": 12,
+      "number": "ARD-2026-0076",
+      "amount": "2573.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-04-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 77,
+    "fields": {
+      "customer": 12,
+      "number": "ARD-2026-0077",
+      "amount": "2455.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": "2026-06-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 78,
+    "fields": {
+      "customer": 12,
+      "number": "ARD-2026-0078",
+      "amount": "2455.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-07-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 79,
+    "fields": {
+      "customer": 13,
+      "number": "ARD-2026-0079",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-16",
+      "due_on": "2026-01-30",
+      "paid_on": "2026-01-23"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 80,
+    "fields": {
+      "customer": 13,
+      "number": "ARD-2026-0080",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-16",
+      "due_on": "2026-03-02",
+      "paid_on": "2026-02-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 81,
+    "fields": {
+      "customer": 13,
+      "number": "ARD-2026-0081",
+      "amount": "121.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-16",
+      "due_on": "2026-03-30",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 82,
+    "fields": {
+      "customer": 13,
+      "number": "ARD-2026-0082",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-16",
+      "due_on": "2026-04-30",
+      "paid_on": "2026-04-20"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 83,
+    "fields": {
+      "customer": 13,
+      "number": "ARD-2026-0083",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-16",
+      "due_on": "2026-05-30",
+      "paid_on": "2026-05-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 84,
+    "fields": {
+      "customer": 13,
+      "number": "ARD-2026-0084",
+      "amount": "133.00",
+      "currency": "USD",
+      "status": "overdue",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-16",
+      "due_on": "2026-06-30",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 85,
+    "fields": {
+      "customer": 14,
+      "number": "ARD-2026-0085",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-03",
+      "due_on": "2026-01-17",
+      "paid_on": "2026-01-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 86,
+    "fields": {
+      "customer": 14,
+      "number": "ARD-2026-0086",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-03",
+      "due_on": "2026-02-17",
+      "paid_on": "2026-02-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 87,
+    "fields": {
+      "customer": 14,
+      "number": "ARD-2026-0087",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-03",
+      "due_on": "2026-03-17",
+      "paid_on": "2026-03-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 88,
+    "fields": {
+      "customer": 14,
+      "number": "ARD-2026-0088",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-03",
+      "due_on": "2026-04-17",
+      "paid_on": "2026-04-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 89,
+    "fields": {
+      "customer": 14,
+      "number": "ARD-2026-0089",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-03",
+      "due_on": "2026-05-17",
+      "paid_on": "2026-05-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 90,
+    "fields": {
+      "customer": 14,
+      "number": "ARD-2026-0090",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-03",
+      "due_on": "2026-06-17",
+      "paid_on": "2026-06-07"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 91,
+    "fields": {
+      "customer": 14,
+      "number": "ARD-2026-0091",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-03",
+      "due_on": "2026-07-17",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 92,
+    "fields": {
+      "customer": 15,
+      "number": "ARD-2026-0092",
+      "amount": "2160.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-21",
+      "due_on": "2026-02-04",
+      "paid_on": "2026-01-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 93,
+    "fields": {
+      "customer": 15,
+      "number": "ARD-2026-0093",
+      "amount": "2160.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-21",
+      "due_on": "2026-03-07",
+      "paid_on": "2026-03-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 94,
+    "fields": {
+      "customer": 15,
+      "number": "ARD-2026-0094",
+      "amount": "2160.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-21",
+      "due_on": "2026-04-04",
+      "paid_on": "2026-04-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 95,
+    "fields": {
+      "customer": 15,
+      "number": "ARD-2026-0095",
+      "amount": "2160.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-21",
+      "due_on": "2026-05-05",
+      "paid_on": "2026-04-22"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 96,
+    "fields": {
+      "customer": 15,
+      "number": "ARD-2026-0096",
+      "amount": "2160.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-21",
+      "due_on": "2026-06-04",
+      "paid_on": "2026-05-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 97,
+    "fields": {
+      "customer": 15,
+      "number": "ARD-2026-0097",
+      "amount": "2160.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-21",
+      "due_on": "2026-07-05",
+      "paid_on": "2026-06-22"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 98,
+    "fields": {
+      "customer": 16,
+      "number": "ARD-2026-0098",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-07",
+      "due_on": "2026-01-21",
+      "paid_on": "2026-01-20"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 99,
+    "fields": {
+      "customer": 16,
+      "number": "ARD-2026-0099",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-07",
+      "due_on": "2026-02-21",
+      "paid_on": "2026-02-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 100,
+    "fields": {
+      "customer": 16,
+      "number": "ARD-2026-0100",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-07",
+      "due_on": "2026-03-21",
+      "paid_on": "2026-03-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 101,
+    "fields": {
+      "customer": 16,
+      "number": "ARD-2026-0101",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-07",
+      "due_on": "2026-04-21",
+      "paid_on": "2026-04-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 102,
+    "fields": {
+      "customer": 16,
+      "number": "ARD-2026-0102",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-07",
+      "due_on": "2026-05-21",
+      "paid_on": "2026-05-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 103,
+    "fields": {
+      "customer": 16,
+      "number": "ARD-2026-0103",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-07",
+      "due_on": "2026-06-21",
+      "paid_on": "2026-06-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 104,
+    "fields": {
+      "customer": 16,
+      "number": "ARD-2026-0104",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-07",
+      "due_on": "2026-07-21",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 105,
+    "fields": {
+      "customer": 17,
+      "number": "ARD-2026-0105",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-24",
+      "due_on": "2026-02-07",
+      "paid_on": "2026-01-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 106,
+    "fields": {
+      "customer": 17,
+      "number": "ARD-2026-0106",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-24",
+      "due_on": "2026-03-10",
+      "paid_on": "2026-03-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 107,
+    "fields": {
+      "customer": 17,
+      "number": "ARD-2026-0107",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-24",
+      "due_on": "2026-04-07",
+      "paid_on": "2026-03-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 108,
+    "fields": {
+      "customer": 17,
+      "number": "ARD-2026-0108",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-24",
+      "due_on": "2026-05-08",
+      "paid_on": "2026-04-25"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 109,
+    "fields": {
+      "customer": 17,
+      "number": "ARD-2026-0109",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-24",
+      "due_on": "2026-06-07",
+      "paid_on": "2026-06-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 110,
+    "fields": {
+      "customer": 17,
+      "number": "ARD-2026-0110",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-24",
+      "due_on": "2026-07-08",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 111,
+    "fields": {
+      "customer": 18,
+      "number": "ARD-2026-0111",
+      "amount": "1747.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-11",
+      "due_on": "2026-01-25",
+      "paid_on": "2026-01-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 112,
+    "fields": {
+      "customer": 18,
+      "number": "ARD-2026-0112",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-11",
+      "due_on": "2026-02-25",
+      "paid_on": "2026-02-23"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 113,
+    "fields": {
+      "customer": 18,
+      "number": "ARD-2026-0113",
+      "amount": "1747.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-11",
+      "due_on": "2026-03-25",
+      "paid_on": "2026-03-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 114,
+    "fields": {
+      "customer": 18,
+      "number": "ARD-2026-0114",
+      "amount": "1747.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-11",
+      "due_on": "2026-04-25",
+      "paid_on": "2026-04-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 115,
+    "fields": {
+      "customer": 18,
+      "number": "ARD-2026-0115",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-11",
+      "due_on": "2026-05-25",
+      "paid_on": "2026-05-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 116,
+    "fields": {
+      "customer": 18,
+      "number": "ARD-2026-0116",
+      "amount": "1747.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-11",
+      "due_on": "2026-06-25",
+      "paid_on": "2026-06-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 117,
+    "fields": {
+      "customer": 18,
+      "number": "ARD-2026-0117",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-11",
+      "due_on": "2026-07-25",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 118,
+    "fields": {
+      "customer": 19,
+      "number": "ARD-2026-0118",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-02",
+      "due_on": "2026-01-16",
+      "paid_on": "2026-01-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 119,
+    "fields": {
+      "customer": 19,
+      "number": "ARD-2026-0119",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-02",
+      "due_on": "2026-02-16",
+      "paid_on": "2026-02-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 120,
+    "fields": {
+      "customer": 19,
+      "number": "ARD-2026-0120",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-02",
+      "due_on": "2026-03-16",
+      "paid_on": "2026-03-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 121,
+    "fields": {
+      "customer": 19,
+      "number": "ARD-2026-0121",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-02",
+      "due_on": "2026-04-16",
+      "paid_on": "2026-04-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 122,
+    "fields": {
+      "customer": 19,
+      "number": "ARD-2026-0122",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-02",
+      "due_on": "2026-05-16",
+      "paid_on": "2026-05-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 123,
+    "fields": {
+      "customer": 19,
+      "number": "ARD-2026-0123",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-02",
+      "due_on": "2026-06-16",
+      "paid_on": "2026-06-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 124,
+    "fields": {
+      "customer": 19,
+      "number": "ARD-2026-0124",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-02",
+      "due_on": "2026-07-16",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 125,
+    "fields": {
+      "customer": 20,
+      "number": "ARD-2026-0125",
+      "amount": "323.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-19",
+      "due_on": "2026-02-02",
+      "paid_on": "2026-01-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 126,
+    "fields": {
+      "customer": 21,
+      "number": "ARD-2026-0126",
+      "amount": "1924.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-05",
+      "due_on": "2026-01-19",
+      "paid_on": "2026-01-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 127,
+    "fields": {
+      "customer": 21,
+      "number": "ARD-2026-0127",
+      "amount": "1924.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-05",
+      "due_on": "2026-02-19",
+      "paid_on": "2026-02-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 128,
+    "fields": {
+      "customer": 21,
+      "number": "ARD-2026-0128",
+      "amount": "2042.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-05",
+      "due_on": "2026-03-19",
+      "paid_on": "2026-03-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 129,
+    "fields": {
+      "customer": 21,
+      "number": "ARD-2026-0129",
+      "amount": "1924.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-05",
+      "due_on": "2026-04-19",
+      "paid_on": "2026-04-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 130,
+    "fields": {
+      "customer": 21,
+      "number": "ARD-2026-0130",
+      "amount": "1924.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-05",
+      "due_on": "2026-05-19",
+      "paid_on": "2026-05-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 131,
+    "fields": {
+      "customer": 21,
+      "number": "ARD-2026-0131",
+      "amount": "1924.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-05",
+      "due_on": "2026-06-19",
+      "paid_on": "2026-06-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 132,
+    "fields": {
+      "customer": 21,
+      "number": "ARD-2026-0132",
+      "amount": "1924.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-05",
+      "due_on": "2026-07-19",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 133,
+    "fields": {
+      "customer": 22,
+      "number": "ARD-2026-0133",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-23",
+      "due_on": "2026-02-06",
+      "paid_on": "2026-01-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 134,
+    "fields": {
+      "customer": 22,
+      "number": "ARD-2026-0134",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-23",
+      "due_on": "2026-03-09",
+      "paid_on": "2026-02-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 135,
+    "fields": {
+      "customer": 22,
+      "number": "ARD-2026-0135",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-23",
+      "due_on": "2026-04-06",
+      "paid_on": "2026-04-01"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 136,
+    "fields": {
+      "customer": 22,
+      "number": "ARD-2026-0136",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-23",
+      "due_on": "2026-05-07",
+      "paid_on": "2026-04-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 137,
+    "fields": {
+      "customer": 22,
+      "number": "ARD-2026-0137",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-23",
+      "due_on": "2026-06-06",
+      "paid_on": "2026-06-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 138,
+    "fields": {
+      "customer": 22,
+      "number": "ARD-2026-0138",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-23",
+      "due_on": "2026-07-07",
+      "paid_on": "2026-06-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 139,
+    "fields": {
+      "customer": 23,
+      "number": "ARD-2026-0139",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-08",
+      "due_on": "2026-01-22",
+      "paid_on": "2026-01-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 140,
+    "fields": {
+      "customer": 23,
+      "number": "ARD-2026-0140",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-08",
+      "due_on": "2026-02-22",
+      "paid_on": "2026-02-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 141,
+    "fields": {
+      "customer": 23,
+      "number": "ARD-2026-0141",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-08",
+      "due_on": "2026-03-22",
+      "paid_on": "2026-03-20"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 142,
+    "fields": {
+      "customer": 23,
+      "number": "ARD-2026-0142",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-08",
+      "due_on": "2026-04-22",
+      "paid_on": "2026-04-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 143,
+    "fields": {
+      "customer": 23,
+      "number": "ARD-2026-0143",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-08",
+      "due_on": "2026-05-22",
+      "paid_on": "2026-05-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 144,
+    "fields": {
+      "customer": 23,
+      "number": "ARD-2026-0144",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-08",
+      "due_on": "2026-06-22",
+      "paid_on": "2026-06-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 145,
+    "fields": {
+      "customer": 23,
+      "number": "ARD-2026-0145",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-08",
+      "due_on": "2026-07-22",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 146,
+    "fields": {
+      "customer": 24,
+      "number": "ARD-2026-0146",
+      "amount": "2691.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-28",
+      "due_on": "2026-02-11",
+      "paid_on": "2026-02-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 147,
+    "fields": {
+      "customer": 24,
+      "number": "ARD-2026-0147",
+      "amount": "2809.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-28",
+      "due_on": "2026-03-14",
+      "paid_on": "2026-03-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 148,
+    "fields": {
+      "customer": 24,
+      "number": "ARD-2026-0148",
+      "amount": "2691.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-28",
+      "due_on": "2026-04-11",
+      "paid_on": "2026-04-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 149,
+    "fields": {
+      "customer": 24,
+      "number": "ARD-2026-0149",
+      "amount": "2809.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-05-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 150,
+    "fields": {
+      "customer": 24,
+      "number": "ARD-2026-0150",
+      "amount": "2750.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": "2026-06-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 151,
+    "fields": {
+      "customer": 24,
+      "number": "ARD-2026-0151",
+      "amount": "2691.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-07-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 152,
+    "fields": {
+      "customer": 25,
+      "number": "ARD-2026-0152",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-18",
+      "due_on": "2026-02-01",
+      "paid_on": "2026-01-22"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 153,
+    "fields": {
+      "customer": 25,
+      "number": "ARD-2026-0153",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-18",
+      "due_on": "2026-03-04",
+      "paid_on": "2026-02-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 154,
+    "fields": {
+      "customer": 25,
+      "number": "ARD-2026-0154",
+      "amount": "121.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-18",
+      "due_on": "2026-04-01",
+      "paid_on": "2026-03-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 155,
+    "fields": {
+      "customer": 25,
+      "number": "ARD-2026-0155",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-18",
+      "due_on": "2026-05-02",
+      "paid_on": "2026-04-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 156,
+    "fields": {
+      "customer": 25,
+      "number": "ARD-2026-0156",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-18",
+      "due_on": "2026-06-01",
+      "paid_on": "2026-05-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 157,
+    "fields": {
+      "customer": 25,
+      "number": "ARD-2026-0157",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-18",
+      "due_on": "2026-07-02",
+      "paid_on": "2026-06-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 158,
+    "fields": {
+      "customer": 26,
+      "number": "ARD-2026-0158",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-04",
+      "due_on": "2026-01-18",
+      "paid_on": "2026-01-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 159,
+    "fields": {
+      "customer": 26,
+      "number": "ARD-2026-0159",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-04",
+      "due_on": "2026-02-18",
+      "paid_on": "2026-02-07"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 160,
+    "fields": {
+      "customer": 26,
+      "number": "ARD-2026-0160",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-04",
+      "due_on": "2026-03-18",
+      "paid_on": "2026-03-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 161,
+    "fields": {
+      "customer": 26,
+      "number": "ARD-2026-0161",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-04",
+      "due_on": "2026-04-18",
+      "paid_on": "2026-04-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 162,
+    "fields": {
+      "customer": 26,
+      "number": "ARD-2026-0162",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-04",
+      "due_on": "2026-05-18",
+      "paid_on": "2026-05-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 163,
+    "fields": {
+      "customer": 26,
+      "number": "ARD-2026-0163",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-04",
+      "due_on": "2026-06-18",
+      "paid_on": "2026-06-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 164,
+    "fields": {
+      "customer": 26,
+      "number": "ARD-2026-0164",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-04",
+      "due_on": "2026-07-18",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 165,
+    "fields": {
+      "customer": 27,
+      "number": "ARD-2026-0165",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-08",
+      "due_on": "2026-01-22",
+      "paid_on": "2026-01-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 166,
+    "fields": {
+      "customer": 27,
+      "number": "ARD-2026-0166",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-08",
+      "due_on": "2026-02-22",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 167,
+    "fields": {
+      "customer": 27,
+      "number": "ARD-2026-0167",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-08",
+      "due_on": "2026-03-22",
+      "paid_on": "2026-03-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 168,
+    "fields": {
+      "customer": 28,
+      "number": "ARD-2026-0168",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-27",
+      "due_on": "2026-02-10",
+      "paid_on": "2026-02-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 169,
+    "fields": {
+      "customer": 28,
+      "number": "ARD-2026-0169",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-27",
+      "due_on": "2026-03-13",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 170,
+    "fields": {
+      "customer": 28,
+      "number": "ARD-2026-0170",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-27",
+      "due_on": "2026-04-10",
+      "paid_on": "2026-03-31"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 171,
+    "fields": {
+      "customer": 28,
+      "number": "ARD-2026-0171",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-27",
+      "due_on": "2026-05-11",
+      "paid_on": "2026-05-01"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 172,
+    "fields": {
+      "customer": 28,
+      "number": "ARD-2026-0172",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-27",
+      "due_on": "2026-06-10",
+      "paid_on": "2026-06-07"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 173,
+    "fields": {
+      "customer": 28,
+      "number": "ARD-2026-0173",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-27",
+      "due_on": "2026-07-11",
+      "paid_on": "2026-07-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 174,
+    "fields": {
+      "customer": 29,
+      "number": "ARD-2026-0174",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-12",
+      "due_on": "2026-01-26",
+      "paid_on": "2026-01-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 175,
+    "fields": {
+      "customer": 29,
+      "number": "ARD-2026-0175",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-12",
+      "due_on": "2026-02-26",
+      "paid_on": "2026-02-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 176,
+    "fields": {
+      "customer": 29,
+      "number": "ARD-2026-0176",
+      "amount": "133.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-12",
+      "due_on": "2026-03-26",
+      "paid_on": "2026-03-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 177,
+    "fields": {
+      "customer": 29,
+      "number": "ARD-2026-0177",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-12",
+      "due_on": "2026-04-26",
+      "paid_on": "2026-04-25"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 178,
+    "fields": {
+      "customer": 29,
+      "number": "ARD-2026-0178",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-12",
+      "due_on": "2026-05-26",
+      "paid_on": "2026-05-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 179,
+    "fields": {
+      "customer": 29,
+      "number": "ARD-2026-0179",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-12",
+      "due_on": "2026-06-26",
+      "paid_on": "2026-06-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 180,
+    "fields": {
+      "customer": 29,
+      "number": "ARD-2026-0180",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-12",
+      "due_on": "2026-07-26",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 181,
+    "fields": {
+      "customer": 30,
+      "number": "ARD-2026-0181",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-28",
+      "due_on": "2026-02-11",
+      "paid_on": "2026-02-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 182,
+    "fields": {
+      "customer": 30,
+      "number": "ARD-2026-0182",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-28",
+      "due_on": "2026-03-14",
+      "paid_on": "2026-03-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 183,
+    "fields": {
+      "customer": 30,
+      "number": "ARD-2026-0183",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-28",
+      "due_on": "2026-04-11",
+      "paid_on": "2026-04-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 184,
+    "fields": {
+      "customer": 30,
+      "number": "ARD-2026-0184",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-05-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 185,
+    "fields": {
+      "customer": 30,
+      "number": "ARD-2026-0185",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": "2026-06-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 186,
+    "fields": {
+      "customer": 30,
+      "number": "ARD-2026-0186",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-06-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 187,
+    "fields": {
+      "customer": 31,
+      "number": "ARD-2026-0187",
+      "amount": "2219.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-17",
+      "due_on": "2026-01-31",
+      "paid_on": "2026-01-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 188,
+    "fields": {
+      "customer": 31,
+      "number": "ARD-2026-0188",
+      "amount": "2219.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-17",
+      "due_on": "2026-03-03",
+      "paid_on": "2026-02-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 189,
+    "fields": {
+      "customer": 31,
+      "number": "ARD-2026-0189",
+      "amount": "2219.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-17",
+      "due_on": "2026-03-31",
+      "paid_on": "2026-03-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 190,
+    "fields": {
+      "customer": 31,
+      "number": "ARD-2026-0190",
+      "amount": "2337.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-17",
+      "due_on": "2026-05-01",
+      "paid_on": "2026-04-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 191,
+    "fields": {
+      "customer": 31,
+      "number": "ARD-2026-0191",
+      "amount": "2337.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-17",
+      "due_on": "2026-05-31",
+      "paid_on": "2026-05-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 192,
+    "fields": {
+      "customer": 31,
+      "number": "ARD-2026-0192",
+      "amount": "2219.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-17",
+      "due_on": "2026-07-01",
+      "paid_on": "2026-06-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 193,
+    "fields": {
+      "customer": 32,
+      "number": "ARD-2026-0193",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-01",
+      "due_on": "2026-01-15",
+      "paid_on": "2026-01-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 194,
+    "fields": {
+      "customer": 32,
+      "number": "ARD-2026-0194",
+      "amount": "121.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-01",
+      "due_on": "2026-02-15",
+      "paid_on": "2026-02-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 195,
+    "fields": {
+      "customer": 32,
+      "number": "ARD-2026-0195",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-01",
+      "due_on": "2026-03-15",
+      "paid_on": "2026-03-14"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 196,
+    "fields": {
+      "customer": 32,
+      "number": "ARD-2026-0196",
+      "amount": "121.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-01",
+      "due_on": "2026-04-15",
+      "paid_on": "2026-04-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 197,
+    "fields": {
+      "customer": 32,
+      "number": "ARD-2026-0197",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-01",
+      "due_on": "2026-05-15",
+      "paid_on": "2026-05-02"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 198,
+    "fields": {
+      "customer": 32,
+      "number": "ARD-2026-0198",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-01",
+      "due_on": "2026-06-15",
+      "paid_on": "2026-06-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 199,
+    "fields": {
+      "customer": 32,
+      "number": "ARD-2026-0199",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-01",
+      "due_on": "2026-07-15",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 200,
+    "fields": {
+      "customer": 33,
+      "number": "ARD-2026-0200",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-22",
+      "due_on": "2026-02-05",
+      "paid_on": "2026-02-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 201,
+    "fields": {
+      "customer": 33,
+      "number": "ARD-2026-0201",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-22",
+      "due_on": "2026-03-08",
+      "paid_on": "2026-03-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 202,
+    "fields": {
+      "customer": 33,
+      "number": "ARD-2026-0202",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-22",
+      "due_on": "2026-04-05",
+      "paid_on": "2026-03-25"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 203,
+    "fields": {
+      "customer": 33,
+      "number": "ARD-2026-0203",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-22",
+      "due_on": "2026-05-06",
+      "paid_on": "2026-04-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 204,
+    "fields": {
+      "customer": 33,
+      "number": "ARD-2026-0204",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-22",
+      "due_on": "2026-06-05",
+      "paid_on": "2026-05-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 205,
+    "fields": {
+      "customer": 33,
+      "number": "ARD-2026-0205",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "overdue",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-22",
+      "due_on": "2026-07-06",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 206,
+    "fields": {
+      "customer": 34,
+      "number": "ARD-2026-0206",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-09",
+      "due_on": "2026-01-23",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 207,
+    "fields": {
+      "customer": 34,
+      "number": "ARD-2026-0207",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-09",
+      "due_on": "2026-02-23",
+      "paid_on": "2026-02-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 208,
+    "fields": {
+      "customer": 34,
+      "number": "ARD-2026-0208",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-09",
+      "due_on": "2026-03-23",
+      "paid_on": "2026-03-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 209,
+    "fields": {
+      "customer": 34,
+      "number": "ARD-2026-0209",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-09",
+      "due_on": "2026-04-23",
+      "paid_on": "2026-04-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 210,
+    "fields": {
+      "customer": 34,
+      "number": "ARD-2026-0210",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-09",
+      "due_on": "2026-05-23",
+      "paid_on": "2026-05-20"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 211,
+    "fields": {
+      "customer": 34,
+      "number": "ARD-2026-0211",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-09",
+      "due_on": "2026-06-23",
+      "paid_on": "2026-06-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 212,
+    "fields": {
+      "customer": 34,
+      "number": "ARD-2026-0212",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-09",
+      "due_on": "2026-07-23",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 213,
+    "fields": {
+      "customer": 35,
+      "number": "ARD-2026-0213",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-26",
+      "due_on": "2026-02-09",
+      "paid_on": "2026-01-28"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 214,
+    "fields": {
+      "customer": 35,
+      "number": "ARD-2026-0214",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-26",
+      "due_on": "2026-03-12",
+      "paid_on": "2026-03-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 215,
+    "fields": {
+      "customer": 35,
+      "number": "ARD-2026-0215",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-26",
+      "due_on": "2026-04-09",
+      "paid_on": "2026-04-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 216,
+    "fields": {
+      "customer": 35,
+      "number": "ARD-2026-0216",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-26",
+      "due_on": "2026-05-10",
+      "paid_on": "2026-05-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 217,
+    "fields": {
+      "customer": 35,
+      "number": "ARD-2026-0217",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-26",
+      "due_on": "2026-06-09",
+      "paid_on": "2026-06-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 218,
+    "fields": {
+      "customer": 35,
+      "number": "ARD-2026-0218",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-26",
+      "due_on": "2026-07-10",
+      "paid_on": "2026-07-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 219,
+    "fields": {
+      "customer": 36,
+      "number": "ARD-2026-0219",
+      "amount": "1983.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-10",
+      "due_on": "2026-01-24",
+      "paid_on": "2026-01-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 220,
+    "fields": {
+      "customer": 36,
+      "number": "ARD-2026-0220",
+      "amount": "1983.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-10",
+      "due_on": "2026-02-24",
+      "paid_on": "2026-02-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 221,
+    "fields": {
+      "customer": 36,
+      "number": "ARD-2026-0221",
+      "amount": "1983.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-10",
+      "due_on": "2026-03-24",
+      "paid_on": "2026-03-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 222,
+    "fields": {
+      "customer": 36,
+      "number": "ARD-2026-0222",
+      "amount": "1983.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-10",
+      "due_on": "2026-04-24",
+      "paid_on": "2026-04-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 223,
+    "fields": {
+      "customer": 36,
+      "number": "ARD-2026-0223",
+      "amount": "1983.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-10",
+      "due_on": "2026-05-24",
+      "paid_on": "2026-05-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 224,
+    "fields": {
+      "customer": 36,
+      "number": "ARD-2026-0224",
+      "amount": "1983.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-10",
+      "due_on": "2026-06-24",
+      "paid_on": "2026-06-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 225,
+    "fields": {
+      "customer": 36,
+      "number": "ARD-2026-0225",
+      "amount": "2101.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-10",
+      "due_on": "2026-07-24",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 226,
+    "fields": {
+      "customer": 37,
+      "number": "ARD-2026-0226",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-28",
+      "due_on": "2026-02-11",
+      "paid_on": "2026-02-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 227,
+    "fields": {
+      "customer": 37,
+      "number": "ARD-2026-0227",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-28",
+      "due_on": "2026-03-14",
+      "paid_on": "2026-03-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 228,
+    "fields": {
+      "customer": 37,
+      "number": "ARD-2026-0228",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-28",
+      "due_on": "2026-04-11",
+      "paid_on": "2026-03-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 229,
+    "fields": {
+      "customer": 37,
+      "number": "ARD-2026-0229",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-05-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 230,
+    "fields": {
+      "customer": 37,
+      "number": "ARD-2026-0230",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": "2026-06-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 231,
+    "fields": {
+      "customer": 37,
+      "number": "ARD-2026-0231",
+      "amount": "1865.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-07-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 232,
+    "fields": {
+      "customer": 38,
+      "number": "ARD-2026-0232",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-15",
+      "due_on": "2026-01-29",
+      "paid_on": "2026-01-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 233,
+    "fields": {
+      "customer": 38,
+      "number": "ARD-2026-0233",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-15",
+      "due_on": "2026-03-01",
+      "paid_on": "2026-02-20"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 234,
+    "fields": {
+      "customer": 38,
+      "number": "ARD-2026-0234",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-15",
+      "due_on": "2026-03-29",
+      "paid_on": "2026-03-22"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 235,
+    "fields": {
+      "customer": 38,
+      "number": "ARD-2026-0235",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-15",
+      "due_on": "2026-04-29",
+      "paid_on": "2026-04-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 236,
+    "fields": {
+      "customer": 38,
+      "number": "ARD-2026-0236",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-15",
+      "due_on": "2026-05-29",
+      "paid_on": "2026-05-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 237,
+    "fields": {
+      "customer": 38,
+      "number": "ARD-2026-0237",
+      "amount": "73.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-15",
+      "due_on": "2026-06-29",
+      "paid_on": "2026-06-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 238,
+    "fields": {
+      "customer": 39,
+      "number": "ARD-2026-0238",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-04",
+      "due_on": "2026-01-18",
+      "paid_on": "2026-01-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 239,
+    "fields": {
+      "customer": 39,
+      "number": "ARD-2026-0239",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-04",
+      "due_on": "2026-02-18",
+      "paid_on": "2026-02-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 240,
+    "fields": {
+      "customer": 39,
+      "number": "ARD-2026-0240",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-04",
+      "due_on": "2026-03-18",
+      "paid_on": "2026-03-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 241,
+    "fields": {
+      "customer": 39,
+      "number": "ARD-2026-0241",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-04",
+      "due_on": "2026-04-18",
+      "paid_on": "2026-04-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 242,
+    "fields": {
+      "customer": 39,
+      "number": "ARD-2026-0242",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-04",
+      "due_on": "2026-05-18",
+      "paid_on": "2026-05-13"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 243,
+    "fields": {
+      "customer": 40,
+      "number": "ARD-2026-0243",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-21",
+      "due_on": "2026-02-04",
+      "paid_on": "2026-01-25"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 244,
+    "fields": {
+      "customer": 40,
+      "number": "ARD-2026-0244",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-21",
+      "due_on": "2026-03-07",
+      "paid_on": "2026-02-23"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 245,
+    "fields": {
+      "customer": 40,
+      "number": "ARD-2026-0245",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-21",
+      "due_on": "2026-04-04",
+      "paid_on": "2026-03-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 246,
+    "fields": {
+      "customer": 40,
+      "number": "ARD-2026-0246",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-21",
+      "due_on": "2026-05-05",
+      "paid_on": "2026-04-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 247,
+    "fields": {
+      "customer": 40,
+      "number": "ARD-2026-0247",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-21",
+      "due_on": "2026-06-04",
+      "paid_on": "2026-06-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 248,
+    "fields": {
+      "customer": 40,
+      "number": "ARD-2026-0248",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-21",
+      "due_on": "2026-07-05",
+      "paid_on": "2026-06-23"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 249,
+    "fields": {
+      "customer": 41,
+      "number": "ARD-2026-0249",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-08",
+      "due_on": "2026-01-22",
+      "paid_on": "2026-01-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 250,
+    "fields": {
+      "customer": 41,
+      "number": "ARD-2026-0250",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-08",
+      "due_on": "2026-02-22",
+      "paid_on": "2026-02-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 251,
+    "fields": {
+      "customer": 41,
+      "number": "ARD-2026-0251",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-08",
+      "due_on": "2026-03-22",
+      "paid_on": "2026-03-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 252,
+    "fields": {
+      "customer": 41,
+      "number": "ARD-2026-0252",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-08",
+      "due_on": "2026-04-22",
+      "paid_on": "2026-04-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 253,
+    "fields": {
+      "customer": 41,
+      "number": "ARD-2026-0253",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-08",
+      "due_on": "2026-05-22",
+      "paid_on": "2026-05-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 254,
+    "fields": {
+      "customer": 41,
+      "number": "ARD-2026-0254",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-08",
+      "due_on": "2026-06-22",
+      "paid_on": "2026-06-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 255,
+    "fields": {
+      "customer": 41,
+      "number": "ARD-2026-0255",
+      "amount": "352.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-08",
+      "due_on": "2026-07-22",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 256,
+    "fields": {
+      "customer": 42,
+      "number": "ARD-2026-0256",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-28",
+      "due_on": "2026-02-11",
+      "paid_on": "2026-02-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 257,
+    "fields": {
+      "customer": 42,
+      "number": "ARD-2026-0257",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-28",
+      "due_on": "2026-03-14",
+      "paid_on": "2026-03-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 258,
+    "fields": {
+      "customer": 42,
+      "number": "ARD-2026-0258",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-28",
+      "due_on": "2026-04-11",
+      "paid_on": "2026-04-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 259,
+    "fields": {
+      "customer": 42,
+      "number": "ARD-2026-0259",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-05-09"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 260,
+    "fields": {
+      "customer": 42,
+      "number": "ARD-2026-0260",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": "2026-06-07"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 261,
+    "fields": {
+      "customer": 42,
+      "number": "ARD-2026-0261",
+      "amount": "121.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-07-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 262,
+    "fields": {
+      "customer": 43,
+      "number": "ARD-2026-0262",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-14",
+      "due_on": "2026-01-28",
+      "paid_on": "2026-01-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 263,
+    "fields": {
+      "customer": 43,
+      "number": "ARD-2026-0263",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-14",
+      "due_on": "2026-02-28",
+      "paid_on": "2026-02-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 264,
+    "fields": {
+      "customer": 43,
+      "number": "ARD-2026-0264",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-14",
+      "due_on": "2026-03-28",
+      "paid_on": "2026-03-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 265,
+    "fields": {
+      "customer": 43,
+      "number": "ARD-2026-0265",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-14",
+      "due_on": "2026-04-28",
+      "paid_on": "2026-04-24"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 266,
+    "fields": {
+      "customer": 43,
+      "number": "ARD-2026-0266",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-14",
+      "due_on": "2026-05-28",
+      "paid_on": "2026-05-27"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 267,
+    "fields": {
+      "customer": 43,
+      "number": "ARD-2026-0267",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-14",
+      "due_on": "2026-06-28",
+      "paid_on": "2026-06-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 268,
+    "fields": {
+      "customer": 43,
+      "number": "ARD-2026-0268",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-14",
+      "due_on": "2026-07-28",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 269,
+    "fields": {
+      "customer": 44,
+      "number": "ARD-2026-0269",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-28",
+      "due_on": "2026-02-11",
+      "paid_on": "2026-02-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 270,
+    "fields": {
+      "customer": 44,
+      "number": "ARD-2026-0270",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-28",
+      "due_on": "2026-03-14",
+      "paid_on": "2026-03-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 271,
+    "fields": {
+      "customer": 44,
+      "number": "ARD-2026-0271",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-28",
+      "due_on": "2026-04-11",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 272,
+    "fields": {
+      "customer": 44,
+      "number": "ARD-2026-0272",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-05-01"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 273,
+    "fields": {
+      "customer": 44,
+      "number": "ARD-2026-0273",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": "2026-06-03"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 274,
+    "fields": {
+      "customer": 44,
+      "number": "ARD-2026-0274",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-07-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 275,
+    "fields": {
+      "customer": 45,
+      "number": "ARD-2026-0275",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-17",
+      "due_on": "2026-01-31",
+      "paid_on": "2026-01-18"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 276,
+    "fields": {
+      "customer": 45,
+      "number": "ARD-2026-0276",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-17",
+      "due_on": "2026-03-03",
+      "paid_on": "2026-02-25"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 277,
+    "fields": {
+      "customer": 45,
+      "number": "ARD-2026-0277",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-17",
+      "due_on": "2026-03-31",
+      "paid_on": "2026-03-23"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 278,
+    "fields": {
+      "customer": 45,
+      "number": "ARD-2026-0278",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-17",
+      "due_on": "2026-05-01",
+      "paid_on": "2026-04-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 279,
+    "fields": {
+      "customer": 45,
+      "number": "ARD-2026-0279",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-17",
+      "due_on": "2026-05-31",
+      "paid_on": "2026-05-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 280,
+    "fields": {
+      "customer": 45,
+      "number": "ARD-2026-0280",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-17",
+      "due_on": "2026-07-01",
+      "paid_on": "2026-06-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 281,
+    "fields": {
+      "customer": 46,
+      "number": "ARD-2026-0281",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-03",
+      "due_on": "2026-01-17",
+      "paid_on": "2026-01-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 282,
+    "fields": {
+      "customer": 46,
+      "number": "ARD-2026-0282",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-03",
+      "due_on": "2026-02-17",
+      "paid_on": "2026-02-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 283,
+    "fields": {
+      "customer": 46,
+      "number": "ARD-2026-0283",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-03",
+      "due_on": "2026-03-17",
+      "paid_on": "2026-03-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 284,
+    "fields": {
+      "customer": 46,
+      "number": "ARD-2026-0284",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-03",
+      "due_on": "2026-04-17",
+      "paid_on": "2026-04-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 285,
+    "fields": {
+      "customer": 46,
+      "number": "ARD-2026-0285",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-03",
+      "due_on": "2026-05-17",
+      "paid_on": "2026-05-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 286,
+    "fields": {
+      "customer": 46,
+      "number": "ARD-2026-0286",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-03",
+      "due_on": "2026-06-17",
+      "paid_on": "2026-06-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 287,
+    "fields": {
+      "customer": 46,
+      "number": "ARD-2026-0287",
+      "amount": "497.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-03",
+      "due_on": "2026-07-17",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 288,
+    "fields": {
+      "customer": 47,
+      "number": "ARD-2026-0288",
+      "amount": "613.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-19",
+      "due_on": "2026-02-02",
+      "paid_on": "2026-02-01"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 289,
+    "fields": {
+      "customer": 47,
+      "number": "ARD-2026-0289",
+      "amount": "613.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-19",
+      "due_on": "2026-03-05",
+      "paid_on": "2026-02-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 290,
+    "fields": {
+      "customer": 47,
+      "number": "ARD-2026-0290",
+      "amount": "613.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-19",
+      "due_on": "2026-04-02",
+      "paid_on": "2026-03-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 291,
+    "fields": {
+      "customer": 47,
+      "number": "ARD-2026-0291",
+      "amount": "642.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-19",
+      "due_on": "2026-05-03",
+      "paid_on": "2026-04-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 292,
+    "fields": {
+      "customer": 47,
+      "number": "ARD-2026-0292",
+      "amount": "613.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-19",
+      "due_on": "2026-06-02",
+      "paid_on": "2026-06-01"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 293,
+    "fields": {
+      "customer": 47,
+      "number": "ARD-2026-0293",
+      "amount": "642.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-19",
+      "due_on": "2026-07-03",
+      "paid_on": "2026-07-01"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 294,
+    "fields": {
+      "customer": 48,
+      "number": "ARD-2026-0294",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jan 2026",
+      "issued_on": "2026-01-12",
+      "due_on": "2026-01-26",
+      "paid_on": "2026-01-19"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 295,
+    "fields": {
+      "customer": 48,
+      "number": "ARD-2026-0295",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-12",
+      "due_on": "2026-02-26",
+      "paid_on": "2026-02-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 296,
+    "fields": {
+      "customer": 48,
+      "number": "ARD-2026-0296",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-12",
+      "due_on": "2026-03-26",
+      "paid_on": "2026-03-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 297,
+    "fields": {
+      "customer": 48,
+      "number": "ARD-2026-0297",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-12",
+      "due_on": "2026-04-26",
+      "paid_on": "2026-04-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 298,
+    "fields": {
+      "customer": 48,
+      "number": "ARD-2026-0298",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-12",
+      "due_on": "2026-05-26",
+      "paid_on": "2026-05-20"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 299,
+    "fields": {
+      "customer": 48,
+      "number": "ARD-2026-0299",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-12",
+      "due_on": "2026-06-26",
+      "paid_on": "2026-06-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 300,
+    "fields": {
+      "customer": 48,
+      "number": "ARD-2026-0300",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-12",
+      "due_on": "2026-07-26",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 301,
+    "fields": {
+      "customer": 50,
+      "number": "ARD-2026-0301",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-04",
+      "due_on": "2026-02-18",
+      "paid_on": "2026-02-15"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 302,
+    "fields": {
+      "customer": 50,
+      "number": "ARD-2026-0302",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-04",
+      "due_on": "2026-03-18",
+      "paid_on": "2026-03-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 303,
+    "fields": {
+      "customer": 50,
+      "number": "ARD-2026-0303",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-04",
+      "due_on": "2026-04-18",
+      "paid_on": "2026-04-05"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 304,
+    "fields": {
+      "customer": 50,
+      "number": "ARD-2026-0304",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-04",
+      "due_on": "2026-05-18",
+      "paid_on": "2026-05-17"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 305,
+    "fields": {
+      "customer": 50,
+      "number": "ARD-2026-0305",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-04",
+      "due_on": "2026-06-18",
+      "paid_on": "2026-06-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 306,
+    "fields": {
+      "customer": 50,
+      "number": "ARD-2026-0306",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-04",
+      "due_on": "2026-07-18",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 307,
+    "fields": {
+      "customer": 51,
+      "number": "ARD-2026-0307",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Feb 2026",
+      "issued_on": "2026-02-23",
+      "due_on": "2026-03-09",
+      "paid_on": "2026-02-26"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 308,
+    "fields": {
+      "customer": 51,
+      "number": "ARD-2026-0308",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-23",
+      "due_on": "2026-04-06",
+      "paid_on": "2026-03-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 309,
+    "fields": {
+      "customer": 51,
+      "number": "ARD-2026-0309",
+      "amount": "410.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-23",
+      "due_on": "2026-05-07",
+      "paid_on": "2026-04-30"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 310,
+    "fields": {
+      "customer": 51,
+      "number": "ARD-2026-0310",
+      "amount": "381.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-23",
+      "due_on": "2026-06-06",
+      "paid_on": "2026-05-28"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 311,
+    "fields": {
+      "customer": 51,
+      "number": "ARD-2026-0311",
+      "amount": "439.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-23",
+      "due_on": "2026-07-07",
+      "paid_on": "2026-07-04"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 312,
+    "fields": {
+      "customer": 52,
+      "number": "ARD-2026-0312",
+      "amount": "1688.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Mar 2026",
+      "issued_on": "2026-03-09",
+      "due_on": "2026-03-23",
+      "paid_on": "2026-03-21"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 313,
+    "fields": {
+      "customer": 52,
+      "number": "ARD-2026-0313",
+      "amount": "1688.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-09",
+      "due_on": "2026-04-23",
+      "paid_on": "2026-04-16"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 314,
+    "fields": {
+      "customer": 52,
+      "number": "ARD-2026-0314",
+      "amount": "1688.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-09",
+      "due_on": "2026-05-23",
+      "paid_on": "2026-05-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 315,
+    "fields": {
+      "customer": 52,
+      "number": "ARD-2026-0315",
+      "amount": "1747.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-09",
+      "due_on": "2026-06-23",
+      "paid_on": "2026-06-12"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 316,
+    "fields": {
+      "customer": 52,
+      "number": "ARD-2026-0316",
+      "amount": "1688.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-09",
+      "due_on": "2026-07-23",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 317,
+    "fields": {
+      "customer": 53,
+      "number": "ARD-2026-0317",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-28",
+      "due_on": "2026-05-12",
+      "paid_on": "2026-05-10"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 318,
+    "fields": {
+      "customer": 53,
+      "number": "ARD-2026-0318",
+      "amount": "526.00",
+      "currency": "USD",
+      "status": "void",
+      "period": "May 2026",
+      "issued_on": "2026-05-28",
+      "due_on": "2026-06-11",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 319,
+    "fields": {
+      "customer": 53,
+      "number": "ARD-2026-0319",
+      "amount": "468.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-28",
+      "due_on": "2026-07-12",
+      "paid_on": "2026-07-08"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 320,
+    "fields": {
+      "customer": 55,
+      "number": "ARD-2026-0320",
+      "amount": "613.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Apr 2026",
+      "issued_on": "2026-04-20",
+      "due_on": "2026-05-04",
+      "paid_on": "2026-05-01"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 321,
+    "fields": {
+      "customer": 55,
+      "number": "ARD-2026-0321",
+      "amount": "584.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-20",
+      "due_on": "2026-06-03",
+      "paid_on": "2026-05-22"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 322,
+    "fields": {
+      "customer": 55,
+      "number": "ARD-2026-0322",
+      "amount": "555.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-20",
+      "due_on": "2026-07-04",
+      "paid_on": "2026-06-29"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 323,
+    "fields": {
+      "customer": 56,
+      "number": "ARD-2026-0323",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-06",
+      "due_on": "2026-05-20",
+      "paid_on": "2026-05-11"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 324,
+    "fields": {
+      "customer": 56,
+      "number": "ARD-2026-0324",
+      "amount": "85.00",
+      "currency": "USD",
+      "status": "overdue",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-06",
+      "due_on": "2026-06-20",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 325,
+    "fields": {
+      "customer": 56,
+      "number": "ARD-2026-0325",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "open",
+      "period": "Jul 2026",
+      "issued_on": "2026-07-06",
+      "due_on": "2026-07-20",
+      "paid_on": null
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 326,
+    "fields": {
+      "customer": 58,
+      "number": "ARD-2026-0326",
+      "amount": "97.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "May 2026",
+      "issued_on": "2026-05-26",
+      "due_on": "2026-06-09",
+      "paid_on": "2026-06-06"
+    }
+  },
+  {
+    "model": "lb.lbinvoice",
+    "pk": 327,
+    "fields": {
+      "customer": 58,
+      "number": "ARD-2026-0327",
+      "amount": "109.00",
+      "currency": "USD",
+      "status": "paid",
+      "period": "Jun 2026",
+      "issued_on": "2026-06-26",
+      "due_on": "2026-07-10",
+      "paid_on": "2026-06-29"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 1,
+    "fields": {
+      "workspace": 1,
+      "customer": 19,
+      "kind": "payment",
+      "label": "Quillon Software paid $526.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-04T11:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 2,
+    "fields": {
+      "workspace": 1,
+      "customer": 48,
+      "kind": "signup",
+      "label": "Fernhall Security started a 14-day trial on Arden Growth",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-12T12:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 3,
+    "fields": {
+      "workspace": 1,
+      "customer": 36,
+      "kind": "payment",
+      "label": "Redfern Insurance paid $1,983.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-12T13:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 4,
+    "fields": {
+      "workspace": 1,
+      "customer": 16,
+      "kind": "payment",
+      "label": "Cartwright & Vale paid $352.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-13T12:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 5,
+    "fields": {
+      "workspace": 1,
+      "customer": 18,
+      "kind": "payment",
+      "label": "Deepfield Robotics paid $1,747.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-17T14:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 6,
+    "fields": {
+      "workspace": 1,
+      "customer": 48,
+      "kind": "upgrade",
+      "label": "Fernhall Security converted to Arden Growth",
+      "mrr_delta": "410.00",
+      "occurred_at": "2026-01-20T15:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 7,
+    "fields": {
+      "workspace": 1,
+      "customer": 1,
+      "kind": "upgrade",
+      "label": "AtlasForge added 6 seats",
+      "mrr_delta": "354.00",
+      "occurred_at": "2026-01-21T15:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 8,
+    "fields": {
+      "workspace": 1,
+      "customer": 20,
+      "kind": "payment",
+      "label": "Rookwood Interactive paid $323.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-21T19:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 9,
+    "fields": {
+      "workspace": 1,
+      "customer": 1,
+      "kind": "payment",
+      "label": "AtlasForge paid $2,927.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-22T09:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 10,
+    "fields": {
+      "workspace": 1,
+      "customer": 45,
+      "kind": "payment",
+      "label": "Clearwater Dental paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-24T17:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 11,
+    "fields": {
+      "workspace": 1,
+      "customer": 25,
+      "kind": "payment",
+      "label": "Foxglove Design paid $97.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-01-25T12:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 12,
+    "fields": {
+      "workspace": 1,
+      "customer": 28,
+      "kind": "payment",
+      "label": "Juniper Freight paid $468.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-02T16:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 13,
+    "fields": {
+      "workspace": 1,
+      "customer": 50,
+      "kind": "signup",
+      "label": "Hollowbrook Cider started a 14-day trial on Arden Starter",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-04T15:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 14,
+    "fields": {
+      "workspace": 1,
+      "customer": 37,
+      "kind": "payment",
+      "label": "Stonebridge Capital paid $1,865.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-05T15:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 15,
+    "fields": {
+      "workspace": 1,
+      "customer": 3,
+      "kind": "upgrade",
+      "label": "Northwind Co moved from Growth to Scale",
+      "mrr_delta": "300.00",
+      "occurred_at": "2026-02-05T17:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 16,
+    "fields": {
+      "workspace": 1,
+      "customer": 2,
+      "kind": "payment",
+      "label": "Kite & Bell paid $555.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-07T08:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 17,
+    "fields": {
+      "workspace": 1,
+      "customer": 46,
+      "kind": "payment",
+      "label": "Drayton Motors paid $468.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-07T13:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 18,
+    "fields": {
+      "workspace": 1,
+      "customer": 50,
+      "kind": "payment",
+      "label": "Hollowbrook Cider paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-08T10:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 19,
+    "fields": {
+      "workspace": 1,
+      "customer": 14,
+      "kind": "payment",
+      "label": "Granton Freight paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-09T11:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 20,
+    "fields": {
+      "workspace": 1,
+      "customer": 50,
+      "kind": "upgrade",
+      "label": "Hollowbrook Cider converted to Arden Starter",
+      "mrr_delta": "85.00",
+      "occurred_at": "2026-02-11T12:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 21,
+    "fields": {
+      "workspace": 1,
+      "customer": 39,
+      "kind": "payment",
+      "label": "Underhill Farms paid $85.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-12T11:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 22,
+    "fields": {
+      "workspace": 1,
+      "customer": 7,
+      "kind": "payment",
+      "label": "Ironvale Group paid $2,160.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-12T11:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 23,
+    "fields": {
+      "workspace": 1,
+      "customer": 9,
+      "kind": "payment",
+      "label": "Marlow Analytics paid $381.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-15T10:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 24,
+    "fields": {
+      "workspace": 1,
+      "customer": 18,
+      "kind": "payment",
+      "label": "Deepfield Robotics paid $1,865.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-16T14:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 25,
+    "fields": {
+      "workspace": 1,
+      "customer": 20,
+      "kind": "churn",
+      "label": "Rookwood Interactive cancelled their subscription",
+      "mrr_delta": "-323.00",
+      "occurred_at": "2026-02-17T10:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 26,
+    "fields": {
+      "workspace": 1,
+      "customer": 11,
+      "kind": "payment",
+      "label": "Pinewatch Media paid $584.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-19T09:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 27,
+    "fields": {
+      "workspace": 1,
+      "customer": 9,
+      "kind": "seat_added",
+      "label": "Marlow Analytics added 2 seats",
+      "mrr_delta": "58.00",
+      "occurred_at": "2026-02-19T14:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 28,
+    "fields": {
+      "workspace": 1,
+      "customer": 6,
+      "kind": "payment",
+      "label": "Brightmoor Studio paid $85.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-19T16:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 29,
+    "fields": {
+      "workspace": 1,
+      "customer": 40,
+      "kind": "payment",
+      "label": "Vantage Freight paid $526.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-22T16:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 30,
+    "fields": {
+      "workspace": 1,
+      "customer": 51,
+      "kind": "signup",
+      "label": "Ivory Lane Fashion started a 14-day trial on Arden Growth",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-23T08:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 31,
+    "fields": {
+      "workspace": 1,
+      "customer": 22,
+      "kind": "payment",
+      "label": "Tanner & Roe paid $97.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-26T12:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 32,
+    "fields": {
+      "workspace": 1,
+      "customer": 8,
+      "kind": "payment",
+      "label": "Copperline Digital paid $497.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-02-28T11:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 33,
+    "fields": {
+      "workspace": 1,
+      "customer": 2,
+      "kind": "seat_added",
+      "label": "Kite & Bell added 4 seats",
+      "mrr_delta": "116.00",
+      "occurred_at": "2026-03-04T14:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 34,
+    "fields": {
+      "workspace": 1,
+      "customer": 51,
+      "kind": "upgrade",
+      "label": "Ivory Lane Fashion converted to Arden Growth",
+      "mrr_delta": "381.00",
+      "occurred_at": "2026-03-04T18:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 35,
+    "fields": {
+      "workspace": 1,
+      "customer": 30,
+      "kind": "payment",
+      "label": "Lundqvist Marine paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-07T15:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 36,
+    "fields": {
+      "workspace": 1,
+      "customer": 52,
+      "kind": "signup",
+      "label": "Jarrow Biotech started a 14-day trial on Arden Scale",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-09T11:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 37,
+    "fields": {
+      "workspace": 1,
+      "customer": 44,
+      "kind": "payment",
+      "label": "Ashbury Grain paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-10T19:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 38,
+    "fields": {
+      "workspace": 1,
+      "customer": 19,
+      "kind": "payment",
+      "label": "Quillon Software paid $526.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-12T10:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 39,
+    "fields": {
+      "workspace": 1,
+      "customer": 18,
+      "kind": "payment",
+      "label": "Deepfield Robotics paid $1,747.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-12T17:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 40,
+    "fields": {
+      "workspace": 1,
+      "customer": 52,
+      "kind": "payment",
+      "label": "Jarrow Biotech paid $1,688.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-13T08:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 41,
+    "fields": {
+      "workspace": 1,
+      "customer": 36,
+      "kind": "payment",
+      "label": "Redfern Insurance paid $1,983.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-15T10:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 42,
+    "fields": {
+      "workspace": 1,
+      "customer": 52,
+      "kind": "upgrade",
+      "label": "Jarrow Biotech converted to Arden Scale",
+      "mrr_delta": "1688.00",
+      "occurred_at": "2026-03-16T15:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 43,
+    "fields": {
+      "workspace": 1,
+      "customer": 41,
+      "kind": "payment",
+      "label": "Westmarch Interactive paid $352.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-16T19:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 44,
+    "fields": {
+      "workspace": 1,
+      "customer": 43,
+      "kind": "payment",
+      "label": "Zephyr Cloudworks paid $555.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-17T17:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 45,
+    "fields": {
+      "workspace": 1,
+      "customer": 31,
+      "kind": "payment",
+      "label": "Mossgate Energy paid $2,219.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-19T19:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 46,
+    "fields": {
+      "workspace": 1,
+      "customer": 6,
+      "kind": "payment",
+      "label": "Brightmoor Studio paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-20T13:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 47,
+    "fields": {
+      "workspace": 1,
+      "customer": 29,
+      "kind": "payment",
+      "label": "Keeler & Sons paid $133.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-21T16:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 48,
+    "fields": {
+      "workspace": 1,
+      "customer": 1,
+      "kind": "payment",
+      "label": "AtlasForge paid $3,045.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-22T15:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 49,
+    "fields": {
+      "workspace": 1,
+      "customer": 45,
+      "kind": "payment",
+      "label": "Clearwater Dental paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-22T19:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 50,
+    "fields": {
+      "workspace": 1,
+      "customer": 24,
+      "kind": "upgrade",
+      "label": "Everline Networks added 8 seats",
+      "mrr_delta": "472.00",
+      "occurred_at": "2026-03-23T09:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 51,
+    "fields": {
+      "workspace": 1,
+      "customer": 8,
+      "kind": "payment",
+      "label": "Copperline Digital paid $497.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-24T13:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 52,
+    "fields": {
+      "workspace": 1,
+      "customer": 25,
+      "kind": "payment",
+      "label": "Foxglove Design paid $121.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-25T15:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 53,
+    "fields": {
+      "workspace": 1,
+      "customer": 15,
+      "kind": "payment",
+      "label": "Bellweather Health paid $2,160.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-27T09:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 54,
+    "fields": {
+      "workspace": 1,
+      "customer": 53,
+      "kind": "signup",
+      "label": "Kestrel Aviation started a 14-day trial on Arden Growth",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-30T19:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 55,
+    "fields": {
+      "workspace": 1,
+      "customer": 5,
+      "kind": "payment",
+      "label": "Halloway & Finch paid $410.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-03-30T19:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 56,
+    "fields": {
+      "workspace": 1,
+      "customer": 27,
+      "kind": "churn",
+      "label": "Inkwell Publishing cancelled their subscription",
+      "mrr_delta": "-85.00",
+      "occurred_at": "2026-04-03T18:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 57,
+    "fields": {
+      "workspace": 1,
+      "customer": 35,
+      "kind": "payment",
+      "label": "Quarrywood Tools paid $85.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-04T08:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 58,
+    "fields": {
+      "workspace": 1,
+      "customer": 46,
+      "kind": "payment",
+      "label": "Drayton Motors paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-04T09:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 59,
+    "fields": {
+      "workspace": 1,
+      "customer": 2,
+      "kind": "payment",
+      "label": "Kite & Bell paid $555.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-06T11:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 60,
+    "fields": {
+      "workspace": 1,
+      "customer": 8,
+      "kind": "downgrade",
+      "label": "Copperline Digital dropped 3 seats",
+      "mrr_delta": "-87.00",
+      "occurred_at": "2026-04-09T13:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 61,
+    "fields": {
+      "workspace": 1,
+      "customer": 53,
+      "kind": "upgrade",
+      "label": "Kestrel Aviation converted to Arden Growth",
+      "mrr_delta": "468.00",
+      "occurred_at": "2026-04-10T10:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 62,
+    "fields": {
+      "workspace": 1,
+      "customer": 52,
+      "kind": "payment",
+      "label": "Jarrow Biotech paid $1,688.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-12T15:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 63,
+    "fields": {
+      "workspace": 1,
+      "customer": 14,
+      "kind": "payment",
+      "label": "Granton Freight paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-13T16:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 64,
+    "fields": {
+      "workspace": 1,
+      "customer": 34,
+      "kind": "payment",
+      "label": "Pemberton Legal paid $410.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-14T17:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 65,
+    "fields": {
+      "workspace": 1,
+      "customer": 48,
+      "kind": "payment",
+      "label": "Fernhall Security paid $410.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-14T19:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 66,
+    "fields": {
+      "workspace": 1,
+      "customer": 18,
+      "kind": "payment",
+      "label": "Deepfield Robotics paid $1,747.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-15T17:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 67,
+    "fields": {
+      "workspace": 1,
+      "customer": 25,
+      "kind": "payment",
+      "label": "Foxglove Design paid $97.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-19T19:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 68,
+    "fields": {
+      "workspace": 1,
+      "customer": 55,
+      "kind": "signup",
+      "label": "Mistral Renewables started a 14-day trial on Arden Growth",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-20T09:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 69,
+    "fields": {
+      "workspace": 1,
+      "customer": 55,
+      "kind": "payment",
+      "label": "Mistral Renewables paid $613.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-24T16:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 70,
+    "fields": {
+      "workspace": 1,
+      "customer": 8,
+      "kind": "payment",
+      "label": "Copperline Digital paid $497.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-26T11:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 71,
+    "fields": {
+      "workspace": 1,
+      "customer": 55,
+      "kind": "upgrade",
+      "label": "Mistral Renewables converted to Arden Growth",
+      "mrr_delta": "555.00",
+      "occurred_at": "2026-04-27T08:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 72,
+    "fields": {
+      "workspace": 1,
+      "customer": 12,
+      "kind": "seat_added",
+      "label": "Orrery Systems added 5 seats",
+      "mrr_delta": "295.00",
+      "occurred_at": "2026-04-27T16:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 73,
+    "fields": {
+      "workspace": 1,
+      "customer": 17,
+      "kind": "payment",
+      "label": "Lantern Row paid $97.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-04-30T13:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 74,
+    "fields": {
+      "workspace": 1,
+      "customer": 22,
+      "kind": "payment",
+      "label": "Tanner & Roe paid $97.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-01T15:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 75,
+    "fields": {
+      "workspace": 1,
+      "customer": 5,
+      "kind": "payment",
+      "label": "Halloway & Finch paid $468.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-01T16:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 76,
+    "fields": {
+      "workspace": 1,
+      "customer": 30,
+      "kind": "payment",
+      "label": "Lundqvist Marine paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-02T10:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 77,
+    "fields": {
+      "workspace": 1,
+      "customer": 2,
+      "kind": "payment",
+      "label": "Kite & Bell paid $613.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-03T12:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 78,
+    "fields": {
+      "workspace": 1,
+      "customer": 19,
+      "kind": "payment",
+      "label": "Quillon Software paid $526.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-05T08:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 79,
+    "fields": {
+      "workspace": 1,
+      "customer": 35,
+      "kind": "payment",
+      "label": "Quarrywood Tools paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-05T13:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 80,
+    "fields": {
+      "workspace": 1,
+      "customer": 53,
+      "kind": "payment",
+      "label": "Kestrel Aviation paid $468.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-06T13:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 81,
+    "fields": {
+      "workspace": 1,
+      "customer": 56,
+      "kind": "signup",
+      "label": "Norbury Print started a 14-day trial on Arden Starter",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-06T16:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 82,
+    "fields": {
+      "workspace": 1,
+      "customer": 16,
+      "kind": "payment",
+      "label": "Cartwright & Vale paid $352.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-11T10:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 83,
+    "fields": {
+      "workspace": 1,
+      "customer": null,
+      "kind": "invite",
+      "label": "Nadia Kessler suspended ilse.bergman@beaconlabs.com",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-11T18:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 84,
+    "fields": {
+      "workspace": 1,
+      "customer": 15,
+      "kind": "downgrade",
+      "label": "Bellweather Health dropped 4 seats",
+      "mrr_delta": "-236.00",
+      "occurred_at": "2026-05-12T09:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 85,
+    "fields": {
+      "workspace": 1,
+      "customer": 26,
+      "kind": "payment",
+      "label": "Harborview Labs paid $497.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-13T11:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 86,
+    "fields": {
+      "workspace": 1,
+      "customer": 52,
+      "kind": "payment",
+      "label": "Jarrow Biotech paid $1,688.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-13T14:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 87,
+    "fields": {
+      "workspace": 1,
+      "customer": 56,
+      "kind": "upgrade",
+      "label": "Norbury Print converted to Arden Starter",
+      "mrr_delta": "85.00",
+      "occurred_at": "2026-05-15T11:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 88,
+    "fields": {
+      "workspace": 1,
+      "customer": 11,
+      "kind": "payment",
+      "label": "Pinewatch Media paid $584.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-18T19:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 89,
+    "fields": {
+      "workspace": 1,
+      "customer": 43,
+      "kind": "payment",
+      "label": "Zephyr Cloudworks paid $526.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-20T09:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 90,
+    "fields": {
+      "workspace": 1,
+      "customer": 47,
+      "kind": "payment",
+      "label": "Elmwood Schools paid $613.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-20T13:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 91,
+    "fields": {
+      "workspace": 1,
+      "customer": 4,
+      "kind": "upgrade",
+      "label": "Verity Labs moved from Starter to Growth",
+      "mrr_delta": "100.00",
+      "occurred_at": "2026-05-20T18:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 92,
+    "fields": {
+      "workspace": 1,
+      "customer": 15,
+      "kind": "payment",
+      "label": "Bellweather Health paid $2,160.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-23T18:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 93,
+    "fields": {
+      "workspace": 1,
+      "customer": 6,
+      "kind": "payment",
+      "label": "Brightmoor Studio paid $85.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-24T14:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 94,
+    "fields": {
+      "workspace": 1,
+      "customer": 58,
+      "kind": "signup",
+      "label": "Pellworth Audio started a 14-day trial on Arden Starter",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-26T15:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 95,
+    "fields": {
+      "workspace": 1,
+      "customer": 22,
+      "kind": "payment",
+      "label": "Tanner & Roe paid $85.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-27T08:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 96,
+    "fields": {
+      "workspace": 1,
+      "customer": 17,
+      "kind": "payment",
+      "label": "Lantern Row paid $73.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-05-27T10:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 97,
+    "fields": {
+      "workspace": 1,
+      "customer": 39,
+      "kind": "churn",
+      "label": "Underhill Farms cancelled their subscription",
+      "mrr_delta": "-85.00",
+      "occurred_at": "2026-05-28T08:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 98,
+    "fields": {
+      "workspace": 1,
+      "customer": 37,
+      "kind": "seat_added",
+      "label": "Stonebridge Capital added 6 seats",
+      "mrr_delta": "354.00",
+      "occurred_at": "2026-06-02T16:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 99,
+    "fields": {
+      "workspace": 1,
+      "customer": 58,
+      "kind": "payment",
+      "label": "Pellworth Audio paid $97.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-03T13:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 100,
+    "fields": {
+      "workspace": 1,
+      "customer": 30,
+      "kind": "payment",
+      "label": "Lundqvist Marine paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-03T16:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 101,
+    "fields": {
+      "workspace": 1,
+      "customer": 58,
+      "kind": "upgrade",
+      "label": "Pellworth Audio converted to Arden Starter",
+      "mrr_delta": "97.00",
+      "occurred_at": "2026-06-05T09:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 102,
+    "fields": {
+      "workspace": 1,
+      "customer": 14,
+      "kind": "payment",
+      "label": "Granton Freight paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-05T14:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 103,
+    "fields": {
+      "workspace": 1,
+      "customer": 37,
+      "kind": "payment",
+      "label": "Stonebridge Capital paid $1,865.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-06T18:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 104,
+    "fields": {
+      "workspace": 1,
+      "customer": 23,
+      "kind": "payment",
+      "label": "Ashgrove Ventures paid $410.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-09T12:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 105,
+    "fields": {
+      "workspace": 1,
+      "customer": 32,
+      "kind": "payment",
+      "label": "Newbury Optics paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-11T09:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 106,
+    "fields": {
+      "workspace": 1,
+      "customer": 26,
+      "kind": "payment",
+      "label": "Harborview Labs paid $526.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-11T14:24:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 107,
+    "fields": {
+      "workspace": 1,
+      "customer": 52,
+      "kind": "payment",
+      "label": "Jarrow Biotech paid $1,747.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-12T08:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 108,
+    "fields": {
+      "workspace": 1,
+      "customer": 50,
+      "kind": "payment",
+      "label": "Hollowbrook Cider paid $85.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-12T13:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 109,
+    "fields": {
+      "workspace": 1,
+      "customer": 16,
+      "kind": "payment",
+      "label": "Cartwright & Vale paid $352.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-13T16:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 110,
+    "fields": {
+      "workspace": 1,
+      "customer": 7,
+      "kind": "payment",
+      "label": "Ironvale Group paid $2,042.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-15T19:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 111,
+    "fields": {
+      "workspace": 1,
+      "customer": 21,
+      "kind": "seat_added",
+      "label": "Silverbeck Logistics added 3 seats",
+      "mrr_delta": "177.00",
+      "occurred_at": "2026-06-16T08:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 112,
+    "fields": {
+      "workspace": 1,
+      "customer": 49,
+      "kind": "signup",
+      "label": "Greymoor Ceramics started a 14-day trial on Arden Starter",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-22T19:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 113,
+    "fields": {
+      "workspace": 1,
+      "customer": 51,
+      "kind": "payment",
+      "label": "Ivory Lane Fashion paid $439.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-26T11:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 114,
+    "fields": {
+      "workspace": 1,
+      "customer": 47,
+      "kind": "payment",
+      "label": "Elmwood Schools paid $642.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-28T16:17:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 115,
+    "fields": {
+      "workspace": 1,
+      "customer": 15,
+      "kind": "payment",
+      "label": "Bellweather Health paid $2,160.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-28T17:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 116,
+    "fields": {
+      "workspace": 1,
+      "customer": 57,
+      "kind": "signup",
+      "label": "Ospreyline Travel started a 14-day trial on Arden Growth",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-29T10:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 117,
+    "fields": {
+      "workspace": 1,
+      "customer": 5,
+      "kind": "payment",
+      "label": "Halloway & Finch paid $468.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-29T11:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 118,
+    "fields": {
+      "workspace": 1,
+      "customer": 10,
+      "kind": "payment",
+      "label": "Sable & Stone paid $97.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-29T19:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 119,
+    "fields": {
+      "workspace": 1,
+      "customer": 55,
+      "kind": "payment",
+      "label": "Mistral Renewables paid $555.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-06-30T17:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 120,
+    "fields": {
+      "workspace": 1,
+      "customer": 54,
+      "kind": "signup",
+      "label": "Larkspur Wellness started a 14-day trial on Arden Starter",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-07-01T16:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 121,
+    "fields": {
+      "workspace": 1,
+      "customer": 7,
+      "kind": "upgrade",
+      "label": "Ironvale Group added 5 seats",
+      "mrr_delta": "295.00",
+      "occurred_at": "2026-07-02T15:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 122,
+    "fields": {
+      "workspace": 1,
+      "customer": 58,
+      "kind": "payment",
+      "label": "Pellworth Audio paid $109.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-07-05T12:03:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 123,
+    "fields": {
+      "workspace": 1,
+      "customer": 37,
+      "kind": "payment",
+      "label": "Stonebridge Capital paid $1,865.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-07-05T16:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 124,
+    "fields": {
+      "workspace": 1,
+      "customer": 53,
+      "kind": "payment",
+      "label": "Kestrel Aviation paid $468.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-07-06T17:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 125,
+    "fields": {
+      "workspace": 1,
+      "customer": 12,
+      "kind": "payment",
+      "label": "Orrery Systems paid $2,455.00",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-07-07T08:51:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 126,
+    "fields": {
+      "workspace": 1,
+      "customer": 23,
+      "kind": "downgrade",
+      "label": "Ashgrove Ventures dropped 2 seats",
+      "mrr_delta": "-58.00",
+      "occurred_at": "2026-07-08T16:46:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 127,
+    "fields": {
+      "workspace": 1,
+      "customer": null,
+      "kind": "invite",
+      "label": "Nadia Kessler invited elise.vandermeer@beaconlabs.com as Member",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-07-09T11:38:00Z"
+    }
+  },
+  {
+    "model": "lb.lbevent",
+    "pk": 128,
+    "fields": {
+      "workspace": 1,
+      "customer": null,
+      "kind": "invite",
+      "label": "Tom Ainsworth invited gabriel.nunes@beaconlabs.com as Member",
+      "mrr_delta": "0.00",
+      "occurred_at": "2026-07-11T10:51:00Z"
+    }
+  }
+]

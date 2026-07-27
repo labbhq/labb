@@ -1,0 +1,64 @@
+<c-vars :plans="[]" :groups="[]" />
+
+<div class="overflow-x-auto rounded-lg border border-base-300">
+    <c-lb.table class="w-full">
+
+        <thead>
+            <tr>
+                <th class="w-2/5 bg-base-100"></th>
+                {% for plan in plans %}
+                <th class="align-top {% if plan.featured %}bg-primary/5{% else %}bg-base-100{% endif %}">
+                    <div class="flex flex-col gap-2 py-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-base font-semibold">{{ plan.name }}</span>
+                            {% if plan.featured %}
+                            <c-lb.badge variant="primary" size="xs">Popular</c-lb.badge>
+                            {% endif %}
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-sm font-medium text-base-content/70">$</span>
+                            <span
+                                id="matrix-price-{{ plan.name|lower }}"
+                                class="text-3xl font-bold tabular-nums"
+                                data-text="$period.annual ? '{{ plan.annual }}' : '{{ plan.monthly }}'"
+                            >{{ plan.monthly }}</span>
+                            <span
+                                class="text-xs font-normal text-base-content/50"
+                                data-text="$period.suffix"
+                            >/month</span>
+                        </div>
+                        <p class="text-xs font-normal text-base-content/50">{{ plan.tagline }}</p>
+                        {% if plan.featured %}
+                        <c-lb.button size="sm" variant="primary">{{ plan.cta }}</c-lb.button>
+                        {% else %}
+                        <c-lb.button size="sm" btnStyle="outline">{{ plan.cta }}</c-lb.button>
+                        {% endif %}
+                    </div>
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for group in groups %}
+            <tr>
+                <th
+                    colspan="4"
+                    class="bg-base-200 text-xs uppercase tracking-wider text-base-content/50"
+                >{{ group.name }}</th>
+            </tr>
+            {% for row in group.rows %}
+            <tr class="hover:bg-base-200/40">
+                <td class="text-sm font-medium">{{ row.label }}</td>
+                {% for value in row.values %}
+                <td class="text-center">
+                    <c-plan-matrix.cell :value=value />
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+
+    </c-lb.table>
+</div>

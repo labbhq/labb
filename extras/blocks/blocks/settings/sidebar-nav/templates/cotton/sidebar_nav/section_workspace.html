@@ -1,0 +1,60 @@
+<c-vars :workspace="{}" :regions="[]" />
+
+<c-sidebar-nav.panel
+    title="Workspace"
+    desc="What your team signs in to, and where their revenue data is stored.">
+
+    <c-slot name="actions">
+        <c-lb.button variant="primary" size="sm">Save changes</c-lb.button>
+    </c-slot>
+
+    <div class="grid sm:grid-cols-2 gap-5">
+        <div>
+            <label class="label label-text text-sm font-medium mb-1">Workspace name</label>
+            <c-lb.input type="text" class="w-full" value="{{ workspace.name }}" />
+        </div>
+
+        <div>
+            <label class="label label-text text-sm font-medium mb-1">
+                Address <span class="text-base-content/40 font-normal">(arden.app/…)</span>
+            </label>
+            <c-lb.input type="text" class="w-full font-mono" value="{{ workspace.slug }}" />
+        </div>
+
+        <div>
+            <label class="label label-text text-sm font-medium mb-1">Billing email</label>
+            <c-lb.input type="email" class="w-full" value="{{ workspace.billing_email }}" />
+        </div>
+
+        <div>
+            <label class="label label-text text-sm font-medium mb-1">Data region</label>
+            <c-lb.select class="w-full">
+                {% for value, label in regions %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </c-lb.select>
+        </div>
+    </div>
+
+    <div class="rounded-box border border-base-300 divide-y divide-base-300">
+        <div class="flex items-center justify-between gap-4 p-4">
+            <div>
+                <div class="text-sm font-medium">Reporting currency</div>
+                <div class="text-xs text-base-content/55 mt-0.5">
+                    Every figure in Arden is shown in {{ workspace.currency }}, converted daily at the ECB rate.
+                </div>
+            </div>
+            <c-lb.badge size="sm" style="outline">{{ workspace.currency }}</c-lb.badge>
+        </div>
+        <div class="flex items-center justify-between gap-4 p-4">
+            <div>
+                <div class="text-sm font-medium">Close the workspace</div>
+                <div class="text-xs text-base-content/55 mt-0.5">
+                    Exports everything to CSV, then deletes it after 30 days.
+                </div>
+            </div>
+            <c-lb.button variant="error" btnStyle="ghost" size="sm">Close</c-lb.button>
+        </div>
+    </div>
+
+</c-sidebar-nav.panel>

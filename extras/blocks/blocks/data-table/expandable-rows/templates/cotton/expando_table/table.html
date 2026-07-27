@@ -1,0 +1,33 @@
+<c-vars :customers="[]" />
+
+{% if customers %}
+<div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+    <c-lb.table size="sm" class="align-middle">
+        <thead>
+            <tr class="border-base-300">
+                <th class="w-8"></th>
+                <th class="font-medium text-base-content/50">Account</th>
+                <th class="font-medium text-base-content/50">Plan</th>
+                <th class="font-medium text-base-content/50">Status</th>
+                <th class="font-medium text-base-content/50 text-end">MRR</th>
+                <th class="font-medium text-base-content/50 text-end">Seats</th>
+                <th class="font-medium text-base-content/50 text-end">Renews</th>
+            </tr>
+        </thead>
+        <tbody id="expando-rows">
+            {% for customer in customers %}
+            <c-expando-table.row :customer=customer />
+            <c-expando-table.detail :customer=customer />
+            {% endfor %}
+        </tbody>
+    </c-lb.table>
+</div>
+{% else %}
+<div class="rounded-box border border-dashed border-base-300 bg-base-100">
+    <c-expando-table.empty
+        id="expando-accounts-empty"
+        icon="rmx.building"
+        title="No accounts yet"
+        body="Arden starts billing the moment an account lands here. Add the first one, or import the book you already have." />
+</div>
+{% endif %}

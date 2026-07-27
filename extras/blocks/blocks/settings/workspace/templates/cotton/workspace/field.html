@@ -1,0 +1,16 @@
+<c-vars label="" hint="" error="" required validateTo="" on="input__debounce.500ms" />
+
+<c-lbr.post :to=validateTo tag="div" on="{{ on }}" class="flex flex-col">
+
+    <label class="label label-text text-sm font-medium mb-1">
+        {{ label }}{% if required %} <span class="text-error">*</span>{% endif %}
+        {% if hint %}<span class="text-base-content/40 font-normal">{{ hint }}</span>{% endif %}
+    </label>
+
+    {{ slot }}
+
+    {% if error %}
+    <p class="text-error text-xs mt-1">{{ error }}</p>
+    {% endif %}
+
+</c-lbr.post>

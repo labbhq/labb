@@ -1,0 +1,40 @@
+<c-vars :signals="{}" :status_choices="[]" />
+
+<div class="mt-6 flex flex-wrap items-center gap-2">
+
+    <c-lbr.get
+        to="block_data_table_customers:index"
+        on="input__debounce.300ms"
+        before="$page=1"
+        class="flex-1 min-w-56">
+        <c-lb.input
+            type="search"
+            placeholder="Search company, contact, industry…"
+            class="w-full"
+            data-lbb-start
+            :ghost="False"
+            :validate="False"
+            :bind=signals.fields.q />
+    </c-lbr.get>
+
+    <c-lbr.get to="block_data_table_customers:index" on="change" before="$page=1">
+        <c-lb.select :validate="False" :bind=signals.fields.status class="w-40">
+            <option value="">All statuses</option>
+            {% for value, label in status_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </c-lb.select>
+    </c-lbr.get>
+
+    <div class="flex items-center gap-2 ms-auto" data-show="Object.values($selected).some(Boolean)">
+        <span
+            class="text-sm text-base-content/60 tabular-nums"
+            data-text="Object.values($selected).filter(Boolean).length + ' selected'"></span>
+        <c-lbr.post to="block_data_table_customers:bulk_delete" tag="div" on="click">
+            <c-lb.button type="button" variant="error" btnStyle="soft" size="sm" icon="rmx.delete-bin">
+                Delete
+            </c-lb.button>
+        </c-lbr.post>
+    </div>
+
+</div>

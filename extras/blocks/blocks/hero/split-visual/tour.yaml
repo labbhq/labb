@@ -1,0 +1,39 @@
+steps:
+  - title: A hero that ships no JavaScript
+    file: templates/pages/index.html
+    match: "<main"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      The whole block is server-rendered markup. There is no script tag, no
+      bundle and no hydration step — Datastar only loads on pages that ask for
+      it, and this page never does.
+
+  - title: The product shot is markup, not an image
+    file: templates/cotton/split_visual/shot.html
+    match: "<c-lb.mockup-browser"
+    teaches: [theming]
+    docs: [ui/components/mockup-browser]
+    body: |
+      Browser chrome around a real Arden dashboard built from components. It
+      weighs nothing, stays sharp at any density, and recolours with the theme —
+      which a screenshot cannot do.
+
+  - title: Colour comes from tokens, never from hex
+    file: templates/cotton/split_visual/shot.html
+    match: "border border-base-300/60 bg-base-200/40"
+    teaches: [theming]
+    docs: [ui/theming]
+    body: |
+      The frame behind the shot is a hairline and a wash over theme tokens. Swap
+      the daisyUI theme and it follows. A fixed colour here would look deliberate
+      in exactly one theme and broken in the other thirty-four.
+
+  - title: Say something beyond the headline
+    file: templates/pages/index.html
+    match: "<c-split-visual.proof"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      A headline and two buttons is a template. The stat row and the trust line
+      are what make it a page — and they cost no JavaScript either.

@@ -1,0 +1,51 @@
+<c-vars :currencies="[]" />
+
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Billing</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            Arden reports every figure in one currency, and sends invoices to one person.
+            Both are easy to change later.
+        </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+        <c-vertical-steps.field label="Reporting currency">
+            <c-lb.select id="vt-currency" class="w-full" bind="form.currency">
+                {% for value, label in currencies %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </c-lb.select>
+        </c-vertical-steps.field>
+
+        <c-vertical-steps.field label="Billing contact" hint="(where invoices go)">
+            <c-lb.input
+                id="vt-contact"
+                type="email"
+                placeholder="finance@veritylabs.io"
+                class="w-full"
+                bind="form.contact" />
+        </c-vertical-steps.field>
+    </div>
+
+    <div class="rounded-box border border-base-300 divide-y divide-base-300">
+        <div class="flex items-center justify-between p-4">
+            <div>
+                <div class="text-sm font-medium">Fourteen day trial</div>
+                <div class="text-xs text-base-content/55 mt-0.5">No card until day fifteen.</div>
+            </div>
+            <c-lb.badge variant="success" style="soft" size="sm">Included</c-lb.badge>
+        </div>
+        <div class="flex items-center justify-between p-4">
+            <div>
+                <div class="text-sm font-medium">Multi-currency customers</div>
+                <div class="text-xs text-base-content/55 mt-0.5">
+                    Converted daily at the ECB rate, with the original on every invoice.
+                </div>
+            </div>
+            <c-lb.badge style="soft" size="sm">Automatic</c-lb.badge>
+        </div>
+    </div>
+
+</div>
