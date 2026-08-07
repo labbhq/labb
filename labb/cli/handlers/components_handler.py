@@ -8,6 +8,7 @@ from rich.table import Table
 from rich.tree import Tree
 
 from ...components import ComponentRegistry
+from ...components.registry import GUIDE_EXAMPLES_DIR
 
 console = Console()
 
@@ -215,9 +216,26 @@ def _list_all_examples(registry: ComponentRegistry):
             f"  [cyan]{component}[/cyan] - {example_count} example{'s' if example_count != 1 else ''}"
         )
 
+    _print_guide_examples_summary(registry)
+
     console.print(
         "\n[dim]Use 'labb components ex <component>' to see examples for a specific component[/dim]"
     )
+
+
+def _print_guide_examples_summary(registry: ComponentRegistry):
+    """Guide examples are not components, so they get their own line."""
+    topics = registry.get_guide_example_topics()
+    if not topics:
+        return
+
+    total = sum(len(names) for names in topics.values())
+    console.print(
+        f"\n[bold blue]📖 Guide examples ({total})[/bold blue]"
+        f" [dim]not components; reference as guide/<topic>/<name>[/dim]"
+    )
+    for topic, names in topics.items():
+        console.print(f"  [magenta]guide/{topic}[/magenta] - {len(names)}")
 
 
 def _list_component_examples(registry: ComponentRegistry, component: str):
@@ -281,10 +299,24 @@ def _show_examples_tree(registry: ComponentRegistry):
             title = registry.get_example_title_from_name(example_name)
             component_branch.add(f"[green]{example_name}[/green] - {title}")
 
+    guide_topics = registry.get_guide_example_topics()
+    guide_total = sum(len(names) for names in guide_topics.values())
+    if guide_topics:
+        guide_branch = tree.add(
+            f"[magenta]guide[/magenta] [dim]({guide_total} example"
+            f"{'s' if guide_total != 1 else ''}, not components)[/dim]"
+        )
+        for topic, names in guide_topics.items():
+            topic_branch = guide_branch.add(f"[magenta]{topic}[/magenta]")
+            for name in names:
+                title = registry.get_example_title_from_name(name)
+                topic_branch.add(f"[green]{name}[/green] - {title}")
+
     console.print("\n")
     console.print(tree)
     console.print(
-        f"\n[dim]Total: {total_examples} examples across {len(components_with_examples)} components[/dim]"
+        f"\n[dim]Total: {total_examples} examples across {len(components_with_examples)} components"
+        f"{f', plus {guide_total} guide examples' if guide_total else ''}[/dim]"
     )
     console.print(
         "[dim]Use 'labb components ex <component> <example>' to view specific examples[/dim]"
@@ -298,7 +330,10 @@ def _show_multiple_examples(
 
     # Check if component has examples
     available_components = registry.get_available_components_with_examples()
-    if component not in available_components:
+    is_guide_topic = component.split("/")[0] == GUIDE_EXAMPLES_DIR and bool(
+        registry.get_component_example_names(component)
+    )
+    if component not in available_components and not is_guide_topic:
         console.print(f"[red]❌ Component '{component}' has no examples[/red]")
 
         if available_components:

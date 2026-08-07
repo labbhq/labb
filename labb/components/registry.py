@@ -5,6 +5,10 @@ import yaml
 
 SCHEMA_DIR = Path(__file__).parent / "schema"
 
+# Guide-only examples live under lb-examples/guide/<topic>/. They are not
+# components, so the component listings skip this directory.
+GUIDE_EXAMPLES_DIR = "guide"
+
 
 class ComponentRegistry:
     """Registry for loading and managing component specifications from multiple schema files"""
@@ -81,15 +85,40 @@ class ComponentRegistry:
     def get_available_components_with_examples(self) -> List[str]:
         """Get list of components that have examples by scanning the file system"""
         try:
-            from pathlib import Path
-
-            examples_dir = Path(__file__).parent.parent / "templates" / "lb-examples"
+            examples_dir = self._examples_dir()
             if not examples_dir.exists():
                 return []
 
-            return [d.name for d in examples_dir.iterdir() if d.is_dir()]
+            return [
+                d.name
+                for d in examples_dir.iterdir()
+                if d.is_dir() and d.name != GUIDE_EXAMPLES_DIR
+            ]
         except Exception:
             return []
+
+    def get_guide_example_topics(self) -> Dict[str, List[str]]:
+        """Guide-only examples, keyed by topic.
+
+        These are not components, so they stay out of the component listings.
+        Reference them as `guide/<topic>/<name>`.
+        """
+        try:
+            guide_dir = self._examples_dir() / GUIDE_EXAMPLES_DIR
+            if not guide_dir.exists():
+                return {}
+
+            return {
+                topic.name: sorted(f.stem for f in topic.glob("*.html"))
+                for topic in sorted(guide_dir.iterdir())
+                if topic.is_dir()
+            }
+        except Exception:
+            return {}
+
+    @staticmethod
+    def _examples_dir() -> Path:
+        return Path(__file__).parent.parent / "templates" / "lb-examples"
 
     def get_component_example_names(self, component_name: str) -> List[str]:
         """Get list of example names for a component by scanning the file system"""
