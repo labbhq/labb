@@ -397,3 +397,22 @@ def get_blog_posts(context, doc_name="blog"):
     posts.sort(key=sort_key, reverse=True)
 
     return posts
+
+
+@register.simple_tag
+def blocks_by_ref(refs):
+    """Resolve `vendor/category/slug` refs via LABB_DOCS["blocks"]["resolver"]."""
+    from django.utils.module_loading import import_string
+
+    dotted = (settings.LABB_DOCS.get("blocks") or {}).get("resolver")
+    if not dotted:
+        return []
+
+    if isinstance(refs, str):
+        refs = [r for r in (part.strip() for part in refs.split(",")) if r]
+
+    try:
+        return import_string(dotted)(list(refs))
+    except Exception:
+        # A renamed block or misconfigured resolver must not 500 the page.
+        return []

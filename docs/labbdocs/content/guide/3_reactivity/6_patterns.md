@@ -37,11 +37,7 @@ Do not sync free-text fields such as names or email addresses because the values
 
 `syncQuery` stores an opaque value. For a readable URL such as `?q=atlas&sort=mrr&page=2`, use [`c-lbr.replace-url`]({% doc_url '5_references/7_reactivity_reference.md' 'guide' %}) and load it with `Signals.from_query`. Use one approach for a page, not both.
 
-<c-lbdocs.block_grid :blocks="[
-  {'name': 'With filters', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#with-filters', 'thumbnail': '/static/lb/data-table/with-filters/thumbnails/with-filters.light.png', 'thumbnail_dark': '/static/lb/data-table/with-filters/thumbnails/with-filters.dark.png'},
-  {'name': 'Customers', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#customers', 'thumbnail': '/static/lb/data-table/customers/thumbnails/customers.light.png', 'thumbnail_dark': '/static/lb/data-table/customers/thumbnails/customers.dark.png'},
-  {'name': 'Expandable rows', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#expandable-rows', 'thumbnail': '/static/lb/data-table/expandable-rows/thumbnails/expandable-rows.light.png', 'thumbnail_dark': '/static/lb/data-table/expandable-rows/thumbnails/expandable-rows.dark.png'}
-]" />
+<c-lbdocs.block_grid refs="lb/data-table/with-filters, lb/data-table/customers, lb/data-table/expandable-rows" />
 
 ## Namespace signals in reusable widgets
 
@@ -150,8 +146,4 @@ Do not combine raw `data-signals` and `$` props on the same element. This is the
   <c-lbdocs.doc_card title="Composition" summary="Habits that keep a reactive template readable" href="{% doc_url '2_building_uis/1_composition.md' 'guide' %}" icon="rmx.compasses-2" />
 </c-lbdocs.doc_card.grid>
 
-<c-lbdocs.block_grid :blocks="[
-  {'name': 'Vertical steps', 'type': 'fullstack', 'detail_url': '/blocks/wizard/#vertical-steps', 'thumbnail': '/static/lb/wizard/vertical-steps/thumbnails/vertical-steps.light.png', 'thumbnail_dark': '/static/lb/wizard/vertical-steps/thumbnails/vertical-steps.dark.png'},
-  {'name': 'Progress minimal', 'type': 'fullstack', 'detail_url': '/blocks/wizard/#progress-minimal', 'thumbnail': '/static/lb/wizard/progress-minimal/thumbnails/progress-minimal.light.png', 'thumbnail_dark': '/static/lb/wizard/progress-minimal/thumbnails/progress-minimal.dark.png'},
-  {'name': 'With summary', 'type': 'fullstack', 'detail_url': '/blocks/wizard/#with-summary', 'thumbnail': '/static/lb/wizard/with-summary/thumbnails/with-summary.light.png', 'thumbnail_dark': '/static/lb/wizard/with-summary/thumbnails/with-summary.dark.png'}
-]" />
+<c-lbdocs.block_grid refs="lb/wizard/vertical-steps, lb/wizard/progress-minimal, lb/wizard/with-summary" />

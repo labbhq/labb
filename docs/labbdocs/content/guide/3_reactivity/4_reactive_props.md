@@ -40,8 +40,4 @@ Continue to [Server actions]({% doc_url '3_reactivity/5_server_actions.md' 'guid
 
 Props can read nested signals, so one object can provide values to several components. Replace the object to update those values together. [Patterns]({% doc_url '3_reactivity/6_patterns.md' 'guide' %}) shows the approach and the [Reference]({% doc_url '5_references/7_reactivity_reference.md' 'guide' %}) lists the syntax.
 
-<c-lbdocs.block_grid :blocks="[
-  {'name': 'Overview', 'type': 'fullstack', 'detail_url': '/blocks/dashboard/#overview', 'thumbnail': '/static/lb/dashboard/overview/thumbnails/overview.light.png', 'thumbnail_dark': '/static/lb/dashboard/overview/thumbnails/overview.dark.png'},
-  {'name': 'Compact KPI', 'type': 'fe', 'detail_url': '/blocks/dashboard/#compact-kpi', 'thumbnail': '/static/lb/dashboard/compact-kpi/thumbnails/compact-kpi.light.png', 'thumbnail_dark': '/static/lb/dashboard/compact-kpi/thumbnails/compact-kpi.dark.png'},
-  {'name': 'Split charts', 'type': 'fe', 'detail_url': '/blocks/dashboard/#split-charts', 'thumbnail': '/static/lb/dashboard/split-charts/thumbnails/split-charts.light.png', 'thumbnail_dark': '/static/lb/dashboard/split-charts/thumbnails/split-charts.dark.png'}
-]" />
+<c-lbdocs.block_grid refs="lb/dashboard/overview, lb/dashboard/compact-kpi, lb/dashboard/split-charts" />

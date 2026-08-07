@@ -25,11 +25,7 @@ def index(request):
 
 The same view serves the first page load and later updates.
 
-<c-lbdocs.block_grid :blocks="[
-  {'name': 'Customers', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#customers', 'thumbnail': '/static/lb/data-table/customers/thumbnails/customers.light.png', 'thumbnail_dark': '/static/lb/data-table/customers/thumbnails/customers.dark.png'},
-  {'name': 'With filters', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#with-filters', 'thumbnail': '/static/lb/data-table/with-filters/thumbnails/with-filters.light.png', 'thumbnail_dark': '/static/lb/data-table/with-filters/thumbnails/with-filters.dark.png'},
-  {'name': 'Card grid', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#card-grid', 'thumbnail': '/static/lb/data-table/card-grid/thumbnails/card-grid.light.png', 'thumbnail_dark': '/static/lb/data-table/card-grid/thumbnails/card-grid.dark.png'}
-]" />
+<c-lbdocs.block_grid refs="lb/data-table/customers, lb/data-table/with-filters, lb/data-table/card-grid" />
 
 ## Reading signals on the server
 

@@ -7,3 +7,5 @@ provides:
     - templates/**/*.html
     literals:
     - templates/**/*.html
+    imports:
+    - css/blocks.css

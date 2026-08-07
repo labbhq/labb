@@ -52,8 +52,4 @@ labb icons search "arrow,heart"
   <c-lbdocs.doc_card title="Components" summary="Every component, with live examples" href="{% url 'ui_docs' %}" icon="rmx.layout-grid" />
 </c-lbdocs.doc_card.grid>
 
-<c-lbdocs.block_grid :blocks="[
-  {'name': 'Profile', 'type': 'fullstack', 'detail_url': '/blocks/settings/#profile', 'thumbnail': '/static/lb/settings/profile/thumbnails/profile.light.png', 'thumbnail_dark': '/static/lb/settings/profile/thumbnails/profile.dark.png'},
-  {'name': 'Team members', 'type': 'fullstack', 'detail_url': '/blocks/settings/#team-members', 'thumbnail': '/static/lb/settings/team-members/thumbnails/team-members.light.png', 'thumbnail_dark': '/static/lb/settings/team-members/thumbnails/team-members.dark.png'},
-  {'name': 'Workspace', 'type': 'fullstack', 'detail_url': '/blocks/settings/#workspace', 'thumbnail': '/static/lb/settings/workspace/thumbnails/workspace.light.png', 'thumbnail_dark': '/static/lb/settings/workspace/thumbnails/workspace.dark.png'}
-]" />
+<c-lbdocs.block_grid refs="lb/settings/profile, lb/settings/team-members, lb/settings/workspace" />

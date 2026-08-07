@@ -120,11 +120,7 @@ Open [http://localhost:8000](http://localhost:8000). If the page renders without
 
 You now have the basic labb workflow: keep your Django view, compose the template from components, and run the CSS watcher during development. Browse the component docs to expand the page, or extract repeated markup into a component of your own.
 
-<c-lbdocs.block_grid :blocks="[
-  {'name': 'Centred bold', 'type': 'fe', 'detail_url': '/blocks/hero/#centred-bold', 'thumbnail': '/static/lb/hero/centred-bold/thumbnails/centred-bold.light.png', 'thumbnail_dark': '/static/lb/hero/centred-bold/thumbnails/centred-bold.dark.png'},
-  {'name': 'App screenshot', 'type': 'fe', 'detail_url': '/blocks/hero/#app-screenshot', 'thumbnail': '/static/lb/hero/app-screenshot/thumbnails/app-screenshot.light.png', 'thumbnail_dark': '/static/lb/hero/app-screenshot/thumbnails/app-screenshot.dark.png'},
-  {'name': 'Split visual', 'type': 'fe', 'detail_url': '/blocks/hero/#split-visual', 'thumbnail': '/static/lb/hero/split-visual/thumbnails/split-visual.light.png', 'thumbnail_dark': '/static/lb/hero/split-visual/thumbnails/split-visual.dark.png'}
-]" />
+<c-lbdocs.block_grid refs="lb/hero/centred-bold, lb/hero/app-screenshot, lb/hero/split-visual" />
 
 ## Related
 

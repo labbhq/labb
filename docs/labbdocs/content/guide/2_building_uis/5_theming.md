@@ -158,10 +158,6 @@ Import these functions from `labb.shortcuts`.
   <c-lbdocs.doc_card title="settings.py" summary="DEFAULT_THEME and the rest of LABB_SETTINGS" href="{% doc_url '5_references/2_django_settings.md' 'guide' %}" icon="rmx.settings-3" />
 </c-lbdocs.doc_card.grid>
 
-<c-lbdocs.block_grid :blocks="[
-  {'name': 'Highlight tiers', 'type': 'fe', 'detail_url': '/blocks/pricing/#highlight-tiers', 'thumbnail': '/static/lb/pricing/highlight-tiers/thumbnails/highlight-tiers.light.png', 'thumbnail_dark': '/static/lb/pricing/highlight-tiers/thumbnails/highlight-tiers.dark.png'},
-  {'name': 'Comparison table', 'type': 'fe', 'detail_url': '/blocks/pricing/#comparison-table', 'thumbnail': '/static/lb/pricing/comparison-table/thumbnails/comparison-table.light.png', 'thumbnail_dark': '/static/lb/pricing/comparison-table/thumbnails/comparison-table.dark.png'},
-  {'name': 'Three tier toggle', 'type': 'fe', 'detail_url': '/blocks/pricing/#three-tier-toggle', 'thumbnail': '/static/lb/pricing/three-tier-toggle/thumbnails/three-tier-toggle.light.png', 'thumbnail_dark': '/static/lb/pricing/three-tier-toggle/thumbnails/three-tier-toggle.dark.png'}
-]" />
+<c-lbdocs.block_grid refs="lb/pricing/highlight-tiers, lb/pricing/comparison-table, lb/pricing/three-tier-toggle" />
 
 Useful references include <a href="https://daisyui.com/docs/themes/" target="_blank">daisyUI themes</a>, the <a href="https://daisyui.com/theme-generator/" target="_blank">theme generator</a>, and an <a href="https://oklch.com/" target="_blank">OKLCH colour picker</a>.
