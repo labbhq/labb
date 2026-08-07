@@ -27,7 +27,7 @@
             id="role-{{ member.key }}"
             size="sm"
             class="w-36"
-            bind="roles.{{ member.key }}"
+            bind="$roles.{{ member.key }}"
         >
             {% for value, label in role_options %}
             <option value="{{ value }}" {% if value == member.role %}selected{% endif %}>{{ label }}</option>

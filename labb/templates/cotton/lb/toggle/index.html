@@ -11,6 +11,6 @@
     class="{{ rx.classes }}"
     {% if checked %}checked{% endif %}
     {% if disabled %}disabled{% endif %}
-    {% if bind %}data-bind:{{ bind.path|default:bind }}{% endif %}
+    {% if bind %}data-bind:{{ bind|lbr_bind_path }}{% endif %}
     {{ rx.attrs }}
 />

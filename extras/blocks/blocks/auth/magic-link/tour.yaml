@@ -11,7 +11,7 @@ steps:
 
   - title: The email input writes into the signal
     file: templates/cotton/magic_link/form.html
-    match: 'bind="email"'
+    match: 'bind="$email"'
     teaches: [signals]
     docs: [reactivity/binding]
     body: |

@@ -12,7 +12,7 @@
 
     <div class="grid sm:grid-cols-2 gap-4">
         <c-vertical-steps.field label="Reporting currency">
-            <c-lb.select id="vt-currency" class="w-full" bind="form.currency">
+            <c-lb.select id="vt-currency" class="w-full" bind="$form.currency">
                 {% for value, label in currencies %}
                 <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}
@@ -25,7 +25,7 @@
                 type="email"
                 placeholder="finance@veritylabs.io"
                 class="w-full"
-                bind="form.contact" />
+                bind="$form.contact" />
         </c-vertical-steps.field>
     </div>
 

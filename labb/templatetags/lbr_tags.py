@@ -114,6 +114,7 @@ def _build_datastar_js_obj(paths):
 
     e.g. ["filters.q", "page"] → '{"filters":{"q":$filters.q},"page":$page}'
     """
+
     def _nest(d):
         parts = []
         for k, v in d.items():
@@ -134,11 +135,26 @@ def _build_datastar_js_obj(paths):
     return "{" + _nest(obj) + "}"
 
 
+@register.filter
+def lbr_bind_path(bind):
+    """Signal path for a form component's `bind` prop.
+
+    Accepts a schema field (`:bind=signals.fields.q`), a bare path
+    (`bind="filters.q"`), or a `$`-prefixed path (`bind="$filters.q"`). The
+    `$` form matches how signals are named everywhere else; the bare form
+    predates it and still works.
+    """
+    path = getattr(bind, "path", None) or bind
+    if not isinstance(path, str):
+        path = str(path)
+    return path[1:] if path.startswith("$") else path
+
 
 @register.filter
 def lbr_signals_json(schema):
     """Convert a Signals instance to a JSON string for data-signals='...'."""
     from labb.signals import Signals
+
     if not isinstance(schema, Signals):
         return mark_safe("{}")
     return mark_safe(_safe_json(schema.to_signals_dict()))
@@ -148,6 +164,7 @@ def lbr_signals_json(schema):
 def lbr_query_sync_js(attrs, schema=""):
     """JS for data-on-signal-patch — writes signals to URL as ?<key>=<encoded>."""
     from labb.signals import Signals
+
     if isinstance(schema, Signals):
         paths = [field.path for field in schema._fields.values()]
     else:
@@ -161,20 +178,22 @@ def lbr_query_sync_js(attrs, schema=""):
         # Each signal path becomes its own ?<key>.<path>=<value> param.
         # $path is a Datastar signal ref; URLSearchParams handles value encoding.
         # Empty/null signals are skipped so the URL only carries active state.
-        sets_parts = [f'if(${p}!=null&&${p}!=="")p.set("{key}.{p}",${p})' for p in paths]
+        sets_parts = [
+            f'if(${p}!=null&&${p}!=="")p.set("{key}.{p}",${p})' for p in paths
+        ]
         sets = ";".join(sets_parts)
         js = (
-            f'(function(){{var p=new URLSearchParams();{sets};'
-            f'var s=p.toString();'
+            f"(function(){{var p=new URLSearchParams();{sets};"
+            f"var s=p.toString();"
             f'history.replaceState(null,"",s?"?"+s:location.pathname)}})()'
         )
     else:
         js_obj = _build_datastar_js_obj(paths)
         if encoding == "base64":
             js = (
-                f'(function(){{var _s=JSON.stringify({js_obj});'
+                f"(function(){{var _s=JSON.stringify({js_obj});"
                 f'history.replaceState(null,"","?{key}="'
-                f'+btoa(unescape(encodeURIComponent(_s)))'
+                f"+btoa(unescape(encodeURIComponent(_s)))"
                 f'.replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=/g,""))}})()'
             )
         else:
@@ -203,7 +222,9 @@ def _wrap_before(before, action):
 
 
 @register.simple_tag
-def lbr_get_action(href, before="", replace_url="", push_url="", preserve_query="", options=""):
+def lbr_get_action(
+    href, before="", replace_url="", push_url="", preserve_query="", options=""
+):
     """Build the full @get(...) action expression for data-on.
 
     SECURITY: before and options are raw JS — treat like |safe.
@@ -505,8 +526,8 @@ class _TextResult:
 def lbr_reactive_text(value):
     """Render a value as element text, tracking a signal when one is bound.
 
-        {% lbr_reactive_text value as rt %}
-        <span {{ rt.attrs }}>{{ rt.text }}</span>
+    {% lbr_reactive_text value as rt %}
+    <span {{ rt.attrs }}>{{ rt.text }}</span>
     """
     raw = "" if value is None else str(value)
     is_rx, signal_path, fallback = _parse_reactive(raw)
@@ -578,7 +599,11 @@ def lbr_props(component_name, attrs=None, extra="", **override_kwargs):
             continue
 
         if prop_name in override_kwargs:
-            raw = str(override_kwargs[prop_name]) if override_kwargs[prop_name] is not None else ""
+            raw = (
+                str(override_kwargs[prop_name])
+                if override_kwargs[prop_name] is not None
+                else ""
+            )
         elif prop_name in attrs_dict:
             raw = str(attrs_dict[prop_name])
             consumed.add(prop_name)
@@ -605,7 +630,8 @@ def lbr_props(component_name, attrs=None, extra="", **override_kwargs):
 
     # Passthrough: strip consumed schema props, class, and icon attrs.
     remaining = {
-        k: v for k, v in attrs_dict.items()
+        k: v
+        for k, v in attrs_dict.items()
         if k not in consumed and not _ICON_ATTR_RE.match(k)
     }
     passthrough = _dict_to_attrs(remaining)
@@ -633,7 +659,9 @@ def lbr_props(component_name, attrs=None, extra="", **override_kwargs):
     # Single-quoted JS string — safe inside the double-quoted HTML attribute.
     extra_js = _js_str(extra_class)
 
-    rx_attr = f"data-attr:class=\"lb.classes('{component_name}', {js_obj}, {extra_js})\""
+    rx_attr = (
+        f"data-attr:class=\"lb.classes('{component_name}', {js_obj}, {extra_js})\""
+    )
     combined = " ".join(filter(None, [passthrough, rx_attr]))
     return _RxResult(classes=classes, attrs=combined)
 

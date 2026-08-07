@@ -11,12 +11,12 @@
                     type="email"
                     placeholder="rafael.sorensen@beaconlabs.com"
                     class="w-full"
-                    bind="invite.email" />
+                    bind="$invite.email" />
             </div>
 
             <div class="sm:w-44">
                 <label class="label label-text text-sm font-medium mb-1">Role</label>
-                <c-lb.select id="tm-invite-role" class="w-full" bind="invite.role">
+                <c-lb.select id="tm-invite-role" class="w-full" bind="$invite.role">
                     {% for value, label in role_options %}
                     <option value="{{ value }}">{{ label }}</option>
                     {% endfor %}

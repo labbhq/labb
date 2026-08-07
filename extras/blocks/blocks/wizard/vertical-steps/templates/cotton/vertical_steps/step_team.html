@@ -16,7 +16,7 @@
                 type="email"
                 placeholder="ingrid@veritylabs.io"
                 class="w-full"
-                bind="form.invite1" />
+                bind="$form.invite1" />
         </c-vertical-steps.field>
 
         <c-vertical-steps.field label="Teammate" hint="(optional)">
@@ -25,11 +25,11 @@
                 type="email"
                 placeholder="peter.vance@northwind.co"
                 class="w-full"
-                bind="form.invite2" />
+                bind="$form.invite2" />
         </c-vertical-steps.field>
 
         <c-vertical-steps.field label="They join as">
-            <c-lb.select id="vt-role" class="w-full" bind="form.role">
+            <c-lb.select id="vt-role" class="w-full" bind="$form.role">
                 {% for value, label in roles %}
                 <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}

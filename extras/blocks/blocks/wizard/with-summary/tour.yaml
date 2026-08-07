@@ -31,7 +31,7 @@ steps:
 
   - title: Seats bind to the same bag the summary reads
     file: templates/cotton/summary_wizard/step_plan.html
-    match: 'bind="form.seats"'
+    match: 'bind="$form.seats"'
     teaches: [binding]
     docs: [reactivity/binding]
     body: |

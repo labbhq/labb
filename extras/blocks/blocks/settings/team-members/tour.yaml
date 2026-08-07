@@ -11,7 +11,7 @@ steps:
 
   - title: Every dropdown binds to its own path
     file: templates/cotton/team_members/roster.html
-    match: 'bind="roles.{{ member.key }}"'
+    match: 'bind="$roles.{{ member.key }}"'
     teaches: [binding]
     docs: [reactivity/binding]
     body: |

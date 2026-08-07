@@ -16,7 +16,7 @@
                 type="text"
                 placeholder="Kite &amp; Bell"
                 class="w-full"
-                bind="form.company" />
+                bind="$form.company" />
         </c-horizontal-steps.field>
 
         <c-horizontal-steps.field label="Workspace address" hint="(arden.app/…)">
@@ -25,12 +25,12 @@
                 type="text"
                 placeholder="kite-and-bell"
                 class="w-full font-mono"
-                bind="form.slug" />
+                bind="$form.slug" />
         </c-horizontal-steps.field>
     </div>
 
     <c-horizontal-steps.field label="Data region" hint="(where your revenue data is stored)">
-        <c-lb.select id="hz-region" class="w-full" bind="form.region">
+        <c-lb.select id="hz-region" class="w-full" bind="$form.region">
             {% for value, label in regions %}
             <option value="{{ value }}">{{ label }}</option>
             {% endfor %}

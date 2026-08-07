@@ -7,7 +7,7 @@
         The first sync backfills 24 months, so your dashboards are not empty on day one.
     </p>
 
-    <c-lb.select id="mw-source" size="lg" class="w-full" bind="form.source">
+    <c-lb.select id="mw-source" size="lg" class="w-full" bind="$form.source">
         {% for value, label in sources %}
         <option value="{{ value }}">{{ label }}</option>
         {% endfor %}
