@@ -59,12 +59,16 @@ def test_sidebar_opens_on_the_workspace_section(page, live_server):
 
 def test_sidebar_section_switch_fires_no_network_request(page, live_server):
     _ready(page, live_server, SIDEBAR)
-    page.wait_for_function("document.getElementById('nav-profile').className.includes('menu-active')")
+    page.wait_for_function(
+        "document.getElementById('nav-profile').className.includes('menu-active')"
+    )
 
     seen = _watch_requests(page)
     page.locator("#nav-billing").click()
 
-    page.wait_for_function("document.getElementById('nav-billing').className.includes('menu-active')")
+    page.wait_for_function(
+        "document.getElementById('nav-billing').className.includes('menu-active')"
+    )
     assert page.get_by_role("heading", name="Billing", exact=True).is_visible()
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
 
@@ -73,12 +77,16 @@ def test_sidebar_shows_the_section_that_was_clicked(page, live_server):
     _ready(page, live_server, SIDEBAR)
 
     page.locator("#nav-billing").click()
-    page.wait_for_function("document.getElementById('nav-billing').className.includes('menu-active')")
+    page.wait_for_function(
+        "document.getElementById('nav-billing').className.includes('menu-active')"
+    )
     assert page.get_by_role("heading", name="Billing", exact=True).is_visible()
     assert not page.get_by_role("heading", name="Workspace", exact=True).is_visible()
 
     page.locator("#nav-security").click()
-    page.wait_for_function("document.getElementById('nav-security').className.includes('menu-active')")
+    page.wait_for_function(
+        "document.getElementById('nav-security').className.includes('menu-active')"
+    )
     assert page.get_by_role("heading", name="Security", exact=True).is_visible()
     assert not page.get_by_role("heading", name="Billing", exact=True).is_visible()
 
@@ -90,9 +98,13 @@ def test_sidebar_keeps_a_half_typed_field_across_a_section_trip(page, live_serve
     name.fill("Beacon Labs EU")
 
     page.locator("#nav-team").click()
-    page.wait_for_function("document.getElementById('nav-team').className.includes('menu-active')")
+    page.wait_for_function(
+        "document.getElementById('nav-team').className.includes('menu-active')"
+    )
     page.locator("#nav-profile").click()
-    page.wait_for_function("document.getElementById('nav-profile').className.includes('menu-active')")
+    page.wait_for_function(
+        "document.getElementById('nav-profile').className.includes('menu-active')"
+    )
 
     assert name.input_value() == "Beacon Labs EU"
 
@@ -224,7 +236,9 @@ def test_team_discard_restores_every_saved_role(page, live_server):
 
 def test_team_invite_line_follows_the_typed_email_and_role(page, live_server):
     _ready(page, live_server, TEAM)
-    assert page.locator("#tm-invite-preview").inner_text() == "They will join as a Member."
+    assert (
+        page.locator("#tm-invite-preview").inner_text() == "They will join as a Member."
+    )
 
     page.locator("#tm-invite-email").fill("rafael.sorensen@beaconlabs.com")
     page.locator("#tm-invite-role").select_option("billing")

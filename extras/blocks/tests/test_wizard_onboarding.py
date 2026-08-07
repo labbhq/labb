@@ -26,21 +26,31 @@ def plans(db):
 
     return [
         LbPlan.objects.create(
-            name="Arden Starter", slug="starter",
+            name="Arden Starter",
+            slug="starter",
             tagline="For a founder who needs the numbers out of a spreadsheet.",
-            price_monthly=49, price_yearly=490, seats_included=3,
+            price_monthly=49,
+            price_yearly=490,
+            seats_included=3,
             features=["Up to 3 seats", "MRR and churn dashboard"],
         ),
         LbPlan.objects.create(
-            name="Arden Growth", slug="growth",
+            name="Arden Growth",
+            slug="growth",
             tagline="For the revenue team that has outgrown guesswork.",
-            price_monthly=149, price_yearly=1490, seats_included=10,
-            is_featured=True, features=["Up to 10 seats", "Revenue forecasting"],
+            price_monthly=149,
+            price_yearly=1490,
+            seats_included=10,
+            is_featured=True,
+            features=["Up to 10 seats", "Revenue forecasting"],
         ),
         LbPlan.objects.create(
-            name="Arden Scale", slug="scale",
+            name="Arden Scale",
+            slug="scale",
             tagline="For finance running the whole book of business.",
-            price_monthly=449, price_yearly=4490, seats_included=25,
+            price_monthly=449,
+            price_yearly=4490,
+            seats_included=25,
             features=["Unlimited seats", "SSO and SCIM"],
         ),
     ]
@@ -108,7 +118,9 @@ def test_an_empty_step_one_cannot_advance(page, live_server, plans):
     page.locator("button", has_text="Continue").click()
 
     page.wait_for_selector("text=Name your workspace.")
-    assert page.locator("text=Choose the address your team will sign in at.").is_visible()
+    assert page.locator(
+        "text=Choose the address your team will sign in at."
+    ).is_visible()
     # still on step 1
     assert not page.locator("text=Invite your revenue team").is_visible()
 
@@ -154,7 +166,9 @@ def test_a_plan_too_small_for_the_team_cannot_submit(page, live_server, plans):
     page.locator("label", has_text="Arden Starter").click()
     page.locator("button", has_text="Create workspace").click()
 
-    page.wait_for_selector("text=Arden Starter includes 3 seats and you are starting with 4.")
+    page.wait_for_selector(
+        "text=Arden Starter includes 3 seats and you are starting with 4."
+    )
 
 
 def test_no_plan_chosen_cannot_submit(page, live_server, plans):
@@ -187,7 +201,9 @@ def test_going_back_preserves_the_earlier_steps(page, live_server, plans):
 # --- the final submit round-trips -------------------------------------------
 
 
-def test_the_final_submit_creates_the_workspace_and_the_invites(page, live_server, plans):
+def test_the_final_submit_creates_the_workspace_and_the_invites(
+    page, live_server, plans
+):
     from lb.models import LbMember, LbWorkspace
 
     page.goto(f"{live_server.url}{BASE}/")
@@ -206,19 +222,25 @@ def test_the_final_submit_creates_the_workspace_and_the_invites(page, live_serve
     assert workspace.region == "eu-west-1"
 
     members = LbMember.objects.filter(workspace=workspace).order_by("email")
-    assert [m.email for m in members] == ["jonah@kiteandbell.com", "rosa@kiteandbell.com"]
+    assert [m.email for m in members] == [
+        "jonah@kiteandbell.com",
+        "rosa@kiteandbell.com",
+    ]
     assert {m.status for m in members} == {"invited"}
     assert {m.role for m in members} == {"member"}
 
 
 def test_an_address_already_taken_is_rejected(page, live_server, plans):
     from django.utils import timezone
-
     from lb.models import LbWorkspace
 
     LbWorkspace.objects.create(
-        name="Kite & Bell", slug="kite-and-bell", plan=plans[1],
-        region="eu-west-1", currency="USD", created_at=timezone.now(),
+        name="Kite & Bell",
+        slug="kite-and-bell",
+        plan=plans[1],
+        region="eu-west-1",
+        currency="USD",
+        created_at=timezone.now(),
     )
 
     page.goto(f"{live_server.url}{BASE}/")

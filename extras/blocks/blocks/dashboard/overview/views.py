@@ -14,7 +14,20 @@ LbWorkspace = lm("LbWorkspace")
 
 INDEX = "lb/dashboard/overview/pages/index.html"
 
-MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+]
 
 SERIES = OrderedDict(
     [
@@ -108,7 +121,9 @@ def _cohort_series(customers):
             "datasets": [
                 {
                     "label": "Still paying (%)",
-                    "data": [round(kept / total * 100, 1) for total, kept in cohorts.values()],
+                    "data": [
+                        round(kept / total * 100, 1) for total, kept in cohorts.values()
+                    ],
                     "backgroundColor": "accent",
                 }
             ],
@@ -146,11 +161,16 @@ def _context(request):
 
     latest = labels[-1] if labels else ""
     net_new = sum(
-        (e.mrr_delta for e in events if _month_label(e.occurred_at) == latest), Decimal(0)
+        (e.mrr_delta for e in events if _month_label(e.occurred_at) == latest),
+        Decimal(0),
     )
 
     at_risk = sorted(
-        (c for c in customers if c.health in ("at_risk", "watch") and c.status != "churned"),
+        (
+            c
+            for c in customers
+            if c.health in ("at_risk", "watch") and c.status != "churned"
+        ),
         key=lambda c: (0 if c.health == "at_risk" else 1, -c.mrr),
     )[:5]
     at_risk_mrr = sum((c.mrr for c in at_risk), Decimal(0))
@@ -199,7 +219,9 @@ def cash_stream(request):
     Real rows, not a random walk: each tick banks the next open invoice, so the
     number the card lands on is the number the table would show.
     """
-    invoices = list(LbInvoice.objects.filter(status="open").order_by("due_on")[:STREAM_TICKS])
+    invoices = list(
+        LbInvoice.objects.filter(status="open").order_by("due_on")[:STREAM_TICKS]
+    )
 
     def generate():
         collected = Decimal(0)

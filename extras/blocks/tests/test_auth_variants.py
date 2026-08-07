@@ -72,7 +72,9 @@ def fired(seen):
 def test_variant_lands_its_own_headline(page, live_server, slug):
     page.goto(f"{live_server.url}{preview(slug)}")
 
-    assert page.get_by_role("heading", name=HEADLINES[slug], exact=True).first.is_visible()
+    assert page.get_by_role(
+        "heading", name=HEADLINES[slug], exact=True
+    ).first.is_visible()
 
 
 @pytest.mark.parametrize("slug", SLUGS)
@@ -139,7 +141,13 @@ def test_social_proof_shows_the_arden_supporting_cast(page, live_server):
     page.goto(f"{live_server.url}{preview('social-proof')}")
 
     logos = page.locator("#proof-logos")
-    for customer in ("AtlasForge", "Kite & Bell", "Northwind Co", "Verity Labs", "Ironvale Group"):
+    for customer in (
+        "AtlasForge",
+        "Kite & Bell",
+        "Northwind Co",
+        "Verity Labs",
+        "Ironvale Group",
+    ):
         assert logos.get_by_text(customer, exact=True).is_visible()
 
     assert page.locator("#proof-quote").get_by_text("Priya Raghavan").is_visible()
@@ -231,9 +239,11 @@ def test_magic_link_sent_state_greets_the_address_that_was_typed(page, live_serv
     page.wait_for_selector("#magic-sent", state="visible")
 
     assert page.locator("#magic-recipient").inner_text() == "priya@northwind.co"
-    assert page.locator("#magic-sent").get_by_text(
-        "The link works once and expires after 10 minutes."
-    ).is_visible()
+    assert (
+        page.locator("#magic-sent")
+        .get_by_text("The link works once and expires after 10 minutes.")
+        .is_visible()
+    )
 
 
 def test_magic_link_can_go_back_to_the_form(page, live_server):

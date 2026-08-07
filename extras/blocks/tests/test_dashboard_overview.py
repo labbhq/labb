@@ -34,78 +34,195 @@ CHART_DATASET = """
 @pytest.fixture
 def arden(db):
     from django.utils import timezone
-
     from lb.models import LbCustomer, LbEvent, LbInvoice, LbMember, LbPlan, LbWorkspace
 
     growth = LbPlan.objects.create(
-        name="Arden Growth", slug="growth", tagline="For revenue teams",
-        price_monthly=149, price_yearly=1490, seats_included=10, is_featured=True,
+        name="Arden Growth",
+        slug="growth",
+        tagline="For revenue teams",
+        price_monthly=149,
+        price_yearly=1490,
+        seats_included=10,
+        is_featured=True,
     )
     scale = LbPlan.objects.create(
-        name="Arden Scale", slug="scale", tagline="For RevOps",
-        price_monthly=449, price_yearly=4490, seats_included=25,
+        name="Arden Scale",
+        slug="scale",
+        tagline="For RevOps",
+        price_monthly=449,
+        price_yearly=4490,
+        seats_included=25,
     )
     workspace = LbWorkspace.objects.create(
-        name="Beacon Labs", slug="beacon-labs", plan=scale,
-        region="eu-west-1", currency="USD", billing_email="billing@beaconlabs.com",
+        name="Beacon Labs",
+        slug="beacon-labs",
+        plan=scale,
+        region="eu-west-1",
+        currency="USD",
+        billing_email="billing@beaconlabs.com",
         created_at=timezone.now(),
     )
     LbMember.objects.create(
-        workspace=workspace, name="Mira Chen", email="mira@beaconlabs.com",
-        title="Founder", role="owner", status="active",
-        joined_on=datetime.date(2024, 1, 12), last_active_at=timezone.now(),
+        workspace=workspace,
+        name="Mira Chen",
+        email="mira@beaconlabs.com",
+        title="Founder",
+        role="owner",
+        status="active",
+        joined_on=datetime.date(2024, 1, 12),
+        last_active_at=timezone.now(),
     )
 
     def customer(company, contact, mrr, status, health, plan, signed_up, renews):
         return LbCustomer.objects.create(
-            workspace=workspace, company=company, contact_name=contact,
-            email=f"{contact.split()[0].lower()}@example.com", plan=plan,
-            status=status, health=health, mrr=mrr, seats=12,
-            industry="Software", country="United States",
-            signed_up_on=signed_up, renews_on=renews,
+            workspace=workspace,
+            company=company,
+            contact_name=contact,
+            email=f"{contact.split()[0].lower()}@example.com",
+            plan=plan,
+            status=status,
+            health=health,
+            mrr=mrr,
+            seats=12,
+            industry="Software",
+            country="United States",
+            signed_up_on=signed_up,
+            renews_on=renews,
         )
 
-    atlas = customer("AtlasForge", "Dana Whitfield", 2927, "active", "good", scale,
-                     datetime.date(2023, 4, 18), datetime.date(2026, 8, 18))
-    kite = customer("Kite & Bell", "Rosa Linden", 555, "active", "good", growth,
-                    datetime.date(2024, 6, 2), datetime.date(2026, 8, 2))
-    northwind = customer("Northwind Co", "Peter Vance", 2278, "active", "watch", scale,
-                         datetime.date(2025, 7, 25), datetime.date(2026, 8, 25))
-    oakhurst = customer("Oakhurst Retail", "Nina Oakhurst", 381, "past_due", "at_risk", growth,
-                        datetime.date(2025, 3, 9), datetime.date(2026, 8, 22))
-    customer("Rookwood Interactive", "Sam Rookwood", 0, "churned", "at_risk", growth,
-             datetime.date(2024, 2, 14), None)
+    atlas = customer(
+        "AtlasForge",
+        "Dana Whitfield",
+        2927,
+        "active",
+        "good",
+        scale,
+        datetime.date(2023, 4, 18),
+        datetime.date(2026, 8, 18),
+    )
+    kite = customer(
+        "Kite & Bell",
+        "Rosa Linden",
+        555,
+        "active",
+        "good",
+        growth,
+        datetime.date(2024, 6, 2),
+        datetime.date(2026, 8, 2),
+    )
+    northwind = customer(
+        "Northwind Co",
+        "Peter Vance",
+        2278,
+        "active",
+        "watch",
+        scale,
+        datetime.date(2025, 7, 25),
+        datetime.date(2026, 8, 25),
+    )
+    oakhurst = customer(
+        "Oakhurst Retail",
+        "Nina Oakhurst",
+        381,
+        "past_due",
+        "at_risk",
+        growth,
+        datetime.date(2025, 3, 9),
+        datetime.date(2026, 8, 22),
+    )
+    customer(
+        "Rookwood Interactive",
+        "Sam Rookwood",
+        0,
+        "churned",
+        "at_risk",
+        growth,
+        datetime.date(2024, 2, 14),
+        None,
+    )
 
     def invoice(cust, number, amount, status, issued, paid=None):
         return LbInvoice.objects.create(
-            customer=cust, number=number, amount=amount, currency="USD", status=status,
-            period=issued.strftime("%b %Y"), issued_on=issued,
-            due_on=issued + datetime.timedelta(days=14), paid_on=paid,
+            customer=cust,
+            number=number,
+            amount=amount,
+            currency="USD",
+            status=status,
+            period=issued.strftime("%b %Y"),
+            issued_on=issued,
+            due_on=issued + datetime.timedelta(days=14),
+            paid_on=paid,
         )
 
-    invoice(atlas, "ARD-2026-0001", 2927, "paid", datetime.date(2026, 1, 18), datetime.date(2026, 1, 27))
-    invoice(kite, "ARD-2026-0002", 555, "paid", datetime.date(2026, 1, 20), datetime.date(2026, 1, 25))
-    invoice(atlas, "ARD-2026-0003", 2927, "paid", datetime.date(2026, 2, 18), datetime.date(2026, 2, 21))
-    invoice(northwind, "ARD-2026-0004", 2278, "paid", datetime.date(2026, 2, 19), datetime.date(2026, 2, 26))
-    invoice(atlas, "ARD-2026-0005", 3045, "paid", datetime.date(2026, 3, 18), datetime.date(2026, 3, 23))
+    invoice(
+        atlas,
+        "ARD-2026-0001",
+        2927,
+        "paid",
+        datetime.date(2026, 1, 18),
+        datetime.date(2026, 1, 27),
+    )
+    invoice(
+        kite,
+        "ARD-2026-0002",
+        555,
+        "paid",
+        datetime.date(2026, 1, 20),
+        datetime.date(2026, 1, 25),
+    )
+    invoice(
+        atlas,
+        "ARD-2026-0003",
+        2927,
+        "paid",
+        datetime.date(2026, 2, 18),
+        datetime.date(2026, 2, 21),
+    )
+    invoice(
+        northwind,
+        "ARD-2026-0004",
+        2278,
+        "paid",
+        datetime.date(2026, 2, 19),
+        datetime.date(2026, 2, 26),
+    )
+    invoice(
+        atlas,
+        "ARD-2026-0005",
+        3045,
+        "paid",
+        datetime.date(2026, 3, 18),
+        datetime.date(2026, 3, 23),
+    )
     invoice(oakhurst, "ARD-2026-0006", 381, "open", datetime.date(2026, 3, 20))
     invoice(kite, "ARD-2026-0007", 555, "open", datetime.date(2026, 3, 21))
     invoice(northwind, "ARD-2026-0008", 2278, "open", datetime.date(2026, 3, 22))
 
     LbEvent.objects.create(
-        workspace=workspace, customer=kite, kind="upgrade",
-        label="Kite & Bell moved to Arden Growth", mrr_delta=410,
+        workspace=workspace,
+        customer=kite,
+        kind="upgrade",
+        label="Kite & Bell moved to Arden Growth",
+        mrr_delta=410,
         occurred_at=datetime.datetime(2026, 3, 4, 11, 20, tzinfo=datetime.timezone.utc),
     )
     LbEvent.objects.create(
-        workspace=workspace, customer=oakhurst, kind="downgrade",
-        label="Oakhurst Retail dropped 4 seats", mrr_delta=-172,
+        workspace=workspace,
+        customer=oakhurst,
+        kind="downgrade",
+        label="Oakhurst Retail dropped 4 seats",
+        mrr_delta=-172,
         occurred_at=datetime.datetime(2026, 3, 8, 9, 5, tzinfo=datetime.timezone.utc),
     )
     LbEvent.objects.create(
-        workspace=workspace, customer=atlas, kind="payment",
-        label="AtlasForge paid $2,927.00", mrr_delta=0,
-        occurred_at=datetime.datetime(2026, 3, 12, 15, 40, tzinfo=datetime.timezone.utc),
+        workspace=workspace,
+        customer=atlas,
+        kind="payment",
+        label="AtlasForge paid $2,927.00",
+        mrr_delta=0,
+        occurred_at=datetime.datetime(
+            2026, 3, 12, 15, 40, tzinfo=datetime.timezone.utc
+        ),
     )
     return workspace
 
@@ -157,7 +274,7 @@ def test_all_three_charts_render(page, live_server, arden):
 
     revenue = _dataset(page, "revenue-chart")
     assert revenue["label"] == "Collected"
-    assert revenue["points"] == 3          # Jan, Feb, Mar 2026
+    assert revenue["points"] == 3  # Jan, Feb, Mar 2026
 
     assert _dataset(page, "cohort-chart")["label"] == "Still paying (%)"
     assert _dataset(page, "plan-chart")["label"] == "MRR"
@@ -166,7 +283,9 @@ def test_all_three_charts_render(page, live_server, arden):
 def test_switching_series_redraws_the_chart(page, live_server, arden):
     """The button sets a signal, the view rebuilds the series, the chart morphs."""
     page.goto(f"{live_server.url}{BASE}/")
-    page.wait_for_function("() => window.Chart && window.Chart.getChart(document.querySelector('#revenue-chart canvas'))")
+    page.wait_for_function(
+        "() => window.Chart && window.Chart.getChart(document.querySelector('#revenue-chart canvas'))"
+    )
     assert _dataset(page, "revenue-chart")["label"] == "Collected"
 
     page.locator("#series-movement").click()
@@ -183,7 +302,9 @@ def test_switching_series_redraws_the_chart(page, live_server, arden):
 
 def test_theme_switch_recolours_the_charts(page, live_server, arden):
     page.goto(f"{live_server.url}{BASE}/")
-    page.wait_for_function("() => window.Chart && window.Chart.getChart(document.querySelector('#revenue-chart canvas'))")
+    page.wait_for_function(
+        "() => window.Chart && window.Chart.getChart(document.querySelector('#revenue-chart canvas'))"
+    )
     before = _dataset(page, "revenue-chart")["colour"]
 
     page.locator("#theme-toggle").click()
@@ -195,7 +316,7 @@ def test_theme_switch_recolours_the_charts(page, live_server, arden):
     )
     after = _dataset(page, "revenue-chart")["colour"]
     assert after != before
-    assert "#" not in after      # resolved from a theme token, not a fixed hex
+    assert "#" not in after  # resolved from a theme token, not a fixed hex
 
 
 # --- the SSE metric ----------------------------------------------------------

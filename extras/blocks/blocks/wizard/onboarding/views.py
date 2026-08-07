@@ -48,15 +48,19 @@ class OnboardingSignals(Signals):
     which is why going back never loses what was typed.
     """
 
-    step           = Int(default=1, min_value=1, max_value=TOTAL_STEPS)
+    step = Int(default=1, min_value=1, max_value=TOTAL_STEPS)
     workspace_name = Str(path="form.workspace_name", default="")
     workspace_slug = Str(path="form.workspace_slug", default="")
-    region         = Str(path="form.region",      default="eu-west-1", choices=[r[0] for r in REGIONS])
-    invite_1       = Str(path="form.invite_1",    default="")
-    invite_2       = Str(path="form.invite_2",    default="")
-    invite_3       = Str(path="form.invite_3",    default="")
-    invite_role    = Str(path="form.invite_role", default="member", choices=[r[0] for r in ROLES])
-    plan           = Str(path="form.plan",        default="", choices=PLAN_SLUGS)
+    region = Str(
+        path="form.region", default="eu-west-1", choices=[r[0] for r in REGIONS]
+    )
+    invite_1 = Str(path="form.invite_1", default="")
+    invite_2 = Str(path="form.invite_2", default="")
+    invite_3 = Str(path="form.invite_3", default="")
+    invite_role = Str(
+        path="form.invite_role", default="member", choices=[r[0] for r in ROLES]
+    )
+    plan = Str(path="form.plan", default="", choices=PLAN_SLUGS)
 
 
 def _invites(s):
@@ -121,7 +125,9 @@ def _validate_step(s, step, strict=False):
             elif LbMember.objects.filter(email=email).exists():
                 errors[f"invite_{i}"] = f"{email} is already on an Arden workspace."
         if strict and not _invites(s):
-            errors["invites"] = "Invite at least one teammate — Arden is worth more with the revenue team in it."
+            errors["invites"] = (
+                "Invite at least one teammate — Arden is worth more with the revenue team in it."
+            )
 
     elif step == 3:
         plan = _selected_plan(s)
@@ -160,7 +166,8 @@ def _invite_slots(s, errors):
 def _ctx(s, errors=None, workspace=None, members=None):
     errors = errors or {}
     invites = [
-        {"email": e, "initials": _initials(e), "name": _display_name(e)} for e in _invites(s)
+        {"email": e, "initials": _initials(e), "name": _display_name(e)}
+        for e in _invites(s)
     ]
     return {
         "signals": s,

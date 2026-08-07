@@ -34,7 +34,9 @@ def preview(slug: str) -> str:
 
 
 def block_templates(slug: str) -> list[Path]:
-    return [p for p in (DASHBOARD_DIR / slug / "templates").rglob("*.html") if p.is_file()]
+    return [
+        p for p in (DASHBOARD_DIR / slug / "templates").rglob("*.html") if p.is_file()
+    ]
 
 
 def _watch_requests(page):
@@ -71,7 +73,9 @@ def test_static_dashboard_emits_no_script_src(page, live_server, slug):
     """The claim a dashboard is least expected to make: this page downloads nothing."""
     page.goto(f"{live_server.url}{preview(slug)}")
 
-    srcs = page.eval_on_selector_all("script[src]", "els => els.map(e => e.getAttribute('src'))")
+    srcs = page.eval_on_selector_all(
+        "script[src]", "els => els.map(e => e.getAttribute('src'))"
+    )
     assert srcs == [], f"{slug} pulled {srcs}"
     assert page.locator(DATASTAR).count() == 0
 
@@ -181,19 +185,30 @@ def test_first_run_placeholders_refuse_to_guess(page, live_server):
 def test_split_charts_renders_thirty_days_by_default(page, live_server):
     page.goto(f"{live_server.url}{preview('split-charts')}")
     page.wait_for_selector(DATASTAR, state="attached")
-    page.wait_for_function("window.Chart && window.Chart.getChart(document.querySelector('#mrr-chart canvas'))")
+    page.wait_for_function(
+        "window.Chart && window.Chart.getChart(document.querySelector('#mrr-chart canvas'))"
+    )
 
     assert _chart_data(page, "mrr-chart")["labels"] == [
-        "9 Jun", "15 Jun", "21 Jun", "27 Jun", "3 Jul", "9 Jul",
+        "9 Jun",
+        "15 Jun",
+        "21 Jun",
+        "27 Jun",
+        "3 Jul",
+        "9 Jul",
     ]
     assert page.locator("#summary-net-new").inner_text() == "16,740"
 
 
-def test_split_charts_switch_redraws_every_chart_with_no_network_request(page, live_server):
+def test_split_charts_switch_redraws_every_chart_with_no_network_request(
+    page, live_server
+):
     """The surface's claim: a client signal swaps three datasets, and the wire stays silent."""
     page.goto(f"{live_server.url}{preview('split-charts')}")
     page.wait_for_selector(DATASTAR, state="attached")
-    page.wait_for_function("window.Chart && window.Chart.getChart(document.querySelector('#movement-chart canvas'))")
+    page.wait_for_function(
+        "window.Chart && window.Chart.getChart(document.querySelector('#movement-chart canvas'))"
+    )
 
     seen = _watch_requests(page)
     page.get_by_role("button", name="7 days").click()
@@ -208,7 +223,10 @@ def test_split_charts_switch_redraws_every_chart_with_no_network_request(page, l
 
     movement = _chart_data(page, "movement-chart")
     assert movement["labels"] == ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"]
-    assert [d["label"] for d in movement["datasets"]] == ["Expansion", "Churn and contraction"]
+    assert [d["label"] for d in movement["datasets"]] == [
+        "Expansion",
+        "Churn and contraction",
+    ]
 
     source = _chart_data(page, "source-chart")
     assert source["datasets"][0]["data"] == [2300, 9180, 700]
@@ -221,7 +239,9 @@ def test_split_charts_switch_updates_the_summary_and_the_caption(page, live_serv
     page.wait_for_selector(DATASTAR, state="attached")
 
     page.get_by_role("button", name="90 days").click()
-    page.wait_for_function("document.getElementById('summary-net-new').textContent === '52,910'")
+    page.wait_for_function(
+        "document.getElementById('summary-net-new').textContent === '52,910'"
+    )
 
     assert page.locator("#summary-expansion").inner_text() == "118,400"
     assert page.locator("#summary-churn").inner_text() == "65,490"

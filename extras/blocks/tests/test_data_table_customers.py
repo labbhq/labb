@@ -38,26 +38,41 @@ COMPANIES = [
 @pytest.fixture
 def customers(db):
     from django.utils import timezone
-
     from lb.models import LbCustomer, LbInvoice, LbPlan, LbWorkspace
 
     plans = [
         LbPlan.objects.create(
-            name="Arden Starter", slug="starter", tagline="For the first ten customers",
-            price_monthly=49, price_yearly=490, seats_included=3,
+            name="Arden Starter",
+            slug="starter",
+            tagline="For the first ten customers",
+            price_monthly=49,
+            price_yearly=490,
+            seats_included=3,
         ),
         LbPlan.objects.create(
-            name="Arden Growth", slug="growth", tagline="For teams finding their shape",
-            price_monthly=149, price_yearly=1490, seats_included=10,
+            name="Arden Growth",
+            slug="growth",
+            tagline="For teams finding their shape",
+            price_monthly=149,
+            price_yearly=1490,
+            seats_included=10,
         ),
         LbPlan.objects.create(
-            name="Arden Scale", slug="scale", tagline="For a real revenue org",
-            price_monthly=449, price_yearly=4490, seats_included=25,
+            name="Arden Scale",
+            slug="scale",
+            tagline="For a real revenue org",
+            price_monthly=449,
+            price_yearly=4490,
+            seats_included=25,
         ),
     ]
     workspace = LbWorkspace.objects.create(
-        name="Beacon Labs", slug="beacon-labs", plan=plans[2],
-        region="eu-west", currency="USD", billing_email="billing@beaconlabs.com",
+        name="Beacon Labs",
+        slug="beacon-labs",
+        plan=plans[2],
+        region="eu-west",
+        currency="USD",
+        billing_email="billing@beaconlabs.com",
         created_at=timezone.now(),
     )
 
@@ -83,13 +98,22 @@ def customers(db):
 
     atlas = made[0]
     LbInvoice.objects.create(
-        customer=atlas, number="ARD-2026-0001", amount=Decimal(2927), status="paid",
-        period="Jan 2026", issued_on=datetime.date(2026, 1, 18),
-        due_on=datetime.date(2026, 2, 1), paid_on=datetime.date(2026, 1, 27),
+        customer=atlas,
+        number="ARD-2026-0001",
+        amount=Decimal(2927),
+        status="paid",
+        period="Jan 2026",
+        issued_on=datetime.date(2026, 1, 18),
+        due_on=datetime.date(2026, 2, 1),
+        paid_on=datetime.date(2026, 1, 27),
     )
     LbInvoice.objects.create(
-        customer=atlas, number="ARD-2026-0002", amount=Decimal(2927), status="overdue",
-        period="Feb 2026", issued_on=datetime.date(2026, 2, 18),
+        customer=atlas,
+        number="ARD-2026-0002",
+        amount=Decimal(2927),
+        status="overdue",
+        period="Feb 2026",
+        issued_on=datetime.date(2026, 2, 18),
         due_on=datetime.date(2026, 3, 1),
     )
     return made
@@ -166,7 +190,9 @@ def test_search_is_written_into_the_url(page, live_server, customers):
     assert "q=atlas" in page.url
 
 
-def test_reload_after_searching_restores_the_filtered_view(page, live_server, customers):
+def test_reload_after_searching_restores_the_filtered_view(
+    page, live_server, customers
+):
     page.goto(f"{live_server.url}{BASE}/")
     _search(page, "atlas")
     page.wait_for_function("location.search.includes('q=atlas')")
@@ -239,9 +265,7 @@ def test_inline_edit_persists(page, live_server, customers):
     page.locator('input[name="mrr"]').fill("3500")
     page.get_by_role("button", name="Save").click()
 
-    page.wait_for_function(
-        "document.body.innerText.includes('Dana Whitfield-Reyes')"
-    )
+    page.wait_for_function("document.body.innerText.includes('Dana Whitfield-Reyes')")
     saved = LbCustomer.objects.get(company="AtlasForge")
     assert saved.contact_name == "Dana Whitfield-Reyes"
     assert saved.mrr == Decimal("3500")
@@ -256,9 +280,7 @@ def test_inline_edit_keeps_the_filtered_view(page, live_server, customers):
     page.locator('input[name="contact_name"]').fill("Dana Reyes")
     page.get_by_role("button", name="Save").click()
 
-    page.wait_for_function(
-        "document.body.innerText.includes('Dana Reyes')"
-    )
+    page.wait_for_function("document.body.innerText.includes('Dana Reyes')")
     assert _rows(page).count() == 1
     assert page.locator('input[type="search"]').input_value() == "atlas"
 
@@ -277,9 +299,7 @@ def test_bulk_delete_removes_the_selected_rows(page, live_server, customers):
 
     page.get_by_role("button", name="Delete", exact=True).click()
 
-    page.wait_for_function(
-        "!document.body.innerText.includes('AtlasForge')"
-    )
+    page.wait_for_function("!document.body.innerText.includes('AtlasForge')")
     assert not LbCustomer.objects.filter(pk__in=[atlas.pk, beacon.pk]).exists()
     assert LbCustomer.objects.count() == len(COMPANIES) - 2
 
@@ -295,7 +315,9 @@ def test_zero_results_shows_a_deliberate_empty_state(page, live_server, customer
     assert page.locator("button", has_text="Clear filters").is_visible()
 
 
-def test_clearing_from_the_empty_state_brings_the_table_back(page, live_server, customers):
+def test_clearing_from_the_empty_state_brings_the_table_back(
+    page, live_server, customers
+):
     page.goto(f"{live_server.url}{BASE}/")
     _search(page, "zzzzz")
     page.wait_for_selector("text=No customers match that filter")

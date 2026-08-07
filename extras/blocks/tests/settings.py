@@ -2,6 +2,7 @@
 Django settings for the block renderer test suite.
 Mirrors the inline settings.configure() in blocks_dev.py serve().
 """
+
 import sys
 from pathlib import Path
 
@@ -10,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Build the synthetic vendor package and add .labb/ to sys.path before
 # Django loads INSTALLED_APPS — pytest-django calls django.setup() before
 # conftest.py runs, so this must happen here.
-from labb.cli.handlers.blocks_dev import _build_vendor_package  # noqa: E402  (import after sys.path setup — intentional)
+from labb.cli.handlers.blocks_dev import _build_vendor_package  # noqa: E402
 
 _build_vendor_package(BASE_DIR, vendor="lb")
 _labb_pkg_root = str(BASE_DIR / ".labb")

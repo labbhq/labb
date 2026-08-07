@@ -45,19 +45,20 @@ STATUS_VARIANT = {
 }
 HEALTH_VARIANT = {"good": "success", "watch": "warning", "at_risk": "error"}
 
+
 # The shareable URL. Each field names the clean query key it restores from
 # (query=), so one query string serves both a cold load and a Datastar request.
 class QuerySignals(Signals):
-    q          = Str(path="filters.q",      default="",           query="q")
-    status     = Str(path="filters.status", default="",           query="status")
-    sort_field = Str(path="sort.field",     default=DEFAULT_SORT, query="sort")
-    sort_dir   = Str(path="sort.dir",       default="asc",        query="dir")
-    page       = Int(default=1, min_value=1,                      query="page")
+    q = Str(path="filters.q", default="", query="q")
+    status = Str(path="filters.status", default="", query="status")
+    sort_field = Str(path="sort.field", default=DEFAULT_SORT, query="sort")
+    sort_dir = Str(path="sort.dir", default="asc", query="dir")
+    page = Int(default=1, min_value=1, query="page")
 
 
 class UISignals(Signals):
     editing_pk = Int(path="ui.editingPk", default=0)
-    selected   = Dict(default_factory=dict)
+    selected = Dict(default_factory=dict)
 
 
 def _query_signals(request):
@@ -128,7 +129,9 @@ def _filtered(s):
 def _summary(qs):
     totals = qs.aggregate(
         mrr=Coalesce(
-            Sum("mrr"), Value(0), output_field=DecimalField(max_digits=12, decimal_places=2)
+            Sum("mrr"),
+            Value(0),
+            output_field=DecimalField(max_digits=12, decimal_places=2),
         ),
         seats=Coalesce(Sum("seats"), Value(0)),
     )
@@ -154,7 +157,9 @@ def _context(request, editing_pk=None):
 
     customers = list(qs[(page - 1) * PAGE_SIZE : page * PAGE_SIZE])
     for c in customers:
-        c.initials = "".join(word[0] for word in c.company.split()[:2] if word[0].isalnum()).upper()
+        c.initials = "".join(
+            word[0] for word in c.company.split()[:2] if word[0].isalnum()
+        ).upper()
         c.mrr_display = _money(c.mrr)
         c.billed_display = _money(c.billed)
         c.status_variant = STATUS_VARIANT.get(c.status, "neutral")
@@ -198,7 +203,9 @@ def index(request):
 def update(request, pk):
     customer = get_object_or_404(LbCustomer, pk=pk)
     if request.method == "POST":
-        customer.contact_name = request.POST.get("contact_name", customer.contact_name).strip()
+        customer.contact_name = request.POST.get(
+            "contact_name", customer.contact_name
+        ).strip()
         customer.email = request.POST.get("email", customer.email).strip()
         customer.status = request.POST.get("status", customer.status)
         customer.seats = int(request.POST.get("seats") or customer.seats)

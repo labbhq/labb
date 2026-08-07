@@ -36,8 +36,12 @@ def _plan(name, slug, monthly, yearly, seats):
     from lb.models import LbPlan
 
     return LbPlan.objects.create(
-        name=name, slug=slug, tagline=f"{name} tier",
-        price_monthly=monthly, price_yearly=yearly, seats_included=seats,
+        name=name,
+        slug=slug,
+        tagline=f"{name} tier",
+        price_monthly=monthly,
+        price_yearly=yearly,
+        seats_included=seats,
         features=["Everything in the tier below", "Priority support"],
     )
 
@@ -46,8 +50,13 @@ def _member(workspace, name, email, role, status, last_active=None):
     from lb.models import LbMember
 
     return LbMember.objects.create(
-        workspace=workspace, name=name, email=email, title="RevOps",
-        role=role, status=status, two_factor=False,
+        workspace=workspace,
+        name=name,
+        email=email,
+        title="RevOps",
+        role=role,
+        status=status,
+        two_factor=False,
         joined_on=datetime.date(2025, 3, 4),
         last_active_at=last_active,
     )
@@ -63,32 +72,71 @@ def arden(db):
     scale = _plan("Arden Scale", "scale", 449, 4490, 25)
 
     workspace = LbWorkspace.objects.create(
-        name="Beacon Labs", slug="beacon-labs", plan=scale,
-        region="eu-west-1", currency="USD",
+        name="Beacon Labs",
+        slug="beacon-labs",
+        plan=scale,
+        region="eu-west-1",
+        currency="USD",
         billing_email="billing@beaconlabs.com",
         created_at=timezone.now() - datetime.timedelta(days=900),
     )
 
-    _member(workspace, "Nadia Kessler", "nadia@beaconlabs.com", "owner", "active",
-            timezone.now() - datetime.timedelta(hours=3))
-    _member(workspace, "Priya Raghunathan", "priya@beaconlabs.com", "billing", "active",
-            timezone.now() - datetime.timedelta(days=2))
-    _member(workspace, "Marcus Oduya", "marcus@beaconlabs.com", "admin", "active",
-            timezone.now() - datetime.timedelta(days=1))
+    _member(
+        workspace,
+        "Nadia Kessler",
+        "nadia@beaconlabs.com",
+        "owner",
+        "active",
+        timezone.now() - datetime.timedelta(hours=3),
+    )
+    _member(
+        workspace,
+        "Priya Raghunathan",
+        "priya@beaconlabs.com",
+        "billing",
+        "active",
+        timezone.now() - datetime.timedelta(days=2),
+    )
+    _member(
+        workspace,
+        "Marcus Oduya",
+        "marcus@beaconlabs.com",
+        "admin",
+        "active",
+        timezone.now() - datetime.timedelta(days=1),
+    )
 
     customer = LbCustomer.objects.create(
-        workspace=workspace, company="AtlasForge", contact_name="Mira Chen",
-        email="ap@atlasforge.com", plan=growth, status="active", health="good",
-        mrr=1490, seats=8, industry="Manufacturing", country="Germany",
+        workspace=workspace,
+        company="AtlasForge",
+        contact_name="Mira Chen",
+        email="ap@atlasforge.com",
+        plan=growth,
+        status="active",
+        health="good",
+        mrr=1490,
+        seats=8,
+        industry="Manufacturing",
+        country="Germany",
         signed_up_on=datetime.date(2025, 1, 9),
     )
     LbInvoice.objects.create(
-        customer=customer, number="ARD-2026-0417", amount="1490.00", currency="USD",
-        status="open", period="Jul 2026",
-        issued_on=datetime.date(2026, 7, 1), due_on=datetime.date(2026, 7, 31),
+        customer=customer,
+        number="ARD-2026-0417",
+        amount="1490.00",
+        currency="USD",
+        status="open",
+        period="Jul 2026",
+        issued_on=datetime.date(2026, 7, 1),
+        due_on=datetime.date(2026, 7, 31),
     )
 
-    return {"workspace": workspace, "starter": starter, "growth": growth, "scale": scale}
+    return {
+        "workspace": workspace,
+        "starter": starter,
+        "growth": growth,
+        "scale": scale,
+    }
 
 
 def _open(page, live_server):
@@ -224,7 +272,9 @@ def test_inviting_a_teammate_updates_only_the_team_zone(page, live_server, arden
     _open(page, live_server)
     _team_tab(page)
 
-    page.locator('input[placeholder="name@beaconlabs.com"]').fill("hana.ishikawa@beaconlabs.com")
+    page.locator('input[placeholder="name@beaconlabs.com"]').fill(
+        "hana.ishikawa@beaconlabs.com"
+    )
     page.wait_for_timeout(1200)
 
     page.evaluate(STAMP)
@@ -245,7 +295,9 @@ def test_inviting_an_existing_member_is_refused_while_typing(page, live_server, 
     _open(page, live_server)
     _team_tab(page)
 
-    page.locator('input[placeholder="name@beaconlabs.com"]').fill("marcus@beaconlabs.com")
+    page.locator('input[placeholder="name@beaconlabs.com"]').fill(
+        "marcus@beaconlabs.com"
+    )
 
     page.wait_for_selector("text=Marcus Oduya is already on this workspace.")
 
@@ -268,7 +320,9 @@ def test_a_full_workspace_cannot_invite(page, live_server, arden):
 # --- billing: plan change ---------------------------------------------------
 
 
-def test_changing_plan_patches_billing_and_team_but_not_profile(page, live_server, arden):
+def test_changing_plan_patches_billing_and_team_but_not_profile(
+    page, live_server, arden
+):
     """Seat allowance comes from the plan, so the team zone is genuinely affected."""
     _open(page, live_server)
     _billing_tab(page)

@@ -13,10 +13,10 @@ MIN_PASSWORD = 8
 
 
 class AuthSignals(Signals):
-    name      = Str(path="form.name",     default="")
-    email     = Str(path="form.email",    default="")
-    password  = Str(path="form.password", default="")
-    submitted = Bool(path="submitted",    default=False)
+    name = Str(path="form.name", default="")
+    email = Str(path="form.email", default="")
+    password = Str(path="form.password", default="")
+    submitted = Bool(path="submitted", default=False)
 
 
 def _validate(s, strict=False, with_name=False):
@@ -43,7 +43,9 @@ def _validate(s, strict=False, with_name=False):
 
     if s.password:
         if len(s.password) < MIN_PASSWORD:
-            errors["password"] = f"At least {MIN_PASSWORD} characters ({len(s.password)} so far)."
+            errors["password"] = (
+                f"At least {MIN_PASSWORD} characters ({len(s.password)} so far)."
+            )
     elif strict:
         errors["password"] = "Password is required."
 
@@ -65,6 +67,7 @@ def _page(request, template, ctx, title):
 
 
 # --- sign in ---------------------------------------------------------------
+
 
 def index(request):
     return _page(request, SIGN_IN, _ctx(AuthSignals(request)), "Sign in to Arden")
@@ -94,13 +97,18 @@ def submit(request):
         )
 
     s.submitted = True
-    return _page(request, SIGN_IN, _ctx(s, submitted=True, member=member), "Sign in to Arden")
+    return _page(
+        request, SIGN_IN, _ctx(s, submitted=True, member=member), "Sign in to Arden"
+    )
 
 
 # --- sign up ---------------------------------------------------------------
 
+
 def sign_up(request):
-    return _page(request, SIGN_UP, _ctx(AuthSignals(request)), "Create an Arden account")
+    return _page(
+        request, SIGN_UP, _ctx(AuthSignals(request)), "Create an Arden account"
+    )
 
 
 def sign_up_validate(request):
@@ -120,7 +128,9 @@ def sign_up_submit(request):
     s = AuthSignals(request)
     errors = _validate(s, strict=True, with_name=True)
     if errors:
-        return _page(request, SIGN_UP, _ctx(s, errors=errors), "Create an Arden account")
+        return _page(
+            request, SIGN_UP, _ctx(s, errors=errors), "Create an Arden account"
+        )
 
     if LbMember.objects.filter(email=s.email).exists():
         return _page(

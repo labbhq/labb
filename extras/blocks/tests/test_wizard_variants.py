@@ -49,9 +49,13 @@ def test_horizontal_steps_advance_without_a_single_request(page, live_server):
 
     seen = _watch_requests(page)
     page.locator("#hz-next").click()
-    page.wait_for_function("document.querySelector('#hz-count span').textContent === '2'")
+    page.wait_for_function(
+        "document.querySelector('#hz-count span').textContent === '2'"
+    )
     page.locator("#hz-next").click()
-    page.wait_for_function("document.querySelector('#hz-count span').textContent === '3'")
+    page.wait_for_function(
+        "document.querySelector('#hz-count span').textContent === '3'"
+    )
 
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
 
@@ -62,9 +66,13 @@ def test_horizontal_steps_going_back_keeps_what_was_typed(page, live_server):
     page.locator("#hz-slug").fill("kite-and-bell")
 
     page.locator("#hz-next").click()
-    page.wait_for_function("document.querySelector('#hz-count span').textContent === '2'")
+    page.wait_for_function(
+        "document.querySelector('#hz-count span').textContent === '2'"
+    )
     page.locator("#hz-back").click()
-    page.wait_for_function("document.querySelector('#hz-count span').textContent === '1'")
+    page.wait_for_function(
+        "document.querySelector('#hz-count span').textContent === '1'"
+    )
 
     assert page.locator("#hz-company").input_value() == "Kite & Bell"
     assert page.locator("#hz-slug").input_value() == "kite-and-bell"
@@ -97,7 +105,9 @@ def test_vertical_steps_advance_without_a_single_request(page, live_server):
 
     seen = _watch_requests(page)
     page.locator("#vt-next").click()
-    page.wait_for_function("document.querySelector('#vt-count span').textContent === '2'")
+    page.wait_for_function(
+        "document.querySelector('#vt-count span').textContent === '2'"
+    )
 
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
 
@@ -106,16 +116,22 @@ def test_vertical_steps_going_back_keeps_what_was_typed(page, live_server):
     _ready(page, live_server, VERTICAL)
     page.locator("#vt-company").fill("Verity Labs")
     page.locator("#vt-next").click()
-    page.wait_for_function("document.querySelector('#vt-count span').textContent === '2'")
+    page.wait_for_function(
+        "document.querySelector('#vt-count span').textContent === '2'"
+    )
 
     page.locator("#vt-contact").fill("finance@veritylabs.io")
     page.locator("#vt-back").click()
-    page.wait_for_function("document.querySelector('#vt-count span').textContent === '1'")
+    page.wait_for_function(
+        "document.querySelector('#vt-count span').textContent === '1'"
+    )
 
     assert page.locator("#vt-company").input_value() == "Verity Labs"
 
     page.locator("#vt-next").click()
-    page.wait_for_function("document.querySelector('#vt-count span').textContent === '2'")
+    page.wait_for_function(
+        "document.querySelector('#vt-count span').textContent === '2'"
+    )
     assert page.locator("#vt-contact").input_value() == "finance@veritylabs.io"
 
 
@@ -129,7 +145,9 @@ def test_vertical_steps_rail_highlights_the_current_step(page, live_server):
     page.wait_for_function(
         "document.getElementById('rail-step-2').className.includes('border-primary/30')"
     )
-    assert "border-primary/30" not in page.locator("#rail-step-1").get_attribute("class")
+    assert "border-primary/30" not in page.locator("#rail-step-1").get_attribute(
+        "class"
+    )
 
 
 # --- with-summary: the panel has to be derived, or the block has no reason to exist
@@ -145,20 +163,26 @@ def test_summary_panel_follows_the_workspace_name_as_it_is_typed(page, live_serv
     page.wait_for_function(
         "document.getElementById('sw-summary-name').textContent === 'Ironvale Group'"
     )
-    assert page.locator("#sw-summary-address").inner_text() == "arden.app/ironvale-group"
+    assert (
+        page.locator("#sw-summary-address").inner_text() == "arden.app/ironvale-group"
+    )
 
 
 def test_summary_total_recomputes_from_seats_with_no_request(page, live_server):
     """Growth is $149 for 10 seats; four extra seats at $12 make it $197."""
     _ready(page, live_server, SUMMARY)
     page.locator("#sw-next").click()
-    page.wait_for_function("document.querySelector('#sw-count span').textContent === '2'")
+    page.wait_for_function(
+        "document.querySelector('#sw-count span').textContent === '2'"
+    )
 
     seen = _watch_requests(page)
     page.locator("#sw-seats").fill("14")
     page.locator("#sw-seats").dispatch_event("input")
 
-    page.wait_for_function("document.getElementById('sw-summary-total').textContent === '197'")
+    page.wait_for_function(
+        "document.getElementById('sw-summary-total').textContent === '197'"
+    )
     assert page.locator("#sw-summary-extra").inner_text() == "4"
     assert page.locator("#sw-summary-extra-row").is_visible()
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
@@ -167,14 +191,18 @@ def test_summary_total_recomputes_from_seats_with_no_request(page, live_server):
 def test_summary_total_follows_the_plan(page, live_server):
     _ready(page, live_server, SUMMARY)
     page.locator("#sw-next").click()
-    page.wait_for_function("document.querySelector('#sw-count span').textContent === '2'")
+    page.wait_for_function(
+        "document.querySelector('#sw-count span').textContent === '2'"
+    )
 
     assert page.locator("#sw-summary-plan").inner_text() == "Arden Growth"
     assert page.locator("#sw-summary-total").inner_text() == "149"
 
     page.locator('input[name="sw-plan"][value="scale"]').check()
 
-    page.wait_for_function("document.getElementById('sw-summary-total').textContent === '449'")
+    page.wait_for_function(
+        "document.getElementById('sw-summary-total').textContent === '449'"
+    )
     assert page.locator("#sw-summary-plan").inner_text() == "Arden Scale"
     # 8 seats against Scale's 25 — no overage, so the extra-seats line goes away.
     assert not page.locator("#sw-summary-extra-row").is_visible()
@@ -186,10 +214,14 @@ def test_summary_survives_going_back(page, live_server):
     page.locator("#sw-next").click()
     page.locator("#sw-seats").fill("14")
     page.locator("#sw-seats").dispatch_event("input")
-    page.wait_for_function("document.getElementById('sw-summary-total').textContent === '197'")
+    page.wait_for_function(
+        "document.getElementById('sw-summary-total').textContent === '197'"
+    )
 
     page.locator("#sw-back").click()
-    page.wait_for_function("document.querySelector('#sw-count span').textContent === '1'")
+    page.wait_for_function(
+        "document.querySelector('#sw-count span').textContent === '1'"
+    )
 
     assert page.locator("#sw-company").input_value() == "Ironvale Group"
     assert page.locator("#sw-summary-total").inner_text() == "197"
@@ -201,7 +233,9 @@ def test_summary_billing_contact_reaches_the_panel(page, live_server):
 
     page.locator("#sw-next").click()
     page.locator("#sw-next").click()
-    page.wait_for_function("document.querySelector('#sw-count span').textContent === '3'")
+    page.wait_for_function(
+        "document.querySelector('#sw-count span').textContent === '3'"
+    )
     page.locator("#sw-contact").fill("finance@ironvale.com")
 
     page.wait_for_function(
@@ -218,12 +252,16 @@ def test_minimal_bar_and_count_track_the_step_with_no_request(page, live_server)
 
     seen = _watch_requests(page)
     page.locator("#mw-next").click()
-    page.wait_for_function("document.getElementById('mw-bar').getAttribute('value') === '50'")
+    page.wait_for_function(
+        "document.getElementById('mw-bar').getAttribute('value') === '50'"
+    )
     assert page.locator("#mw-count").inner_text() == "Step 2 of 4"
 
     page.locator("#mw-next").click()
     page.locator("#mw-next").click()
-    page.wait_for_function("document.getElementById('mw-bar').getAttribute('value') === '100'")
+    page.wait_for_function(
+        "document.getElementById('mw-bar').getAttribute('value') === '100'"
+    )
 
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
 
@@ -252,7 +290,9 @@ def test_minimal_going_back_keeps_every_answer(page, live_server):
 
     for _ in range(2):
         page.locator("#mw-back").click()
-    page.wait_for_function("document.getElementById('mw-bar').getAttribute('value') === '25'")
+    page.wait_for_function(
+        "document.getElementById('mw-bar').getAttribute('value') === '25'"
+    )
 
     assert page.locator("#mw-company").input_value() == "Northwind Co"
 

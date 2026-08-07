@@ -19,22 +19,34 @@ def member(db):
     import datetime
 
     from django.utils import timezone
-
     from lb.models import LbMember, LbPlan, LbWorkspace
 
     plan = LbPlan.objects.create(
-        name="Scale", slug="scale", tagline="For growing teams",
-        price_monthly=449, price_yearly=4490, seats_included=25,
+        name="Scale",
+        slug="scale",
+        tagline="For growing teams",
+        price_monthly=449,
+        price_yearly=4490,
+        seats_included=25,
     )
     workspace = LbWorkspace.objects.create(
-        name="Beacon Labs", slug="beacon-labs", plan=plan,
-        region="eu-west", currency="USD", billing_email="billing@beaconlabs.com",
+        name="Beacon Labs",
+        slug="beacon-labs",
+        plan=plan,
+        region="eu-west",
+        currency="USD",
+        billing_email="billing@beaconlabs.com",
         created_at=timezone.now(),
     )
     return LbMember.objects.create(
-        workspace=workspace, name="Mira Chen", email="mira@beaconlabs.com",
-        title="Founder", role="owner", status="active",
-        joined_on=datetime.date(2026, 1, 12), last_active_at=timezone.now(),
+        workspace=workspace,
+        name="Mira Chen",
+        email="mira@beaconlabs.com",
+        title="Founder",
+        role="owner",
+        status="active",
+        joined_on=datetime.date(2026, 1, 12),
+        last_active_at=timezone.now(),
     )
 
 
@@ -147,7 +159,9 @@ def test_sign_up_rejects_an_existing_member(page, live_server, member):
     page.locator("button", has_text="Create account").click()
 
     page.wait_for_selector("text=That email is already on an Arden workspace.")
-    assert page.locator("text=That email is already on an Arden workspace.").is_visible()
+    assert page.locator(
+        "text=That email is already on an Arden workspace."
+    ).is_visible()
 
 
 def test_successful_sign_up_creates_a_member(page, live_server, member):
@@ -160,4 +174,6 @@ def test_successful_sign_up_creates_a_member(page, live_server, member):
     page.locator("button", has_text="Create account").click()
 
     page.wait_for_selector("text=Welcome to Arden, Jonah Price.")
-    assert LbMember.objects.filter(email="jonah@kiteandbell.com", status="invited").exists()
+    assert LbMember.objects.filter(
+        email="jonah@kiteandbell.com", status="invited"
+    ).exists()

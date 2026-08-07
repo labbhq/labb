@@ -56,7 +56,9 @@ def test_toggle_reprices_every_plan_with_no_network_request(page, live_server):
     seen = _watch_requests(page)
     page.get_by_role("button", name="Annual").click()
 
-    page.wait_for_function("document.getElementById('price-growth').textContent === '1,490'")
+    page.wait_for_function(
+        "document.getElementById('price-growth').textContent === '1,490'"
+    )
     assert page.locator("#price-starter").inner_text() == "490"
     assert page.locator("#price-scale").inner_text() == "4,490"
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
@@ -65,10 +67,14 @@ def test_toggle_reprices_every_plan_with_no_network_request(page, live_server):
 def test_toggle_flips_back_to_monthly(page, live_server):
     page.goto(f"{live_server.url}{TOGGLE}")
     page.get_by_role("button", name="Annual").click()
-    page.wait_for_function("document.getElementById('price-growth').textContent === '1,490'")
+    page.wait_for_function(
+        "document.getElementById('price-growth').textContent === '1,490'"
+    )
 
     page.get_by_role("button", name="Monthly").click()
-    page.wait_for_function("document.getElementById('price-growth').textContent === '149'")
+    page.wait_for_function(
+        "document.getElementById('price-growth').textContent === '149'"
+    )
     assert page.locator("#price-starter").inner_text() == "49"
 
 
@@ -101,7 +107,12 @@ def test_matrix_renders_the_full_feature_grid(page, live_server):
     page.goto(f"{live_server.url}{MATRIX}")
 
     assert page.locator("#matrix-price-growth").inner_text() == "149"
-    for group in ("The revenue graph", "Forecasting", "Alerts and integrations", "Governance and support"):
+    for group in (
+        "The revenue graph",
+        "Forecasting",
+        "Alerts and integrations",
+        "Governance and support",
+    ):
         assert page.get_by_role("columnheader", name=group).is_visible()
     assert page.get_by_role("cell", name="Custom revenue models").is_visible()
 
@@ -133,7 +144,9 @@ def test_calculator_renders_a_quote_server_side(page, live_server):
     assert page.locator("#usage-total").inner_text() == "257"
 
 
-def test_calculator_recomputes_the_price_live_with_no_network_request(page, live_server):
+def test_calculator_recomputes_the_price_live_with_no_network_request(
+    page, live_server
+):
     """Drag the slider to the top: plan, line items and total all re-derive client-side."""
     page.goto(f"{live_server.url}{CALC}")
     page.wait_for_selector(DATASTAR, state="attached")
@@ -143,7 +156,9 @@ def test_calculator_recomputes_the_price_live_with_no_network_request(page, live
     slider.focus()
     slider.press("End")
 
-    page.wait_for_function("document.getElementById('seat-count-value').textContent === '60'")
+    page.wait_for_function(
+        "document.getElementById('seat-count-value').textContent === '60'"
+    )
     # 60 seats → Scale ($449 platform) + 60 × $9 = $989.
     assert page.locator("#recommended-plan").inner_text() == "Scale"
     assert page.locator("#usage-total").inner_text() == "989"
@@ -158,7 +173,9 @@ def test_calculator_drops_to_starter_at_the_bottom_of_the_slider(page, live_serv
     slider.focus()
     slider.press("Home")
 
-    page.wait_for_function("document.getElementById('seat-count-value').textContent === '3'")
+    page.wait_for_function(
+        "document.getElementById('seat-count-value').textContent === '3'"
+    )
     # 3 seats → Starter ($49 platform) + 3 × $9 = $76.
     assert page.locator("#recommended-plan").inner_text() == "Starter"
     assert page.locator("#usage-total").inner_text() == "76"
@@ -169,7 +186,9 @@ def test_calculator_annual_multiplies_the_derived_total(page, live_server):
     page.wait_for_selector(DATASTAR, state="attached")
 
     page.get_by_role("button", name="Annual").click()
-    page.wait_for_function("document.getElementById('usage-total').textContent === '2,570'")
+    page.wait_for_function(
+        "document.getElementById('usage-total').textContent === '2,570'"
+    )
     assert page.locator("#recommended-plan").inner_text() == "Growth"
 
 
@@ -200,7 +219,9 @@ def test_highlight_tiers_ships_no_datastar(page, live_server):
 
     assert page.locator(DATASTAR).count() == 0
     assert page.locator("script[src]").count() == 0
-    assert page.get_by_role("heading", name="Three plans. Most teams pick the middle one.").is_visible()
+    assert page.get_by_role(
+        "heading", name="Three plans. Most teams pick the middle one."
+    ).is_visible()
 
 
 def test_highlight_tiers_raises_the_middle_plan(page, live_server):

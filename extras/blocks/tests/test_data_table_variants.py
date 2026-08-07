@@ -111,7 +111,9 @@ def test_filter_chip_narrows_the_rows_with_no_network_request(page, live_server)
     seen = _watch_requests(page)
     page.locator("#chip-status-trial").click()
 
-    page.wait_for_function("document.querySelectorAll('#filter-rows tr:not([style*=\"none\"])').length === 1")
+    page.wait_for_function(
+        "document.querySelectorAll('#filter-rows tr:not([style*=\"none\"])').length === 1"
+    )
     assert page.locator("#filter-rows tr:visible").count() == 1
     assert page.locator("#filter-row-nc").is_visible()
     assert page.locator("#filter-row-af").is_hidden()
@@ -125,7 +127,9 @@ def test_two_chips_intersect(page, live_server):
     page.locator("#chip-status-active").click()
     page.locator("#chip-health-watch").click()
 
-    page.wait_for_function("document.querySelectorAll('#filter-rows tr:not([style*=\"none\"])').length === 2")
+    page.wait_for_function(
+        "document.querySelectorAll('#filter-rows tr:not([style*=\"none\"])').length === 2"
+    )
     assert page.locator("#filter-row-kb").is_visible()
     assert page.locator("#filter-row-hf").is_visible()
     assert page.locator("#filter-row-af").is_hidden()
@@ -145,7 +149,9 @@ def test_filters_zero_result_shows_the_empty_state_and_recovers(page, live_serve
     assert page.locator("#filter-empty").is_visible()
 
     page.locator("#filter-empty button").click()
-    page.wait_for_function("document.querySelectorAll('#filter-rows tr:not([style*=\"none\"])').length === 8")
+    page.wait_for_function(
+        "document.querySelectorAll('#filter-rows tr:not([style*=\"none\"])').length === 8"
+    )
     assert page.locator("#filter-empty").is_hidden()
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
 

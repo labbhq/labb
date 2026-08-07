@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # ---------------------------------------------------------------------------
 # Arden — the demo product every block draws from.
 # Revenue ops for growing teams: Workspace · Member · Customer · Invoice ·
@@ -39,7 +38,11 @@ class LbWorkspace(models.Model):
     name = models.CharField(max_length=120)
     slug = models.SlugField(max_length=60, unique=True)
     plan = models.ForeignKey(
-        LbPlan, on_delete=models.SET_NULL, null=True, blank=True, related_name="workspaces"
+        LbPlan,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="workspaces",
     )
     region = models.CharField(max_length=40, default="eu-west-1")
     currency = models.CharField(max_length=3, default="USD")
@@ -72,12 +75,18 @@ MEMBER_STATUS_CHOICES = [
 class LbMember(models.Model):
     """A person on the workspace team — drives the settings/team surface."""
 
-    workspace = models.ForeignKey(LbWorkspace, on_delete=models.CASCADE, related_name="members")
+    workspace = models.ForeignKey(
+        LbWorkspace, on_delete=models.CASCADE, related_name="members"
+    )
     name = models.CharField(max_length=120)
     email = models.EmailField(unique=True)
     title = models.CharField(max_length=100, blank=True)
-    role = models.CharField(max_length=20, choices=MEMBER_ROLE_CHOICES, default="member")
-    status = models.CharField(max_length=20, choices=MEMBER_STATUS_CHOICES, default="active")
+    role = models.CharField(
+        max_length=20, choices=MEMBER_ROLE_CHOICES, default="member"
+    )
+    status = models.CharField(
+        max_length=20, choices=MEMBER_STATUS_CHOICES, default="active"
+    )
     two_factor = models.BooleanField(default=False)
     joined_on = models.DateField()
     last_active_at = models.DateTimeField(null=True, blank=True)
@@ -106,15 +115,25 @@ CUSTOMER_HEALTH_CHOICES = [
 class LbCustomer(models.Model):
     """A company paying the workspace — the spine of the data table."""
 
-    workspace = models.ForeignKey(LbWorkspace, on_delete=models.CASCADE, related_name="customers")
+    workspace = models.ForeignKey(
+        LbWorkspace, on_delete=models.CASCADE, related_name="customers"
+    )
     company = models.CharField(max_length=120)
     contact_name = models.CharField(max_length=120)
     email = models.EmailField()
     plan = models.ForeignKey(
-        LbPlan, on_delete=models.SET_NULL, null=True, blank=True, related_name="customers"
+        LbPlan,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="customers",
     )
-    status = models.CharField(max_length=20, choices=CUSTOMER_STATUS_CHOICES, default="active")
-    health = models.CharField(max_length=20, choices=CUSTOMER_HEALTH_CHOICES, default="good")
+    status = models.CharField(
+        max_length=20, choices=CUSTOMER_STATUS_CHOICES, default="active"
+    )
+    health = models.CharField(
+        max_length=20, choices=CUSTOMER_HEALTH_CHOICES, default="good"
+    )
     mrr = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     seats = models.PositiveSmallIntegerField(default=1)
     industry = models.CharField(max_length=60, blank=True)
@@ -140,11 +159,15 @@ INVOICE_STATUS_CHOICES = [
 class LbInvoice(models.Model):
     """A billing run against a customer — the chartable revenue series."""
 
-    customer = models.ForeignKey(LbCustomer, on_delete=models.CASCADE, related_name="invoices")
+    customer = models.ForeignKey(
+        LbCustomer, on_delete=models.CASCADE, related_name="invoices"
+    )
     number = models.CharField(max_length=30, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, default="USD")
-    status = models.CharField(max_length=20, choices=INVOICE_STATUS_CHOICES, default="paid")
+    status = models.CharField(
+        max_length=20, choices=INVOICE_STATUS_CHOICES, default="paid"
+    )
     period = models.CharField(max_length=20, blank=True)
     issued_on = models.DateField()
     due_on = models.DateField()
@@ -171,9 +194,15 @@ EVENT_KIND_CHOICES = [
 class LbEvent(models.Model):
     """Something that happened in the workspace — feeds activity feeds and charts."""
 
-    workspace = models.ForeignKey(LbWorkspace, on_delete=models.CASCADE, related_name="events")
+    workspace = models.ForeignKey(
+        LbWorkspace, on_delete=models.CASCADE, related_name="events"
+    )
     customer = models.ForeignKey(
-        LbCustomer, on_delete=models.CASCADE, null=True, blank=True, related_name="events"
+        LbCustomer,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="events",
     )
     kind = models.CharField(max_length=20, choices=EVENT_KIND_CHOICES)
     label = models.CharField(max_length=200)

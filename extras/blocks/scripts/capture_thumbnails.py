@@ -17,7 +17,9 @@ import yaml
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
-BLOCKS = ROOT / (yaml.safe_load((ROOT / "blocks.yaml").read_text()).get("blocks_dir") or ".")
+BLOCKS = ROOT / (
+    yaml.safe_load((ROOT / "blocks.yaml").read_text()).get("blocks_dir") or "."
+)
 PORT = 8791
 BASE = f"http://127.0.0.1:{PORT}"
 
@@ -71,7 +73,9 @@ def main():
                 try:
                     resp = page.goto(url, wait_until="networkidle")
                     if resp is None or resp.status >= 400:
-                        failed.append(f"{category}/{slug} (HTTP {resp.status if resp else '?'})")
+                        failed.append(
+                            f"{category}/{slug} (HTTP {resp.status if resp else '?'})"
+                        )
                         continue
                     for mode, theme in THEMES.items():
                         page.evaluate(

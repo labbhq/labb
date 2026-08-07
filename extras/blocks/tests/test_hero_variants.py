@@ -19,7 +19,13 @@ import pytest
 
 HERO_DIR = Path(__file__).resolve().parent.parent / "hero"
 
-SLUGS = ["split-visual", "centred-bold", "with-logos", "app-screenshot", "gradient-mesh"]
+SLUGS = [
+    "split-visual",
+    "centred-bold",
+    "with-logos",
+    "app-screenshot",
+    "gradient-mesh",
+]
 
 # The line each hero has to land, and one element from that hero and no other.
 HEADLINES = {
@@ -133,7 +139,13 @@ def test_hero_has_no_lorem(slug):
 def test_with_logos_shows_the_arden_supporting_cast(page, live_server):
     page.goto(f"{live_server.url}{preview('with-logos')}")
 
-    for customer in ("AtlasForge", "Kite & Bell", "Northwind Co", "Verity Labs", "Ironvale Group"):
+    for customer in (
+        "AtlasForge",
+        "Kite & Bell",
+        "Northwind Co",
+        "Verity Labs",
+        "Ironvale Group",
+    ):
         assert page.get_by_text(customer, exact=True).first.is_visible()
 
 

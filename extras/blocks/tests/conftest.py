@@ -2,8 +2,6 @@ import os
 import sys
 from pathlib import Path
 
-import pytest
-
 # Allow async db access — required for pytest-playwright under asyncio.
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
@@ -15,13 +13,13 @@ if str(BLOCKS_ROOT) not in sys.path:
 
 # Build .labb/templates/, synthetic vendor package, and populate BLOCK_REGISTRY
 # before Django loads the ROOT_URLCONF (which reads BLOCK_REGISTRY at import time).
-from labb.cli.handlers.commons import blocks_root  # noqa: E402
 from labb.cli.handlers.blocks_dev import (  # noqa: E402  (import after sys.path setup — intentional)
     _build_template_tree,
     _build_vendor_package,
     _create_renderer_base_template,
     _discover_blocks,
 )
+from labb.cli.handlers.commons import blocks_root  # noqa: E402
 
 _build_template_tree(BLOCKS_ROOT, vendor="lb")
 _build_vendor_package(BLOCKS_ROOT, vendor="lb")
@@ -34,7 +32,8 @@ if labb_pkg_root not in sys.path:
 
 discovered = _discover_blocks(BLOCKS_ROOT)
 
-from labb.contrib.blocks import renderer as _renderer  # noqa: E402  (import after sys.path setup — intentional)
+# Imported after the sys.path setup above, so it cannot move to the top.
+from labb.contrib.blocks import renderer as _renderer  # noqa: E402
 
 _block_registry = {
     f"lb/{category}/{slug}": {

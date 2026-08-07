@@ -45,18 +45,19 @@ MIN_SLUG = 3
 
 
 class ProfileSignals(Signals):
-    name   = Str(path="profile.name",   default="")
-    slug   = Str(path="profile.slug",   default="")
-    email  = Str(path="profile.email",  default="")
+    name = Str(path="profile.name", default="")
+    slug = Str(path="profile.slug", default="")
+    email = Str(path="profile.email", default="")
     region = Str(path="profile.region", default="")
 
 
 class InviteSignals(Signals):
     email = Str(path="invite.email", default="")
-    role  = Str(path="invite.role",  default="member")
+    role = Str(path="invite.role", default="member")
 
 
 # --- data ------------------------------------------------------------------
+
 
 def _workspace():
     return LbWorkspace.objects.select_related("plan").first()
@@ -82,10 +83,13 @@ def _seats_used(members):
 
 
 def _looks_like_email(value):
-    return "@" in value and "." in value.split("@")[-1] and len(value.split("@")[-1]) > 3
+    return (
+        "@" in value and "." in value.split("@")[-1] and len(value.split("@")[-1]) > 3
+    )
 
 
 # --- validation ------------------------------------------------------------
+
 
 def _profile_errors(s, workspace, strict=False):
     """Gentle while typing, strict on save."""
@@ -137,6 +141,7 @@ def _invite_errors(s, workspace, strict=False):
 # One dict per section, shared by the full-page render and the scoped patch, so
 # a zone can never drift between the two.
 
+
 def _profile_signals(request, workspace):
     s = ProfileSignals(request)
     if not request.signals:
@@ -167,7 +172,9 @@ def _team_props(request, workspace, errors=None):
         "seats_total": seats_total,
         "seats_left": max(0, seats_total - seats_used),
         "seats_full": seats_used >= seats_total,
-        "seats_pct": min(100, round(seats_used * 100 / seats_total)) if seats_total else 0,
+        "seats_pct": min(100, round(seats_used * 100 / seats_total))
+        if seats_total
+        else 0,
         "plan": workspace.plan,
         "signals": InviteSignals(request),
         "errors": errors or {},
@@ -177,12 +184,16 @@ def _team_props(request, workspace, errors=None):
 
 def _billing_props(request, workspace, failed=""):
     invoices = list(
-        LbInvoice.objects.filter(customer__workspace=workspace).select_related("customer")[:5]
+        LbInvoice.objects.filter(customer__workspace=workspace).select_related(
+            "customer"
+        )[:5]
     )
     for inv in invoices:
-        inv.status_variant = {"paid": "success", "open": "info", "overdue": "error"}.get(
-            inv.status, "neutral"
-        )
+        inv.status_variant = {
+            "paid": "success",
+            "open": "info",
+            "overdue": "error",
+        }.get(inv.status, "neutral")
     outstanding = sum(
         inv.amount
         for inv in LbInvoice.objects.filter(
@@ -219,35 +230,50 @@ def _context(request, workspace):
 
 # --- patches ---------------------------------------------------------------
 
+
 def _patch_profile(request, workspace, errors=None):
     return patch_component(
-        request, "@section-profile", "workspace.profile",
-        mode=INNER, **_profile_props(request, workspace, errors),
+        request,
+        "@section-profile",
+        "workspace.profile",
+        mode=INNER,
+        **_profile_props(request, workspace, errors),
     )
 
 
 def _patch_team(request, workspace, errors=None):
     return patch_component(
-        request, "@section-team", "workspace.team",
-        mode=INNER, **_team_props(request, workspace, errors),
+        request,
+        "@section-team",
+        "workspace.team",
+        mode=INNER,
+        **_team_props(request, workspace, errors),
     )
 
 
 def _patch_billing(request, workspace, failed=""):
     return patch_component(
-        request, "@section-billing", "workspace.billing",
-        mode=INNER, **_billing_props(request, workspace, failed),
+        request,
+        "@section-billing",
+        "workspace.billing",
+        mode=INNER,
+        **_billing_props(request, workspace, failed),
     )
 
 
 def _patch_toast(request, message, detail=""):
     return patch_component(
-        request, "@toast", "workspace.toast",
-        mode=INNER, message=message, detail=detail,
+        request,
+        "@toast",
+        "workspace.toast",
+        mode=INNER,
+        message=message,
+        detail=detail,
     )
 
 
 # --- views -----------------------------------------------------------------
+
 
 def index(request):
     return render_page(request, INDEX, _context(request, _workspace()), title=TITLE)
@@ -278,10 +304,16 @@ def profile_save(request):
     workspace.region = s.region or workspace.region
     workspace.save()
 
-    return SSEResponse([
-        _patch_profile(request, workspace),
-        _patch_toast(request, "Profile saved", f"{workspace.name} · arden.app/w/{workspace.slug}"),
-    ])
+    return SSEResponse(
+        [
+            _patch_profile(request, workspace),
+            _patch_toast(
+                request,
+                "Profile saved",
+                f"{workspace.name} · arden.app/w/{workspace.slug}",
+            ),
+        ]
+    )
 
 
 def invite_validate(request):
@@ -323,11 +355,17 @@ def invite_save(request):
     )
 
     s.email = ""
-    return SSEResponse([
-        s.patch("email"),
-        _patch_team(request, workspace),
-        _patch_toast(request, "Invite sent", f"{member.email} joins as {member.get_role_display()}."),
-    ])
+    return SSEResponse(
+        [
+            s.patch("email"),
+            _patch_team(request, workspace),
+            _patch_toast(
+                request,
+                "Invite sent",
+                f"{member.email} joins as {member.get_role_display()}.",
+            ),
+        ]
+    )
 
 
 def plan_change(request, pk):
@@ -354,8 +392,10 @@ def plan_change(request, pk):
     # The seat allowance shown in the team section comes from the plan, so that
     # zone is genuinely affected too — patch every zone the change touches, and
     # only those.
-    return SSEResponse([
-        _patch_billing(request, workspace),
-        _patch_team(request, workspace),
-        _patch_toast(request, "Plan changed", f"You are now on {plan.name}."),
-    ])
+    return SSEResponse(
+        [
+            _patch_billing(request, workspace),
+            _patch_team(request, workspace),
+            _patch_toast(request, "Plan changed", f"You are now on {plan.name}."),
+        ]
+    )
