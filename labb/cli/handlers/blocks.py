@@ -26,12 +26,7 @@ def _title_name(name: str) -> str:
 
 
 def _clone_source(source: BlockSource, tmp_dir: str) -> Optional[Path]:
-    """Clone a remote source and return its root, or None if it is unreachable.
-
-    GIT_TERMINAL_PROMPT=0 matters: GitHub answers 404 for missing *and* private
-    repos, so without it git decides credentials might help and blocks on an
-    interactive prompt. The CLI then hangs instead of reaching the warning below.
-    """
+    """Clone a remote source and return its root, or None if unreachable."""
     result = subprocess.run(
         # "--" ensures a URL beginning with "-" is not read as a git option.
         ["git", "clone", "--depth=1", "--quiet", "--", source.url, tmp_dir],
