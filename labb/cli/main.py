@@ -239,7 +239,9 @@ app.add_typer(block_app, name="block")
 @block_app.command("init")
 def block_init_cmd(
     name: str = typer.Option("blocks", "--name", "-n", help="Collection name"),
-    path: str = typer.Option(None, "--path", "-p", help="Path to create collection (default: ./{name})"),
+    path: str = typer.Option(
+        None, "--path", "-p", help="Path to create collection (default: ./{name})"
+    ),
 ):
     """Initialise a block collection as a Django app"""
     from .handlers.blocks import block_init
@@ -250,7 +252,9 @@ def block_init_cmd(
 @block_app.command("add")
 def block_add_cmd(
     ref: str = typer.Argument(..., help="Block ref (vendor/category/slug)"),
-    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Target collection name"),
+    collection: Optional[str] = typer.Option(
+        None, "--collection", "-c", help="Target collection name"
+    ),
 ):
     """Add a block from a configured source into a collection"""
     from .handlers.blocks import block_add
@@ -261,7 +265,9 @@ def block_add_cmd(
 @block_app.command("remove")
 def block_remove_cmd(
     ref: str = typer.Argument(..., help="Block ref (vendor/category/slug)"),
-    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Target collection name"),
+    collection: Optional[str] = typer.Option(
+        None, "--collection", "-c", help="Target collection name"
+    ),
 ):
     """Remove a block from a collection"""
     from .handlers.blocks import block_remove
@@ -272,10 +278,18 @@ def block_remove_cmd(
 @block_app.command("sync")
 def block_sync_cmd(
     vendor: str = typer.Argument(..., help="Vendor key to sync (e.g. lb)"),
-    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Target collection name"),
-    models_only: bool = typer.Option(False, "--models-only", help="Sync only model files"),
-    fixtures_only: bool = typer.Option(False, "--fixtures-only", help="Sync only fixtures"),
-    templates_only: bool = typer.Option(False, "--templates-only", help="Sync only templates"),
+    collection: Optional[str] = typer.Option(
+        None, "--collection", "-c", help="Target collection name"
+    ),
+    models_only: bool = typer.Option(
+        False, "--models-only", help="Sync only model files"
+    ),
+    fixtures_only: bool = typer.Option(
+        False, "--fixtures-only", help="Sync only fixtures"
+    ),
+    templates_only: bool = typer.Option(
+        False, "--templates-only", help="Sync only templates"
+    ),
 ):
     """Re-fetch and overwrite vendor models, fixtures, templates and block code from source"""
     from .handlers.blocks import block_sync
@@ -291,7 +305,9 @@ def block_sync_cmd(
 
 @block_app.command("list")
 def block_list_cmd(
-    source: Optional[str] = typer.Option(None, "--source", "-s", help="Filter to a specific source"),
+    source: Optional[str] = typer.Option(
+        None, "--source", "-s", help="Filter to a specific source"
+    ),
 ):
     """List all available blocks from configured sources"""
     from .handlers.blocks import block_list
@@ -301,7 +317,9 @@ def block_list_cmd(
 
 @block_app.command("search")
 def block_search_cmd(
-    query: str = typer.Argument(..., help="Search query (matches ref, name, description)"),
+    query: str = typer.Argument(
+        ..., help="Search query (matches ref, name, description)"
+    ),
 ):
     """Search for blocks by name or description"""
     from .handlers.blocks import block_search
@@ -319,29 +337,42 @@ block_app.add_typer(block_dev_app, name="dev")
 
 @block_dev_app.command("start")
 def block_dev_start_cmd(
-    name: Optional[str] = typer.Option(None, "--name", "-n", help="Directory name for the source repo"),
-    vendor: Optional[str] = typer.Option(None, "--vendor", "-v", help="Vendor key (e.g. lb)"),
-    package_manager: Optional[str] = typer.Option(None, "--package-manager", "-p", help="Package manager (poetry, pip, uv)"),
+    name: Optional[str] = typer.Option(
+        None, "--name", "-n", help="Directory name for the source repo"
+    ),
+    vendor: Optional[str] = typer.Option(
+        None, "--vendor", "-v", help="Vendor key (e.g. lb)"
+    ),
+    package_manager: Optional[str] = typer.Option(
+        None, "--package-manager", "-p", help="Package manager (poetry, pip, uv)"
+    ),
 ):
     """Bootstrap a new block source repo with package manager setup"""
     from .handlers.blocks_dev import start
+
     start(name=name, vendor=vendor, package_manager=package_manager)
 
 
 @block_dev_app.command("new")
 def block_dev_new_cmd(
     ref: str = typer.Argument(..., help="Block ref as category/slug (e.g. crud/todos)"),
-    block_type: str = typer.Option("fullstack", "--type", "-t", help="Block type: fe or fullstack"),
+    block_type: str = typer.Option(
+        "fullstack", "--type", "-t", help="Block type: fe or fullstack"
+    ),
 ):
     """Scaffold a new block skeleton in the current source repo"""
     from .handlers.blocks_dev import new_block
+
     new_block(ref=ref, block_type=block_type)
 
 
 @block_dev_app.command("build")
 def block_dev_build_index(
     path: str = typer.Option(
-        ".", "--path", "-p", help="Path to block source repo (default: current directory)"
+        ".",
+        "--path",
+        "-p",
+        help="Path to block source repo (default: current directory)",
     ),
 ):
     """Regenerate index.yaml from all block.yaml files in a source repo"""
@@ -353,7 +384,10 @@ def block_dev_build_index(
 @block_dev_app.command("validate")
 def block_dev_validate_cmd(
     path: str = typer.Option(
-        ".", "--path", "-p", help="Path to block source repo (default: current directory)"
+        ".",
+        "--path",
+        "-p",
+        help="Path to block source repo (default: current directory)",
     ),
 ):
     """Check all blocks in a source repo conform to the spec"""
@@ -385,10 +419,13 @@ block_app.add_typer(source_app, name="source")
 def source_add_cmd(
     name: str = typer.Argument(..., help="Source name"),
     url: Optional[str] = typer.Argument(None, help="Remote git URL"),
-    path: Optional[str] = typer.Option(None, "--path", "-p", help="Local filesystem path"),
+    path: Optional[str] = typer.Option(
+        None, "--path", "-p", help="Local filesystem path"
+    ),
 ):
     """Add a block source (remote git repo or local path) to labb.yaml"""
     from .handlers.blocks import source_add
+
     source_add(name=name, url=url, path=path)
 
 
@@ -396,6 +433,7 @@ def source_add_cmd(
 def source_list_cmd():
     """List all configured block sources"""
     from .handlers.blocks import source_list
+
     source_list()
 
 

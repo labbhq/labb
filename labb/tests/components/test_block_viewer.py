@@ -79,7 +79,9 @@ class TestThumbnailResolution:
         assert views._thumbnail_path(meta, "dark").name == "login.png"
 
     def test_declared_thumbnail_is_used(self, tmp_path):
-        views, meta = self._meta(tmp_path, ["custom.png"], declared="thumbnails/custom.png")
+        views, meta = self._meta(
+            tmp_path, ["custom.png"], declared="thumbnails/custom.png"
+        )
         assert views._thumbnail_path(meta, "dark").name == "custom.png"
 
     def test_declared_path_still_prefers_its_themed_sibling(self, tmp_path):

@@ -4,7 +4,9 @@ from labb.cli.handlers.migrate_handler import _plan_packages, migrate_config
 
 
 def test_plan_packages_maps_apps_to_components():
-    plan = _plan_packages({"labb": ["templates/cotton/lbb/**/*.html"], "labbdocs": None})
+    plan = _plan_packages(
+        {"labb": ["templates/cotton/lbb/**/*.html"], "labbdocs": None}
+    )
     assert plan["labb"] == {"components": ["templates/cotton/lbb/**/*.html"]}
     assert plan["labbdocs"] == {"components": []}
 
@@ -39,7 +41,9 @@ def test_migrate_rewrites_yaml_input_and_cleans_up(tmp_path):
 
     cfg = yaml.safe_load((tmp_path / "labb.yaml").read_text())
     # scan.apps → packages.components; scan.output dropped; templates kept
-    assert cfg["css"]["packages"]["labb"] == {"components": ["templates/cotton/lbb/**/*.html"]}
+    assert cfg["css"]["packages"]["labb"] == {
+        "components": ["templates/cotton/lbb/**/*.html"]
+    }
     assert "apps" not in cfg["css"]["scan"]
     assert "output" not in cfg["css"]["scan"]
     assert cfg["css"]["scan"]["templates"] == ["templates/**/*.html"]

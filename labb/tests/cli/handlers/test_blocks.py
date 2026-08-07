@@ -1,4 +1,5 @@
 """Tests for blocks.py: block_init, block_add, block_remove, block_sync, block_list, block_search, source_add, source_list."""
+
 from pathlib import Path
 from unittest.mock import patch
 
@@ -17,12 +18,11 @@ from labb.cli.handlers.blocks import (
 )
 from labb.config import (
     BlockCollection,
-    BlockSource,
     BlocksConfig,
+    BlockSource,
     LabbConfig,
     clear_config_cache,
 )
-
 
 # ===========================================================================
 # block_init
@@ -168,9 +168,13 @@ def test_block_init_second_collection_not_default(tmp_path):
     existing_config = LabbConfig(
         blocks=BlocksConfig(
             collections=[
-                BlockCollection(name="blocks", path=str(tmp_path / "blocks"), default=True)
+                BlockCollection(
+                    name="blocks", path=str(tmp_path / "blocks"), default=True
+                )
             ],
-            sources=[BlockSource(name="labbhq", url="https://github.com/labbhq/blocks")],
+            sources=[
+                BlockSource(name="labbhq", url="https://github.com/labbhq/blocks")
+            ],
         )
     )
 
@@ -202,7 +206,9 @@ def test_block_init_duplicate_name_errors(tmp_path):
     existing_config = LabbConfig(
         blocks=BlocksConfig(
             collections=[
-                BlockCollection(name="blocks", path=str(tmp_path / "blocks"), default=True)
+                BlockCollection(
+                    name="blocks", path=str(tmp_path / "blocks"), default=True
+                )
             ],
             sources=[],
         )
@@ -226,9 +232,13 @@ def test_block_init_labbhq_not_added_twice(tmp_path):
     existing_config = LabbConfig(
         blocks=BlocksConfig(
             collections=[
-                BlockCollection(name="blocks", path=str(tmp_path / "blocks"), default=True)
+                BlockCollection(
+                    name="blocks", path=str(tmp_path / "blocks"), default=True
+                )
             ],
-            sources=[BlockSource(name="labbhq", url="https://github.com/labbhq/blocks")],
+            sources=[
+                BlockSource(name="labbhq", url="https://github.com/labbhq/blocks")
+            ],
         )
     )
 
@@ -291,7 +301,9 @@ def make_source_repo(base: Path, vendor: str = "lb") -> Path:
 
     models_dir = src / "models"
     models_dir.mkdir()
-    (models_dir / "__init__.py").write_text(f"from .todo import Lb{vendor.title()}Todo\n")
+    (models_dir / "__init__.py").write_text(
+        f"from .todo import Lb{vendor.title()}Todo\n"
+    )
     (models_dir / "todo.py").write_text(
         f"from django.db import models\n"
         f"class Lb{vendor.title()}Todo(models.Model):\n"
@@ -311,7 +323,9 @@ def make_source_repo(base: Path, vendor: str = "lb") -> Path:
     (block_dir / "views.py").write_text(
         f"from labb.contrib.blocks import lm\nModel = lm('Lb{vendor.title()}Todo')\n"
     )
-    (block_dir / "urls.py").write_text("from django.urls import path\nurlpatterns = []\n")
+    (block_dir / "urls.py").write_text(
+        "from django.urls import path\nurlpatterns = []\n"
+    )
     templates_dir = block_dir / "templates"
     templates_dir.mkdir()
     (templates_dir / "index.html").write_text("<div>todos</div>")
@@ -350,7 +364,9 @@ def make_collection(base: Path, name: str = "blocks") -> Path:
     return col
 
 
-def make_labb_config_add(tmp_path: Path, source_path: Path, collection_path: Path) -> Path:
+def make_labb_config_add(
+    tmp_path: Path, source_path: Path, collection_path: Path
+) -> Path:
     config_path = tmp_path / "labb.yaml"
     config_path.write_text(
         f"css:\n"
@@ -402,7 +418,9 @@ def test_block_add_first_time(tmp_path):
 
     assert (collection_path / "lb" / "crud" / "todos" / "views.py").exists()
     assert (collection_path / "lb" / "crud" / "todos" / "urls.py").exists()
-    assert (collection_path / "templates" / "lb" / "crud" / "todos" / "index.html").exists()
+    assert (
+        collection_path / "templates" / "lb" / "crud" / "todos" / "index.html"
+    ).exists()
     assert (collection_path / "lb" / "models" / "todo.py").exists()
 
     fixture_file = collection_path / "fixtures" / "lb.json"
@@ -635,7 +653,11 @@ def test_block_remove_not_installed_errors(tmp_path):
     with p1, p2:
         with pytest.raises((SystemExit, click.exceptions.Exit)) as exc_info:
             block_remove(ref="lb/crud/nonexistent")
-    code = exc_info.value.code if isinstance(exc_info.value, SystemExit) else exc_info.value.exit_code
+    code = (
+        exc_info.value.code
+        if isinstance(exc_info.value, SystemExit)
+        else exc_info.value.exit_code
+    )
     assert code == 1
 
 
@@ -645,7 +667,11 @@ def test_block_remove_invalid_ref_format(tmp_path):
     with p1, p2:
         with pytest.raises((SystemExit, click.exceptions.Exit)) as exc_info:
             block_remove(ref="lb/todos")
-    code = exc_info.value.code if isinstance(exc_info.value, SystemExit) else exc_info.value.exit_code
+    code = (
+        exc_info.value.code
+        if isinstance(exc_info.value, SystemExit)
+        else exc_info.value.exit_code
+    )
     assert code == 1
 
 
@@ -659,7 +685,9 @@ def make_source_with_vendor(base: Path, vendor: str = "lb") -> Path:
     src.mkdir()
     models_dir = src / "models"
     models_dir.mkdir()
-    (models_dir / "__init__.py").write_text(f"from .todo import Lb{vendor.title()}Todo\n")
+    (models_dir / "__init__.py").write_text(
+        f"from .todo import Lb{vendor.title()}Todo\n"
+    )
     (models_dir / "todo.py").write_text(
         f"from django.db import models\n"
         f"class Lb{vendor.title()}Todo(models.Model):\n"
@@ -689,7 +717,9 @@ def make_installed_vendor(col: Path, vendor: str = "lb"):
     )
 
 
-def make_labb_config_sync(tmp_path: Path, collection_path: Path, source_path: Path) -> Path:
+def make_labb_config_sync(
+    tmp_path: Path, collection_path: Path, source_path: Path
+) -> Path:
     config_path = tmp_path / "labb.yaml"
     config_path.write_text(
         f"css:\n  build:\n    input: in.css\n    output: out.css\n"
@@ -705,7 +735,9 @@ def make_labb_config_sync(tmp_path: Path, collection_path: Path, source_path: Pa
     return config_path
 
 
-def make_labb_config_object_sync(source_path: Path, collection_path: Path) -> LabbConfig:
+def make_labb_config_object_sync(
+    source_path: Path, collection_path: Path
+) -> LabbConfig:
     return LabbConfig(
         blocks=BlocksConfig(
             collections=[
@@ -969,7 +1001,10 @@ def test_sync_default_covers_models_fixtures_and_templates(tmp_path):
     config_path, config_obj, col = setup_template_sync_test(tmp_path)
     _run_sync(config_path, config_obj)
 
-    assert "models.CharField(max_length=500)" in (col / "lb" / "models" / "todo.py").read_text()
+    assert (
+        "models.CharField(max_length=500)"
+        in (col / "lb" / "models" / "todo.py").read_text()
+    )
     assert '"blocks.' in (col / "fixtures" / "lb.json").read_text()
     assert (col / "templates" / "cotton" / "todos" / "row.html").exists()
 
@@ -1011,7 +1046,9 @@ def test_sync_templates_only_skips_block_code(tmp_path):
 # ===========================================================================
 
 
-def make_local_source(tmp_path: Path, name: str = "mysource", vendor: str = "lb") -> Path:
+def make_local_source(
+    tmp_path: Path, name: str = "mysource", vendor: str = "lb"
+) -> Path:
     src = tmp_path / name
     src.mkdir()
     (src / "index.yaml").write_text(
@@ -1153,9 +1190,7 @@ def test_block_list_unknown_source_errors(tmp_path, capsys):
 def test_block_list_no_sources_configured(tmp_path, capsys):
     config_path = tmp_path / "labb.yaml"
     config_path.write_text("css:\n  build:\n    input: in.css\n    output: out.css\n")
-    config = LabbConfig(
-        blocks=BlocksConfig(collections=[], sources=[])
-    )
+    config = LabbConfig(blocks=BlocksConfig(collections=[], sources=[]))
 
     with (
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
@@ -1370,7 +1405,9 @@ def test_source_add_duplicate_name_errors(tmp_path):
     existing_config = LabbConfig(
         blocks=BlocksConfig(
             collections=[],
-            sources=[BlockSource(name="labbhq", url="https://github.com/labbhq/blocks")],
+            sources=[
+                BlockSource(name="labbhq", url="https://github.com/labbhq/blocks")
+            ],
         )
     )
 

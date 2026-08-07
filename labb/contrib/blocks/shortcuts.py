@@ -4,7 +4,9 @@ from django.http import HttpRequest
 from django.shortcuts import render as _django_render
 
 
-def render_page(request: HttpRequest, template: str, context: dict | None = None, title: str = ""):
+def render_page(
+    request: HttpRequest, template: str, context: dict | None = None, title: str = ""
+):
     """Render a pages/ block template wrapped in c-lbb.page."""
     ctx = dict(context or {})
     ctx.setdefault("title", title)

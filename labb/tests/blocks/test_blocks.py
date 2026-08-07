@@ -148,9 +148,11 @@ def make_fake_collection(tmp_path, name="blocks"):
     (tmp_path / "lb" / "crud" / "todos" / "urls.py").write_text("# urls")
     (tmp_path / "lb" / "crud" / "contacts").mkdir(parents=True)
     (tmp_path / "lb" / "crud" / "contacts" / "urls.py").write_text("# urls")
-    (tmp_path / "lb" / "models").mkdir(parents=True)   # should be skipped (category skip)
-    (tmp_path / "templates").mkdir()                    # should be skipped (vendor skip)
-    (tmp_path / "migrations").mkdir()                   # should be skipped (vendor skip)
+    (tmp_path / "lb" / "models").mkdir(
+        parents=True
+    )  # should be skipped (category skip)
+    (tmp_path / "templates").mkdir()  # should be skipped (vendor skip)
+    (tmp_path / "migrations").mkdir()  # should be skipped (vendor skip)
 
     mod = types.ModuleType(name)
     mod.__path__ = [str(tmp_path)]
@@ -168,8 +170,10 @@ class TestIncludeBlocksAutoDiscovery:
         mock_include = MagicMock(side_effect=lambda m: f"included:{m}")
         mock_path = MagicMock(side_effect=lambda prefix, inc: (prefix, inc))
 
-        with patch("django.urls.include", mock_include), \
-             patch("django.urls.path", mock_path):
+        with (
+            patch("django.urls.include", mock_include),
+            patch("django.urls.path", mock_path),
+        ):
             result = include_blocks(collection)
 
         assert len(result) == 2
@@ -184,8 +188,10 @@ class TestIncludeBlocksAutoDiscovery:
         mock_include = MagicMock(side_effect=lambda m: f"included:{m}")
         mock_path = MagicMock(side_effect=lambda prefix, inc: (prefix, inc))
 
-        with patch("django.urls.include", mock_include), \
-             patch("django.urls.path", mock_path):
+        with (
+            patch("django.urls.include", mock_include),
+            patch("django.urls.path", mock_path),
+        ):
             result = include_blocks(collection)
 
         by_prefix = {r[0]: r[1] for r in result}
@@ -201,8 +207,10 @@ class TestIncludeBlocksAutoDiscovery:
         mock_include = MagicMock(side_effect=lambda m: f"included:{m}")
         mock_path = MagicMock(side_effect=lambda prefix, inc: (prefix, inc))
 
-        with patch("django.urls.include", mock_include), \
-             patch("django.urls.path", mock_path):
+        with (
+            patch("django.urls.include", mock_include),
+            patch("django.urls.path", mock_path),
+        ):
             result = include_blocks(collection)
 
         prefixes = {r[0] for r in result}
@@ -219,8 +227,10 @@ class TestIncludeBlocksAutoDiscovery:
         mock_include = MagicMock(side_effect=lambda m: f"included:{m}")
         mock_path = MagicMock(side_effect=lambda prefix, inc: (prefix, inc))
 
-        with patch("django.urls.include", mock_include), \
-             patch("django.urls.path", mock_path):
+        with (
+            patch("django.urls.include", mock_include),
+            patch("django.urls.path", mock_path),
+        ):
             result = include_blocks(collection)
 
         prefixes = {r[0] for r in result}

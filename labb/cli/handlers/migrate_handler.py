@@ -30,7 +30,9 @@ def _patch_input_css(input_path: Path) -> list:
     """Add the labb.css import if missing; return a list of manual-cleanup notes."""
     notes = []
     if not input_path.exists():
-        notes.append(f"input.css not found at {input_path} — add {LABB_IMPORT_LINE} yourself.")
+        notes.append(
+            f"input.css not found at {input_path} — add {LABB_IMPORT_LINE} yourself."
+        )
         return notes
     text = input_path.read_text(encoding="utf-8")
 
@@ -41,7 +43,9 @@ def _patch_input_css(input_path: Path) -> list:
             text = text.replace(anchor, anchor + "\n" + LABB_IMPORT_BLOCK, 1)
         elif '@import "tailwindcss";\n' in text:
             text = text.replace(
-                '@import "tailwindcss";\n', '@import "tailwindcss";\n\n' + LABB_IMPORT_BLOCK, 1
+                '@import "tailwindcss";\n',
+                '@import "tailwindcss";\n\n' + LABB_IMPORT_BLOCK,
+                1,
             )
         else:
             text = LABB_IMPORT_BLOCK + text
@@ -49,7 +53,8 @@ def _patch_input_css(input_path: Path) -> list:
 
     # Flag things that must be removed by hand (auto-deleting CSS is unsafe).
     if "@source" in text and any(
-        m in text for m in ("labb-fullstack-reactivity", "/labb/templates", "labbdocs/templates")
+        m in text
+        for m in ("labb-fullstack-reactivity", "/labb/templates", "labbdocs/templates")
     ):
         notes.append(
             'Remove the old hardcoded `@source "...labb/templates"` lines — labb.css supplies them now.'
@@ -132,7 +137,9 @@ def migrate_config(path: str = ".", assume_yes: bool = False) -> None:
         console.print("[green]✅ Added .labb/ to .gitignore[/green]")
 
     if notes:
-        console.print("\n[bold yellow]Manual cleanup needed in input.css:[/bold yellow]")
+        console.print(
+            "\n[bold yellow]Manual cleanup needed in input.css:[/bold yellow]"
+        )
         for note in notes:
             console.print(f"  • {note}")
     console.print("\n[bold green]Done. Run `labb build` to verify.[/bold green]")

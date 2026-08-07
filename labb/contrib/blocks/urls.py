@@ -26,9 +26,7 @@ def include_blocks(collection, ref: Optional[str] = None):
     if ref is not None:
         parts = ref.split("/")
         if len(parts) != 3:
-            raise ValueError(
-                f"Block ref must be vendor/category/slug, got: {ref!r}"
-            )
+            raise ValueError(f"Block ref must be vendor/category/slug, got: {ref!r}")
         vendor, category, slug = parts
         module_path = f"{collection_name}.{vendor}.{category}.{slug}.urls"
         return include(module_path)

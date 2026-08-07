@@ -15,6 +15,7 @@ def file_tree(raw_tabs: dict) -> list:
         tree = file_tree(raw)
         # pass tabs + tree to c-lbb.renderer.viewer
     """
+
     def _insert(node, parts, fname):
         head, *tail = parts
         if tail:
@@ -35,7 +36,14 @@ def file_tree(raw_tabs: dict) -> list:
         for name in sorted(files):
             items.append({"type": "file", "name": name, "fname": files[name]})
         for name in sorted(dirs):
-            items.append({"type": "dir", "name": name, "fname": None, "children": _to_nodes(dirs[name])})
+            items.append(
+                {
+                    "type": "dir",
+                    "name": name,
+                    "fname": None,
+                    "children": _to_nodes(dirs[name]),
+                }
+            )
         return items
 
     return _to_nodes(root)

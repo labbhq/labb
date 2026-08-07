@@ -1,24 +1,23 @@
 """Tests for blocks_dev.py: build_index, validate, new_block, start, serve helpers."""
-import yaml
-import pytest
-
-import typer
-import click
 
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from labb.cli.handlers.commons import blocks_root
+import click
+import pytest
+import typer
+import yaml
+
 from labb.cli.handlers.blocks_dev import (
-    build_index,
-    validate,
-    new_block,
     _build_template_tree,
     _discover_blocks,
     _ensure_gitignore,
+    build_index,
+    new_block,
     serve,
+    validate,
 )
-
+from labb.cli.handlers.commons import blocks_root
 
 # ===========================================================================
 # build_index
@@ -84,7 +83,9 @@ def test_build_index_skips_invalid_block(tmp_path, capsys):
 
     bad_dir = tmp_path / "crud" / "bad"
     bad_dir.mkdir(parents=True)
-    (bad_dir / "block.yaml").write_text("type: fullstack\ntier: free\ndescription: Missing name\n")
+    (bad_dir / "block.yaml").write_text(
+        "type: fullstack\ntier: free\ndescription: Missing name\n"
+    )
 
     build_index(path=str(tmp_path))
 
@@ -200,11 +201,15 @@ def make_fullstack_block(tmp_path, category="crud", slug="todos"):
     (templates / "index.html").write_text("<div>todos</div>")
     views_content = "from labb.contrib.blocks import lm\nLbTodo = lm('LbTodo')\n"
     (block_dir / "views.py").write_text(views_content)
-    (block_dir / "urls.py").write_text("from django.urls import path\nurlpatterns = []\n")
+    (block_dir / "urls.py").write_text(
+        "from django.urls import path\nurlpatterns = []\n"
+    )
     return block_dir
 
 
-def make_fe_block(tmp_path, category="landing", slug="hero-split", with_preview_context=True):
+def make_fe_block(
+    tmp_path, category="landing", slug="hero-split", with_preview_context=True
+):
     block_dir = tmp_path / category / slug
     block_dir.mkdir(parents=True)
     yaml_content = (
@@ -332,7 +337,9 @@ def test_validate_fullstack_missing_urls_py(tmp_path, capsys):
 def test_validate_fullstack_with_lt_import(tmp_path, capsys):
     make_repo_with_blocks_yaml(tmp_path)
     block_dir = make_fullstack_block(tmp_path)
-    (block_dir / "views.py").write_text("from labb.contrib.blocks import lt\nLbTodo = lt('LbTodo')\n")
+    (block_dir / "views.py").write_text(
+        "from labb.contrib.blocks import lt\nLbTodo = lt('LbTodo')\n"
+    )
 
     with pytest.raises(click.exceptions.Exit) as exc:
         validate(path=str(tmp_path))
@@ -372,7 +379,9 @@ def test_validate_returns_false_on_errors(tmp_path):
     make_repo_with_blocks_yaml(tmp_path)
     block_dir = tmp_path / "crud" / "todos"
     block_dir.mkdir(parents=True)
-    (block_dir / "block.yaml").write_text("name: Todo\nref: crud/todos\ntype: fullstack\ntier: free\n")
+    (block_dir / "block.yaml").write_text(
+        "name: Todo\nref: crud/todos\ntype: fullstack\ntier: free\n"
+    )
     templates = block_dir / "templates"
     templates.mkdir()
     (templates / "index.html").write_text("<div>x</div>")
@@ -405,7 +414,9 @@ def _write_block_yaml(tmp_path, extra: str, category="dashboard", slug="todos"):
     templates.mkdir()
     (templates / "index.html").write_text("<div>todos</div>")
     (block_dir / "views.py").write_text("from labb.contrib.blocks import lm\n")
-    (block_dir / "urls.py").write_text("from django.urls import path\nurlpatterns = []\n")
+    (block_dir / "urls.py").write_text(
+        "from django.urls import path\nurlpatterns = []\n"
+    )
     return block_dir
 
 
@@ -478,7 +489,7 @@ def test_validate_tags_not_a_list(tmp_path, capsys):
 
 def _make_blocks_yaml(tmp_path: Path, vendor: str = "myco") -> None:
     (tmp_path / "blocks.yaml").write_text(
-        f"vendor: {vendor}\nname: {vendor}-blocks\ndescription: \"\"\n"
+        f'vendor: {vendor}\nname: {vendor}-blocks\ndescription: ""\n'
     )
 
 
@@ -492,7 +503,9 @@ class TestNewBlockFullstack:
         assert (tmp_path / "crud" / "todos" / "block.yaml").exists()
         assert (tmp_path / "crud" / "todos" / "views.py").exists()
         assert (tmp_path / "crud" / "todos" / "urls.py").exists()
-        assert (tmp_path / "crud" / "todos" / "templates" / "pages" / "index.html").exists()
+        assert (
+            tmp_path / "crud" / "todos" / "templates" / "pages" / "index.html"
+        ).exists()
 
     def test_new_block_fe_skips_views_and_urls(self, tmp_path, monkeypatch):
         monkeypatch.chdir(tmp_path)
@@ -501,7 +514,9 @@ class TestNewBlockFullstack:
         new_block(ref="crud/todos", block_type="fe")
 
         assert (tmp_path / "crud" / "todos" / "block.yaml").exists()
-        assert (tmp_path / "crud" / "todos" / "templates" / "pages" / "index.html").exists()
+        assert (
+            tmp_path / "crud" / "todos" / "templates" / "pages" / "index.html"
+        ).exists()
         assert not (tmp_path / "crud" / "todos" / "views.py").exists()
         assert not (tmp_path / "crud" / "todos" / "urls.py").exists()
 
@@ -675,8 +690,12 @@ def test_build_template_tree_multiple_blocks(tmp_path):
 
     _build_template_tree(repo, "lb")
 
-    assert (repo / ".labb" / "templates" / "lb" / "crud" / "todos" / "index.html").exists()
-    assert (repo / ".labb" / "templates" / "lb" / "landing" / "hero" / "index.html").exists()
+    assert (
+        repo / ".labb" / "templates" / "lb" / "crud" / "todos" / "index.html"
+    ).exists()
+    assert (
+        repo / ".labb" / "templates" / "lb" / "landing" / "hero" / "index.html"
+    ).exists()
 
 
 def test_build_template_tree_skips_no_templates_dir(tmp_path):
@@ -706,7 +725,9 @@ def test_build_template_tree_merges_cotton_subdir(tmp_path):
     # Regular template lands at the vendor path
     assert (repo / ".labb" / "templates" / "lb" / "ui" / "hero" / "index.html").exists()
     # Cotton component merges into .labb/templates/cotton/, not nested under vendor
-    merged = repo / ".labb" / "templates" / "cotton" / "lb" / "ui" / "hero" / "index.html"
+    merged = (
+        repo / ".labb" / "templates" / "cotton" / "lb" / "ui" / "hero" / "index.html"
+    )
     assert merged.exists()
     assert "c-vars" in merged.read_text()
     # Cotton dir must NOT appear nested under the vendor template path
@@ -842,9 +863,7 @@ def _run_start(tmp_path, vendor="myco", name=None, package_manager="poetry"):
     target_dir = tmp_path / name
 
     with (
-        patch(
-            "labb.cli.handlers.blocks_dev.questionary.text"
-        ) as mock_text,
+        patch("labb.cli.handlers.blocks_dev.questionary.text") as mock_text,
         patch(
             "labb.cli.handlers.blocks_dev.prompt_package_manager",
             return_value=package_manager,
@@ -939,7 +958,9 @@ TOUR_TEMPLATE = """\
 """
 
 
-def make_tour_block(tmp_path, tour, template=TOUR_TEMPLATE, category="auth", slug="split-brand"):
+def make_tour_block(
+    tmp_path, tour, template=TOUR_TEMPLATE, category="auth", slug="split-brand"
+):
     """A fullstack block carrying a tour.yaml, for exercising tour validation."""
     block_dir = tmp_path / category / slug
     block_dir.mkdir(parents=True)
@@ -953,7 +974,9 @@ def make_tour_block(tmp_path, tour, template=TOUR_TEMPLATE, category="auth", slu
     (block_dir / "views.py").write_text(
         "from labb.contrib.blocks import lm\n\n\ndef sign_in(request):\n    return None\n"
     )
-    (block_dir / "urls.py").write_text("from django.urls import path\nurlpatterns = []\n")
+    (block_dir / "urls.py").write_text(
+        "from django.urls import path\nurlpatterns = []\n"
+    )
     (block_dir / "tour.yaml").write_text(tour)
     return block_dir
 
@@ -1292,7 +1315,9 @@ class TestBlocksRootResolution:
         assert blocks_root(tmp_path) == tmp_path
 
     def test_reads_blocks_dir(self, tmp_path):
-        (tmp_path / "blocks.yaml").write_text("vendor: lb\nname: x\nblocks_dir: blocks\n")
+        (tmp_path / "blocks.yaml").write_text(
+            "vendor: lb\nname: x\nblocks_dir: blocks\n"
+        )
         assert blocks_root(tmp_path) == tmp_path / "blocks"
 
     def test_falls_back_when_no_blocks_yaml(self, tmp_path):
@@ -1303,7 +1328,9 @@ class TestCommons:
     """commons/ holds components shared by several blocks in a source repo."""
 
     def _repo(self, tmp_path):
-        (tmp_path / "blocks.yaml").write_text("vendor: lb\nname: Test\nblocks_dir: blocks\n")
+        (tmp_path / "blocks.yaml").write_text(
+            "vendor: lb\nname: Test\nblocks_dir: blocks\n"
+        )
         src = tmp_path / "blocks"
         block = src / "auth" / "login" / "templates" / "cotton" / "login"
         block.mkdir(parents=True)
@@ -1322,7 +1349,9 @@ class TestCommons:
     def test_block_components_still_merge(self, tmp_path):
         repo = self._repo(tmp_path)
         _build_template_tree(repo, vendor="lb")
-        assert (repo / ".labb" / "templates" / "cotton" / "login" / "form.html").exists()
+        assert (
+            repo / ".labb" / "templates" / "cotton" / "login" / "form.html"
+        ).exists()
 
     def test_commons_is_not_a_category(self, tmp_path):
         # It has no block.yaml, and must never be walked as a category.
@@ -1330,7 +1359,9 @@ class TestCommons:
         assert "commons" not in {c for c, _ in _discover_blocks(repo)}
 
     def test_repo_without_commons_still_builds(self, tmp_path):
-        (tmp_path / "blocks.yaml").write_text("vendor: lb\nname: Test\nblocks_dir: blocks\n")
+        (tmp_path / "blocks.yaml").write_text(
+            "vendor: lb\nname: Test\nblocks_dir: blocks\n"
+        )
         block = tmp_path / "blocks" / "auth" / "login" / "templates" / "pages"
         block.mkdir(parents=True)
         (block / "index.html").write_text("<div>hi</div>")
