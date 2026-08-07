@@ -152,6 +152,29 @@ def test_map_bound_prop_emits_all_variant_classes(mock_components_registry):
     assert {"btn-primary", "btn-secondary", "btn-success", "btn-error"} <= result
 
 
+def test_map_template_var_prop_emits_all_variant_classes(mock_components_registry):
+    """A {{ }} interpolation is resolved at render time, so every variant is emitted.
+
+    This is the most common dynamic form in blocks (variant="{{ row.tone }}") and
+    used to emit nothing at all, which fails silently: the component renders with
+    a class Tailwind never compiled.
+    """
+    result = _map_attributes_to_classes(
+        "button", {"variant": "{{ user_variant }}"}, mock_components_registry
+    )
+    assert {"btn-primary", "btn-secondary", "btn-success", "btn-error"} <= result
+
+
+def test_map_partially_interpolated_prop_emits_all_variant_classes(
+    mock_components_registry,
+):
+    """Interpolation anywhere in the value makes the whole value unknown."""
+    result = _map_attributes_to_classes(
+        "button", {"variant": "x-{{ suffix }}"}, mock_components_registry
+    )
+    assert {"btn-primary", "btn-secondary"} <= result
+
+
 def test_map_literal_prop_unaffected_by_expansion(mock_components_registry):
     """A literal prop still resolves to only its own variant class."""
     result = _map_attributes_to_classes(
@@ -1651,6 +1674,7 @@ def test_scan_templates_watch_with_django_apps_config(temp_dir):
 
 # ── css.packages resolver + generator ────────────────────────────────────────
 
+
 def test_load_package_provides_reads_labb_groups():
     from labb.cli.handlers.scan_handler import load_package_provides
 
@@ -1709,9 +1733,9 @@ def test_generate_css_artifacts_writes_single_seam(tmp_path):
     labb_css = (labb_dir / "labb.css").read_text()
     classes = (labb_dir / "labb-component-classes.txt").read_text()
     # one seam holds all three contributions
-    assert "daisyui/theme" in labb_css          # themes inlined (imports)
-    assert "@import " not in labb_css            # inlined, never @import'd
-    assert "cotton/lbb" in labb_css              # literal @source glob
+    assert "daisyui/theme" in labb_css  # themes inlined (imports)
+    assert "@import " not in labb_css  # inlined, never @import'd
+    assert "cotton/lbb" in labb_css  # literal @source glob
     assert '@source "labb-component-classes.txt";' in labb_css  # sibling safelist
     assert "do not edit" in labb_css.lower()
     assert len(classes.strip().splitlines()) > 3  # scanned component classes
@@ -1736,11 +1760,13 @@ def test_package_css_merge_dedups_shared_entries():
     from labb.config import PackageCss
 
     a = PackageCss(components=["x/**"], literals=["u/**"], imports=["css/themes.css"])
-    b = PackageCss(components=["x/**", "y/**"], literals=["u/**"], imports=["css/themes.css"])
+    b = PackageCss(
+        components=["x/**", "y/**"], literals=["u/**"], imports=["css/themes.css"]
+    )
     merged = a.merged_with(b)
-    assert merged.components == ["x/**", "y/**"]          # x/** not repeated
+    assert merged.components == ["x/**", "y/**"]  # x/** not repeated
     assert merged.literals == ["u/**"]
-    assert merged.imports == ["css/themes.css"]            # themes not inlined twice
+    assert merged.imports == ["css/themes.css"]  # themes not inlined twice
 
 
 def test_resolve_packages_errors_on_unimportable_package(tmp_path):
