@@ -14,7 +14,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 CONTENT_BASE_PATH = BASE_DIR / "labbdocs" / "content"
 
-
 _yaml_cache = {}
 
 
@@ -407,6 +406,25 @@ class DocParser:
             # Convert underscores to spaces and title case
             return name.replace("_", " ").title()
 
+        def group_title(directory):
+            """A group's nav label.
+
+            A `_meta.yaml` in the folder names the group, the same way a page's
+            frontmatter names the page. It is metadata for a directory, so it
+            adds no route. Without one, fall back to the folder name, which
+            title-cases acronyms badly ("Building Uis").
+            """
+            meta = directory / "_meta.yaml"
+            if meta.is_file():
+                try:
+                    with open(meta, "r", encoding="utf-8") as f:
+                        title = (yaml.safe_load(f) or {}).get("title")
+                    if title:
+                        return title
+                except Exception:
+                    pass
+            return format_title(directory.name)
+
         def create_url_path(file_path):
             """Convert file path to URL path."""
             # Get relative path from base
@@ -425,7 +443,7 @@ class DocParser:
             for item in sorted(current_path.iterdir(), reverse=reverse_order):
                 if item.is_dir():
                     children = build_menu(item)
-                    menu_item = {"title": format_title(item.name)}
+                    menu_item = {"title": group_title(item)}
                     if children:
                         menu_item["children"] = children
                     menu_items.append(menu_item)
