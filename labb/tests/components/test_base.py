@@ -49,7 +49,10 @@ def _ensure_template_dir(template_dir: Path) -> None:
     # DIRS entries may be Path or str — compare as strings.
     dirs = [str(d) for d in settings.TEMPLATES[0]["DIRS"]]
     if template_dir_str not in dirs:
-        settings.TEMPLATES[0]["DIRS"] = [template_dir_str, *settings.TEMPLATES[0]["DIRS"]]
+        settings.TEMPLATES[0]["DIRS"] = [
+            template_dir_str,
+            *settings.TEMPLATES[0]["DIRS"],
+        ]
 
     # Check the live engine, not just settings: override_settings rebuilds the
     # engines from the restored TEMPLATES, so settings can look right while the
@@ -179,7 +182,9 @@ class ComponentTestBase:
         if context is None:
             context = {}
 
-        return _render_isolated(template_str.strip(), context, "Template rendering error")
+        return _render_isolated(
+            template_str.strip(), context, "Template rendering error"
+        )
 
     def get_component_schema(self, component_name):
         """

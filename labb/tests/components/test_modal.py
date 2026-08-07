@@ -151,9 +151,13 @@ class TestModalComponent(ComponentTestTemplate):
             elif size == "md":
                 self.assert_classes_present(html, {"w-11/12", "sm:w-96", "max-w-md"})
             elif size == "lg":
-                self.assert_classes_present(html, {"w-11/12", "sm:w-[32rem]", "max-w-lg"})
+                self.assert_classes_present(
+                    html, {"w-11/12", "sm:w-[32rem]", "max-w-lg"}
+                )
             elif size == "xl":
-                self.assert_classes_present(html, {"w-11/12", "sm:w-[36rem]", "max-w-xl"})
+                self.assert_classes_present(
+                    html, {"w-11/12", "sm:w-[36rem]", "max-w-xl"}
+                )
             elif size == "screen":
                 self.assert_classes_present(html, {"w-11/12", "max-w-5xl"})
 
@@ -179,7 +183,9 @@ class TestModalComponent(ComponentTestTemplate):
         )
 
         # Should include all the mapped features
-        self.assert_classes_present(html, {"w-11/12", "sm:w-[32rem]", "max-w-lg"})  # size
+        self.assert_classes_present(
+            html, {"w-11/12", "sm:w-[32rem]", "max-w-lg"}
+        )  # size
         assert "modal-backdrop" in html  # withBackdrop
         assert "btn-circle" in html  # withCloseBtn
         self.assert_classes_present(html, {"left-2", "top-2"})  # closeBtnPosition

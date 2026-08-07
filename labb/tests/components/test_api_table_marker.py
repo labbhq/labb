@@ -12,9 +12,10 @@ loads (`lb_tags`, `docs_tags`) and renders it against a real component spec
 import os
 from pathlib import Path
 
+from django.template import Context, Engine
+
 import labb
 import labbdocs
-from django.template import Context, Engine
 
 
 def _render_api_table(component_name: str) -> str:
@@ -39,7 +40,7 @@ def test_api_table_reactive_marker_tooltip():
 
     # The dead `.x` wording is gone.
     assert "Reactive via" not in html
-    assert ".x\"" not in html
+    assert '.x"' not in html
 
     # The flashlight icon marker is still emitted.
     assert "rmx.flashlight" in html

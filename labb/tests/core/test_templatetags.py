@@ -19,7 +19,7 @@ class TestParseAttrsToDict:
 
     def test_datastar_data_on_colon(self):
         """data-on:click must be kept as a single key, not split at the colon."""
-        result = parse_attrs_to_dict('data-on:click="$view = \'code\'"')
+        result = parse_attrs_to_dict("data-on:click=\"$view = 'code'\"")
         assert "data-on:click" in result
         assert "data-on" not in result
         assert ":click" not in result
@@ -32,7 +32,7 @@ class TestParseAttrsToDict:
 
     def test_cotton_colon_prefix_still_works(self):
         """:prop (Cotton dynamic binding) must still parse with the leading colon."""
-        result = parse_attrs_to_dict(':items=my_list')
+        result = parse_attrs_to_dict(":items=my_list")
         assert ":items" in result
 
     def test_mixed_attrs(self):

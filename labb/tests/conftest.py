@@ -196,6 +196,7 @@ def django_project_dir(temp_dir):
 def clear_labb_config_cache():
     clear_config_cache()
 
+
 @pytest.fixture(autouse=True)
 def _restore_component_registry():
     """Undo any test that reloads the component registry with a mocked schema.

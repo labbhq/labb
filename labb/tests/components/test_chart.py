@@ -18,6 +18,7 @@ class TestChartConfigProvider(ComponentTestBase):
     @staticmethod
     def _config(html):
         import re
+
         return re.sub(r"[ \t]+", " ", html)
 
     def test_bare_chart_defaults(self):
@@ -33,7 +34,9 @@ class TestChartConfigProvider(ComponentTestBase):
 
     def test_legend_defaults_off_and_opts_in(self):
         assert "legend: false" in self._config(self.render_component("chart"))
-        assert "legend: true" in self._config(self.render_component("chart", legend=True))
+        assert "legend: true" in self._config(
+            self.render_component("chart", legend=True)
+        )
 
     def test_grid_defaults_off_and_opts_in(self):
         assert "grid: false" in self._config(self.render_component("chart"))
@@ -91,7 +94,7 @@ class TestChartBarSubComponent(ComponentTestBase):
 
     def test_bar_x_ref_canvas(self):
         html = self.render_component("chart.bar")
-        assert '<canvas' in html
+        assert "<canvas" in html
 
 
 class TestChartLineSubComponent(ComponentTestBase):
@@ -235,12 +238,12 @@ class TestChartElementReference(ComponentTestBase):
 
     def test_static_uses_bare_el_not_signal(self):
         html = self.render_component("chart.bar")
-        assert 'lbChart.initFromEl(el)' in html
-        assert '$el' not in html
+        assert "lbChart.initFromEl(el)" in html
+        assert "$el" not in html
 
     def test_reactive_binding_uses_data_effect_with_bare_el(self):
         # A `$signal` data prop takes the reactive branch (data-effect), not data-init.
         html = self.render_component("chart.bar", data="$chartData")
         assert 'data-effect="lbChart.handle(el, $chartData)"' in html
-        assert 'data-init' not in html
-        assert '$el' not in html
+        assert "data-init" not in html
+        assert "$el" not in html
