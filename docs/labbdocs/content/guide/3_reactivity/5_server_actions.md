@@ -1,20 +1,20 @@
 ---
 title: Server actions
-description: "Server-driven updates in labb with c-lbr.get, post, and delete. Send a request to a normal Django view, read request.signals, and morph the response into the page. No JSON endpoints."
+description: "Use c-lbr actions to call ordinary Django views, read request.signals, and update the current page."
 keywords: "labb server actions, c-lbr.get post delete, request.signals, is_datastar, django ajax without javascript, datastar django views"
 ---
 
-When the change involves data the server owns, use a server action. The [`c-lbr.` action components]({% doc_url '3_reactivity/7_reference.md' 'guide' %}) (`<c-lbr.get>`, `<c-lbr.post>`, and `<c-lbr.delete>`, thin Cotton wrappers over [Datastar](https://data-star.dev/)) send a request to a normal Django view, and Datastar morphs the response into the page.
+Use a server action when Django owns the change. [`c-lbr.` action components]({% doc_url '5_references/7_reactivity_reference.md' 'guide' %}) such as `<c-lbr.get>`, `<c-lbr.post>`, and `<c-lbr.delete>` call a normal Django view. Datastar then updates the current page from the response.
 
-Wrap the element that triggers the action. This search box re-runs a Django view as the user types:
+Wrap the element that triggers the request. This search field calls a Django view as the user types.
 
 ```html
 <c-lbr.get to="todos:index" on="input__debounce.300ms">
-    <c-lb.input type="search" bind="filters.q" placeholder="Search todos" />
+    <c-lb.input type="search" bind="$filters.q" placeholder="Search todos" />
 </c-lbr.get>
 ```
 
-The view is an ordinary Django view. It reads the current [signals]({% doc_url '3_reactivity/2_signals.md' 'guide' %}) from `request.signals`, does its work, and returns the whole page. Datastar compares the response with what is on screen and morphs only the parts that changed:
+The view reads the current [signals]({% doc_url '3_reactivity/2_signals.md' 'guide' %}) from `request.signals`, queries the data, and returns the whole page. Datastar compares the response with the DOM and updates the changed regions.
 
 ```python
 def index(request):
@@ -23,11 +23,32 @@ def index(request):
     return render(request, "todos/index.html", {"todos": todos})
 ```
 
-There is no separate JSON endpoint and no partial template. The same view serves the first page load and every update after it. The [data-table block](/blocks/data-table/) builds search, sort, and pagination this way, and the [dashboard block](/blocks/dashboard/) drives live charts from a server action.
+The same view serves the first page load and later updates.
+
+<c-lbdocs.block_grid :blocks="[
+  {'name': 'Customers', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#customers', 'thumbnail': '/static/lb/data-table/customers/thumbnails/customers.light.png', 'thumbnail_dark': '/static/lb/data-table/customers/thumbnails/customers.dark.png'},
+  {'name': 'With filters', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#with-filters', 'thumbnail': '/static/lb/data-table/with-filters/thumbnails/with-filters.light.png', 'thumbnail_dark': '/static/lb/data-table/with-filters/thumbnails/with-filters.dark.png'},
+  {'name': 'Card grid', 'type': 'fullstack', 'detail_url': '/blocks/data-table/#card-grid', 'thumbnail': '/static/lb/data-table/card-grid/thumbnails/card-grid.light.png', 'thumbnail_dark': '/static/lb/data-table/card-grid/thumbnails/card-grid.dark.png'}
+]" />
+
+## Reading signals on the server
+
+Datastar sends the current signal bag with each action request. labb’s `ReactivityMiddleware` decodes it into `request.signals`, a plain dictionary.
+
+For typed, validated access, use the same `Signals` class that you pass to `<c-lbr.signals :schema=...>`.
+
+```python
+def index(request):
+    s = TodoSignals(request)
+    todos = Todo.objects.filter(text__icontains=s.q)
+    return render(request, "todos/index.html", {"todos": todos, "signals": s})
+```
+
+This keeps signal paths in one place. [Signals]({% doc_url '3_reactivity/2_signals.md' 'guide' %}) covers the declaration.
 
 ## Wrap the trigger, not the container
 
-Put the action as close as possible to the element that fires it. Wrapping a whole card means every click anywhere inside it fires the action:
+Place the action around the element that fires it. Wrapping an entire card makes each click inside the card trigger a request.
 
 ```html
 {# Wrong: the entire card surface triggers #}
@@ -45,11 +66,11 @@ Put the action as close as possible to the element that fires it. Wrapping a who
 </c-lb.card>
 ```
 
-`<c-lbr.post>` is the exception: it renders a `<form>` and legitimately wraps its own inputs. Keep layout containers outside it.
+`<c-lbr.post>` is the exception because it renders a `<form>` around its inputs. Keep layout containers outside the form.
 
 ## `c-lbr.get` for reads and navigation
 
-`<c-lbr.get>` fires a GET on any event. Use it for search, sort, pagination, filtering, and navigation. The `on` prop chooses the event, and `before` runs an expression first, usually to set a signal:
+`<c-lbr.get>` sends a GET request on an event. Use it for search, sorting, pagination, filters, and navigation. `on` selects the event. `before` runs an expression first, usually to set a signal.
 
 {% verbatim %}
 ```html
@@ -68,17 +89,17 @@ Put the action as close as possible to the element that fires it. Wrapping a who
 ```
 {% endverbatim %}
 
-`before` is raw, unescaped JavaScript. Only ever put hardcoded expressions in it, such as signal assignments and integer primary keys from the ORM. Never interpolate user text into it.
+`before` contains raw JavaScript. Keep it to hardcoded expressions, signal assignments, and integer primary keys from the ORM. Do not interpolate user text into it.
 
 ## `c-lbr.post` for forms
 
-`<c-lbr.post>` renders a real `<form>` and, on submit, posts the current signal bag as JSON. csrf is handled for you, so there is no manual `{% csrf_token %}`. Bind the inputs to signals and read them from `request.signals` in the view:
+`<c-lbr.post>` renders a real `<form>` and posts the current signal bag as JSON on submit. It handles CSRF. Bind inputs to signals and read them from `request.signals` in the view.
 
 ```html
 <c-lbr.signals $text="" />
 
 <c-lbr.post to="todos:create">
-    <c-lb.input type="text" bind="text" placeholder="What needs doing?" required />
+    <c-lb.input type="text" bind="$text" placeholder="What needs doing?" required />
     <c-lb.button type="submit" variant="primary">Add</c-lb.button>
 </c-lbr.post>
 ```
@@ -94,9 +115,9 @@ def create(request):
     return redirect("todos:index")
 ```
 
-`request.is_datastar` is `True` when the request came from a reactive action. Return the page for an in-place update, or redirect for a full navigation. That one check lets the same view work with and without reactivity. A real `<form>` is what makes password managers and Enter-to-submit work, so use it for anything a user submits. The [auth blocks](/blocks/auth/) show sign-in and register forms with live validation built this way.
+`request.is_datastar` is `True` for a reactive action. Return the page for an in-place update or redirect after a normal navigation. A real `<form>` also supports password managers and Enter to submit, so use it for user-submitted data. The [auth blocks](/blocks/auth/) include sign-in and registration examples.
 
-For a POST that is not a form submit (bulk actions, row buttons), give `<c-lbr.post>` a `tag="div" on="click"`. It still posts the signal bag as JSON. If you instead need a classic form whose named inputs arrive in `request.POST`, opt in with `options="{contentType: 'form'}"`; `request.signals` is then empty by design, so carry any view state in the action URL.
+For bulk actions or row buttons, use `<c-lbr.post tag="div" on="click">`. It still posts the signal bag as JSON. For a classic form whose named inputs arrive in `request.POST`, use `options="{contentType: 'form'}"`. In that mode `request.signals` remains empty, so include view state in the action URL.
 
 ## `c-lbr.delete` with a confirm
 
@@ -110,18 +131,18 @@ For a POST that is not a form submit (bulk actions, row buttons), give `<c-lbr.p
 
 ## How the update lands
 
-Datastar does not replace the page. It morphs the response into the current DOM, keeping form focus and scroll position, and touching only what differs. It matches elements by their `id`, so give every region that changes between requests a stable `id`:
+Datastar morphs the response into the current DOM while preserving form focus and scroll position. It matches elements by `id`, so give changing regions stable IDs.
 
 ```html
 <div id="todo-header">...</div>   {# the count updates here #}
 <div id="todo-list">...</div>     {# items morph here #}
 ```
 
-Always set an `id` on list items and table rows, for example {% verbatim %}`id="todo-{{ todo.pk }}"`{% endverbatim %}. Without stable ids, rows can flicker or merge when the list changes.
+Set an `id` on each list item and table row, such as {% verbatim %}`id="todo-{{ todo.pk }}"`{% endverbatim %}. Without stable IDs, rows can flicker or merge when the list changes.
 
 ## Naming a target
 
-`<c-lbr.target>` marks a named region as a stable anchor for updates, so you can refer to it by name from the server instead of by id:
+`<c-lbr.target>` gives an update region a stable name that server code can use.
 
 {% verbatim %}
 ```html
@@ -133,4 +154,4 @@ Always set an `id` on list items and table rows, for example {% verbatim %}`id="
 ```
 {% endverbatim %}
 
-Server-side, `@todo-list` resolves to that target. Most views return the full page and let the morph sort out the diff; [Patterns]({% doc_url '1_getting_started/3_patterns.md' 'guide' %}) covers targets and finer-grained updates.
+On the server, `@todo-list` resolves to that target. Most views return the whole page. [Patterns]({% doc_url '3_reactivity/6_patterns.md' 'guide' %}) covers targeted updates.

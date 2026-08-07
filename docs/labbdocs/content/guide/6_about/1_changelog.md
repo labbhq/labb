@@ -11,27 +11,26 @@ keywords: "labb changelog, labbui release notes, django labb versions"
 
 **Jul 14, 2026**
 
-The first alpha of 0.5.0. The big change is reactivity. labb now handles client interactivity with Datastar instead of Alpine. If you used the old `.x` variants, see [Migrating to 0.5](/docs/guide/about/migrating-to-0-5).
+0.5.0 introduces Datastar-based reactivity and removes the Alpine `.x` variants. See [Migrating to 0.5](/docs/guide/about/migrating-to-0-5) if your project uses the old API.
 
 ### Reactivity
-- **Datastar-powered reactivity.** A new reactivity core built on [Datastar](https://data-star.dev/). Signals, reactive props, and server actions, all server-rendered.
-- **Signals.** Declare client state with `<c-lbr.signals>` and bind inputs, buttons, and text to it.
-- **Reactive props.** Prefix any component prop with `$` and it re-renders when the signal changes. `variant="$status:primary"` uses `primary` as the server-rendered first paint.
-- **Server actions.** `c-lbr.get`, `c-lbr.post`, and `c-lbr.delete` fire a request on any DOM event, hit an ordinary Django view, and morph the response into the page. No partial endpoints, no JSON views. csrf is handled for you, so `post` no longer needs a manual `{% templatetag openblock %} csrf_token {% templatetag closeblock %}`.
-- **Reactive charts.** Pass `data="$signal"` to a chart and it updates when the signal changes.
-- **Opt-in loading.** Datastar loads only on pages that use it. Pages with no reactivity still ship zero JavaScript.
+- **Datastar reactivity.** Signals, reactive props, and server actions work with server-rendered Django templates.
+- **Signals and reactive props.** Declare browser state with `<c-lbr.signals>`, bind inputs to it, and drive compatible props with values such as `variant="$status:primary"`.
+- **Server actions.** `c-lbr.get`, `c-lbr.post`, and `c-lbr.delete` call ordinary Django views and morph their responses into the page. `post` handles CSRF.
+- **Reactive charts.** Pass `data="$signal"` to update a chart when the signal changes.
+- **Opt-in runtime.** Datastar loads only on pages that use reactive features.
 
 ### Blocks
-- **35 blocks across 7 surfaces.** auth, dashboard, data-table, hero, pricing, settings, and wizard, five blocks each. Every block is server-rendered and reactive, ready to copy into a project.
-- **`labb block` CLI.** Scaffold, preview, validate, and install blocks from the command line.
+- **35 blocks across seven categories.** Auth, dashboard, data tables, hero, pricing, settings, and wizard blocks are ready to copy into a project.
+- **`labb block` CLI.** Create collections, preview blocks, validate them, and install them from the command line.
 
 ### Components
 - **Reactive-capable inputs and charts.** Schema updates across charts, data display, and data input so components accept reactive props.
 - Component API tables now mark which props are reactive.
 
 ### Docs
-- **New reactivity guide.** A full section covering signals, reactive props, events and bindings, server actions, and patterns.
-- **Restructured getting started.** Clearer installation (with an optional icons step), introduction, and patterns pages.
+- **Reactivity guide.** New guides cover signals, reactive props, bindings, server actions, and patterns.
+- **Restructured guide.** Installation, introduction, and the first-page tutorial have been reorganised.
 
 ### Removed / breaking
 - **Alpine `.x` variants are gone.** The whole Alpine layer has been removed: the `.x` component variants, the bundled Alpine runtime, and `x-model` / `x-on` bindings. Move to Datastar with the [Migrating to 0.5](/docs/guide/about/migrating-to-0-5) guide.

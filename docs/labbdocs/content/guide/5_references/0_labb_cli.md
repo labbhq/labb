@@ -8,7 +8,7 @@ The `labb` command-line interface manages labb in your Django project: setup, CS
 
 
 
-## Commands Overview
+## Commands overview
 
 | Command | Description |
 |---------|-------------|
@@ -294,8 +294,10 @@ labb components ex [OPTIONS] [COMPONENT] [EXAMPLES]...
 
 **Arguments:**
 
-- `COMPONENT`: Component name to show examples for
+- `COMPONENT`: Component name to show examples for, or a `guide/<topic>` path
 - `EXAMPLES`: Specific example(s) to display (can specify multiple)
+
+Examples written for the guide rather than for a component live under `guide/<topic>/` and are listed separately, since they are not components.
 
 **Options:**
 
@@ -319,6 +321,10 @@ labb components ex badge basic
 # View multiple examples at once
 labb components ex badge basic color-variants sizes
 
+# List and view guide examples
+labb components ex guide/reactivity
+labb components ex guide/reactivity toggle
+
 # View examples from different components
 labb components ex button primary-button
 labb components ex modal basic-modal
@@ -329,7 +335,7 @@ labb components ex modal basic-modal
 ### `labb icons`
 
 <c-lbdocs.indented_block>
-Search and manage icon packs (requires <a href="{% doc_url '1_getting_started/5_icons.md' 'guide' %}">labbicons package</a> to be installed).
+Search and manage icon packs (requires <a href="{% doc_url '2_building_uis/3_icons.md' 'guide' %}">labbicons package</a> to be installed).
 
 > *If the `labbicons` package is not installed, the command will show an error with installation instructions.*
 
@@ -356,19 +362,24 @@ labb icons search QUERY [OPTIONS]
 
 **Arguments:**
 
-- `QUERY`: Search term for icon names
+- `QUERY`: Search term, or several separated by commas
 
 **Options:**
 
 - `--pack, -p TEXT`: Filter by icon pack (e.g., rmx)
 - `--category, -c TEXT`: Filter by category
 - `--variant, -v TEXT`: Filter by variant (fill, line)
-- `--limit, -l INTEGER`: Maximum number of results to show (default: 20)
+- `--limit, -l INTEGER`: Maximum number of results to show **per term** (default: 20)
+
+Comma-separated terms are searched one after another, each with its own results section, so you can pick an icon per slot in a single command. The filters and the limit apply to every term.
 
 **Examples:**
 ```bash
 # Search for icons containing "arrow"
 labb icons search "arrow"
+
+# Search several terms at once
+labb icons search "arrow,heart,user"
 
 # Search in specific pack
 labb icons search "arrow" --pack rmx
@@ -455,9 +466,9 @@ labb llms | grep "button"
 </c-lbdocs.indented_block>
 
 
-## Development Workflow
+## Development workflow
 
-### 1. Project Initialization
+### 1. project initialization
 
 ```bash
 # Initialize project (creates config + project structure)
@@ -473,7 +484,7 @@ labb setup
 labb setup
 ```
 
-### 2. Development
+### 2. development
 
 ```bash
 # Start development mode
@@ -482,14 +493,14 @@ labb dev
 
 This runs both CSS building and template scanning in watch mode.
 
-### 3. Production Build
+### 3. production build
 
 ```bash
 # Build for production
 labb build --minify
 ```
 
-### 4. Component Usage
+### 4. component usage
 
 ```bash
 # List all components
@@ -505,7 +516,7 @@ labb components ex --tree
 labb components ex badge basic color-variants
 ```
 
-### 5. Icon Usage (Optional)
+### 5. icon usage (optional)
 
 ```bash
 # Install labbicons package first
@@ -523,7 +534,7 @@ labb icons info rmx.arrow-down
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 **"npx is not available"**
 ```bash
@@ -556,7 +567,7 @@ labb init
 labb config --validate
 ```
 
-### Getting Help
+### Getting help
 
 ```bash
 # Show general help
@@ -574,9 +585,9 @@ labb components inspect --help
 labb components ex --help
 ```
 
-## Advanced Usage
+## Advanced usage
 
-### Custom Configuration
+### Custom configuration
 
 ```bash
 # Use custom config file
@@ -587,7 +598,7 @@ labb build
 labb build --config /path/to/custom.yaml
 ```
 
-### CI/CD Integration
+### CI/CD integration
 
 ```bash
 # Non-interactive setup
@@ -598,7 +609,7 @@ labb setup --install-deps
 labb build --minify
 ```
 
-### AI/LLM Integration
+### AI/LLM integration
 
 ```bash
 # Get complete documentation for AI consumption

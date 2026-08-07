@@ -4,17 +4,19 @@ description: "Django template tags for labb: labb_theme, labb_css, and helpers f
 keywords: "labb template tags, labb_theme django, django labb_tags"
 ---
 
+`lb_tags` holds labb's template tags: theming, asset loading, and the helpers components use internally. This page covers loading the library and every tag it provides.
+
 {% load docs_tags %}
 
 ## Overview
 
 labb ships Django template tags in the `lb_tags` module for working with labb components and theming.
 
-## Loading Template Tags
+## Loading template tags
 
 You can load the template tags in two ways:
 
-### Method 1: Manual Loading (Per Template)
+### Method 1: manual loading (per template)
 
 Load the template tags in individual Django templates:
 
@@ -36,7 +38,7 @@ Load the template tags in individual Django templates:
 {% endverbatim %}
 </c-lbdocs.codeblock.title>
 
-### Method 2: Automatic Loading (Global)
+### Method 2: automatic loading (global)
 
 Register the template tags globally in your Django settings to make them available in all templates without manual loading:
 
@@ -199,4 +201,4 @@ Returns the raw theme value from the user's session or the default theme from Dj
 </c-lbdocs.indented_block>
 
 
-See the [configuration documentation]({% doc_url '3_references/1_config_yaml.md' 'guide' %}) and [Django settings documentation]({% doc_url '3_references/2_django_settings.md' 'guide' %}) for more details about using some of these tags.
+See the [configuration documentation]({% doc_url '5_references/1_config_yaml.md' 'guide' %}) and [Django settings documentation]({% doc_url '5_references/2_django_settings.md' 'guide' %}) for more details about using some of these tags.

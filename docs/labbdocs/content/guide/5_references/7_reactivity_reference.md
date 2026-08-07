@@ -1,5 +1,5 @@
 ---
-title: Reference
+title: Reactivity
 description: "API reference for labb reactivity: c-lbr.signals, reactive props, c-lbr.get / post / delete, c-lbr.target, request.signals, and the data- attributes."
 keywords: "labb c-lbr reference, datastar django, labb signals api, django reactivity reference"
 ---
@@ -43,7 +43,7 @@ For interactivity that stays in the browser, use these attributes directly. They
 
 | Attribute | Does |
 |-----------|------|
-| `bind="filters.q"` | On a form component, keeps a signal in sync with the input. Accepts a string path or `schema.fields.q`. |
+| `bind="$filters.q"` | On a form component, keeps a signal in sync with the input. Accepts a `$`-prefixed path, a bare path (`bind="filters.q"`), or `schema.fields.q`. |
 | `data-on:click="$open = !$open"` | Runs an expression on a DOM event. Add timing with `__debounce.300ms` or `__throttle.50ms`. |
 | `data-show="$open"` | Shows or hides the element. |
 | `data-text="$label"` | Sets the element's text. |
@@ -70,7 +70,7 @@ Fires a POST request. Defaults to a `<form>` on submit and posts the current sig
 <c-lbr.signals $text="" />
 
 <c-lbr.post to="todos:create">
-    <c-lb.input type="text" bind="text" required />
+    <c-lb.input type="text" bind="$text" required />
     <c-lb.button type="submit" variant="primary">Add</c-lb.button>
 </c-lbr.post>
 ```

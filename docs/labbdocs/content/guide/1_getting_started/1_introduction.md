@@ -7,7 +7,7 @@ keywords: "django ui components, django component library, django-cotton, labb d
 
 labb is a component library for Django. You build interfaces by writing HTML-like tags in your templates, and labb renders accessible, styled markup on the server. No JavaScript framework, no build step for components, and nothing ships to the browser unless you ask for it.
 
-This page is a quick tour of how you build with labb. If you have not installed it yet, start with [Installation]({% doc_url '1_getting_started/1_installation.md' 'guide' %}).
+This page is a quick tour of how you build with labb. If you have not installed it yet, start with [Installation]({% doc_url '1_getting_started/2_installation.md' 'guide' %}).
 
 ## Your first component
 
@@ -41,21 +41,22 @@ Components nest. Build a card by combining the card pieces:
 </c-lb.card>
 ```
 
-When a piece of markup shows up more than once, move it into your own component and reuse it. Your templates end up reading like an outline of the page instead of a wall of `<div>` tags.
+When a piece of markup shows up more than once, move it into your own component and reuse it. [Composition]({% doc_url '2_building_uis/1_composition.md' 'guide' %}) covers the habits, and [Writing components]({% doc_url '2_building_uis/2_writing_components.md' 'guide' %}) covers how to build one.
 
 ## Add an icon
 
-Any component with an `icon` prop takes an icon name. Search for one from the command line:
+Any component with an `icon` prop takes an icon name. Search for available icons from the command line, and use comma-separated list for multiple searches:
 
 ```bash
 labb icons search "arrow"
+labb icons search "arrow,heart,user"
 ```
 
 ```html
-<c-lb.button icon="rmx.arrow-right-line">Next</c-lb.button>
+<c-lb.button icon="rmx.arrow-right">Next</c-lb.button>
 ```
 
-Icons come from the optional `labbicons` package. See the [Icons]({% doc_url '1_getting_started/5_icons.md' 'guide' %}) page for install and usage, or browse them all in the [icon browser]({% url 'icons_docs' %}).
+Icons come from the optional `labbicons` package. See the [Icons]({% doc_url '2_building_uis/3_icons.md' 'guide' %}) page for install and usage, or browse them all in the [icon browser]({% url 'icons_docs' %}).
 
 ## Make it interactive
 
@@ -74,10 +75,9 @@ The same idea powers server-driven interactions like search, forms, and inline e
 - **Optional reactivity** that loads only on the pages that use it
 - **A CLI** for setup, component inspection, and AI-assisted development
 
-## Next steps
+## Related
 
-<c-lbdocs.doc_card.grid cols="3">
-  <c-lbdocs.doc_card title="Reactivity" summary="Add interactivity with signals and server actions" href="{% doc_url '3_reactivity/1_overview.md' 'guide' %}" icon="rmx.flashlight" />
-  <c-lbdocs.doc_card title="Patterns" summary="Practices for building maintainable UIs" href="{% doc_url '1_getting_started/4_patterns.md' 'guide' %}" icon="rmx.compasses-2" />
+<c-lbdocs.doc_card.grid cols="2">
   <c-lbdocs.doc_card title="Components" summary="Browse every component and its examples" href="{% url 'ui_docs' %}" icon="rmx.layout-grid" />
+  <c-lbdocs.doc_card title="Blocks" summary="Whole sections and features, installed with one command" href="{% doc_url '2_building_uis/4_blocks.md' 'guide' %}" icon="rmx.stack" />
 </c-lbdocs.doc_card.grid>

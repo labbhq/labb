@@ -6,9 +6,9 @@ keywords: "labb-provides.yaml, labb css packages, labb third party package, css 
 
 {% load docs_tags %}
 
-`labb-provides.yaml` is how a **package** publishes CSS to labb projects. A package ships this file at its root; consumers then subscribe to its named **groups** from their own [`css.packages`]({% doc_url '4_references/1_config_yaml.md' 'guide' %}), instead of hardcoding the package's template paths.
+`labb-provides.yaml` is how a **package** publishes CSS to labb projects. A package ships this file at its root; consumers then subscribe to its named **groups** from their own [`css.packages`]({% doc_url '5_references/1_config_yaml.md' 'guide' %}), instead of hardcoding the package's template paths.
 
-This is the reference for the file. For a walkthrough of building a package, see [Developing packages]({% doc_url '2_concepts/3_developing_packages.md' 'guide' %}).
+This is the reference for the file. For a walkthrough of building a package, see [Developing packages]({% doc_url '4_going_further/2_developing_packages.md' 'guide' %}).
 
 ## Location
 
@@ -45,7 +45,7 @@ provides:
 | `literals` | Template globs handed to Tailwind as `@source`. | Templates with **raw utility classes** written literally in the markup (e.g. `min-h-screen`, `-translate-x-1/2`) that Tailwind must scan directly. |
 | `imports` | CSS files shipped in the package, **inlined** into the build. | Themes and other package CSS. Inlined (not `@import`ed) so any `@plugin` inside resolves against the consumer's `node_modules`. |
 
-A group may set any combination of the three. See [Building CSS]({% doc_url '2_concepts/2_building_css.md' 'guide' %}) for why `components` and `literals` are separate.
+A group may set any combination of the three. See [Building CSS]({% doc_url '4_going_further/1_building_css.md' 'guide' %}) for why `components` and `literals` are separate.
 
 ## Example: labb's own file
 
@@ -89,9 +89,9 @@ css:
   <span>A package does not have to publish groups. If it ships none, a consumer can still pull CSS from it with the raw form: <code>my_package: { literals: [templates/**/*.html] }</code>. Groups are the ergonomic layer on top.</span>
 </c-lb.alert>
 
-## Keep going
+## Related
 
 <c-lbdocs.doc_card.grid cols="2">
-  <c-lbdocs.doc_card title="Developing packages" summary="Build and publish a package that ships components and CSS" href="{% doc_url '2_concepts/3_developing_packages.md' 'guide' %}" icon="rmx.box-3" />
-  <c-lbdocs.doc_card title="labb.yaml" summary="The css.packages consumer schema" href="{% doc_url '4_references/1_config_yaml.md' 'guide' %}" icon="rmx.settings-3" />
+  <c-lbdocs.doc_card title="Developing packages" summary="Build and publish a package that ships components and CSS" href="{% doc_url '4_going_further/2_developing_packages.md' 'guide' %}" icon="rmx.box-3" />
+  <c-lbdocs.doc_card title="labb.yaml" summary="The css.packages consumer schema" href="{% doc_url '5_references/1_config_yaml.md' 'guide' %}" icon="rmx.settings-3" />
 </c-lbdocs.doc_card.grid>

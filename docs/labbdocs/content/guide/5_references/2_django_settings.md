@@ -4,6 +4,8 @@ description: "LABB_SETTINGS in Django settings.py: configure labb, django-cotton
 keywords: "labb django settings, LABB_SETTINGS, django-cotton settings"
 ---
 
+labb reads a single `LABB_SETTINGS` dict from your Django settings. Every key is optional; this page lists them and their defaults.
+
 ## Overview of LABB_SETTINGS
 
 All labb-specific settings live under a single `LABB_SETTINGS` dict in your Django `settings.py`:
@@ -18,7 +20,7 @@ LABB_SETTINGS = {
 
 Only set what you need. Every setting is optional and has a built-in default.
 
-## Settings Reference
+## Settings reference
 
 ### `DEFAULT_THEME`
 

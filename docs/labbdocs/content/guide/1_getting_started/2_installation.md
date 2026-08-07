@@ -6,7 +6,7 @@ keywords: "install labb django, labb django setup, django-cotton install, labbst
 
 {% load docs_tags %}
 
-labb installs in two ways. Start a brand new project with **labbstart**, which scaffolds everything for you, or add labb to an existing Django project with pip. Pick the track that fits below.
+This page gets labb installed and the CSS watcher running. Start a new project with **labbstart**, which scaffolds one already configured, or add labb to a Django project you already have.
 
 **Prerequisites:** Python 3.8+ and Django 4.2+.
 
@@ -189,68 +189,19 @@ Keep the CSS watcher running while you develop:
 labb dev
 ```
 
-<c-lb.collapse title="Add icons (optional)" class="my-4" style="arrow">
-To use icons in your components, install **labbicons**:
-
-```bash
-pip install labbicons
-# or together with labb
-pip install labbui[icons]
-```
-
-Add `labbicons` to `INSTALLED_APPS`:
-
-<c-lbdocs.codeblock.title title="settings.py">
-```python
-INSTALLED_APPS = [
-    # ... other apps
-    'django_cotton',
-    'labb',
-    'labbicons',
-]
-```
-</c-lbdocs.codeblock.title>
-
-Then use icons in any component that accepts an `icon` prop, or directly:
-
-```html
-<c-lb.button icon="rmx.heart">Like</c-lb.button>
-<c-lbi.rmx.heart w="24" h="24" />
-```
-
-See the <a href="{% doc_url '1_getting_started/5_icons.md' 'guide' %}">Icons guide</a> for the full reference.
-</c-lb.collapse>
+Icons are a separate package. If you want them, the <a href="{% doc_url '2_building_uis/3_icons.md' 'guide' %}">Icons</a> page covers installing `labbicons` and using it.
 
 </c-lbdocs.steps.step>
 
-<c-lbdocs.steps.step number="4" title="Write your first component" last>
+<c-lbdocs.steps.step number="4" title="Run the server" last>
 
-Start the Django server in a second terminal:
+Start Django in a second terminal, with the watcher still running in the first:
 
 ```bash
 python manage.py runserver
 ```
 
-Then use labb components in your templates with HTML-like syntax:
-
-<c-lbdocs.codeblock.title title="templates/example.html">
-{% verbatim %}
-```html
-<c-lb.button variant="primary">Click me</c-lb.button>
-
-<c-lb.card>
-    <c-lb.card.body>
-        <c-lb.card.title>Card Title</c-lb.card.title>
-        <p>Card content goes here</p>
-    </c-lb.card.body>
-</c-lb.card>
-
-<c-lb.alert variant="success">Success message!</c-lb.alert>
-```
-{% endverbatim %}
-</c-lbdocs.codeblock.title>
-
-Browse the <a href="{% doc_url '1_actions/button.md' 'ui' %}">component documentation</a> for everything available.
+Open [http://localhost:8000](http://localhost:8000). labb is installed.
 
 </c-lbdocs.steps.step>
 
@@ -260,28 +211,9 @@ Browse the <a href="{% doc_url '1_actions/button.md' 'ui' %}">component document
 
 </c-lb.tabs>
 
-## Reactive components
+## Related
 
-Make any component prop reactive by binding it to a signal. Declare the signal, then change it from the page:
-
-<c-lbdocs.codeblock.title title="templates/example.html">
-```html
-<c-lbr.signals $variant="primary" />
-
-<c-lb.button variant="$variant:primary">
-    <span data-text="$variant"></span> button
-</c-lb.button>
-
-<c-lb.button btnStyle="ghost" data-on:click="$variant = 'success'">Change</c-lb.button>
-```
-</c-lbdocs.codeblock.title>
-
-See the <a href="{% doc_url '3_reactivity/1_overview.md' 'guide' %}">Reactivity guide</a> for the full picture.
-
-## Next Steps
-
-- <a href="{% doc_url '2_concepts/1_theming.md' 'guide' %}">Theming</a>: customize colors and themes
-- <a href="{% doc_url '2_concepts/2_building_css.md' 'guide' %}">Building CSS</a>: CSS build process and production builds
-- <a href="{% doc_url '3_reactivity/1_overview.md' 'guide' %}">Reactivity</a>: add interactivity with signals and server actions
-- <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}">CLI Reference</a>: component inspection, icon search, and more
-- <a href="{% doc_url '1_getting_started/5_icons.md' 'guide' %}">Icons</a>: install labbicons for 2,800+ Remix icons
+<c-lbdocs.doc_card.grid cols="2">
+  <c-lbdocs.doc_card title="Building CSS" summary="What labb dev is doing, and how to build for production" href="{% doc_url '4_going_further/1_building_css.md' 'guide' %}" icon="rmx.css3" />
+  <c-lbdocs.doc_card title="Theming" summary="Swap the built-in themes or define your own" href="{% doc_url '2_building_uis/5_theming.md' 'guide' %}" icon="rmx.palette" />
+</c-lbdocs.doc_card.grid>

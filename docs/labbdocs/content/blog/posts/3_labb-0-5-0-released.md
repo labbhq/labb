@@ -77,7 +77,7 @@ Server actions handle anything the server owns. `c-lbr.get`, `c-lbr.post`, and `
 
 ```html
 <c-lbr.get to="todos:index" on="input__debounce.300ms">
-  <c-lb.input type="search" bind="filters.q" placeholder="Search todos" />
+  <c-lb.input type="search" bind="$filters.q" placeholder="Search todos" />
 </c-lbr.get>
 ```
 

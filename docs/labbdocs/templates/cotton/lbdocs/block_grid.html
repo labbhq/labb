@@ -1,0 +1,13 @@
+<c-vars
+    title="Explore related blocks"
+    :blocks="[]"
+/>
+
+<section class="not-prose my-14">
+    <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-base-content/50">{{ title }}</p>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {% for block in blocks %}
+        <c-labbio.blocks.card :block=block />
+        {% endfor %}
+    </div>
+</section>

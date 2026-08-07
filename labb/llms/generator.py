@@ -15,8 +15,8 @@ DOCS_BASE_URL = "https://labb.io"
 # available as raw markdown by appending .md to its URL.
 REFERENCE_SECTIONS = [
     ("guide", "3_reactivity", "Reactivity"),
-    ("guide", "4_references", "Reference"),
-    ("guide", "5_about", "About"),
+    ("guide", "5_references", "Reference"),
+    ("guide", "6_about", "About"),
 ]
 
 
@@ -70,12 +70,8 @@ def generate_doc_references() -> str:
         "\n## Further Reading\n"
         "Every doc page is available as raw markdown by appending `.md` to its URL. "
         "Fetch these when the summaries above are not enough — reactivity in particular "
-        "is covered in far more depth than fits here.\n\n"
-        + "\n\n".join(blocks)
-        + "\n"
+        "is covered in far more depth than fits here.\n\n" + "\n\n".join(blocks) + "\n"
     )
-
-
 
 
 def generate_component_descriptions() -> str:
@@ -185,6 +181,7 @@ Install labbicons for icon support: `pip install labbicons` or `poetry add labbi
 
 **Icon Usage:**
 - Search icons: `labb icons search "arrow"`
+- Search several at once: `labb icons search "arrow,heart,user"` (comma-separated; each term gets its own results section)
 - List packs: `labb icons packs`
 - Get icon info: `labb icons info rmx.arrow-down`
 - Use in components that supports icon: `<c-lb.button icon="rmx.arrow-down">Button</c-lb.button>`
@@ -375,7 +372,7 @@ Reactivity directives (`c-lbr.*`) drive server-side interactions. On the trigger
 ```
 
 ## Blocks
-Blocks are ready-made, installable slices of UI built from labb components. Some are frontend-only markup; others are full features that ship models, views, urls, fixtures, and templates. You add a block into your own project with the `labb block` CLI, then own and edit the vendored code.
+Blocks are ready-made page sections and features built from labb components. Frontend blocks ship templates and components. Fullstack blocks also ship models, views, URLs, fixtures, and templates. `labb block add` creates a default collection when one is missing, then copies the block into your project for you to edit.
 
 **Catalogue:** 35 blocks across 7 surfaces (5 each): `auth`, `dashboard`, `data-table`, `hero`, `pricing`, `settings`, `wizard`.
 
@@ -383,8 +380,8 @@ Blocks are ready-made, installable slices of UI built from labb components. Some
 ```bash
 labb block list                 # list all blocks from configured sources
 labb block search "dashboard"   # search by name or description
-labb block init                 # initialise a block collection as a Django app
-labb block add <surface/slug>   # add a block into your collection
+labb block init --name blocks                 # optionally choose the collection name
+labb block add lb/data-table/customers         # creates the default collection if needed
 labb block sync <surface/slug>  # re-fetch and overwrite vendored code from source
 labb block remove <surface/slug>
 labb block source               # manage block sources
@@ -464,7 +461,7 @@ labb components ex --tree
 
 **Common Mistakes to Avoid:**
 - DON'T guess parameter names - Use `labb components inspect`
-- DON'T guess icon names - Use `labb icons search "term"` or `labb llms` to find exact icon names. Guessing (e.g. `rmx.rocket-2-line`) often causes: `TypeError: cannot unpack non-iterable NoneType object` when the icon does not exist.
+- DON'T guess icon names - Use `labb icons search "term"` or `labb llms` to find exact icon names. Looking up several at once is one command: `labb icons search "arrow,heart,user"`. Guessing (e.g. `rmx.rocket-2-line`) often causes: `TypeError: cannot unpack non-iterable NoneType object` when the icon does not exist.
 - DON'T create manual icons - Use built-in `icon="rmx.iconname"` (search with `labb icons search`)
 - DON'T skip CLI examples - They show correct syntax
 

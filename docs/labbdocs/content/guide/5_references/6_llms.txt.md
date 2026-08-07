@@ -13,9 +13,9 @@ labb's `llms.txt` file can be accessed via the web or the `labb` CLI. *MCP serve
 
 **Note:** All documentation pages can be accessed in raw markdown format by adding `.md` to the URL.
 
-## Access Methods
+## Access methods
 
-### Web Access
+### Web access
 
 <c-lb.button as="a" href="{% url 'llms_txt' %}" size="xs">
   <c-lbi.rmx.file_text w="1em" h="1em" />
@@ -31,7 +31,7 @@ curl {{ llms_txt_url }}
 
 **URL:** `{{ llms_txt_url }}`
 
-### CLI Access
+### CLI access
 
 <c-lbdocs.misc.copy_button text="labb llms" label="labb llms" elementId="llms" icon="rmx.terminal" />
 
@@ -48,10 +48,10 @@ labb llms | grep "button"
 labb llms | grep -A 10 "badge:"
 ```
 
-### MCP Server
+### MCP server
  *Coming soon*
 
-## Editor Integration
+## Editor integration
 
 ### VSCode
 

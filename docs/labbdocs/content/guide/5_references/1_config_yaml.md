@@ -8,7 +8,7 @@ keywords: "labb.yaml, labb config django, labb project configuration"
 
 The `labb.yaml` configuration file controls most aspects of your labb project. This file is created when you run `labb init` and is used by all labb CLI commands.
 
-## Default Configuration
+## Default configuration
 
 The default structure of a `labb.yaml` file created by `labb init`:
 
@@ -27,11 +27,11 @@ css:
       - '**/templates/**/*.html'
 ```
 
-## Configuration Sections
+## Configuration sections
 
-### CSS Build Configuration
+### CSS build configuration
 
-Controls how CSS is built using Tailwind CSS 4 when using the <a href="{% doc_url '3_references/0_labb_cli.md' 'guide' %}#labb-build">`labb build`</a> command:
+Controls how CSS is built using Tailwind CSS 4 when using the <a href="{% doc_url '5_references/0_labb_cli.md' 'guide' %}#labb-build">`labb build`</a> command:
 
 ```yaml
 css:
@@ -51,7 +51,7 @@ labb build --input src/styles.css --output dist/app.css
 labb build --no-minify
 ```
 
-### CSS Packages Configuration
+### CSS packages configuration
 
 `css.packages` declares which **installed packages** contribute CSS to your build. A package publishes named **groups**; you subscribe to the ones you need. Everything is import-resolved, so it works whether the package is a path dependency or installed from PyPI. You never hardcode another package's file paths.
 
@@ -79,7 +79,7 @@ All three land in a single generated `.labb/labb.css`, which your `input.css` pu
 
 #### Publishing groups (`labb-provides.yaml`)
 
-A package publishes its groups from a `labb-provides.yaml` at its root (see the [full reference]({% doc_url '4_references/5_labb_provides.md' 'guide' %}) and the [Developing packages]({% doc_url '2_concepts/3_developing_packages.md' 'guide' %}) guide):
+A package publishes its groups from a `labb-provides.yaml` at its root (see the [full reference]({% doc_url '5_references/5_labb_provides.md' 'guide' %}) and the [Developing packages]({% doc_url '4_going_further/2_developing_packages.md' 'guide' %}) guide):
 
 ```yaml
 provides:
@@ -88,7 +88,7 @@ provides:
   blocks:     { components: [templates/cotton/lbb/**/*.html], literals: [templates/cotton/lbb/**/*.html] }
 ```
 
-### CSS Scan Configuration
+### CSS scan configuration
 
 `css.scan.templates` lists **your own** template patterns, scanned for `<c-lb.*>` usage:
 
@@ -102,10 +102,10 @@ css:
 ```
 
 <c-lb.alert variant="warning" alertStyle="outline" class="my-4">
-  <span>`css.scan.apps` and `css.scan.output` are **deprecated** and replaced by `css.packages` (the safelist now lives in `.labb/`). Run <code>labb migrate</code> to convert an old config. See <a href="{% doc_url '5_about/4_migrating_to_0_5.md' 'guide' %}">Migrating to 0.5</a>.</span>
+  <span>`css.scan.apps` and `css.scan.output` are **deprecated** and replaced by `css.packages` (the safelist now lives in `.labb/`). Run <code>labb migrate</code> to convert an old config. See <a href="{% doc_url '6_about/3_migrating_to_0_5.md' 'guide' %}">Migrating to 0.5</a>.</span>
 </c-lb.alert>
 
-## Environment Variables
+## Environment variables
 
 By default, the labb CLI looks for `labb.yaml` or `labb.yml` files in the current working directory. You can override the configuration file location using environment variables:
 
@@ -125,7 +125,7 @@ export LABB_CONFIG_PATH=/path/to/custom.yaml
 labb build
 ```
 
-## Template Patterns
+## Template patterns
 
 The `css.scan.templates` array supports glob patterns to find template files:
 
@@ -140,9 +140,9 @@ css:
       - 'myapp/custom/**/*.html'     # Specific app patterns
 ```
 
-## Managing Configuration
+## Managing configuration
 
-### Configuration Validation
+### Configuration validation
 
 You can validate your configuration using the CLI:
 
@@ -154,7 +154,7 @@ labb config --validate
 labb config --metadata
 ```
 
-### View Current Configuration
+### View current configuration
 
 ```bash
 # Display current configuration
@@ -164,14 +164,14 @@ labb config
 labb config --metadata
 ```
 
-### Edit Configuration
+### Edit configuration
 
 ```bash
 # Open configuration file in editor
 labb config --edit
 ```
 
-### Use Custom Configuration File
+### Use custom configuration file
 
 ```bash
 # Use specific config file

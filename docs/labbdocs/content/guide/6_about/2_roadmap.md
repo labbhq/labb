@@ -29,35 +29,19 @@ Priorities may shift based on community feedback. Have a feature request? Open a
             </c-lb.timeline.end>
         </c-slot>
     </c-lb.timeline.item>
-    <c-lb.timeline.item variant="warning" icon="rmx.loader-4">
+    <c-lb.timeline.item variant="success" icon="rmx.checkbox-circle">
         <c-slot name="endSlot">
             <c-lb.timeline.end box class="my-6">
-                <span class="font-bold">IDE extensions</span>
-                <p class="text-sm">Autocomplete and inline documentation</p>
-            </c-lb.timeline.end>
-        </c-slot>
-    </c-lb.timeline.item>
-    <c-lb.timeline.item icon="rmx.time">
-    <c-slot name="endSlot">
-        <c-lb.timeline.end box class="my-6">
-            <span class="font-bold">labbwire</span>
-            <p class="text-sm">HTML over the wire, the Django (cotton) way</p>
-        </c-lb.timeline.end>
-    </c-slot>
-    </c-lb.timeline.item>
-     <c-lb.timeline.item icon="rmx.time">
-        <c-slot name="endSlot">
-            <c-lb.timeline.end box class="my-6">
-                <span class="font-bold">Playground</span>
-                <p class="text-sm">Testing and experimenting with components</p>
+                <span class="font-bold">v0.5.0</span>
+                <p class="text-sm">Fullstack reactivity powered by Datastar, installable blocks, and package extendability</p>
             </c-lb.timeline.end>
         </c-slot>
     </c-lb.timeline.item>
     <c-lb.timeline.item icon="rmx.time">
         <c-slot name="endSlot">
             <c-lb.timeline.end box class="my-6">
-                <span class="font-bold">Blocks and templates</span>
-                <p class="text-sm">Pre-built page sections and full page layouts</p>
+                <span class="font-bold">Package component schemas</span>
+                <p class="text-sm">Third-party packages declare their own component schemas, so labb scan resolves variant classes for their tags too</p>
             </c-lb.timeline.end>
         </c-slot>
     </c-lb.timeline.item>
@@ -77,8 +61,15 @@ Priorities may shift based on community feedback. Have a feature request? Open a
             </c-lb.timeline.end>
         </c-slot>
     </c-lb.timeline.item>
-
-    <c-lb.timeline.item last icon="rmx.time">
+    <c-lb.timeline.item icon="rmx.time">
+        <c-slot name="endSlot">
+            <c-lb.timeline.end box class="my-6">
+                <span class="font-bold">IDE extensions</span>
+                <p class="text-sm">Autocomplete and inline documentation</p>
+            </c-lb.timeline.end>
+        </c-slot>
+    </c-lb.timeline.item>
+    <c-lb.timeline.item icon="rmx.time" last>
         <c-slot name="endSlot">
             <c-lb.timeline.end box class="my-6">
                 <span class="font-bold">Starter kits</span>
