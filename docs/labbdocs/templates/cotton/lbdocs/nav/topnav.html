@@ -1,5 +1,6 @@
 {% load lb_tags %}
 {% load static %}
+{% load docs_tags %}
 
 <c-vars
     topnavTitle
@@ -81,18 +82,21 @@
         </c-lb.navbar.center>
 
         <c-lb.navbar.end class="flex items-center gap-2">
-            <c-lb.button
-                as="a"
-                href="/search/"
-                size="sm"
-                btnStyle="ghost"
-                icon="rmx.search"
-                class="gap-2"
-                onclick="event.preventDefault(); palOpen()"
-            >
-                <span class="hidden sm:inline">Search</span>
-                <c-lb.kbd size="xs">⌘K</c-lb.kbd>
-            </c-lb.button>
+            {% search_enabled as has_search %}
+            {% if has_search %}
+                <c-lb.button
+                    as="a"
+                    href="{% url 'labbdocs_search:page' %}"
+                    size="sm"
+                    btnStyle="ghost"
+                    icon="rmx.search"
+                    class="gap-2"
+                    onclick="event.preventDefault(); palOpen()"
+                >
+                    <span class="hidden sm:inline">Search</span>
+                    <c-lb.kbd size="xs">⌘K</c-lb.kbd>
+                </c-lb.button>
+            {% endif %}
             <c-lb.dropdown alignment="end" size="sm">
                 <c-lb.dropdown.trigger class="btn btn-sm btn-ghost btn-circle">
                     <c-lbi.rmx.sun w="1.25em" h="1.25em" />
@@ -118,4 +122,3 @@
         </c-lb.navbar.end>
     </c-lb.navbar>
 </div>
-

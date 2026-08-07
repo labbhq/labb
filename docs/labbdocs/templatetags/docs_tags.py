@@ -24,6 +24,14 @@ from ..seo_utils import (
 register = template.Library()
 
 
+@register.simple_tag
+def search_enabled():
+    """Whether `labbdocs.search` is installed."""
+    from django.apps import apps
+
+    return apps.is_installed("labbdocs.search")
+
+
 @register.simple_tag(takes_context=True)
 def labb_docs_banner(context):
     """

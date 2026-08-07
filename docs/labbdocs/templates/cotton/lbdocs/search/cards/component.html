@@ -1,0 +1,16 @@
+<c-vars :doc="{}" />
+
+<a href="{{ doc.url }}" class="flex items-start gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-base-200">
+    {% if doc.metadata.icon %}
+    <span class="mt-0.5 flex size-5 shrink-0 items-center justify-center text-base-content/60">
+        <c-component is="lbi" n="{{ doc.metadata.icon }}" w="1.05em" h="1.05em" />
+    </span>
+    {% endif %}
+    <div class="min-w-0 flex-1">
+        <div class="flex items-baseline justify-between gap-3">
+            <span class="truncate text-sm font-medium">{{ doc.title }}</span>
+            {% if doc.metadata.component %}<code class="shrink-0 font-mono text-xs text-base-content/40">{{ doc.metadata.component }}</code>{% endif %}
+        </div>
+        {% if doc.summary %}<p class="mt-0.5 truncate text-xs text-base-content/50">{{ doc.summary }}</p>{% endif %}
+    </div>
+</a>

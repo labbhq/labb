@@ -1,0 +1,29 @@
+<c-vars :groups="[]" :shortcuts="[]" has_query="" no_results="" q="" />
+
+<div id="search-palette-results" data-effect="palHighlight($cursor)">
+    {% if has_query %}
+        {% if no_results %}
+        <div class="px-3 py-10 text-center">
+            <p class="text-sm text-base-content/60">No results for "{{ q }}".</p>
+        </div>
+        {% else %}
+        <c-lbdocs.search.results :groups=groups q="{{ q }}" />
+        <div class="mt-4 border-t border-base-200 px-3 pt-3">
+            <a
+                href="{% url 'labbdocs_search:page' %}?q={{ q|urlencode }}"
+                class="text-xs text-base-content/50 transition-colors hover:text-base-content"
+            >See all results for "{{ q }}"</a>
+        </div>
+        {% endif %}
+    {% else %}
+        <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-base-content/40">Browse</p>
+        <div class="flex flex-col">
+            {% for s in shortcuts %}
+            <a href="{{ s.href }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-base-200">
+                <c-component is="lbi" n="{{ s.icon }}" w="1em" h="1em" class="text-base-content/50" />
+                <span>{{ s.label }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

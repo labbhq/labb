@@ -1,0 +1,16 @@
+<c-vars :doc="{}" />
+
+{% if doc.metadata.is_heading %}
+<a href="{{ doc.url }}" class="flex items-center gap-2 rounded-lg px-3 py-1 text-xs text-base-content/60 transition-colors hover:bg-base-200 hover:text-base-content">
+    <span class="text-base-content/30">#</span>
+    <span class="truncate">{{ doc.metadata.heading|default:doc.title }}</span>
+</a>
+{% else %}
+<a href="{{ doc.url }}" class="block rounded-lg px-3 py-2 transition-colors hover:bg-base-200">
+    <div class="flex items-baseline gap-2">
+        <span class="truncate text-sm font-medium">{{ doc.title }}</span>
+        {% if doc.category == "blog" %}<span class="shrink-0 text-xs text-base-content/40">Blog</span>{% endif %}
+    </div>
+    {% if doc.summary %}<p class="mt-0.5 truncate text-xs text-base-content/50">{{ doc.summary }}</p>{% endif %}
+</a>
+{% endif %}

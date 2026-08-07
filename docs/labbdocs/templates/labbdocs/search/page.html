@@ -1,0 +1,84 @@
+<c-lbdocs.layout.base
+    title="Search — labb"
+    topnavTitle="Search"
+    includeMeta=False
+>
+
+    <c-lbr.signals id="search-page-signals" :schema=signals />
+    <c-lbr.replace-url to="{{ canonical_url }}" />
+
+    <div class="max-w-5xl mx-auto px-6 py-12">
+
+        <header class="mb-6">
+            <h1 class="text-lg font-semibold tracking-tight">Search</h1>
+            <p class="text-base-content/50 mt-1 text-xs">
+                Find components, icons, blocks, and guides across labb.
+            </p>
+        </header>
+
+        <form
+            method="get"
+            action="{% url 'labbdocs_search:page' %}"
+            data-on:submit__prevent="@get('{% url 'labbdocs_search:page' %}')"
+            class="mb-10"
+        >
+            <input type="hidden" name="type" value="{{ active_type }}" />
+            <c-lbr.get to="labbdocs_search:page" on="input__debounce.250ms" tag="div">
+                <c-lb.input
+                    id="search-page-input"
+                    type="search"
+                    name="q"
+                    value="{{ q }}"
+                    :bind=signals.fields.q
+                    placeholder="Search components, icons, blocks, guides"
+                    autocomplete="off"
+                    autofocus
+                    class="w-full"
+                />
+            </c-lbr.get>
+        </form>
+
+        <div id="search-results">
+            {% if has_query %}
+                {% if not has_results %}
+                    <div class="text-center py-16">
+                        <p class="text-sm text-base-content/60">No results for "{{ q }}".</p>
+                        <p class="mt-4 text-xs text-base-content/50">Try a different term, or browse:</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            {% for s in shortcuts %}
+                            <c-lb.button as="a" href="{{ s.href }}" size="sm" btnStyle="ghost" icon="{{ s.icon }}">{{ s.label }}</c-lb.button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="flex flex-col gap-8 md:flex-row md:gap-10">
+                        <aside class="md:w-52 md:shrink-0">
+                            <c-lbdocs.search.facets :facets=facets />
+                        </aside>
+                        <div class="min-w-0 flex-1">
+                            {% if groups %}
+                            <c-lbdocs.search.results :groups=groups q="{{ q }}" />
+                            {% else %}
+                            <p class="py-12 text-sm text-base-content/60">No {{ active_label }} results for "{{ q }}".</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {% for s in shortcuts %}
+                    <c-lb.button
+                        as="a"
+                        href="{{ s.href }}"
+                        class="justify-start"
+                        btnStyle="outline"
+                        icon="{{ s.icon }}"
+                    >{{ s.label }}</c-lb.button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</c-lbdocs.layout.base>

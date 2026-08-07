@@ -100,6 +100,9 @@
         <c-lbdocs.nav.footer />
     {% endif %}
 
-    <c-search.palette />
+    {% search_enabled as has_search %}
+    {% if has_search %}
+        <c-lbdocs.search.palette />
+    {% endif %}
 </body>
 </html>

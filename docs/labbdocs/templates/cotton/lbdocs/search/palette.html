@@ -1,0 +1,105 @@
+{% load lb_tags search_tags static %}
+
+{% category_shortcuts as shortcuts %}
+
+<c-lbr.signals id="palette-signals" data-signals="{q: '', cursor: 0}" />
+
+<c-lb.modal
+    id="search-palette"
+    placement="middle"
+    withBackdrop
+    :withCloseBtn=False
+    boxClass="w-full max-w-xl p-0 overflow-hidden rounded-xl border border-base-300 shadow-none"
+>
+    <div
+        data-on:keydown="evt.key==='ArrowDown' ? (evt.preventDefault(), $cursor=palClamp($cursor+1)) : evt.key==='ArrowUp' ? (evt.preventDefault(), $cursor=palClamp($cursor-1)) : evt.key==='Enter' ? (evt.preventDefault(), palGo($cursor)) : null"
+    >
+        <div class="flex items-center gap-3 border-b border-base-200 px-4">
+            <c-lbi.rmx.search class="size-4 shrink-0 text-base-content/40" />
+            <c-lbr.get to="labbdocs_search:palette" on="input__debounce.250ms" tag="div" class="flex-1">
+                <c-lb.input
+                    id="search-palette-input"
+                    type="search"
+                    bind="$q"
+                    autocomplete="off"
+                    spellcheck="false"
+                    placeholder="Search components, icons, blocks, guides…"
+                    autofocus
+                    data-on:input="$cursor=0"
+                    class="h-12 w-full border-0 bg-transparent px-0 text-base shadow-none focus:outline-none focus-visible:outline-none"
+                />
+            </c-lbr.get>
+        </div>
+
+        <div class="px-3 pb-4 pt-4">
+            <c-lbdocs.search.palette-results :shortcuts=shortcuts :has_query=False :no_results=False q="" />
+        </div>
+    </div>
+</c-lb.modal>
+
+<style>
+    #search-palette-results { max-height: 60vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: color-mix(in oklch, var(--color-base-content) 20%, transparent) transparent; }
+    #search-palette-results::-webkit-scrollbar { width: 6px; }
+    #search-palette-results::-webkit-scrollbar-thumb { background-color: color-mix(in oklch, var(--color-base-content) 20%, transparent); border-radius: 3px; }
+    #search-palette-results::-webkit-scrollbar-track { background: transparent; }
+    #search-palette-results a.palette-active {
+        background-color: color-mix(in oklch, var(--color-base-content) 8%, transparent);
+        outline: 2px solid color-mix(in oklch, var(--color-primary) 55%, transparent);
+        outline-offset: -2px;
+    }
+    .lb-copied {
+        background-color: color-mix(in oklch, var(--color-success) 22%, transparent) !important;
+        color: var(--color-base-content);
+    }
+</style>
+
+<script>
+    (function () {
+        function items() {
+            var r = document.getElementById('search-palette-results');
+            return r ? Array.prototype.slice.call(r.querySelectorAll('a[href]')) : [];
+        }
+        // Load Datastar on demand — static pages stay zero-JS until the user
+        // actually opens search, then the palette's reactive bits come alive.
+        window.palEnsureDatastar = function () {
+            if (window.__lbDatastarRequested || document.querySelector('script[src*="datastar.js"]')) { return; }
+            window.__lbDatastarRequested = true;
+            var s = document.createElement('script');
+            s.type = 'module';
+            s.src = '{% static "labb/js/vendor/datastar.js" %}';
+            document.head.appendChild(s);
+        };
+        window.palOpen = function () {
+            window.palEnsureDatastar();
+            var d = document.getElementById('search-palette');
+            if (d && !d.open) { d.showModal(); }
+            var i = document.getElementById('search-palette-input');
+            if (i) { i.focus(); i.select(); }
+        };
+        window.palClamp = function (n) {
+            var len = items().length;
+            if (!len) { return 0; }
+            return ((n % len) + len) % len;
+        };
+        window.palHighlight = function (cursor) {
+            var list = items();
+            for (var i = 0; i < list.length; i++) {
+                list[i].classList.toggle('palette-active', i === cursor);
+            }
+            if (list[cursor]) { list[cursor].scrollIntoView({ block: 'nearest' }); }
+        };
+        window.palGo = function (cursor) {
+            var list = items();
+            var a = list[cursor] || list[0];
+            if (a) { a.click(); }
+        };
+        // Open on ⌘K / Ctrl+K — plain JS so the overlay works on every page,
+        // independent of whether Datastar has finished loading.
+        window.addEventListener('keydown', function (evt) {
+            if ((evt.metaKey || evt.ctrlKey) && (evt.key === 'k' || evt.key === 'K')) {
+                evt.preventDefault();
+                window.palOpen();
+            }
+        });
+    })();
+</script>
