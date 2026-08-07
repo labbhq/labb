@@ -65,9 +65,10 @@ class TestTourKeyboardNav(ComponentTestBase):
 
     def test_key_change_reuses_click(self):
         # Each key change mirrors a click exactly by dispatching one on the
-        # target step button, then moving focus to it (roving tabindex).
+        # target step button, then moving focus to it (roving tabindex). The step
+        # number must be quoted — `[data-tour-step=2]` is not a valid selector.
         html = self.render_tour()
-        assert "el.querySelector('[data-tour-step=' + t + ']')" in html
+        assert r"el.querySelector('[data-tour-step=\'' + t + '\']')" in html
         assert "btn.click(); btn.focus();" in html
 
     # --- active-step signal ------------------------------------------------

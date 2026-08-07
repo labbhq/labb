@@ -5,10 +5,10 @@ from pathlib import Path
 from django.http import FileResponse, Http404
 from django.shortcuts import render
 
-from .registry import registry
-from .tree import file_tree
 from labb.contrib.blocks import render_page
 
+from .registry import registry
+from .tree import file_tree
 
 THUMBNAIL_MODES = ("light", "dark")
 
@@ -54,9 +54,13 @@ def gallery(request):
     for cards in by_category.values():
         cards.sort(key=lambda c: c["slug"])
 
-    return render(request, "cotton/lbb/renderer/gallery.html", {
-        "categories": sorted(by_category.items()),
-    })
+    return render(
+        request,
+        "cotton/lbb/renderer/gallery.html",
+        {
+            "categories": sorted(by_category.items()),
+        },
+    )
 
 
 def thumbnail(request, ref):
@@ -78,7 +82,7 @@ def detail(request, ref):
     block_dir = Path(registry.repo_path) / category / slug
 
     raw_tabs = {}
-    for fname in ["views.py", "urls.py", "block.yaml"]:
+    for fname in ["views.py", "urls.py"]:
         fpath = block_dir / fname
         if fpath.exists():
             raw_tabs[fname] = fpath.read_text()
@@ -92,15 +96,19 @@ def detail(request, ref):
 
     tabs = [{"fname": fname, "content": content} for fname, content in raw_tabs.items()]
 
-    return render(request, "cotton/lbb/renderer/detail.html", {
-        "meta": meta,
-        "slug": slug,
-        "vendor": vendor,
-        "category": category,
-        "preview_url": f"/{vendor}/{category}/{slug}/preview/",
-        "tabs": tabs,
-        "tree": file_tree(raw_tabs),
-    })
+    return render(
+        request,
+        "cotton/lbb/renderer/detail.html",
+        {
+            "meta": meta,
+            "slug": slug,
+            "vendor": vendor,
+            "category": category,
+            "preview_url": f"/{vendor}/{category}/{slug}/preview/",
+            "tabs": tabs,
+            "tree": file_tree(raw_tabs),
+        },
+    )
 
 
 def fe_preview(request, ref):

@@ -79,7 +79,9 @@ _FIXED_COLOUR_PATTERNS = (
     re.compile(r"\bhsla?\([^)]*\)"),
     re.compile(
         r"\b(?:bg|text|border|from|via|to|ring|fill|stroke|outline|decoration|"
-        r"accent|caret|divide|placeholder|shadow)-(?:" + _TAILWIND_FIXED_PALETTE + r")-\d{2,3}\b"
+        r"accent|caret|divide|placeholder|shadow)-(?:"
+        + _TAILWIND_FIXED_PALETTE
+        + r")-\d{2,3}\b"
     ),
 )
 
@@ -271,6 +273,7 @@ def _ensure_gitignore(repo_path: Path) -> None:
 def _merge_cotton_dir(src_dir: Path, dest_dir: Path) -> None:
     """Merge a block's templates/cotton/ into .labb/templates/cotton/."""
     import shutil
+
     for item in src_dir.rglob("*"):
         if not item.is_file():
             continue
@@ -288,6 +291,7 @@ def _merge_cotton_dir(src_dir: Path, dest_dir: Path) -> None:
 def _symlink_subdir(src_dir: Path, dest_dir: Path) -> None:
     """Recursively symlink all files from src_dir into dest_dir."""
     import shutil
+
     dest_dir.mkdir(parents=True, exist_ok=True)
     for item in sorted(src_dir.rglob("*")):
         if not item.is_file():
@@ -314,6 +318,7 @@ def _build_template_tree(repo_path: Path, vendor: str) -> None:
     several blocks are authored once.
     """
     import shutil
+
     labb_templates = repo_path / ".labb" / "templates"
     src_root = blocks_root(repo_path)
 
@@ -324,7 +329,11 @@ def _build_template_tree(repo_path: Path, vendor: str) -> None:
     for category_dir in sorted(src_root.iterdir()):
         if not category_dir.is_dir():
             continue
-        if category_dir.name in _SKIP_DIRS or category_dir.name.startswith(".") or category_dir.name.startswith("_"):
+        if (
+            category_dir.name in _SKIP_DIRS
+            or category_dir.name.startswith(".")
+            or category_dir.name.startswith("_")
+        ):
             continue
 
         for slug_dir in sorted(category_dir.iterdir()):
@@ -368,6 +377,7 @@ def _build_vendor_package(repo_path: Path, vendor: str) -> None:
       {vendor}.crud    → repo_path/crud/   (and other category dirs)
     """
     import shutil
+
     vendor_pkg = repo_path / ".labb" / vendor
     if vendor_pkg.exists():
         shutil.rmtree(vendor_pkg)
@@ -383,7 +393,11 @@ def _build_vendor_package(repo_path: Path, vendor: str) -> None:
     for item in sorted(src_root.iterdir()):
         if not item.is_dir():
             continue
-        if item.name in _SKIP_DIRS or item.name.startswith(".") or item.name.startswith("_"):
+        if (
+            item.name in _SKIP_DIRS
+            or item.name.startswith(".")
+            or item.name.startswith("_")
+        ):
             continue
         (vendor_pkg / item.name).symlink_to(item.resolve())
 
@@ -433,7 +447,7 @@ def _read_vendor(blocks_yaml_path: Path) -> str:
     for line in content.splitlines():
         line = line.strip()
         if line.startswith("vendor:"):
-            value = line[len("vendor:"):].strip()
+            value = line[len("vendor:") :].strip()
             if (value.startswith('"') and value.endswith('"')) or (
                 value.startswith("'") and value.endswith("'")
             ):
@@ -472,14 +486,12 @@ def _create_template(
     )
 
 
-def _create_views_py(
-    block_dir: Path, vendor: str, category: str, slug: str
-) -> None:
+def _create_views_py(block_dir: Path, vendor: str, category: str, slug: str) -> None:
     template_path = f"{vendor}/{category}/{slug}/pages/index.html"
     content = (
         "from labb.contrib.blocks import lm, render_page\n"
         "\n"
-        "# LbMyModel = lm(\"LbMyModel\")\n"
+        '# LbMyModel = lm("LbMyModel")\n'
         "\n"
         f'TEMPLATE = "{template_path}"\n'
         "\n"
@@ -701,7 +713,13 @@ def build_index(path: str = ".") -> None:
 
     index_path = root / "index.yaml"
     with index_path.open("w", encoding="utf-8") as f:
-        yaml.dump({"blocks": blocks}, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        yaml.dump(
+            {"blocks": blocks},
+            f,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
 
     print(f"✓ Indexed {len(blocks)} blocks → index.yaml")
 
@@ -759,7 +777,9 @@ def _validate_tour(block_dir: Path, errors: list[str]) -> None:
         block_dir / "views.py",
         block_dir / "urls.py",
     ]
-    block_source = "\n".join(f.read_text(encoding="utf-8") for f in searchable if f.exists())
+    block_source = "\n".join(
+        f.read_text(encoding="utf-8") for f in searchable if f.exists()
+    )
 
     for n, step in enumerate(steps, start=1):
         label = step.get("title") or f"step {n}"
@@ -793,7 +813,9 @@ def _validate_tour(block_dir: Path, errors: list[str]) -> None:
         if step.get("file"):
             target = block_dir / step["file"]
             if not target.exists():
-                errors.append(f"tour step '{label}': file '{step['file']}' does not exist")
+                errors.append(
+                    f"tour step '{label}': file '{step['file']}' does not exist"
+                )
                 continue
         else:
             target = _default_tour_file(block_dir)
@@ -869,7 +891,9 @@ def _validate_theme_tokens(block_dir: Path, errors: list[str]) -> None:
     """
     allowed = _allowed_fixed_colours(block_dir)
     for template in _block_template_files(block_dir):
-        for n, line in enumerate(template.read_text(encoding="utf-8").splitlines(), start=1):
+        for n, line in enumerate(
+            template.read_text(encoding="utf-8").splitlines(), start=1
+        ):
             for pattern in _FIXED_COLOUR_PATTERNS:
                 for hit in pattern.findall(line):
                     if hit.strip().lower() in allowed:
@@ -968,7 +992,9 @@ def validate(path: str = ".") -> bool:
 
         block_type = block_data.get("type")
         if block_type is not None and block_type not in valid_types:
-            block_errors.append(f"invalid type '{block_type}' (must be 'fe' or 'fullstack')")
+            block_errors.append(
+                f"invalid type '{block_type}' (must be 'fe' or 'fullstack')"
+            )
 
         block_category = block_data.get("category")
         if block_category is not None and block_category not in VALID_CATEGORIES:
@@ -1021,7 +1047,9 @@ def validate(path: str = ".") -> bool:
             urls_py = block_dir / "urls.py"
 
             if not views_py.exists():
-                block_errors.append("views.py is missing (required for fullstack blocks)")
+                block_errors.append(
+                    "views.py is missing (required for fullstack blocks)"
+                )
             else:
                 views_content = views_py.read_text(encoding="utf-8")
                 if "from labb.contrib.blocks import lt" in views_content:
@@ -1034,7 +1062,9 @@ def validate(path: str = ".") -> bool:
                     )
 
             if not urls_py.exists():
-                block_errors.append("urls.py is missing (required for fullstack blocks)")
+                block_errors.append(
+                    "urls.py is missing (required for fullstack blocks)"
+                )
 
         elif block_type == "fe":
             if "preview_context" not in block_data:
@@ -1266,6 +1296,7 @@ def serve(path: str = ".", port: int = 8765) -> None:
 
     try:
         from django.conf import settings as django_settings
+
         if not django_settings.configured:
             django_settings.configure(
                 SECRET_KEY="labb-dev-not-for-production",
@@ -1289,36 +1320,42 @@ def serve(path: str = ".", port: int = 8765) -> None:
                         "NAME": str(repo_path / ".labb" / "dev.sqlite3"),
                     }
                 },
-                TEMPLATES=[{
-                    "BACKEND": "django.template.backends.django.DjangoTemplates",
-                    "DIRS": [str(repo_path / ".labb" / "templates")],
-                    "APP_DIRS": False,
-                    "OPTIONS": {
-                        "context_processors": [
-                            "django.template.context_processors.request",
-                        ],
-                        "loaders": [
-                            (
-                                "django_cotton.cotton_loader.Loader",
-                                [
-                                    "django.template.loaders.filesystem.Loader",
-                                    "django.template.loaders.app_directories.Loader",
-                                ],
-                            ),
-                        ],
-                    },
-                }],
+                TEMPLATES=[
+                    {
+                        "BACKEND": "django.template.backends.django.DjangoTemplates",
+                        "DIRS": [str(repo_path / ".labb" / "templates")],
+                        "APP_DIRS": False,
+                        "OPTIONS": {
+                            "context_processors": [
+                                "django.template.context_processors.request",
+                            ],
+                            "loaders": [
+                                (
+                                    "django_cotton.cotton_loader.Loader",
+                                    [
+                                        "django.template.loaders.filesystem.Loader",
+                                        "django.template.loaders.app_directories.Loader",
+                                    ],
+                                ),
+                            ],
+                        },
+                    }
+                ],
                 STATIC_URL="/static/",
-                STATICFILES_DIRS=[str(repo_path / "static")] if (repo_path / "static").exists() else [],
+                STATICFILES_DIRS=[str(repo_path / "static")]
+                if (repo_path / "static").exists()
+                else [],
                 ROOT_URLCONF="labb.contrib.blocks.renderer.urls",
             )
     except RuntimeError:
         pass
 
     import django
+
     django.setup()
 
     from labb.contrib.blocks import renderer
+
     block_registry = {
         f"{vendor}/{category}/{slug}": {
             "type": block_meta["type"],
@@ -1339,15 +1376,18 @@ def serve(path: str = ".", port: int = 8765) -> None:
     renderer.configure(block_registry, blocks_root(repo_path), vendor)
 
     from django.core.management import call_command
+
     call_command("migrate", "--run-syncdb", verbosity=0)
 
-    fixtures_path = repo_path / "fixtures.json"
+    fixtures_path = blocks_root(repo_path) / "fixtures.json"
     if fixtures_path.exists():
         call_command("loaddata", str(fixtures_path), verbosity=0)
 
     block_count = len(discovered_blocks)
     print(f"Starting labb block renderer at http://localhost:{port}/")
-    print(f"Vendor: {vendor} | {block_count} block{'s' if block_count != 1 else ''} discovered")
+    print(
+        f"Vendor: {vendor} | {block_count} block{'s' if block_count != 1 else ''} discovered"
+    )
     print("Press Ctrl+C to stop.")
 
     call_command("runserver", f"0.0.0.0:{port}", use_reloader=True)

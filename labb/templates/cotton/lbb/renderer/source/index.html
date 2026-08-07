@@ -1,10 +1,10 @@
-<c-vars id="block-viewer" :tabs="[]" :tree="[]" height="600" />
+<c-vars id="block-viewer" key="" :tabs="[]" :tree="[]" height="600" />
 
 {% if tabs %}
 {% with idsafe=id|cut:"-" %}
 <div class="lbb-source flex flex-col h-full" id="{{ id }}-source">
 
-<c-lbr.signals id="{{ id }}-source-signals"
+<c-lbr.signals id="{{ id }}-source-signals-{{ key }}"
                data-signals='{"activeFile_{{ idsafe }}":"{{ tabs.0.fname }}"}' />
 
 <div class="flex items-center justify-between px-3 h-9 shrink-0 border-b border-base-200 bg-base-100">

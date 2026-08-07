@@ -18,7 +18,7 @@
             const t = k === 'ArrowDown' ? (cur >= len ? 1 : cur + 1)
                     : k === 'ArrowUp' ? (cur <= 1 ? len : cur - 1)
                     : k === 'Home' ? 1 : len;
-            const btn = el.querySelector('[data-tour-step=' + t + ']');
+            const btn = el.querySelector('[data-tour-step=\'' + t + '\']');
             if (btn) { btn.click(); btn.focus(); }">
         {% for step in tour %}
         <li class="rounded-lg border transition"

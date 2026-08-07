@@ -7,7 +7,9 @@
 
 <div class="border border-base-300 rounded-xl bg-base-100">
 
-    <div class="relative flex items-center gap-2 px-2 py-2 border-b border-base-200 bg-base-100 min-h-11 rounded-t-xl">
+    <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-2 py-2 border-b border-base-200 bg-base-100 min-h-11 rounded-t-xl">
+
+      <div class="col-start-1 flex items-center gap-2 min-w-0">
 
         <c-lb.join class="shrink-0">
             <c-lb.button class="join-item font-medium" size="xs" btnStyle="ghost"
@@ -19,15 +21,18 @@
         </c-lb.join>
 
         {% if type %}
-        <c-lb.tooltip tip="{% if type == 'fullstack' %}Models, views + templates{% else %}Templates only{% endif %}">
-            <span class="flex items-center gap-1 shrink-0 rounded-md border border-base-200 px-2 py-1 text-xs font-medium text-base-content/50">
+        <c-lb.tooltip tip="{% if type == 'fullstack' %}Fullstack: models, views, urls + templates{% else %}Frontend: templates only{% endif %}">
+            <span class="flex items-center gap-1 shrink-0 rounded-md px-2 py-1 text-xs font-medium
+                         {% if type == 'fullstack' %}border border-warning/40 bg-warning/10 text-warning{% else %}border border-base-200 text-base-content/50{% endif %}">
                 <c-lbi n="{% if type == 'fullstack' %}rmx.stack{% else %}rmx.html5{% endif %}" w="13" h="13" />
                 {% if type == 'fullstack' %}Fullstack{% else %}Frontend{% endif %}
             </span>
         </c-lb.tooltip>
         {% endif %}
 
-        <div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-0.5" data-show="$view_{{ idsafe }} === 'preview'">
+      </div>
+
+      <div class="col-start-2 hidden lg:flex items-center gap-0.5" data-show="$view_{{ idsafe }} === 'preview'">
             <c-lb.tooltip tip="Desktop">
                 <c-lb.button modifier="square" size="xs" btnStyle="ghost"
                              data-class='{"bg-base-200": $viewport_{{ idsafe }} === "desktop"}'
@@ -49,23 +54,17 @@
                     <c-lbi n="rmx.smartphone" w="14" h="14" />
                 </c-lb.button>
             </c-lb.tooltip>
-            <div class="w-px h-4 bg-base-200 mx-1 shrink-0"></div>
-            <c-lb.tooltip tip="Refresh">
-                <c-lb.button modifier="square" size="xs" btnStyle="ghost"
-                             data-on:click="document.getElementById('{{ frame_id }}').contentWindow.location.reload()">
-                    <c-lbi n="rmx.refresh" w="14" h="14" />
-                </c-lb.button>
-            </c-lb.tooltip>
         </div>
 
-        <div class="flex-1"></div>
+      <div class="col-start-3 flex items-center justify-end gap-2 min-w-0">
 
         {% if install_cmd %}
-        <div class="flex items-center gap-1.5 border border-base-200 px-2.5 py-0.5 rounded-md shrink-0"
+        {% comment %}Shrinks before the controls do; below md the command drops, copy stays.{% endcomment %}
+        <div class="flex items-center gap-1.5 min-w-0 border border-base-200 px-2.5 py-0.5 rounded-md"
              data-install-cmd="{{ install_cmd }}">
             <c-lbi n="rmx.terminal-box" w="13" h="13" class="shrink-0" />
-            <span class="text-xs font-mono text-base-content/60">{{ install_cmd }}</span>
-            <c-lb.button modifier="square" size="xs" btnStyle="ghost" class="tooltip -mr-1" data-tip="Copy"
+            <span class="hidden md:block text-xs font-mono text-base-content/60 truncate">{{ install_cmd }}</span>
+            <c-lb.button modifier="square" size="xs" btnStyle="ghost" class="tooltip -mr-1 shrink-0" data-tip="Copy"
                          data-on:click="lbbCopyInstall(el)">
                 <span class="i-copy"><c-lbi n="rmx.clipboard" w="13" h="13" class="text-base-content/60" /></span>
                 <span class="i-check" style="display:none"><c-lbi n="rmx.check" w="13" h="13" class="text-success" /></span>
@@ -73,10 +72,20 @@
         </div>
         {% endif %}
 
-        <c-lb.button as="a" href="{{ preview_url }}" target="_blank" size="xs" variant="neutral" class="shrink-0 gap-1">
-            Open
+        <c-lb.tooltip tip="Refresh" class="shrink-0" data-show="$view_{{ idsafe }} === 'preview'">
+            <c-lb.button modifier="square" size="xs" btnStyle="ghost"
+                         data-on:click="document.getElementById('{{ frame_id }}').contentWindow.location.reload()">
+                <c-lbi n="rmx.refresh" w="14" h="14" />
+            </c-lb.button>
+        </c-lb.tooltip>
+
+        <c-lb.button as="a" href="{{ preview_url }}" target="_blank" size="xs" variant="neutral"
+                     class="shrink-0 gap-1" aria-label="Open preview in a new tab">
+            <span class="hidden sm:inline">Open</span>
             <c-lbi n="rmx.external-link" w="12" h="12" />
         </c-lb.button>
+
+      </div>
 
     </div>
 
@@ -101,7 +110,7 @@
     <div data-show="$view_{{ idsafe }} === 'code'" style="display:none" class="rounded-b-xl overflow-hidden">
         <div class="flex" style="height:{{ height }}px">
             <div class="flex-1 min-w-0">
-                <c-lbb.renderer.source id="{{ id }}" :tabs=tabs :tree=tree />
+                <c-lbb.renderer.source id="{{ id }}" key="{{ slug|slugify }}" :tabs=tabs :tree=tree />
             </div>
             {% if tour %}
             <div class="hidden lg:block w-72 shrink-0 border-l border-base-200 bg-base-100">

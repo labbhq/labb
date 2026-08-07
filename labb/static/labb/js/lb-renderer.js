@@ -244,6 +244,16 @@ if (!window.__lbbSourceSetup) {
   const wrapReady = (code) => { if (code.dataset.highlighted === 'yes' && !code.dataset.lined) lbbWrapLines(code); };
   const scanReady = () => document.querySelectorAll('.src-tab code[data-highlighted="yes"]:not([data-lined])').forEach(wrapReady);
 
+  // The morph strips our data-* markers with the old content, so an unlined
+  // <code> is always new source — never something we'd double-highlight.
+  const processCode = (code) => {
+    if (!code || code.dataset.lined) return;
+    if (window.hljs && !code.dataset.highlighted) {
+      try { window.hljs.highlightElement(code); } catch (_) {}
+    }
+    lbbWrapLines(code);
+  };
+
   scanReady();
   document.addEventListener('DOMContentLoaded', () => setTimeout(scanReady, 0));
   window.addEventListener('load', () => {
@@ -253,20 +263,21 @@ if (!window.__lbbSourceSetup) {
   });
 
   new MutationObserver((muts) => {
+    lbbEnsureSrcStyle(); // a morph may have just dropped it from <head>
     for (const m of muts) {
       if (m.type === 'attributes') {
         if (m.target.nodeName === 'CODE' && m.target.closest('.src-tab')) wrapReady(m.target);
         continue;
       }
       if (!loaded) continue; // ignore initial hydration; hljs handles those
+      // Switching block morphs a <code>'s children in place: the added node is a
+      // text node and <code> is never re-added, so neither branch below sees it.
+      if (m.target.nodeType === 1) processCode(m.target.closest?.('.src-tab code'));
       for (const n of m.addedNodes) {
         if (n.nodeType !== 1) continue;
         const codes = n.matches?.('.src-tab code:not([data-lined])') ? [n]
           : n.querySelectorAll?.('.src-tab code:not([data-lined])');
-        codes && codes.forEach((c) => {
-          if (window.hljs && !c.dataset.highlighted) { try { window.hljs.highlightElement(c); } catch (_) {} }
-          lbbWrapLines(c);
-        });
+        codes && codes.forEach(processCode);
       }
     }
   }).observe(document.documentElement, {
@@ -274,9 +285,11 @@ if (!window.__lbbSourceSetup) {
   });
 }
 
-// One-time styles: line numbers, tour highlight, and a theme-aware, monochrome
-// -first override of hljs's fixed GitHub-Dark palette (unreadable on labb-light).
-if (!document.getElementById('lbb-src-style')) {
+// Line numbers, tour highlight, and a theme-aware override of hljs's fixed
+// GitHub-Dark palette (unreadable on labb-light). Re-checked, not injected
+// once: a morph rebuilds <head> and drops this tag.
+function lbbEnsureSrcStyle() {
+  if (document.getElementById('lbb-src-style')) return;
   const s = document.createElement('style');
   s.id = 'lbb-src-style';
   s.textContent = [
@@ -296,3 +309,5 @@ if (!document.getElementById('lbb-src-style')) {
   ].join('');
   document.head.appendChild(s);
 }
+
+lbbEnsureSrcStyle();

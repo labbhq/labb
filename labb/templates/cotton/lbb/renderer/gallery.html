@@ -4,6 +4,11 @@
     [data-theme="dark"] .lbb-thumb-light { display: none; }
     [data-theme="labb-dark"] .lbb-thumb-dark,
     [data-theme="dark"] .lbb-thumb-dark { display: block; }
+    /* Theme "System" leaves no data-theme attribute, so follow the OS. */
+    @media (prefers-color-scheme: dark) {
+        html:not([data-theme]) .lbb-thumb-light { display: none; }
+        html:not([data-theme]) .lbb-thumb-dark { display: block; }
+    }
 </style>
 <c-lbb.page title="Block Gallery">
     <main class="w-full px-6 lg:px-10 py-8">
