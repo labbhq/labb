@@ -1,3 +1,4 @@
+import os
 import shutil
 import subprocess
 import tempfile
@@ -7,24 +8,41 @@ from typing import Optional
 import typer
 import yaml
 
-from labb.cli.handlers.commons import blocks_root, commons_dir
-
-from labb.cli.handlers.commons import console
+from labb.cli.handlers.commons import blocks_root, commons_dir, console
 from labb.config import (
     BlockCollection,
-    BlockSource,
     BlocksConfig,
+    BlockSource,
     find_config_file,
     load_config,
     save_config,
 )
-
 
 # ── Shared helpers ────────────────────────────────────────────────────────────
 
 
 def _title_name(name: str) -> str:
     return name.title().replace("_", "").replace("-", "")
+
+
+def _clone_source(source: BlockSource, tmp_dir: str) -> Optional[Path]:
+    """Clone a remote source and return its root, or None if it is unreachable.
+
+    GIT_TERMINAL_PROMPT=0 matters: GitHub answers 404 for missing *and* private
+    repos, so without it git decides credentials might help and blocks on an
+    interactive prompt. The CLI then hangs instead of reaching the warning below.
+    """
+    result = subprocess.run(
+        # "--" ensures a URL beginning with "-" is not read as a git option.
+        ["git", "clone", "--depth=1", "--quiet", "--", source.url, tmp_dir],
+        capture_output=True,
+        env={**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_ASKPASS": "true"},
+        timeout=60,
+    )
+    if result.returncode != 0:
+        return None
+
+    return Path(tmp_dir) / source.subdir if source.subdir else Path(tmp_dir)
 
 
 def _fetch_index(source: BlockSource, config_dir: Optional[Path] = None) -> list[dict]:
@@ -37,41 +55,45 @@ def _fetch_index(source: BlockSource, config_dir: Optional[Path] = None) -> list
 
         index_path = resolved / "index.yaml"
         if not index_path.exists():
-            console.print(f"[yellow]Warning: index.yaml not found for source '{source.name}' at {index_path}[/yellow]")
+            console.print(
+                f"[yellow]Warning: index.yaml not found for source '{source.name}' at {index_path}[/yellow]"
+            )
             return []
 
         try:
             data = yaml.safe_load(index_path.read_text()) or {}
             return data.get("blocks", [])
         except Exception as exc:
-            console.print(f"[yellow]Warning: failed to parse index.yaml for source '{source.name}': {exc}[/yellow]")
+            console.print(
+                f"[yellow]Warning: failed to parse index.yaml for source '{source.name}': {exc}[/yellow]"
+            )
             return []
 
     elif source.is_remote:
         tmp_dir = tempfile.mkdtemp()
         try:
-            result = subprocess.run(
-                # "--" ensures a URL beginning with "-" is not read as a git option.
-                ["git", "clone", "--depth=1", "--quiet", "--", source.url, tmp_dir],
-                capture_output=True,
-            )
-            if result.returncode != 0:
+            src_root = _clone_source(source, tmp_dir)
+            if src_root is None:
                 console.print(
                     f"[yellow]Warning: could not clone source '{source.name}' "
                     f"from {source.url} — skipping.[/yellow]"
                 )
                 return []
 
-            index_path = Path(tmp_dir) / "index.yaml"
+            index_path = src_root / "index.yaml"
             if not index_path.exists():
-                console.print(f"[yellow]Warning: index.yaml not found in cloned repo for source '{source.name}'[/yellow]")
+                console.print(
+                    f"[yellow]Warning: index.yaml not found in cloned repo for source '{source.name}'[/yellow]"
+                )
                 return []
 
             try:
                 data = yaml.safe_load(index_path.read_text()) or {}
                 return data.get("blocks", [])
             except Exception as exc:
-                console.print(f"[yellow]Warning: failed to parse index.yaml for source '{source.name}': {exc}[/yellow]")
+                console.print(
+                    f"[yellow]Warning: failed to parse index.yaml for source '{source.name}': {exc}[/yellow]"
+                )
                 return []
         finally:
             shutil.rmtree(tmp_dir, ignore_errors=True)
@@ -133,14 +155,9 @@ def _resolve_source_for_ref(
         elif source.is_remote:
             tmp_dir = tempfile.mkdtemp()
             tmp_dirs.append(tmp_dir)
-            result = subprocess.run(
-                # "--" ensures a URL beginning with "-" is not read as a git option.
-                ["git", "clone", "--depth=1", "--quiet", "--", source.url, tmp_dir],
-                capture_output=True,
-            )
-            if result.returncode != 0:
+            src_root = _clone_source(source, tmp_dir)
+            if src_root is None:
                 continue
-            src_root = Path(tmp_dir)
             index_file = src_root / "index.yaml"
             if not index_file.exists():
                 continue
@@ -154,7 +171,9 @@ def _resolve_source_for_ref(
             if match_by == "ref" and entry.get("ref") == ref_or_vendor:
                 matched_source = source
                 break
-            elif match_by == "vendor" and entry.get("ref", "").startswith(f"{ref_or_vendor}/"):
+            elif match_by == "vendor" and entry.get("ref", "").startswith(
+                f"{ref_or_vendor}/"
+            ):
                 matched_source = source
                 break
         if matched_source is not None:
@@ -248,14 +267,19 @@ def _copy_block_templates(
 # ── Commands ──────────────────────────────────────────────────────────────────
 
 
-def block_init(name: str = "blocks", path: Optional[str] = None, silent: bool = False) -> None:
+def block_init(
+    name: str = "blocks", path: Optional[str] = None, silent: bool = False
+) -> None:
     config_path = find_config_file()
     if config_path is None:
         if not silent:
-            console.print("[red]No labb.yaml found. Run `labb init` to create a project first.[/red]")
+            console.print(
+                "[red]No labb.yaml found. Run `labb init` to create a project first.[/red]"
+            )
         raise typer.Exit(1)
 
     from labb.config import clear_config_cache
+
     clear_config_cache()
     config = load_config(config_path)
 
@@ -301,7 +325,11 @@ def block_init(name: str = "blocks", path: Optional[str] = None, silent: bool = 
         f'    label = "{name}"\n'
     )
 
-    labbhq_source = BlockSource(name="labbhq", url="https://github.com/labbhq/blocks")
+    labbhq_source = BlockSource(
+        name="labbhq",
+        url="https://github.com/labbhq/labb",
+        subdir="extras/blocks",
+    )
 
     try:
         rel_path = str(collection_path.resolve().relative_to(config_dir.resolve()))
@@ -328,7 +356,9 @@ def block_init(name: str = "blocks", path: Optional[str] = None, silent: bool = 
     save_config(config, config_path)
 
     if not silent:
-        console.print(f"[green]✓ Created collection '{name}' at {collection_path}/[/green]")
+        console.print(
+            f"[green]✓ Created collection '{name}' at {collection_path}/[/green]"
+        )
         console.print("[green]✓ Added labbhq as default source[/green]")
         console.print("")
         console.print("Next:")
@@ -338,10 +368,13 @@ def block_init(name: str = "blocks", path: Optional[str] = None, silent: bool = 
 def block_add(ref: str, collection_name: Optional[str] = None) -> None:
     config_path = find_config_file()
     if config_path is None:
-        console.print("[red]No labb.yaml found. Run `labb init` to create a project first.[/red]")
+        console.print(
+            "[red]No labb.yaml found. Run `labb init` to create a project first.[/red]"
+        )
         raise typer.Exit(1)
 
     from labb.config import clear_config_cache
+
     clear_config_cache()
     config = load_config(config_path)
 
@@ -352,19 +385,25 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
 
     parts = ref.split("/")
     if len(parts) != 3:
-        console.print(f"[red]Invalid ref '{ref}' — expected vendor/category/slug (3 parts, got {len(parts)}).[/red]")
+        console.print(
+            f"[red]Invalid ref '{ref}' — expected vendor/category/slug (3 parts, got {len(parts)}).[/red]"
+        )
         raise typer.Exit(1)
     vendor, category, slug = parts
 
     if collection_name is not None:
         collection = config.blocks.get_collection(collection_name)
         if collection is None:
-            console.print(f"[red]Collection '{collection_name}' not found in labb.yaml.[/red]")
+            console.print(
+                f"[red]Collection '{collection_name}' not found in labb.yaml.[/red]"
+            )
             raise typer.Exit(1)
     else:
         collection = config.blocks.get_default_collection()
         if collection is None:
-            console.print("[red]No default collection found. Use --collection to specify one.[/red]")
+            console.print(
+                "[red]No default collection found. Use --collection to specify one.[/red]"
+            )
             raise typer.Exit(1)
 
     config_dir = config_path.parent
@@ -378,7 +417,9 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
         target_block_dir = collection_path / vendor / category / slug
 
         if not source_block_dir.exists():
-            console.print(f"[red]Block directory not found in source: {source_block_dir}[/red]")
+            console.print(
+                f"[red]Block directory not found in source: {source_block_dir}[/red]"
+            )
             raise typer.Exit(1)
 
         target_block_dir.mkdir(parents=True, exist_ok=True)
@@ -430,7 +471,9 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
             collection_models_init.write_text(import_line + "\n")
 
         source_templates_dir = source_block_dir / "templates"
-        _copy_block_templates(source_templates_dir, collection_path, vendor, category, slug)
+        _copy_block_templates(
+            source_templates_dir, collection_path, vendor, category, slug
+        )
         _copy_commons(source_root, collection_path)
 
         source_fixture = source_root / "fixtures.json"
@@ -449,21 +492,31 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
             console.print(f"[green]✓ Added {ref}[/green]")
             console.print("")
             console.print("Next:")
-            console.print(f"  1. Add '{collection_app_label}' to INSTALLED_APPS (if not already done)")
-            console.print(f"  2. python manage.py makemigrations {collection_app_label}")
+            console.print(
+                f"  1. Add '{collection_app_label}' to INSTALLED_APPS (if not already done)"
+            )
+            console.print(
+                f"  2. python manage.py makemigrations {collection_app_label}"
+            )
             console.print("  3. python manage.py migrate")
             console.print("  4. Wire URLs in urls.py:")
             console.print("       from labb.contrib.blocks import include_blocks")
             console.print(f"       import {collection_app_label}")
             console.print(f'       path("", include_blocks({collection_app_label}))')
             if new_fixtures:
-                console.print(f"  5. Optional seed data: python manage.py loaddata {vendor}")
+                console.print(
+                    f"  5. Optional seed data: python manage.py loaddata {vendor}"
+                )
         else:
             console.print(f"[green]✓ Added {ref}[/green]")
             console.print("")
-            console.print(f"[dim]{vendor} vendor models already present — skipped.[/dim]")
+            console.print(
+                f"[dim]{vendor} vendor models already present — skipped.[/dim]"
+            )
             if not new_fixtures:
-                console.print(f"[dim]{vendor} fixtures already present — skipped.[/dim]")
+                console.print(
+                    f"[dim]{vendor} fixtures already present — skipped.[/dim]"
+                )
             console.print("")
             console.print("If new models were introduced, run:")
             console.print(f"  python manage.py makemigrations {collection_app_label}")
@@ -477,15 +530,20 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
 def block_remove(ref: str, collection_name: Optional[str] = None) -> None:
     config_path = find_config_file()
     if config_path is None:
-        console.print("[red]No labb.yaml found. Run `labb init` to create a project first.[/red]")
+        console.print(
+            "[red]No labb.yaml found. Run `labb init` to create a project first.[/red]"
+        )
         raise typer.Exit(1)
 
     from labb.config import clear_config_cache
+
     clear_config_cache()
     config = load_config(config_path)
 
     if config.blocks is None:
-        console.print("[red]No blocks section in labb.yaml. Run `labb block init` to set up blocks.[/red]")
+        console.print(
+            "[red]No blocks section in labb.yaml. Run `labb block init` to set up blocks.[/red]"
+        )
         raise typer.Exit(1)
 
     parts = ref.split("/")
@@ -499,19 +557,25 @@ def block_remove(ref: str, collection_name: Optional[str] = None) -> None:
     if collection_name is not None:
         collection = config.blocks.get_collection(collection_name)
         if collection is None:
-            console.print(f"[red]Collection '{collection_name}' not found in labb.yaml.[/red]")
+            console.print(
+                f"[red]Collection '{collection_name}' not found in labb.yaml.[/red]"
+            )
             raise typer.Exit(1)
     else:
         collection = config.blocks.get_default_collection()
         if collection is None:
-            console.print("[red]No default collection found. Use --collection to specify one.[/red]")
+            console.print(
+                "[red]No default collection found. Use --collection to specify one.[/red]"
+            )
             raise typer.Exit(1)
 
     collection_path = Path(collection.path)
 
     block_dir = collection_path / vendor / category / slug
     if not block_dir.exists():
-        console.print(f"[red]Error: {ref} is not installed in collection '{collection.name}'.[/red]")
+        console.print(
+            f"[red]Error: {ref} is not installed in collection '{collection.name}'.[/red]"
+        )
         raise typer.Exit(1)
 
     shutil.rmtree(block_dir)
@@ -522,8 +586,12 @@ def block_remove(ref: str, collection_name: Optional[str] = None) -> None:
 
     console.print(f"[green]✓ Removed {ref}[/green]")
     console.print("")
-    console.print(f"Models and fixtures were not removed — they may be used by other {vendor} blocks.")
-    console.print(f"To clean up, remove unwanted model files from {collection_path}/{vendor}/models/ and run:")
+    console.print(
+        f"Models and fixtures were not removed — they may be used by other {vendor} blocks."
+    )
+    console.print(
+        f"To clean up, remove unwanted model files from {collection_path}/{vendor}/models/ and run:"
+    )
     console.print(f"  python manage.py makemigrations {collection.name}")
     console.print("  python manage.py migrate")
 
@@ -537,26 +605,35 @@ def block_sync(
 ) -> None:
     config_path = find_config_file()
     if config_path is None:
-        console.print("[red]No labb.yaml found. Run `labb init` to create a project first.[/red]")
+        console.print(
+            "[red]No labb.yaml found. Run `labb init` to create a project first.[/red]"
+        )
         raise typer.Exit(1)
 
     from labb.config import clear_config_cache
+
     clear_config_cache()
     config = load_config(config_path)
 
     if config.blocks is None:
-        console.print("[red]Error: No blocks section in labb.yaml. Run `labb block init` first.[/red]")
+        console.print(
+            "[red]Error: No blocks section in labb.yaml. Run `labb block init` first.[/red]"
+        )
         raise typer.Exit(1)
 
     if collection_name is not None:
         collection = config.blocks.get_collection(collection_name)
         if collection is None:
-            console.print(f"[red]Collection '{collection_name}' not found in labb.yaml.[/red]")
+            console.print(
+                f"[red]Collection '{collection_name}' not found in labb.yaml.[/red]"
+            )
             raise typer.Exit(1)
     else:
         collection = config.blocks.get_default_collection()
         if collection is None:
-            console.print("[red]No default collection found. Use --collection to specify one.[/red]")
+            console.print(
+                "[red]No default collection found. Use --collection to specify one.[/red]"
+            )
             raise typer.Exit(1)
 
     collection_path = Path(collection.path)
@@ -613,14 +690,23 @@ def block_sync(
         if do_templates:
             synced_templates = _copy_commons(source_root, collection_path)
             for category_dir in sorted(vendor_dir.iterdir()):
-                if not category_dir.is_dir() or category_dir.name in ("models", "__pycache__"):
+                if not category_dir.is_dir() or category_dir.name in (
+                    "models",
+                    "__pycache__",
+                ):
                     continue
                 for slug_dir in sorted(category_dir.iterdir()):
                     if not slug_dir.is_dir() or slug_dir.name == "__pycache__":
                         continue
-                    source_templates = source_root / category_dir.name / slug_dir.name / "templates"
+                    source_templates = (
+                        source_root / category_dir.name / slug_dir.name / "templates"
+                    )
                     if _copy_block_templates(
-                        source_templates, collection_path, vendor, category_dir.name, slug_dir.name
+                        source_templates,
+                        collection_path,
+                        vendor,
+                        category_dir.name,
+                        slug_dir.name,
                     ):
                         synced_templates = True
 
@@ -628,7 +714,10 @@ def block_sync(
         if do_code:
             code_files = ("views.py", "urls.py", "block.yaml", "tour.yaml")
             for category_dir in sorted(vendor_dir.iterdir()):
-                if not category_dir.is_dir() or category_dir.name in ("models", "__pycache__"):
+                if not category_dir.is_dir() or category_dir.name in (
+                    "models",
+                    "__pycache__",
+                ):
                     continue
                 for slug_dir in sorted(category_dir.iterdir()):
                     if not slug_dir.is_dir() or slug_dir.name == "__pycache__":
@@ -644,11 +733,17 @@ def block_sync(
         if synced_models:
             console.print(f"[green]✓ Synced {vendor} models from {source_name}[/green]")
         if synced_fixtures:
-            console.print(f"[green]✓ Synced {vendor} fixtures from {source_name}[/green]")
+            console.print(
+                f"[green]✓ Synced {vendor} fixtures from {source_name}[/green]"
+            )
         if synced_templates:
-            console.print(f"[green]✓ Synced {vendor} templates from {source_name}[/green]")
+            console.print(
+                f"[green]✓ Synced {vendor} templates from {source_name}[/green]"
+            )
         if synced_code:
-            console.print(f"[green]✓ Synced {vendor} block code from {source_name}[/green]")
+            console.print(
+                f"[green]✓ Synced {vendor} block code from {source_name}[/green]"
+            )
 
         if do_models:
             console.print("")
@@ -669,7 +764,9 @@ def block_list(source_name: Optional[str] = None) -> None:
     if source_name is not None:
         matched = [s for s in sources if s.name == source_name]
         if not matched:
-            console.print(f"[red]Source '{source_name}' not found in configuration.[/red]")
+            console.print(
+                f"[red]Source '{source_name}' not found in configuration.[/red]"
+            )
             return
         sources = matched
 
@@ -701,7 +798,8 @@ def block_search(query: str) -> None:
         all_blocks.extend(blocks)
 
     matched = [
-        b for b in all_blocks
+        b
+        for b in all_blocks
         if q in (b.get("ref") or "").lower()
         or q in (b.get("name") or "").lower()
         or q in (b.get("description") or "").lower()

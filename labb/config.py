@@ -28,6 +28,8 @@ class BlockSource:
     url: Optional[str] = None  # remote git source
     path: Optional[str] = None  # local filesystem source
 
+    subdir: Optional[str] = None
+
     @property
     def is_remote(self) -> bool:
         return self.url is not None
@@ -196,7 +198,9 @@ class LabbConfig:
     blocks: Optional[BlocksConfig] = None
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any], config_dir: Optional[Path] = None) -> "LabbConfig":
+    def from_dict(
+        cls, data: Dict[str, Any], config_dir: Optional[Path] = None
+    ) -> "LabbConfig":
         """Create LabbConfig from dictionary data"""
         config = cls()
 
@@ -271,6 +275,7 @@ class LabbConfig:
                         name=entry["name"],
                         url=entry.get("url"),
                         path=entry.get("path"),
+                        subdir=entry.get("subdir"),
                     )
                 )
 
@@ -313,7 +318,16 @@ class LabbConfig:
                     for c in self.blocks.collections
                 ],
                 "sources": [
-                    {k: v for k, v in {"name": s.name, "url": s.url, "path": s.path}.items() if v is not None}
+                    {
+                        k: v
+                        for k, v in {
+                            "name": s.name,
+                            "url": s.url,
+                            "path": s.path,
+                            "subdir": s.subdir,
+                        }.items()
+                        if v is not None
+                    }
                     for s in self.blocks.sources
                 ],
             }
