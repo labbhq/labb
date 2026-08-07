@@ -30,9 +30,7 @@ register = template.Library()
 # ---------------------------------------------------------------------------
 
 # Parses HTML attribute strings: name, optional =, optional quoted/unquoted value.
-_ATTRS_RE = re.compile(
-    r'([@:]?[\w.:-]+)(=)?(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))?'
-)
+_ATTRS_RE = re.compile(r'([@:]?[\w.:-]+)(=)?(?:"([^"]*)"|\'([^\']*)\'|([^\s>]+))?')
 # Matches icon dot-notation attr names (icon, icon.fill, icon.class, etc.).
 _ICON_ATTR_RE = re.compile(r"^icon(?:\.[\w.]+)?$")
 # Matches l:name="value" or l:name='value' in serialised attr strings.
@@ -179,10 +177,14 @@ def lb_load_stack(name):
     helper_set = set(inline_helpers)
 
     src_paths = sorted(
-        p for p, m in path_modes.items() if m in ("src", "module") and p not in helper_set
+        p
+        for p, m in path_modes.items()
+        if m in ("src", "module") and p not in helper_set
     )
     inline_paths = sorted(
-        p for p, m in path_modes.items() if m not in ("src", "module") and p not in helper_set
+        p
+        for p, m in path_modes.items()
+        if m not in ("src", "module") and p not in helper_set
     )
 
     script_tags = []
@@ -231,7 +233,9 @@ def parse_attrs_to_dict(attrs):
 
     result = {}
 
-    for attr_name, eq, double_quoted, single_quoted, unquoted in _ATTRS_RE.findall(attrs_str):
+    for attr_name, eq, double_quoted, single_quoted, unquoted in _ATTRS_RE.findall(
+        attrs_str
+    ):
         attr_value = double_quoted or single_quoted or unquoted or None
         has_equals = bool(eq)
 
@@ -346,6 +350,7 @@ def strip_icon_attrs(attrs):
     if not attrs:
         return ""
     from django.utils.html import escape as _escape
+
     if hasattr(attrs, "attrs_dict"):
         attrs_map = attrs.attrs_dict()
     elif hasattr(attrs, "items"):
@@ -484,5 +489,3 @@ def resolve_labb_link(viewname, attrs=""):
         return reverse(viewname, kwargs=kwargs) if kwargs else reverse(viewname)
     except NoReverseMatch:
         return ""
-
-

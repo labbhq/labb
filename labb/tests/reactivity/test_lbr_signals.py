@@ -40,7 +40,6 @@ def _signal_attr_value(html, attr):
 
 
 class TestCottonAttrPreservation(ComponentTestBase):
-
     def test_dollar_prefix_preserved(self):
         html = self.render_template_string(
             '{% load lbr_tags %}<c-lbr.signals $signalA="hello" />'
@@ -61,7 +60,6 @@ class TestCottonAttrPreservation(ComponentTestBase):
 
 
 class TestBlobSignals(ComponentTestBase):
-
     def _render(self, attrs_str, context=None):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.signals {attrs_str} />",
@@ -154,6 +152,7 @@ class TestSignalInjection(ComponentTestBase):
         html = self._render("$q=q", context={"q": payload})
         # Only one data-signals blob should exist — the injected one won't parse cleanly.
         import re
+
         blob_count = len(re.findall(r"data-signals='", html))
         assert blob_count == 1, f"Extra data-signals attribute injected:\n{html}"
         assert _blob(html) == {"q": payload}
@@ -217,7 +216,7 @@ class TestStripSignalAttrs(ComponentTestBase):
         )
 
     def _assert_no_injection(self, html, injected_attr):
-        assert f' {injected_attr}=' not in html, (
+        assert f" {injected_attr}=" not in html, (
             f"Injection succeeded — '{injected_attr}' appeared as an attribute:\n{html}"
         )
 
@@ -278,7 +277,6 @@ class TestStripSignalAttrs(ComponentTestBase):
 
 
 class TestSignalModifiers(ComponentTestBase):
-
     def _render(self, attrs_str, context=None):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.signals {attrs_str} />",
@@ -313,11 +311,12 @@ class TestSignalModifiers(ComponentTestBase):
         """$a.b__case.kebab → path=a.b, modifier=case.kebab (not a.b.case)"""
         html = self._render('$a.b__case.kebab="v"')
         assert "a.b__case.kebab" in _signal_attrs(html)
-        assert "data-signals='" not in html  # no blob — modifier signals never go in blob
+        assert (
+            "data-signals='" not in html
+        )  # no blob — modifier signals never go in blob
 
 
 class TestSyncQuery(ComponentTestBase):
-
     def _render(self, attrs_str, context=None):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.signals {attrs_str} />",
@@ -372,7 +371,9 @@ class TestSyncQuery(ComponentTestBase):
         assert 'p.set("lbr.page",$page)' in js
 
     def test_modifier_signals_excluded_from_sync(self):
-        js = self._patch_js(self._render('$filters.q="foo" $page__ifmissing="1" syncQuery'))
+        js = self._patch_js(
+            self._render('$filters.q="foo" $page__ifmissing="1" syncQuery')
+        )
         assert 'p.set("lbr.filters.q",$filters.q)' in js
         assert '"lbr.page"' not in js
 

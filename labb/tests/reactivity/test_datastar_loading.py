@@ -25,7 +25,6 @@ def _has_schema(html):
 
 
 class TestDatastarOptInLoading(ComponentTestBase):
-
     def setup_method(self):
         # The push/load stack is process-global and normally cleared on the
         # request_finished signal, which does not fire under render_to_string.
@@ -35,9 +34,7 @@ class TestDatastarOptInLoading(ComponentTestBase):
         _clear_stacks()
 
     def test_default_page_ships_no_runtime(self):
-        html = self.render_template_string(
-            "{% load lb_tags %}<c-lb.m.dependencies />"
-        )
+        html = self.render_template_string("{% load lb_tags %}<c-lb.m.dependencies />")
         assert not _has_datastar(html)
         assert not _has_schema(html)
 
@@ -58,51 +55,49 @@ class TestDatastarOptInLoading(ComponentTestBase):
     def test_reactive_prop_auto_loads_runtime(self):
         # A lone reactive $-prop on a plain component, no signals, no flag.
         html = self.render_template_string(
-            '{% load lb_tags %}<c-lb.m.page>'
+            "{% load lb_tags %}<c-lb.m.page>"
             '<c-lb.badge variant="$status:neutral">Hi</c-lb.badge>'
-            '</c-lb.m.page>'
+            "</c-lb.m.page>"
         )
         assert _has_datastar(html)
         assert _has_schema(html)
 
     def test_static_prop_ships_no_runtime(self):
         html = self.render_template_string(
-            '{% load lb_tags %}<c-lb.m.page>'
+            "{% load lb_tags %}<c-lb.m.page>"
             '<c-lb.badge variant="neutral">Hi</c-lb.badge>'
-            '</c-lb.m.page>'
+            "</c-lb.m.page>"
         )
         assert not _has_datastar(html)
         assert not _has_schema(html)
 
     def test_action_loads_datastar(self):
         html = self.render_template_string(
-            '{% load lb_tags %}<c-lb.m.page>'
+            "{% load lb_tags %}<c-lb.m.page>"
             '<c-lbr.get to="/x/"><c-lb.button>Go</c-lb.button></c-lbr.get>'
-            '</c-lb.m.page>'
+            "</c-lb.m.page>"
         )
         assert _has_datastar(html)
 
     def test_reactive_chart_loads_runtime(self):
         html = self.render_template_string(
-            '{% load lb_tags %}<c-lb.m.page>'
+            "{% load lb_tags %}<c-lb.m.page>"
             '<c-lb.chart.instance type="bar" data="$sales:{}" />'
-            '</c-lb.m.page>'
+            "</c-lb.m.page>"
         )
         assert _has_datastar(html)
 
     def test_reactive_countdown_loads_runtime(self):
         # A signal-bound --value is reactive without being a class prop.
         html = self.render_template_string(
-            '{% load lb_tags %}<c-lb.m.page>'
+            "{% load lb_tags %}<c-lb.m.page>"
             '<c-lb.countdown value="$seconds:30" />'
-            '</c-lb.m.page>'
+            "</c-lb.m.page>"
         )
         assert _has_datastar(html)
 
     def test_static_countdown_ships_no_runtime(self):
         html = self.render_template_string(
-            '{% load lb_tags %}<c-lb.m.page>'
-            '<c-lb.countdown value="30" />'
-            '</c-lb.m.page>'
+            '{% load lb_tags %}<c-lb.m.page><c-lb.countdown value="30" /></c-lb.m.page>'
         )
         assert not _has_datastar(html)

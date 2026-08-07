@@ -41,7 +41,6 @@ def mw():
 
 
 class TestIsDatastar:
-
     def test_true_when_header_present(self, factory, mw):
         request = factory.get("/")
         request.META["HTTP_DATASTAR_REQUEST"] = "true"
@@ -61,7 +60,6 @@ class TestIsDatastar:
 
 
 class TestSignalParsing:
-
     def test_empty_when_no_param(self, factory, mw):
         request = factory.get("/")
         mw(request)
@@ -90,10 +88,12 @@ class TestSignalParsing:
     def test_datastar_param_takes_precedence_over_lbr(self, factory, mw):
         datastar_sigs = {"source": "datastar"}
         lbr_sigs = {"source": "lbr"}
-        qs = urlencode({
-            "datastar": json.dumps(datastar_sigs),
-            "lbr": _b64(lbr_sigs),
-        })
+        qs = urlencode(
+            {
+                "datastar": json.dumps(datastar_sigs),
+                "lbr": _b64(lbr_sigs),
+            }
+        )
         request = factory.get(f"/?{qs}")
         mw(request)
         assert request.signals == {"source": "datastar"}
@@ -129,9 +129,13 @@ class TestSignalParsing:
 
     def test_lbr_param_decoded_as_base64(self, factory, mw):
         from unittest.mock import patch
-        with patch("labb.middleware.get_reactivity_setting", side_effect=lambda k: {
-            "QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"
-        }.get(k)):
+
+        with patch(
+            "labb.middleware.get_reactivity_setting",
+            side_effect=lambda k: {"QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"}.get(
+                k
+            ),
+        ):
             signals = {"filters": {"q": "foo"}, "page": 2}
             qs = urlencode({"lbr": _b64(signals)})
             request = factory.get(f"/?{qs}")
@@ -140,18 +144,26 @@ class TestSignalParsing:
 
     def test_lbr_empty_string_gives_empty_dict(self, factory, mw):
         from unittest.mock import patch
-        with patch("labb.middleware.get_reactivity_setting", side_effect=lambda k: {
-            "QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"
-        }.get(k)):
+
+        with patch(
+            "labb.middleware.get_reactivity_setting",
+            side_effect=lambda k: {"QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"}.get(
+                k
+            ),
+        ):
             request = factory.get("/?lbr=")
             mw(request)
         assert request.signals == {}
 
     def test_lbr_invalid_base64_gives_empty_dict(self, factory, mw):
         from unittest.mock import patch
-        with patch("labb.middleware.get_reactivity_setting", side_effect=lambda k: {
-            "QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"
-        }.get(k)):
+
+        with patch(
+            "labb.middleware.get_reactivity_setting",
+            side_effect=lambda k: {"QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"}.get(
+                k
+            ),
+        ):
             request = factory.get("/?lbr=not-valid!!!")
             mw(request)
         assert request.signals == {}

@@ -17,7 +17,6 @@ def _load_js(html):
 
 
 class TestReplaceUrlJs(ComponentTestBase):
-
     def _render(self, attrs_str):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.replace-url {attrs_str} />"
@@ -74,6 +73,7 @@ class TestReplaceUrlJsInjection(ComponentTestBase):
 
     def _js(self, url):
         from labb.templatetags.lbr_tags import lbr_replace_url_js
+
         return lbr_replace_url_js(url)
 
     # ── signal refs still work after the fix ─────────────────────────────────
@@ -156,26 +156,32 @@ class TestResolveUrlKwargs(ComponentTestBase):
 
     def test_direct_url_returned_as_is(self):
         from labb.templatetags.lbr_tags import lbr_resolve_url
+
         assert lbr_resolve_url("/direct/") == "/direct/"
 
     def test_empty_to_returns_empty(self):
         from labb.templatetags.lbr_tags import lbr_resolve_url
+
         assert lbr_resolve_url("") == ""
 
     def test_graceful_empty_on_bad_viewname(self):
         from labb.templatetags.lbr_tags import lbr_resolve_url
+
         assert lbr_resolve_url("no:such:view") == ""
 
     def test_graceful_empty_on_bad_json(self):
         from labb.templatetags.lbr_tags import lbr_resolve_url
+
         assert lbr_resolve_url("no:view", "not-json") == ""
 
     def test_dict_kwargs_does_not_raise(self):
         from labb.templatetags.lbr_tags import lbr_resolve_url
+
         assert lbr_resolve_url("no:view", {"pk": 1}) == ""
 
     def test_http_url_passes_through(self):
         from labb.templatetags.lbr_tags import lbr_resolve_url
+
         assert lbr_resolve_url("https://example.com/api/") == "https://example.com/api/"
 
 
@@ -186,7 +192,9 @@ class TestDeleteActionConfirm(ComponentTestBase):
         """Call lbr_delete_action directly with a pre-HTML-escaped confirm string,
         matching what the template engine delivers after auto-escaping {{ emp.name }}."""
         from django.utils.html import conditional_escape
+
         from labb.templatetags.lbr_tags import lbr_delete_action
+
         escaped = conditional_escape(confirm_text)
         return lbr_delete_action("/items/1/", "", escaped)
 
@@ -194,6 +202,7 @@ class TestDeleteActionConfirm(ComponentTestBase):
 
     def test_no_confirm_omits_confirm_call(self):
         from labb.templatetags.lbr_tags import lbr_delete_action
+
         assert "confirm(" not in lbr_delete_action("/items/1/", "", "")
 
     def test_plain_message_passes_through(self):
@@ -229,7 +238,9 @@ class TestDeleteActionConfirm(ComponentTestBase):
         # surrounding data-on:click="..." HTML attribute.
         result = self._action('Delete "special" item?')
         # json.dumps-style \" is fine; a bare " in the action would not be.
-        assert '"special"' not in result or result.count('"') <= 2  # only the outer attr quotes
+        assert (
+            '"special"' not in result or result.count('"') <= 2
+        )  # only the outer attr quotes
 
     # ── injection tests ──────────────────────────────────────────────────────
 
@@ -260,9 +271,10 @@ class TestDeleteActionConfirm(ComponentTestBase):
         # that before JS-escaping, otherwise &#x27; reaches the browser as-is
         # and HTML-decodes back to ' at the JS layer — broken string.
         from labb.templatetags.lbr_tags import lbr_delete_action
+
         html_escaped_input = "Delete O&#x27;Brien?"  # as delivered by template engine
         result = lbr_delete_action("/items/1/", "", html_escaped_input)
-        assert r"O\'Brien" in result   # properly JS-escaped
+        assert r"O\'Brien" in result  # properly JS-escaped
         assert "&#x27;" not in result  # entity must not survive into JS
 
 
@@ -272,9 +284,9 @@ class TestDeleteActionConfirm(ComponentTestBase):
 
 
 class TestGetAction(ComponentTestBase):
-
     def _action(self, **kwargs):
         from labb.templatetags.lbr_tags import lbr_get_action
+
         return lbr_get_action("/url/", **kwargs)
 
     def test_basic(self):
@@ -314,9 +326,9 @@ class TestGetAction(ComponentTestBase):
 
 
 class TestPostAction(ComponentTestBase):
-
     def _action(self, **kwargs):
         from labb.templatetags.lbr_tags import lbr_post_action
+
         return lbr_post_action("/url/", **kwargs)
 
     # CSRF is on by default — assertions below pass csrf=False to test the pure
@@ -354,6 +366,7 @@ class TestPostActionCSRF(ComponentTestBase):
 
     def _action(self, **kwargs):
         from labb.templatetags.lbr_tags import lbr_post_action
+
         return lbr_post_action("/url/", **kwargs)
 
     def test_form_includes_csrf_header_by_default(self):
@@ -396,6 +409,7 @@ class TestDeleteActionCSRF(ComponentTestBase):
 
     def _action(self, **kwargs):
         from labb.templatetags.lbr_tags import lbr_delete_action
+
         return lbr_delete_action("/url/", **kwargs)
 
     def test_includes_csrf_header_by_default(self):
@@ -424,10 +438,12 @@ class TestGetActionNoCSRF(ComponentTestBase):
 
     def test_basic_get_has_no_csrf(self):
         from labb.templatetags.lbr_tags import lbr_get_action
+
         assert "X-CSRFToken" not in lbr_get_action("/url/")
 
     def test_get_with_options_has_no_csrf(self):
         from labb.templatetags.lbr_tags import lbr_get_action
+
         assert "X-CSRFToken" not in lbr_get_action("/url/", options="{selector: '#x'}")
 
 
@@ -437,9 +453,9 @@ class TestGetActionNoCSRF(ComponentTestBase):
 
 
 class TestDeleteAction(ComponentTestBase):
-
     def _action(self, **kwargs):
         from labb.templatetags.lbr_tags import lbr_delete_action
+
         return lbr_delete_action("/url/", **kwargs)
 
     # CSRF is on by default — pass csrf=False here to test pure options shaping;
@@ -470,19 +486,20 @@ class TestDeleteAction(ComponentTestBase):
 
 
 class TestActionHrefEscaping(ComponentTestBase):
-
     # A URL with an apostrophe: legitimately possible, and the injection vector.
     PAYLOAD = "/search/?q=a' + alert(document.cookie) + '"
 
     def test_get_action_escapes_quote(self):
         from labb.templatetags.lbr_tags import lbr_get_action
+
         result = lbr_get_action(self.PAYLOAD)
-        assert "a\\' + alert" in result       # quote escaped, does not break out
+        assert "a\\' + alert" in result  # quote escaped, does not break out
         # No raw (unescaped) single quote from the payload survives to break the string.
         assert "a' + alert" not in result
 
     def test_get_action_escapes_quote_in_pushstate_loc(self):
         from labb.templatetags.lbr_tags import lbr_get_action
+
         result = lbr_get_action(self.PAYLOAD, push_url="1")
         # Both @get and the pushState loc carry the href, so both quotes are escaped.
         assert "a' + alert" not in result
@@ -490,23 +507,27 @@ class TestActionHrefEscaping(ComponentTestBase):
 
     def test_post_action_escapes_quote(self):
         from labb.templatetags.lbr_tags import lbr_post_action
+
         result = lbr_post_action(self.PAYLOAD, tag="div")
         assert "a\\' + alert" in result
         assert "a' + alert" not in result
 
     def test_delete_action_escapes_quote(self):
         from labb.templatetags.lbr_tags import lbr_delete_action
+
         result = lbr_delete_action(self.PAYLOAD)
         assert "a\\' + alert" in result
         assert "a' + alert" not in result
 
     def test_backslash_in_href_is_doubled(self):
         from labb.templatetags.lbr_tags import lbr_get_action
+
         result = lbr_get_action("/a\\'b")
         assert r"/a\\\'b" in result  # \\ for the backslash, \' for the quote
 
     def test_plain_url_unchanged(self):
         from labb.templatetags.lbr_tags import lbr_get_action
+
         assert lbr_get_action("/todos/1/") == "@get('/todos/1/')"
 
 
@@ -516,7 +537,6 @@ class TestActionHrefEscaping(ComponentTestBase):
 
 
 class TestGetComponent(ComponentTestBase):
-
     def _render(self, attrs_str, slot=""):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.get {attrs_str}>{slot}</c-lbr.get>"
@@ -526,7 +546,7 @@ class TestGetComponent(ComponentTestBase):
         assert "<div" in self._render('to="/url/"')
 
     def test_default_event_is_click(self):
-        assert 'data-on:click=' in self._render('to="/url/"')
+        assert "data-on:click=" in self._render('to="/url/"')
 
     def test_action_in_data_on(self):
         html = self._render('to="/url/"')
@@ -570,7 +590,6 @@ class TestGetComponent(ComponentTestBase):
 
 
 class TestPostComponent(ComponentTestBase):
-
     def _render(self, attrs_str, slot=""):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.post {attrs_str}>{slot}</c-lbr.post>"
@@ -624,7 +643,6 @@ class TestPostComponent(ComponentTestBase):
 
 
 class TestDeleteComponent(ComponentTestBase):
-
     def _render(self, attrs_str, slot=""):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.delete {attrs_str}>{slot}</c-lbr.delete>"
@@ -683,14 +701,16 @@ class TestCSRFHelperAvailability(ComponentTestBase):
         # Stacks are thread-local and cleared per real request (request_finished);
         # render_to_string skips that cycle, so clear manually for isolation.
         from labb.templatetags.lb_tags import _clear_stacks
+
         _clear_stacks()
         return self.render_template_string(
-            "{% load lb_tags %}"
-            "<c-lb.m.dependencies>" + slot + "</c-lb.m.dependencies>"
+            "{% load lb_tags %}<c-lb.m.dependencies>" + slot + "</c-lb.m.dependencies>"
         )
 
     def test_helper_defined_when_body_pushes_datastar(self):
-        html = self._render('<c-lbr.post to="/submit/" tag="div" on="click"><button>Go</button></c-lbr.post>')
+        html = self._render(
+            '<c-lbr.post to="/submit/" tag="div" on="click"><button>Go</button></c-lbr.post>'
+        )
         assert "function labbGetCSRFToken()" in html
         assert "X-CSRFToken" in html  # the action header
         # defined exactly once (no duplicate with any other block)
@@ -702,7 +722,6 @@ class TestCSRFHelperAvailability(ComponentTestBase):
 
 
 class TestTargetComponent(ComponentTestBase):
-
     def _render(self, attrs_str, slot=""):
         return self.render_template_string(
             f"{{% load lbr_tags %}}<c-lbr.target {attrs_str}>{slot}</c-lbr.target>"

@@ -1,6 +1,6 @@
 from datastar_py import ServerSentEventGenerator as _DS
-from datastar_py.django import DatastarResponse as SSEResponse
 from datastar_py.consts import ElementPatchMode
+from datastar_py.django import DatastarResponse as SSEResponse
 
 __all__ = [
     "SSEResponse",
@@ -23,14 +23,20 @@ def _css_selector(selector: str) -> str:
     return selector
 
 
-def patch_component(request, selector, component_name, mode=ElementPatchMode.OUTER, **kwargs):
+def patch_component(
+    request, selector, component_name, mode=ElementPatchMode.OUTER, **kwargs
+):
     from django_cotton import render_component
+
     html = render_component(request, component_name, **kwargs)
     return _DS.patch_elements(html, selector=_css_selector(selector), mode=mode)
 
 
-def patch_template(request, selector, template_name, context=None, mode=ElementPatchMode.OUTER):
+def patch_template(
+    request, selector, template_name, context=None, mode=ElementPatchMode.OUTER
+):
     from django.template.loader import render_to_string
+
     html = render_to_string(template_name, context or {}, request)
     return _DS.patch_elements(html, selector=_css_selector(selector), mode=mode)
 

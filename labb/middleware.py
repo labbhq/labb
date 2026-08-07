@@ -26,7 +26,7 @@ def _decode_flat(request, prefix: str) -> dict:
     for key in request.GET:
         if not key.startswith(dot_prefix):
             continue
-        path = key[len(dot_prefix):]
+        path = key[len(dot_prefix) :]
         parts = path.split(".")
         d = result
         for part in parts[:-1]:

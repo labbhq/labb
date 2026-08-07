@@ -15,9 +15,12 @@ from labb.tests.components.test_base import ComponentTestBase
 
 
 class TestParseReactive:
-
     def test_reactive_with_fallback(self):
-        assert _parse_reactive("$badge.variant:neutral") == (True, "badge.variant", "neutral")
+        assert _parse_reactive("$badge.variant:neutral") == (
+            True,
+            "badge.variant",
+            "neutral",
+        )
 
     def test_reactive_without_fallback(self):
         assert _parse_reactive("$open") == (True, "open", "")
@@ -49,7 +52,6 @@ class TestParseReactive:
 
 
 class TestChartSignal:
-
     def test_valid_signal_returned(self):
         assert str(lbr_chart_signal("$chartData")) == "$chartData"
 
@@ -78,7 +80,7 @@ class TestReactivePropRendering(ComponentTestBase):
         assert "$badge.variant" in html
 
     def test_malformed_reactive_prop_does_not_emit_injection(self):
-        html = self._render("variant=\"$x');alert(1)//\"")
+        html = self._render('variant="$x\');alert(1)//"')
         assert "alert(1)" not in html
         # Degrades to a plain (non-reactive) badge — no reactive class binding.
         assert "data-attr:class" not in html
@@ -104,4 +106,4 @@ class TestPassthroughEscaping(ComponentTestBase):
     def test_angle_bracket_is_escaped(self):
         html = self.render_component("input", placeholder="a < b")
         assert "&lt;" in html
-        assert "placeholder=\"a < b\"" not in html
+        assert 'placeholder="a < b"' not in html

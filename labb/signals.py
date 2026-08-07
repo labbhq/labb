@@ -76,6 +76,7 @@ class SignalValidationError(Exception):
 
 # ── Field base ────────────────────────────────────────────────────────────────
 
+
 class SignalField:
     """Base descriptor for a single typed signal value."""
 
@@ -94,7 +95,7 @@ class SignalField:
         # Clean query-string key this field hydrates from via Signals.from_query.
         # None means the field is not read from the URL.
         self.query = query
-        self.name: str = ""       # set by __set_name__
+        self.name: str = ""  # set by __set_name__
         self.path: str = path or ""  # resolved in __set_name__
 
     def __set_name__(self, owner, name: str):
@@ -136,6 +137,7 @@ class SignalField:
 
 # ── Concrete field types ──────────────────────────────────────────────────────
 
+
 class Str(SignalField):
     def __init__(
         self,
@@ -149,7 +151,13 @@ class Str(SignalField):
         min_length: int | None = None,
         max_length: int | None = None,
     ):
-        super().__init__(path=path, default=default, default_factory=default_factory, required=required, query=query)
+        super().__init__(
+            path=path,
+            default=default,
+            default_factory=default_factory,
+            required=required,
+            query=query,
+        )
         self.strip = strip
         self.choices = choices
         self.min_length = min_length
@@ -186,7 +194,13 @@ class Int(SignalField):
         min_value: int | None = None,
         max_value: int | None = None,
     ):
-        super().__init__(path=path, default=default, default_factory=default_factory, required=required, query=query)
+        super().__init__(
+            path=path,
+            default=default,
+            default_factory=default_factory,
+            required=required,
+            query=query,
+        )
         self.min_value = min_value
         self.max_value = max_value
 
@@ -216,7 +230,13 @@ class Float(SignalField):
         min_value: float | None = None,
         max_value: float | None = None,
     ):
-        super().__init__(path=path, default=default, default_factory=default_factory, required=required, query=query)
+        super().__init__(
+            path=path,
+            default=default,
+            default_factory=default_factory,
+            required=required,
+            query=query,
+        )
         self.min_value = min_value
         self.max_value = max_value
 
@@ -232,8 +252,16 @@ class Float(SignalField):
 
 
 class Bool(SignalField):
-    def __init__(self, path=None, default=False, default_factory=None, required=False, query=None):
-        super().__init__(path=path, default=default, default_factory=default_factory, required=required, query=query)
+    def __init__(
+        self, path=None, default=False, default_factory=None, required=False, query=None
+    ):
+        super().__init__(
+            path=path,
+            default=default,
+            default_factory=default_factory,
+            required=required,
+            query=query,
+        )
 
     def coerce(self, value):
         if isinstance(value, bool):
@@ -244,22 +272,39 @@ class Bool(SignalField):
 
 
 class Dict(SignalField):
-    def __init__(self, path=None, default=None, default_factory=dict, required=False, query=None):
-        super().__init__(path=path, default=default, default_factory=default_factory, required=required, query=query)
+    def __init__(
+        self, path=None, default=None, default_factory=dict, required=False, query=None
+    ):
+        super().__init__(
+            path=path,
+            default=default,
+            default_factory=default_factory,
+            required=required,
+            query=query,
+        )
 
     def coerce(self, value):
         return value if isinstance(value, dict) else {}
 
 
 class List(SignalField):
-    def __init__(self, path=None, default=None, default_factory=list, required=False, query=None):
-        super().__init__(path=path, default=default, default_factory=default_factory, required=required, query=query)
+    def __init__(
+        self, path=None, default=None, default_factory=list, required=False, query=None
+    ):
+        super().__init__(
+            path=path,
+            default=default,
+            default_factory=default_factory,
+            required=required,
+            query=query,
+        )
 
     def coerce(self, value):
         return value if isinstance(value, list) else []
 
 
 # ── Metaclass + base ──────────────────────────────────────────────────────────
+
 
 class _SignalsMeta(type):
     """Collects SignalField descriptors across the MRO so inheritance works."""
@@ -379,6 +424,7 @@ class Signals(metaclass=_SignalsMeta):
         Named args → emit only those fields (no mutation).
         """
         from datastar_py import ServerSentEventGenerator as _DS
+
         if field_names:
             signals: dict = {}
             for name in field_names:

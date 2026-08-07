@@ -10,8 +10,8 @@ DEFAULT_SETTINGS = {
     "DEFAULT_THEME": "__system__",  # system's default theme
     "STACK_HELPERS": {},
     "REACTIVITY": {
-        "QUERY_KEY": "lbr",      # query param name for syncQuery URL persistence
-        "QUERY_ENCODING": "flat", # "base64" | "flat" | "json"
+        "QUERY_KEY": "lbr",  # query param name for syncQuery URL persistence
+        "QUERY_ENCODING": "flat",  # "base64" | "flat" | "json"
     },
 }
 
@@ -44,7 +44,9 @@ def get_reactivity_setting(key, default=None):
 
     labb_settings = getattr(settings, "LABB_SETTINGS", {})
     reactivity_settings = labb_settings.get("REACTIVITY", {})
-    return reactivity_settings.get(key, DEFAULT_SETTINGS["REACTIVITY"].get(key, default))
+    return reactivity_settings.get(
+        key, DEFAULT_SETTINGS["REACTIVITY"].get(key, default)
+    )
 
 
 def get_default_theme():

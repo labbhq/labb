@@ -3,11 +3,17 @@
 import pytest
 
 from labb.signals import (
-    Bool, Dict, Int, List, Signals, SignalValidationError, Str,
+    Bool,
+    Dict,
+    Int,
+    List,
+    Signals,
+    SignalValidationError,
+    Str,
 )
 
-
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 class FakeRequest:
     def __init__(self, signals):
@@ -16,10 +22,12 @@ class FakeRequest:
 
 # ── Field parsing ─────────────────────────────────────────────────────────────
 
+
 class TestStrField:
     def _make(self, **kwargs):
         class S(Signals):
             v = Str(**kwargs)
+
         return S
 
     def test_coerces_to_str(self):
@@ -41,11 +49,13 @@ class TestStrField:
     def test_nested_path(self):
         class S(Signals):
             q = Str(path="filters.q", default="")
+
         assert S({"filters": {"q": "foo"}}).q == "foo"
 
     def test_accepts_request(self):
         class S(Signals):
             q = Str(path="filters.q", default="")
+
         req = FakeRequest({"filters": {"q": "bar"}})
         assert S(req).q == "bar"
 
@@ -81,6 +91,7 @@ class TestIntField:
     def _make(self, **kwargs):
         class S(Signals):
             v = Int(**kwargs)
+
         return S
 
     def test_coerces_str_to_int(self):
@@ -104,6 +115,7 @@ class TestIntField:
     def test_nested_path(self):
         class S(Signals):
             editing_pk = Int(path="ui.editingPk", default=0)
+
         assert S({"ui": {"editingPk": 7}}).editing_pk == 7
 
 
@@ -111,6 +123,7 @@ class TestBoolField:
     def _make(self, **kwargs):
         class S(Signals):
             v = Bool(**kwargs)
+
         return S
 
     def test_true_bool(self):
@@ -136,17 +149,20 @@ class TestDictField:
     def test_passes_dict_through(self):
         class S(Signals):
             selected = Dict(default_factory=dict)
+
         s = S({"selected": {"1": True, "2": False}})
         assert s.selected == {"1": True, "2": False}
 
     def test_default_factory(self):
         class S(Signals):
             selected = Dict(default_factory=dict)
+
         assert S({}).selected == {}
 
     def test_non_dict_falls_back(self):
         class S(Signals):
             selected = Dict(default_factory=dict)
+
         assert S({"selected": "not-a-dict"}).selected == {}
 
 
@@ -154,53 +170,63 @@ class TestListField:
     def test_passes_list_through(self):
         class S(Signals):
             ids = List(default_factory=list)
+
         assert S({"ids": [1, 2, 3]}).ids == [1, 2, 3]
 
     def test_non_list_falls_back(self):
         class S(Signals):
             ids = List(default_factory=list)
+
         assert S({"ids": "not-a-list"}).ids == []
 
 
 # ── Required fields ───────────────────────────────────────────────────────────
 
+
 class TestRequired:
     def test_missing_required_raises_at_parse(self):
         class S(Signals):
             pk = Int(required=True)
+
         with pytest.raises(SignalValidationError):
             S({})
 
     def test_present_required_passes(self):
         class S(Signals):
             pk = Int(required=True)
+
         assert S({"pk": 5}).pk == 5
 
     def test_bad_type_required_raises(self):
         class S(Signals):
             pk = Int(required=True)
+
         with pytest.raises(SignalValidationError):
             S({"pk": "not-int"})
 
 
 # ── validate= and s.validate() ────────────────────────────────────────────────
 
+
 class TestValidation:
     def test_validate_true_raises_on_failure(self):
         class S(Signals):
             v = Str(default="a", choices=("a", "b"))
+
         with pytest.raises(SignalValidationError):
             S({"v": "c"}, validate=True)
 
     def test_validate_false_no_raise(self):
         class S(Signals):
             v = Str(default="a", choices=("a", "b"))
+
         s = S({"v": "c"}, validate=False)
         assert s.v == "c"  # no raise
 
     def test_manual_validate_returns_bool(self):
         class S(Signals):
             v = Str(default="a", choices=("a", "b"))
+
         s = S({"v": "c"})
         assert s.validate() is False
         assert "v" in s.errors
@@ -208,6 +234,7 @@ class TestValidation:
     def test_manual_validate_success(self):
         class S(Signals):
             v = Str(default="a", choices=("a", "b"))
+
         s = S({"v": "b"})
         assert s.validate() is True
         assert s.errors == {}
@@ -240,6 +267,7 @@ class TestValidation:
         class S(Signals):
             a = Int(default=0, min_value=1)
             b = Str(default="x", choices=("x", "y"))
+
         s = S({"a": 0, "b": "z"})
         s.validate()
         assert "a" in s.errors
@@ -247,6 +275,7 @@ class TestValidation:
 
 
 # ── Inheritance ───────────────────────────────────────────────────────────────
+
 
 class TestInheritance:
     def test_child_inherits_parent_fields(self):
@@ -285,84 +314,102 @@ class TestInheritance:
 
 # ── Path inference ────────────────────────────────────────────────────────────
 
+
 class TestPathInference:
     def test_implicit_path_from_name(self):
         class S(Signals):
             page = Int(default=1)
+
         assert S({"page": 5}).page == 5
 
     def test_explicit_path_overrides_name(self):
         class S(Signals):
             q = Str(path="filters.q", default="")
+
         assert S({"filters": {"q": "bar"}}).q == "bar"
         assert S({"q": "bar"}).q == ""  # "q" top-level key is ignored
 
     def test_deeply_nested_path(self):
         class S(Signals):
             editing_pk = Int(path="ui.editingPk", default=0)
+
         assert S({"ui": {"editingPk": 3}}).editing_pk == 3
 
 
 # ── fields property ───────────────────────────────────────────────────────────
 
+
 class TestFields:
     def test_fields_returns_field_descriptors(self):
         class S(Signals):
             page = Int(default=1)
+
         s = S({"page": 2})
         assert s.fields["page"] is S._fields["page"]
 
     def test_path_accessible(self):
         class S(Signals):
             q = Str(path="filters.q", default="")
+
         assert S({}).fields["q"].path == "filters.q"
 
 
 # ── to_signals_dict ───────────────────────────────────────────────────────────
 
+
 class TestToSignalsDict:
     def test_flat_path(self):
         class S(Signals):
             page = Int(default=1)
+
         assert S({"page": 3}).to_signals_dict() == {"page": 3}
 
     def test_nested_path(self):
         class S(Signals):
             q = Str(path="filters.q", default="")
-        assert S({"filters": {"q": "foo"}}).to_signals_dict() == {"filters": {"q": "foo"}}
+
+        assert S({"filters": {"q": "foo"}}).to_signals_dict() == {
+            "filters": {"q": "foo"}
+        }
 
     def test_multiple_fields_merge_nested(self):
         class S(Signals):
             field = Str(path="sort.field", default="name")
             direction = Str(path="sort.dir", default="asc")
+
         result = S({"sort": {"field": "email", "dir": "desc"}}).to_signals_dict()
         assert result == {"sort": {"field": "email", "dir": "desc"}}
 
     def test_defaults_used_when_missing(self):
         class S(Signals):
             page = Int(default=1)
-            q    = Str(path="filters.q", default="")
+            q = Str(path="filters.q", default="")
+
         assert S({}).to_signals_dict() == {"page": 1, "filters": {"q": ""}}
 
     def test_roundtrip(self):
         class S(Signals):
-            q    = Str(path="filters.q", default="")
+            q = Str(path="filters.q", default="")
             page = Int(default=1)
+
         original = {"filters": {"q": "foo"}, "page": 2}
         assert S(original).to_signals_dict() == original
 
 
 # ── Plain dict in tests ───────────────────────────────────────────────────────
 
+
 class TestPlainDict:
     def test_accepts_plain_dict(self):
         class S(Signals):
             page = Int(default=1)
+
         assert S({"page": 2}).page == 2
 
     def test_accepts_request(self):
         class S(Signals):
             page = Int(default=1)
+
         req = FakeRequest({"page": 3})
         assert S(req).page == 3
 
@@ -370,11 +417,13 @@ class TestPlainDict:
         class S(Signals):
             page = Int(default=1)
             q = Str(default="")
+
         s = S(None)
         assert s.page == 1 and s.q == ""
 
 
 # ── from_query — clean query string → signals (replace-url reverse) ────────────
+
 
 class FakeGetRequest:
     def __init__(self, get):
@@ -382,10 +431,10 @@ class FakeGetRequest:
 
 
 class QuerySchema(Signals):
-    q          = Str(path="filters.q",  default="",     query="q")
-    status     = Str(path="filters.st", default="",     query="status")
+    q = Str(path="filters.q", default="", query="q")
+    status = Str(path="filters.st", default="", query="status")
     sort_field = Str(path="sort.field", default="name", query="sort")
-    page       = Int(default=1, min_value=1,            query="page")
+    page = Int(default=1, min_value=1, query="page")
     editing_pk = Int(path="ui.editingPk", default=0)  # no query key
 
 
