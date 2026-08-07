@@ -31,6 +31,20 @@ function labbGetCSRFToken() {
 
 {% if setThemeEndpoint %}
 <script>
+
+const LABB_THEME_COOKIE = 'labb_theme';
+
+function labbWriteThemeCookie(theme) {
+    document.cookie = LABB_THEME_COOKIE + '=' + encodeURIComponent(theme)
+        + ';path=/;max-age=31536000;samesite=lax';
+}
+
+function labbReadThemeCookie() {
+    const prefix = LABB_THEME_COOKIE + '=';
+    const match = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith(prefix));
+    return match ? decodeURIComponent(match.slice(prefix.length)) : null;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const currentTheme = document.documentElement.getAttribute('data-theme') || '__system__';
     const controllers = document.querySelectorAll('input[type="checkbox"].theme-controller, input[type="radio"].theme-controller');
@@ -58,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function revert(controller) {
         setTheme(currentTheme);
+        labbWriteThemeCookie(currentTheme);
         if (controller.type === 'checkbox') {
             controller.checked = !controller.checked;
         } else {
@@ -65,6 +80,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (original) original.checked = true;
         }
     }
+
+    window.addEventListener('pageshow', function (event) {
+        const shown = document.documentElement.getAttribute('data-theme') || '__system__';
+        const theme = event.persisted ? (labbReadThemeCookie() || shown) : shown;
+        if (theme !== shown) setTheme(theme);
+        syncControllers(theme);
+    });
 
     controllers.forEach(function (controller) {
         controller.checked = controller.value === currentTheme;
@@ -76,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             setTheme(newTheme);
             syncControllers(newTheme);
+            labbWriteThemeCookie(newTheme);
 
             fetch('{{ setThemeEndpoint }}', {
                 method: 'POST',
