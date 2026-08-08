@@ -19,7 +19,7 @@ changelog:
 
 preview_context:
   total: 6
-  open: 0
+  open: 1
   customers:
     - id: 1
       initials: "AF"

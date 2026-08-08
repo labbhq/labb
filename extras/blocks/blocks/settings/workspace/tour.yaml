@@ -33,7 +33,7 @@ steps:
   - title: Save one section, patch one zone
     file: views.py
     match: "def profile_save"
-    through: "_patch_toast(request, \"Profile saved\""
+    through: '"Profile saved",'
     teaches: [scoped-morph, server-actions, live-validation]
     docs: [reactivity/actions, reactivity/morphing]
     body: |

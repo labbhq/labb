@@ -19,7 +19,6 @@ changelog:
       - "Initial release — the catalogue's wizard anchor"
 
 allow_fixed_colours:
-  - "#8b5cf6"
-  - "#d946ef"
-  - "#f472b6"
-  - "#fb923c"
+  - "#312e81"
+  - "#0f766e"
+  - "#65a30d"

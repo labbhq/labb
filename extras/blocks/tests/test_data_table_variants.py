@@ -172,12 +172,13 @@ def test_filter_badge_is_a_reactive_prop(page, live_server):
 # --- expandable-rows: a detail panel, in place ------------------------------
 
 
-def test_rows_start_collapsed(page, live_server):
+def test_first_row_starts_expanded_to_show_the_detail_pattern(page, live_server):
     page.goto(f"{live_server.url}{EXPANDO}")
     page.wait_for_selector(DATASTAR, state="attached")
 
     assert page.locator("#expando-row-1").is_visible()
-    assert page.locator("#expando-detail-1").is_hidden()
+    assert page.locator("#expando-detail-1").is_visible()
+    assert page.locator("#expando-toggle-1").get_attribute("aria-expanded") == "true"
 
 
 def test_row_expands_in_place_with_no_network_request(page, live_server):
@@ -186,13 +187,25 @@ def test_row_expands_in_place_with_no_network_request(page, live_server):
     page.locator("#expando-row-1").wait_for()
 
     seen = _watch_requests(page)
-    page.locator("#expando-row-1").click()
+    page.locator("#expando-toggle-5").click()
 
-    page.wait_for_selector("#expando-detail-1", state="visible")
-    detail = page.locator("#expando-detail-1")
-    assert "INV-2041" in detail.inner_text()
-    assert "Dara Osei" in detail.inner_text()
+    page.wait_for_selector("#expando-detail-5", state="visible")
+    detail = page.locator("#expando-detail-5")
+    assert "INV-2038" in detail.inner_text()
+    assert "Mira Chen" in detail.inner_text()
     assert _fired(seen) == [], f"expected zero requests, got {_fired(seen)}"
+
+
+def test_expando_toggle_works_from_the_keyboard(page, live_server):
+    page.goto(f"{live_server.url}{EXPANDO}")
+    page.wait_for_selector(DATASTAR, state="attached")
+
+    toggle = page.locator("#expando-toggle-1")
+    toggle.focus()
+    toggle.press("Enter")
+
+    page.wait_for_selector("#expando-detail-1", state="hidden")
+    assert toggle.get_attribute("aria-expanded") == "false"
 
 
 def test_opening_a_second_row_closes_the_first(page, live_server):
@@ -200,10 +213,7 @@ def test_opening_a_second_row_closes_the_first(page, live_server):
     page.goto(f"{live_server.url}{EXPANDO}")
     page.wait_for_selector(DATASTAR, state="attached")
 
-    page.locator("#expando-row-1").click()
-    page.wait_for_selector("#expando-detail-1", state="visible")
-
-    page.locator("#expando-row-5").click()
+    page.locator("#expando-toggle-5").click()
     page.wait_for_selector("#expando-detail-5", state="visible")
     assert page.locator("#expando-detail-1").is_hidden()
     assert "INV-2038" in page.locator("#expando-detail-5").inner_text()
@@ -213,10 +223,7 @@ def test_clicking_an_open_row_closes_it(page, live_server):
     page.goto(f"{live_server.url}{EXPANDO}")
     page.wait_for_selector(DATASTAR, state="attached")
 
-    page.locator("#expando-row-1").click()
-    page.wait_for_selector("#expando-detail-1", state="visible")
-
-    page.locator("#expando-row-1").click()
+    page.locator("#expando-toggle-1").click()
     page.wait_for_selector("#expando-detail-1", state="hidden")
     assert page.locator("#expando-detail-1").is_hidden()
 
@@ -226,7 +233,7 @@ def test_expando_empty_state_renders_inside_the_panel(page, live_server):
     page.goto(f"{live_server.url}{EXPANDO}")
     page.wait_for_selector(DATASTAR, state="attached")
 
-    page.locator("#expando-row-3").click()
+    page.locator("#expando-toggle-3").click()
     page.wait_for_selector("#expando-invoices-empty-3", state="visible")
 
     empty = page.locator("#expando-invoices-empty-3")

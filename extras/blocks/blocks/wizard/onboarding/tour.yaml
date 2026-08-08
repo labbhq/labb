@@ -2,7 +2,7 @@ steps:
   - title: One signal bag for the whole wizard
     file: views.py
     match: "class OnboardingSignals"
-    through: 'plan           = Str(path="form.plan"'
+    through: 'plan = Str(path="form.plan"'
     teaches: [signals, multi-step]
     docs: [reactivity/signals]
     body: |

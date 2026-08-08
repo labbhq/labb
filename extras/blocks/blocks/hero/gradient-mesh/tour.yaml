@@ -1,11 +1,11 @@
 steps:
   - title: One deliberate gradient, identical in every theme
     file: templates/cotton/gradient_mesh/mesh.html
-    match: "#8b5cf6"
+    match: "#0f766e"
     teaches: [zero-js]
     docs: [ui/theming]
     body: |
-      The one sanctioned fixed-colour exception: a blurred mesh of four curated
+      The one sanctioned fixed-colour exception: a blurred mesh of three curated
       hues, masked so it crowns the hero and fades before the content. It is
       declared in `block.yaml` (`allow_fixed_colours`) precisely because it must
       look the same in light and dark — a brand gradient, not a theme surface.

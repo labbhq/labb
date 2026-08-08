@@ -19,7 +19,6 @@ changelog:
       - "Initial release"
 
 allow_fixed_colours:
-  - "#8b5cf6"
-  - "#d946ef"
-  - "#f472b6"
-  - "#fb923c"
+  - "#1d4ed8"
+  - "#4f46e5"
+  - "#0f766e"

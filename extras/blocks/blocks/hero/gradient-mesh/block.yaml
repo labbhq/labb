@@ -10,10 +10,9 @@ thumbnail: thumbnails/gradient-mesh.png
 # the same in light and dark, so it cannot be a theme token. Everything else in
 # the block stays token-only.
 allow_fixed_colours:
-  - "#8b5cf6"
-  - "#d946ef"
-  - "#f472b6"
-  - "#fb923c"
+  - "#0f766e"
+  - "#0284c7"
+  - "#4f46e5"
 tags:
   - hero
   - marketing
