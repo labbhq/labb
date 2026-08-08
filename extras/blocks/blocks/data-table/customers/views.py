@@ -53,6 +53,15 @@ class QuerySignals(Signals):
     page = Int(default=1, min_value=1)
 
 
+class EditSignals(Signals):
+    contact_name = Str(path="edit.contact_name", default="")
+    email = Str(path="edit.email", default="")
+    status = Str(path="edit.status", default="")
+    plan = Str(path="edit.plan", default="")
+    seats = Int(path="edit.seats", default=0, min_value=0)
+    mrr = Str(path="edit.mrr", default="")
+
+
 class UISignals(Signals):
     editing_pk = Int(path="ui.editingPk", default=0)
     selected = Dict(default_factory=dict)
@@ -153,6 +162,20 @@ def _context(request, editing_pk=None):
         )
         if editing
         else "",
+        "edit_signals": EditSignals(
+            {
+                "edit": {
+                    "contact_name": editing.contact_name,
+                    "email": editing.email,
+                    "status": editing.status,
+                    "plan": str(editing.plan_id or ""),
+                    "seats": editing.seats,
+                    "mrr": str(editing.mrr),
+                }
+            }
+        )
+        if editing
+        else None,
         "sort_field": s.sort_field,
         "sort_dir": s.sort_dir,
         "next_dir": {field: _next_dir(s, field) for field in SORT_FIELDS},
@@ -182,16 +205,14 @@ def index(request):
 def update(request, pk):
     customer = get_object_or_404(LbCustomer, pk=pk)
     if request.method == "POST":
-        customer.contact_name = request.POST.get(
-            "contact_name", customer.contact_name
-        ).strip()
-        customer.email = request.POST.get("email", customer.email).strip()
-        customer.status = request.POST.get("status", customer.status)
-        customer.seats = int(request.POST.get("seats") or customer.seats)
-        customer.mrr = Decimal(request.POST.get("mrr") or customer.mrr)
-        plan_pk = request.POST.get("plan")
-        if plan_pk:
-            customer.plan = LbPlan.objects.filter(pk=plan_pk).first()
+        edit = EditSignals(request)
+        customer.contact_name = edit.contact_name.strip() or customer.contact_name
+        customer.email = edit.email.strip() or customer.email
+        customer.status = edit.status or customer.status
+        customer.seats = edit.seats or customer.seats
+        customer.mrr = Decimal(edit.mrr or customer.mrr)
+        if edit.plan:
+            customer.plan = LbPlan.objects.filter(pk=edit.plan).first()
         customer.save()
         if request.is_datastar:
             return _render(request, _context(request, editing_pk=0))

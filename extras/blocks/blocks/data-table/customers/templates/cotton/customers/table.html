@@ -38,7 +38,7 @@
         <tbody>
             {% for customer in customers %}
                 {% if customer.pk == editing_pk %}
-                <c-customers.edit-row :customer=customer :plans=plans :status_choices=status_choices :update_url=update_url />
+                <c-customers.edit-row :customer=customer :plans=plans :status_choices=status_choices :update_url=update_url :edit_signals=edit_signals />
                 {% else %}
                 <c-customers.row :customer=customer />
                 {% endif %}

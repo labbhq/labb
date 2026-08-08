@@ -1,10 +1,11 @@
-<c-vars :customer="{}" :plans="[]" :status_choices="[]" update_url="" />
+<c-vars :customer="{}" :plans="[]" :status_choices="[]" update_url="" :edit_signals="None" />
 
 <tr id="customer-{{ customer.pk }}" class="border-base-300 bg-base-200/50">
     <td colspan="9" class="p-3">
 
-        <c-lbr.post :to=update_url options="{contentType: 'form'}">
-            {% csrf_token %}
+        <c-lbr.signals :schema=edit_signals />
+
+        <c-lbr.post :to=update_url>
 
             <div class="flex flex-wrap items-end gap-2">
 
@@ -20,7 +21,7 @@
                     <c-lb.input
                         type="text"
                         name="contact_name"
-                        value="{{ customer.contact_name }}"
+                        bind="$edit.contact_name"
                         size="sm"
                         class="w-full"
                         :ghost="False"
@@ -33,7 +34,7 @@
                     <c-lb.input
                         type="email"
                         name="email"
-                        value="{{ customer.email }}"
+                        bind="$edit.email"
                         size="sm"
                         class="w-full"
                         :ghost="False"
@@ -42,7 +43,7 @@
                 </c-customers.edit-field>
 
                 <c-customers.edit-field label="Plan" class="w-36">
-                    <c-lb.select name="plan" size="sm" class="w-full" :validate="False">
+                    <c-lb.select name="plan" bind="$edit.plan" size="sm" class="w-full" :validate="False">
                         {% for plan in plans %}
                         <option value="{{ plan.pk }}" {% if customer.plan_id == plan.pk %}selected{% endif %}>{{ plan.name }}</option>
                         {% endfor %}
@@ -50,7 +51,7 @@
                 </c-customers.edit-field>
 
                 <c-customers.edit-field label="Status" class="w-32">
-                    <c-lb.select name="status" size="sm" class="w-full" :validate="False">
+                    <c-lb.select name="status" bind="$edit.status" size="sm" class="w-full" :validate="False">
                         {% for value, label in status_choices %}
                         <option value="{{ value }}" {% if customer.status == value %}selected{% endif %}>{{ label }}</option>
                         {% endfor %}
@@ -61,7 +62,7 @@
                     <c-lb.input
                         type="number"
                         name="mrr"
-                        value="{{ customer.mrr|floatformat:0 }}"
+                        bind="$edit.mrr"
                         min="0"
                         step="1"
                         size="sm"
@@ -74,7 +75,7 @@
                     <c-lb.input
                         type="number"
                         name="seats"
-                        value="{{ customer.seats }}"
+                        bind="$edit.seats"
                         min="1"
                         step="1"
                         size="sm"

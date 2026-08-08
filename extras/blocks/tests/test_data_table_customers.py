@@ -206,8 +206,8 @@ def test_reload_after_searching_restores_the_filtered_view(
 
 
 def test_a_shared_url_lands_on_the_same_view(page, live_server, customers):
-    """The URL alone — no signals in flight — is enough to rebuild the view."""
-    page.goto(f"{live_server.url}{BASE}/?sort=mrr&dir=desc")
+    """The URL alone, with no signals in flight, rebuilds the view."""
+    page.goto(f"{live_server.url}{BASE}/?lbr.sort.field=mrr&lbr.sort.dir=desc")
 
     page.wait_for_selector("tbody tr")
     assert "Ironvale Group" in _rows(page).first.inner_text()  # highest MRR
@@ -217,8 +217,8 @@ def test_sort_state_is_written_into_the_url(page, live_server, customers):
     page.goto(f"{live_server.url}{BASE}/")
     page.locator("thead").get_by_role("button", name="MRR").click()
 
-    page.wait_for_function("location.search.includes('sort=mrr')")
-    assert "sort=mrr" in page.url
+    page.wait_for_function("location.search.includes('sort.field=mrr')")
+    assert "lbr.sort.field=mrr" in page.url
 
 
 # --- sort -------------------------------------------------------------------
@@ -272,8 +272,12 @@ def test_inline_edit_persists(page, live_server, customers):
 
 
 def test_inline_edit_keeps_the_filtered_view(page, live_server, customers):
-    """A form POST carries no signal bag — the action URL carries the state instead."""
-    page.goto(f"{live_server.url}{BASE}/?q=atlas")
+    """The filter survives a form POST.
+
+    A form submit carries no signal bag, so the view has to recover the query
+    state some other way. Currently it does not, and every row comes back.
+    """
+    page.goto(f"{live_server.url}{BASE}/?lbr.filters.q=atlas")
     page.get_by_role("button", name="Edit AtlasForge").click()
 
     page.wait_for_selector('input[name="contact_name"]')
