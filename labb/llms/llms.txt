@@ -453,12 +453,12 @@ Props marked with `*` have a CSS class mapping — they can be driven at runtime
 **join**: Groups multiple items together visually | Vars: class: string, direction*: horizontal/vertical | 3 examples
 **kbd**: Keyboard key indicator to display keyboard shortcuts or key combinations | Vars: size*: xs/sm/md/lg/xl, variant*: neutral/primary/secondary/accent/info/success/warning/error, class: string, icon: string, icon.class: string | 9 examples
 **label**: Descriptive text label for form inputs | Vars: as: p/span/label/div, class: string, floating: boolean | 2 examples
-**lbr.delete**: Fires a DELETE request on any DOM event, optionally gated behind a confirm() dialog. | Vars: to: string, pk: string, kwargs: string
-**lbr.get**: Fires a GET request on any DOM event. Wraps content in a configurable element with a Datastar data-on or data-init action. | Vars: to: string, pk: string, kwargs: string
-**lbr.post**: Fires a POST request on any DOM event. Defaults to a form element with submit event and form content-type encoding. | Vars: to: string, pk: string, kwargs: string
-**lbr.replace-url**: Replaces (or pushes) the browser URL on morph without firing a new request. Renders a hidden div with data-init. | Vars: to: string, pk: string, kwargs: string
-**lbr.signals**: Declares Datastar signals and loads Datastar on the page (so a separate dependency include is not needed). Provide signals in whichever form fits: $-prefixed props for scalars ($open="false"); a Cotton :$-binding or context variable for objects and numbers (:$order="{...}"); or a typed :schema instance. For an initial value that must be computed in the browser at load time (e.g. matchMedia or reading the DOM), pass a raw data-signals="{...}" attribute through the component: it is forwarded as-is and evaluated as JS. Do not combine $-props and a raw data-signals on the same element. | Vars: schema: string, syncQuery: boolean
-**lbr.target**: Marks an element as a named Datastar morph target via data-lbr-target. Use as a stable anchor for partial updates. | Vars: name: string, tag: string
+**lbr.delete**: Wraps content and sends a DELETE request when the chosen browser event fires. | Vars: to: string, pk: string, kwargs: string
+**lbr.get**: Wraps content and sends a GET request when the chosen browser event fires. | Vars: to: string, pk: string, kwargs: string
+**lbr.post**: Wraps content and sends a POST request when the chosen browser event fires. It renders a form that prevents native submit by default. | Vars: to: string, pk: string, kwargs: string
+**lbr.replace-url**: Updates browser history when the component renders. It does not navigate or send a request. | Vars: to: string, pk: string, kwargs: string
+**lbr.signals**: Declares page signals and loads Datastar. Use $-prefixed props for strings and booleans, Cotton :$ bindings for numbers or objects, or a typed Signals instance. Pass raw data-signals for an initial value the browser must calculate on load. Do not combine raw data-signals with $-prefixed props. | Vars: schema: string, syncQuery: boolean
+**lbr.target**: Marks a stable region for a partial Datastar update. Server-side @name resolves to this element. | Vars: name: string, tag: string
 **link**: Link component with support for href, Django view name resolution, DaisyUI styling, and l: prefixed URL arguments | Vars: as: a/button/span/div, variant*: neutral/primary/secondary/accent/info/success/warning/error, class: string, href: string, viewname: string | 5 examples
 **list**: List component for displaying information in vertical rows with horizontal layout | Vars: as: ul/div/ol, class: string | 2 examples
 **list.row**: Individual list row item with horizontal grid layout | Vars: as: li/div, class: string
