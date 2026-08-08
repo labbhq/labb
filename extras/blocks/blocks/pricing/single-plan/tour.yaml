@@ -1,5 +1,5 @@
 steps:
-  - title: The page is an outline
+  - title: Compose the single-plan page
     file: templates/pages/index.html
     match: "<c-single-plan.pitch />"
     teaches: [zero-js]
@@ -8,7 +8,7 @@ steps:
       Three components and a grid. The pitch, the plan and the FAQ each own their own
       markup, so the page reads as what it is rather than as a wall of divs.
 
-  - title: Zero JavaScript, and that is the feature
+  - title: Use the accordion without custom JavaScript
     file: templates/cotton/single_plan/faq.html
     match: "<c-lb.accordion join>"
     teaches: [zero-js]
@@ -18,7 +18,7 @@ steps:
       Datastar, because nothing in it needs to — reactivity in labb is opt-in, so a
       static pricing page ships as a static pricing page.
 
-  - title: Priced in theme tokens
+  - title: Use theme tokens for the plan card
     file: templates/cotton/single_plan/card.html
     match: 'class="border-primary border-2 shadow-lg"'
     teaches: [theming]

@@ -1,5 +1,5 @@
 steps:
-  - title: A step, an answer bag, and a tone
+  - title: Declare the step and answer state
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals, multi-step]
@@ -9,7 +9,7 @@ steps:
       a reactive prop takes a signal path, never an expression, so the value has to
       live somewhere.
 
-  - title: The bar is the whole stepper
+  - title: Render progress from the current step
     file: templates/cotton/minimal_wizard/progress.html
     match: 'data-attr:value="$step * 25"'
     teaches: [signals]
@@ -19,7 +19,7 @@ steps:
       renders the opening value, so the bar is already at 25% before any JavaScript
       arrives.
 
-  - title: The badge recolours itself on the last step
+  - title: Drive the completion badge from state
     file: templates/cotton/minimal_wizard/progress.html
     match: 'variant="$tone:primary"'
     teaches: [reactive-props]
@@ -30,7 +30,7 @@ steps:
       the tone is a signal rather than an inline ternary — the prop parser only takes
       a path, never an expression.
 
-  - title: Advancing sets both signals at once
+  - title: Advance the step and update the tone
     file: templates/cotton/minimal_wizard/nav.html
     match: "data-on:click=\"$step = Math.min($step + 1, 4); $tone ="
     teaches: [signals, multi-step]
@@ -39,7 +39,7 @@ steps:
       One click, two assignments, zero requests. Going back runs the same arithmetic
       in reverse and every answer is still in the bag, because nothing ever took it out.
 
-  - title: Answers bind straight to the bag
+  - title: Bind fields to the answer state
     file: templates/cotton/minimal_wizard/step_model.html
     match: 'data-bind="form.model"'
     teaches: [binding]

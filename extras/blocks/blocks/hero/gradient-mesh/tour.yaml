@@ -1,5 +1,5 @@
 steps:
-  - title: One deliberate gradient, identical in every theme
+  - title: Keep a deliberate brand gradient local
     file: templates/cotton/gradient_mesh/mesh.html
     match: "#0f766e"
     teaches: [zero-js]
@@ -11,7 +11,7 @@ steps:
       look the same in light and dark — a brand gradient, not a theme surface.
       Everything under it is still built from daisyUI tokens.
 
-  - title: The ground under it
+  - title: Use base tokens behind the artwork
     file: templates/pages/index.html
     match: "overflow-hidden bg-base-100"
     teaches: [theming]
@@ -21,7 +21,7 @@ steps:
       same token in every theme, which is why the hero never looks like it was
       designed for a theme it is no longer in.
 
-  - title: Drama costs no JavaScript
+  - title: Keep the hero server-rendered
     file: templates/pages/index.html
     match: "<main"
     teaches: [zero-js]
@@ -30,7 +30,7 @@ steps:
       No canvas, no WebGL, no animation loop — the whole effect is CSS on
       server-rendered markup. Nothing to download and nothing to run.
 
-  - title: Content over the top
+  - title: Layer content above the visual
     file: templates/pages/index.html
     match: "<c-gradient-mesh.proof"
     teaches: [zero-js]

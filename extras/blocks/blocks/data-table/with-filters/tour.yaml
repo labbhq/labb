@@ -1,5 +1,5 @@
 steps:
-  - title: One signal holds the whole filter state
+  - title: Declare the filter state
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -9,7 +9,7 @@ steps:
       declared in prop mode from the object the page was rendered with. There is no view
       behind this block because there is nothing for a server to do.
 
-  - title: A chip is a signal assignment
+  - title: Update a filter from a chip
     file: templates/cotton/filter_table/chip.html
     match: "data-on:click=\"$filters = ardenFilters('{{ value }}', $filters.health)\""
     teaches: [signals]
@@ -19,7 +19,7 @@ steps:
       interaction. Open the network tab, click every chip in the toolbar, and it stays
       empty: the rows were already in the page.
 
-  - title: Rows filter themselves
+  - title: Show rows from the active filters
     file: templates/cotton/filter_table/row.html
     match: 'data-show="ardenMatches('
     teaches: [signals]
@@ -29,7 +29,7 @@ steps:
       No list is re-rendered and no DOM is rebuilt, so the table cannot flicker or lose
       your scroll position.
 
-  - title: The badge is a reactive prop
+  - title: Drive a component prop from state
     file: templates/cotton/filter_table/toolbar.html
     match: 'variant="$filters.tone:neutral"'
     teaches: [reactive-props]
@@ -40,7 +40,7 @@ steps:
       A reactive prop takes a signal path, never an expression, which is why the tone is
       computed into the signal rather than in the attribute.
 
-  - title: The zero-result state is a real state
+  - title: Render the empty result state
     file: templates/cotton/filter_table/empty.html
     match: 'data-show="ardenVisible($filters) === 0"'
     teaches: [signals]

@@ -1,5 +1,5 @@
 steps:
-  - title: The period lives in one signal
+  - title: Declare the billing period
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -8,7 +8,7 @@ steps:
       Prop mode: an object literal straight from the page context. No schema, no
       view, no endpoint — the matrix is a static page with one moving part.
 
-  - title: The toggle restyles itself through a reactive prop
+  - title: Style the selected period
     file: templates/cotton/plan_matrix/header.html
     match: 'btnStyle="$period.annualStyle:ghost"'
     teaches: [reactive-props]
@@ -17,7 +17,7 @@ steps:
       `$period.annualStyle` is the signal, `ghost` is what the server renders. The
       button picks up its daisyUI classes again in the browser when the signal moves.
 
-  - title: The header re-prices with no request
+  - title: Recalculate the plan price in the browser
     file: templates/cotton/plan_matrix/matrix.html
     match: "data-text=\"$period.annual ?"
     teaches: [reactive-props]
@@ -27,7 +27,7 @@ steps:
       three prices at once and the network tab stays empty — the annual figures were
       already in the HTML.
 
-  - title: A matrix cell is a component, not a nest of ifs
+  - title: Extract the comparison cell component
     file: templates/cotton/plan_matrix/cell.html
     match: '{% if value == "yes" %}'
     teaches: [theming]

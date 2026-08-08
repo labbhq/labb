@@ -1,5 +1,5 @@
 steps:
-  - title: One signal names the section
+  - title: Declare the active settings section
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -8,7 +8,7 @@ steps:
       A string. That is the entire state of this settings shell — declared in prop
       mode, with no schema and no view behind it.
 
-  - title: The nav writes it, the body reads it
+  - title: Change the section from the navigation
     file: templates/cotton/sidebar_nav/rail.html
     match: "data-on:click=\"$section = '{{ item.key }}'\""
     teaches: [signals]
@@ -18,7 +18,7 @@ steps:
       from the same value. Open the network tab and click every section: nothing is
       sent.
 
-  - title: Every section is already on the page
+  - title: Show the matching settings panel
     file: templates/pages/index.html
     match: "data-show=\"$section === 'billing'\""
     teaches: [signals]
@@ -28,7 +28,7 @@ steps:
       faster than five round-trips, and it means a half-typed field survives a trip
       to Billing and back.
 
-  - title: Where the server belongs
+  - title: Add a server action when persistence is needed
     file: templates/cotton/sidebar_nav/section_workspace.html
     match: '<c-lb.button variant="primary" size="sm">Save changes</c-lb.button>'
     teaches: [signals]

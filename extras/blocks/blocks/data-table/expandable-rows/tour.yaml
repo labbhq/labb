@@ -1,5 +1,5 @@
 steps:
-  - title: One integer is the whole interaction
+  - title: Declare the open row
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -9,7 +9,7 @@ steps:
       number. There is no view behind this block: the detail is already in the page, so
       opening a row is a state change, not a request.
 
-  - title: Clicking a row toggles that number
+  - title: Change the open row on click
     file: templates/cotton/expando_table/row.html
     match: 'data-on:click="$open = $open === '
     teaches: [signals]
@@ -19,7 +19,7 @@ steps:
       Because only one id fits in the signal, opening a second row closes the first for
       free. That is the accordion, and it took no code to get.
 
-  - title: The panel is a sibling row that shows itself
+  - title: Show details for the open row
     file: templates/cotton/expando_table/detail.html
     match: 'data-show="$open === '
     teaches: [signals]
@@ -29,7 +29,7 @@ steps:
       signal names it. It expands in place: the table does not navigate, no drawer slides
       over the data you were comparing, and the scroll position is exactly where you left it.
 
-  - title: A detail panel needs an empty state too
+  - title: Give the detail area an empty state
     file: templates/cotton/expando_table/detail.html
     match: "<c-expando-table.empty"
     teaches: [theming]

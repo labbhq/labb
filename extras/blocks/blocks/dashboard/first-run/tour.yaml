@@ -1,5 +1,5 @@
 steps:
-  - title: An empty state is a screen, not an accident
+  - title: Build the first-run state as a page
     file: templates/cotton/first_run/empty.html
     match: "Your revenue graph starts with one connection."
     teaches: [zero-js]
@@ -9,7 +9,7 @@ steps:
       says what is missing, why that is expected, what happens when you fix it, and how
       long it takes — then gives you exactly one thing to click.
 
-  - title: The panel is theme tokens, not an image
+  - title: Use theme tokens for the setup panel
     file: templates/cotton/first_run/empty.html
     match: "border-t border-base-300 bg-base-200"
     teaches: [theming]
@@ -19,7 +19,7 @@ steps:
       hairline. No asset to redistribute, no licence to inherit, and it recolours in
       every daisyUI theme instead of only looking right in one.
 
-  - title: Placeholders that refuse to guess
+  - title: Make placeholders communicate the next action
     file: templates/cotton/first_run/placeholders.html
     match: 'class="flex flex-col gap-3 rounded-lg border border-dashed border-base-300'
     teaches: [zero-js]

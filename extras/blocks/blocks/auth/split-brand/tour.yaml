@@ -1,50 +1,29 @@
 steps:
-  - title: Declare the signals
+  - title: Start with the form schema
     file: templates/pages/sign_in.html
     match: "<c-lbr.signals"
     teaches: [signals]
     docs: [reactivity/signals]
-    body: |
-      Signals are client state. Declared once here from the schema the view
-      hands over, then readable anywhere in the block. No store, no setup.
+    body: The page receives one typed schema from the view. Its fields provide the initial form state and the values Django validates on the next request.
 
-  - title: Bind an input to a signal
+  - title: Bind inputs to schema fields
     file: templates/cotton/split_brand/form.html
     match: ':bind=signals.fields.email'
     teaches: [binding, live-validation]
     docs: [reactivity/binding]
-    body: |
-      The input writes straight into the `email` signal. No change handler,
-      no JavaScript — binding is all it takes.
+    body: Bind accepts the schema field descriptor, so the input and validation view use the same signal path. The template does not need a hand-written change handler.
 
-  - title: Validate while the user types
+  - title: Validate as the user fills the form
     file: templates/cotton/split_brand/field.html
     match: "<c-lbr.post"
     through: 'before="if ($submitted) return"'
     teaches: [server-actions, morphing, live-validation]
-    docs: [reactivity/actions, reactivity/morphing]
-    body: |
-      A debounced POST carries the signals to a normal Django view. The view
-      returns the whole page and Datastar morphs the diff — there is no partial
-      endpoint and no JSON API to build. `before` skips this once the form has
-      been submitted, so validation switches from gentle to strict.
+    docs: [reactivity/actions]
+    body: A debounced POST sends the current signals to Django and returns the refreshed field. The before expression stops background checks once the user submits the form.
 
-  - title: One validator, two pages
+  - title: Keep sign-in and sign-up rules together
     file: views.py
     match: "def _validate"
     teaches: [live-validation]
     docs: [reactivity/actions]
-    body: |
-      Gentle while typing, strict on submit. The same function backs sign-in and
-      sign-up — the only difference is whether a name is expected, which is what
-      lets one view serve both pages.
-
-  - title: Post the form to a real view
-    file: templates/cotton/split_brand/form.html
-    match: '<c-lbr.post :to=action'
-    teaches: [server-actions, morphing]
-    docs: [reactivity/actions]
-    body: |
-      The submit is the same mechanism as the live validation, pointed at a
-      different view. `before` flips the `submitted` signal, which is what turns
-      validation strict on the way in.
+    body: Both pages use the same validation helper. The view decides whether a name is required, which keeps the shared fields and error handling in one place.

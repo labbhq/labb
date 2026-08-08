@@ -1,5 +1,5 @@
 steps:
-  - title: A dashboard that ships no JavaScript
+  - title: Start with a server-rendered KPI grid
     file: templates/pages/index.html
     match: '<section id="kpi-grid"'
     teaches: [zero-js]
@@ -9,7 +9,7 @@ steps:
       Reactivity in labb is opt-in: no signal, no action, no bundle. A board that
       only ever reports last night's close has no reason to pay for a framework.
 
-  - title: The sparkline is an SVG, not a chart library
+  - title: Use an SVG sparkline for a small trend
     file: templates/cotton/compact_kpi/spark.html
     match: 'stroke="currentColor"'
     teaches: [theming, zero-js]
@@ -19,7 +19,7 @@ steps:
       its colour from `currentColor`, so a theme token on the wrapper decides how it
       renders — and it recolours with the theme like everything else.
 
-  - title: Digits that line up
+  - title: Use tabular numbers for changing metrics
     file: templates/cotton/compact_kpi/tile.html
     match: "text-2xl font-semibold tracking-tight tabular-nums"
     teaches: [zero-js]

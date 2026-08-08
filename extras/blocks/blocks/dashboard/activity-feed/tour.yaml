@@ -1,5 +1,5 @@
 steps:
-  - title: Numbers and the events behind them, on one page
+  - title: Compose stats and activity on one page
     file: templates/pages/index.html
     match: "<c-activity-feed.stats"
     teaches: [zero-js]
@@ -9,7 +9,7 @@ steps:
       the block — a KPI with no audit trail is a number nobody trusts. All of it is
       server-rendered HTML, and the page ships no JavaScript at all.
 
-  - title: The feed is a labb timeline
+  - title: Render events with the timeline component
     file: templates/cotton/activity_feed/day.html
     match: '<c-lb.timeline direction="vertical" compact snap>'
     teaches: [zero-js]
@@ -19,7 +19,7 @@ steps:
       connectors and the icon slot come for free; the block only supplies the time on
       the left and the event card on the right.
 
-  - title: Colour comes from the event, not from CSS
+  - title: Choose event colours from data
     file: templates/cotton/activity_feed/event.html
     match: "{% if event.tone == 'error' %}text-error"
     teaches: [theming]

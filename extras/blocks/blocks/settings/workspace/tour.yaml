@@ -1,65 +1,38 @@
 steps:
-  - title: Name the zones that can change
+  - title: Mark the sections Django can replace
     file: templates/pages/index.html
     match: '<c-lbr.target name="section-profile"'
     teaches: [scoped-morph]
     docs: [reactivity/morphing]
-    body: |
-      Each tab wraps its section in a named target. A target is just a div with a
-      name the server can aim at — the profile, the team and the billing zones can
-      now be replaced one at a time, and everything outside them is untouchable.
+    body: Each settings area has a named target. A view can return the profile, team, or billing section without rebuilding the rest of the page.
 
-  - title: Bind the fields to signals
+  - title: Bind a field and its preview to one value
     file: templates/cotton/workspace/profile.html
     match: ':bind=signals.fields.slug'
     teaches: [signals, binding]
     docs: [reactivity/signals, reactivity/binding]
-    body: |
-      The address input writes straight into the `profile.slug` signal. The
-      preview line under it reads the same signal, so `arden.app/w/…` updates as
-      you type. No handler, no JavaScript.
+    body: The input writes to profile.slug and the preview reads that same value. The schema keeps the browser binding and the server-side field name aligned.
 
-  - title: Validate while the user types
+  - title: Validate a field through a normal view
     file: templates/cotton/workspace/field.html
     match: "<c-lbr.post"
     through: 'on="{{ on }}"'
     teaches: [server-actions, live-validation]
     docs: [reactivity/actions]
-    body: |
-      Every field is wrapped in a debounced POST to a normal Django view. The
-      view checks the signals and answers with the section — so an error appears
-      under the field the moment it is wrong, and disappears the moment it isn't.
+    body: A debounced POST sends the field state to Django. The response returns the target section with the current validation result beside the field.
 
-  - title: Save one section, patch one zone
+  - title: Save the sections that changed
     file: views.py
     match: "def profile_save"
     through: '"Profile saved",'
-    teaches: [scoped-morph, server-actions, live-validation]
+    teaches: [scoped-morph, server-actions]
     docs: [reactivity/actions, reactivity/morphing]
-    body: |
-      This is the whole point of the block. Validation is strict on save; if it
-      passes, the view writes the workspace and answers with exactly two patches
-      — the profile zone and the toast. The team table and the billing tables are
-      never re-rendered, never re-queried, and never lose their scroll position.
+    body: The save view validates, writes the workspace, then returns the profile target and a toast. Other settings sections keep their existing DOM and scroll position.
 
-  - title: A toast is just another zone
-    file: templates/cotton/workspace/toast.html
-    match: 'data-init="setTimeout'
-    teaches: [scoped-morph]
-    docs: [reactivity/morphing]
-    body: |
-      The toast is not a special mechanism — it is an empty target on the page
-      that a save patches content into. It removes itself after five seconds, and
-      an empty patch would clear it just as well.
-
-  - title: Patch every zone the change touches — and only those
+  - title: Include related state in the response
     file: views.py
     match: "def plan_change"
     through: '_patch_toast(request, "Plan changed"'
     teaches: [scoped-morph, server-actions]
     docs: [reactivity/morphing]
-    body: |
-      Scoped morphing puts the staleness question on you. A seat allowance comes
-      from the plan, so changing plan really does change the team section too —
-      and the response patches both. Downgrading below the seats in use is
-      refused, and that error lands in the billing zone alone.
+    body: Changing a plan also changes the team allowance, so this response updates both targets. Use the same rule when one action affects more than one part of a page.

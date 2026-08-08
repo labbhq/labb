@@ -1,62 +1,30 @@
 steps:
-  - title: The view state is a signal bag
+  - title: Keep table state in one schema
     file: templates/pages/index.html
     match: '<c-lbr.signals id="customer-query"'
     teaches: [signals]
     docs: [reactivity/signals]
-    body: |
-      Search, status filter, sort and page live in signals, declared once from the
-      schema the view hands over. Every request the table makes carries the whole
-      bag, so no action ever has to rebuild the state it is acting on.
+    body: The page declares search, filters, sorting, and pagination once. The same schema gives the template a starting state and gives the view typed values.
 
-  - title: Search is a GET to an ordinary view
+  - title: Send the search to the normal list view
     file: templates/cotton/customers/toolbar.html
     match: 'on="input__debounce.300ms"'
     through: ':bind=signals.fields.q'
     teaches: [binding, server-actions, morphing]
     docs: [reactivity/events-and-bindings, reactivity/server-actions]
-    body: |
-      The input binds to the `filters.q` signal; a debounced GET carries it to the
-      same view that renders the page. The view filters the queryset and returns
-      the whole page — Datastar morphs the diff. There is no partial endpoint and
-      no JSON API here, just Django.
+    body: The input binds to the search field, then a debounced GET sends that state to Django. The list view filters the queryset and returns HTML for Datastar to update.
 
-  - title: Sort and paginate by moving a signal first
-    file: templates/cotton/customers/sort_header.html
-    match: "before=\"$sort.field="
-    teaches: [signals, server-actions]
-    docs: [reactivity/server-actions]
-    body: |
-      `before` runs before the request fires, so a column header only has to say
-      what it wants the state to become. The same trick pages the table and closes
-      the inline editor — one view, one context builder, no special cases.
-
-  - title: The URL follows the signal bag
+  - title: Make a filtered table shareable
     file: templates/pages/index.html
     match: '<c-lbr.signals id="customer-query"'
     through: "syncQuery"
     teaches: [signals]
     docs: [reactivity/patterns]
-    body: |
-      `syncQuery` keeps the filter, sort and page signals in the address bar as
-      they change. There is no hand-built URL and no second state format to keep
-      in step with the table.
+    body: syncQuery keeps the active filters, sort, and page in the URL. A fresh request restores them through ReactivityMiddleware before the view runs.
 
-  - title: A shared link comes back to life
-    file: views.py
-    match: "s = QuerySignals(request)"
-    teaches: [signals]
-    docs: [reactivity/signals]
-    body: |
-      The reactivity middleware restores the saved signal bag before the view
-      runs, so this one schema handles both a pasted link and a live request.
-
-  - title: Edit and delete over the same view
+  - title: Reuse the same view for row actions
     file: templates/cotton/customers/row.html
     match: "<c-lbr.delete"
     teaches: [server-actions, morphing]
     docs: [reactivity/server-actions]
-    body: |
-      Row actions hit real Django views that mutate and re-render. Because the row
-      carries a stable `id`, the morph touches only the row that changed — and the
-      summary above the table recomputes in the same response, for free.
+    body: Delete actions call an ordinary Django view and return the updated page. The stable row id lets Datastar update the changed row while the page summary stays in sync.

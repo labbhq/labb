@@ -1,5 +1,5 @@
 steps:
-  - title: The screenshot is not a screenshot
+  - title: Build the app preview from components
     file: templates/cotton/app_screenshot/shot.html
     match: "<c-lb.mockup-window"
     teaches: [theming]
@@ -9,7 +9,7 @@ steps:
       chart and table, all real components. It stays crisp on any display, weighs
       nothing to download, and follows the theme. A PNG does none of that.
 
-  - title: Every colour in the shot is a token
+  - title: Let the preview follow the active theme
     file: templates/cotton/app_screenshot/bar.html
     match: "bg-primary/20"
     teaches: [theming]
@@ -18,7 +18,7 @@ steps:
       The chart bars are `primary` at two opacities. Switch the theme and the
       chart restyles itself — no palette to maintain, and nothing to re-export.
 
-  - title: No JavaScript reaches the browser
+  - title: Keep the hero server-rendered
     file: templates/pages/index.html
     match: "<main"
     teaches: [zero-js]
@@ -27,7 +27,7 @@ steps:
       There is no script tag in this block. Datastar loads only where a page uses
       it, so a marketing page that needs nothing ships nothing.
 
-  - title: Earn the click
+  - title: Pair the call to action with proof
     file: templates/pages/index.html
     match: "<c-app-screenshot.trust"
     teaches: [zero-js]

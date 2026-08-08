@@ -1,5 +1,5 @@
 steps:
-  - title: A sign-in page that downloads nothing
+  - title: Start with a server-rendered page
     file: templates/pages/index.html
     match: "<main"
     teaches: [zero-js]
@@ -8,7 +8,7 @@ steps:
       No signals, no actions, no bundle. Reactivity in labb is opt-in, and this
       treatment opts out entirely — the browser gets HTML and CSS and stops there.
 
-  - title: The proof comes before the form
+  - title: Extract the proof section
     file: templates/cotton/social_signin/proof.html
     match: '<div id="proof-rating"'
     teaches: [zero-js]
@@ -18,7 +18,7 @@ steps:
       the treatment you reach for when the visitor still needs a reason. Both are
       plain markup and icons, so neither costs a request.
 
-  - title: Colour is a token, even for stars
+  - title: Use theme tokens for the rating
     file: templates/cotton/social_signin/proof.html
     match: 'class="flex items-center gap-0.5 text-warning"'
     teaches: [theming]
@@ -28,7 +28,7 @@ steps:
       like everything else on the page, which is what keeps the block usable in a
       theme nobody has picked yet.
 
-  - title: Surrounding matter, not decoration
+  - title: Keep the supporting content reusable
     file: templates/cotton/social_signin/quote.html
     match: '<c-lb.card id="proof-quote"'
     teaches: [zero-js]

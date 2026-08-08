@@ -1,5 +1,5 @@
 steps:
-  - title: The page is an outline
+  - title: Compose the pricing page from small components
     file: templates/pages/index.html
     match: "<c-highlight-tiers.tier :plan=plan />"
     teaches: [zero-js]
@@ -8,7 +8,7 @@ steps:
       One loop over three plans, then the proof strip. All the card markup lives in the
       tier component, so the page stays readable at a glance.
 
-  - title: The featured card is built from theme tokens
+  - title: Use theme tokens for the featured tier
     file: templates/cotton/highlight_tiers/tier.html
     match: "border-primary border-2 shadow-lg ring-1 ring-primary/20"
     teaches: [theming]
@@ -18,7 +18,7 @@ steps:
       cue a theme token, so it recolours with the theme instead of fighting it. The
       cards stay the same size; only fill and border say which one is featured.
 
-  - title: No script tag, anywhere
+  - title: Keep the comparison server-rendered
     file: templates/pages/index.html
     match: "<main class="
     teaches: [zero-js]

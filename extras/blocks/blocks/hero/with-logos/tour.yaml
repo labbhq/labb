@@ -1,5 +1,5 @@
 steps:
-  - title: The logo cloud is the point
+  - title: Add a logo cloud as a reusable section
     file: templates/pages/index.html
     match: "<c-with-logos.cloud"
     teaches: [zero-js]
@@ -8,7 +8,7 @@ steps:
       A hero that only asserts is a template. This one shows who already agreed.
       The cloud is the block's surrounding matter, and it is still just HTML.
 
-  - title: Customer marks come from labb's icon pack
+  - title: Render customer marks with icons
     file: templates/cotton/with_logos/logo.html
     match: "<c-lbi n="
     teaches: [theming]
@@ -18,7 +18,7 @@ steps:
       files, no CDN call and no third-party licence into the project that installs
       it. Swap in real SVG logos when you have them.
 
-  - title: The list lives in block.yaml
+  - title: Replace preview data with your own list
     file: templates/cotton/with_logos/cloud.html
     match: '<c-vars :customers="[]" />'
     teaches: [zero-js]

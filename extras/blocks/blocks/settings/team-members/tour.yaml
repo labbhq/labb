@@ -1,5 +1,5 @@
 steps:
-  - title: Four signals, and one of them never changes
+  - title: Declare roles and saved state
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -9,7 +9,7 @@ steps:
       is never mutated. Keeping both is what makes an unsaved-changes bar possible
       without any bookkeeping.
 
-  - title: Every dropdown binds to its own path
+  - title: Bind each member role
     file: templates/cotton/team_members/roster.html
     match: 'bind="$roles.{{ member.key }}"'
     teaches: [binding]
@@ -20,7 +20,7 @@ steps:
       over from there. Bound paths must be lowercase — the browser lowercases attribute
       names, and a mismatched path silently binds to nothing.
 
-  - title: The row marks itself when it drifts
+  - title: Mark rows with unsaved changes
     file: templates/cotton/team_members/roster.html
     match: "data-class=\"{'bg-warning/5': $roles.{{ member.key }} !== $saved.{{ member.key }}}\""
     teaches: [signals, theming]
@@ -29,7 +29,7 @@ steps:
       A comparison between the two signals, rendered as a theme-token tint. Nothing
       tracks which rows changed — the difference *is* the state.
 
-  - title: The unsaved bar is derived, not tracked
+  - title: Show the save bar from derived state
     file: templates/cotton/team_members/savebar.html
     match: 'data-show="Object.keys($roles).filter(k => $roles[k] !== $saved[k]).length > 0"'
     teaches: [signals]
@@ -39,7 +39,7 @@ steps:
       and it goes away, with no request in between. Discard copies `saved` back over
       `roles` and the whole page settles.
 
-  - title: The invite line reads three signals at once
+  - title: Build the invitation preview from state
     file: templates/cotton/team_members/invite.html
     match: "data-text=\"($invite.email || 'They') + ' will join as a ' + $rolelabels[$invite.role] + '.'\""
     teaches: [signals, binding]

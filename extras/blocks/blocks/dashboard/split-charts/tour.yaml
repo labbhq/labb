@@ -1,5 +1,5 @@
 steps:
-  - title: Three ranges, one signal
+  - title: Declare the selected chart range
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -9,7 +9,7 @@ steps:
       the one currently on screen — its labels, its summary numbers and all three of
       its chart datasets. There is no analytics view behind this block.
 
-  - title: A chart bound to a signal path
+  - title: Bind chart data to state
     file: templates/pages/index.html
     match: 'data="$view.mrr"'
     teaches: [charts, reactive-props]
@@ -19,7 +19,7 @@ steps:
       an expression — that is the rule that shapes this block. Change the signal and
       Chart.js animates to the new series instead of the canvas being rebuilt.
 
-  - title: Swap the whole object, redraw everything
+  - title: Replace the chart state for a new range
     file: templates/cotton/split_charts/header.html
     match: "data-on:click=\"$view = ardenRange('7d')\""
     teaches: [signals, charts]
@@ -30,7 +30,7 @@ steps:
       four stats and the caption all land on the new range in one assignment. Open the
       network tab and switch: nothing fires.
 
-  - title: The buttons restyle themselves from the same signal
+  - title: Style the selected range button
     file: templates/cotton/split_charts/header.html
     match: 'btnStyle="$view.d7Style:ghost"'
     teaches: [reactive-props]
@@ -40,7 +40,7 @@ steps:
       the signal, with the server-rendered fallback after the colon. The page is correct
       before Datastar loads, and labb recomputes the daisyUI classes in the browser.
 
-  - title: Chart colours are theme tokens
+  - title: Keep chart colours in the theme
     file: templates/cotton/split_charts/panel.html
     match: 'class="bg-base-100 {{ class }}"'
     teaches: [theming, charts]

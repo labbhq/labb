@@ -1,5 +1,5 @@
 steps:
-  - title: A page, and not one byte of JavaScript
+  - title: Start with a server-rendered billing page
     file: templates/pages/index.html
     match: "<c-billing-panel.header"
     teaches: [zero-js]
@@ -9,7 +9,7 @@ steps:
       all. A billing page is read far more often than it is clicked, and this one is
       pure HTML: view the source and there is no script tag with a src.
 
-  - title: The same invoices the data table shows
+  - title: Reuse the invoice table pattern
     file: templates/cotton/billing_panel/invoices.html
     match: "{{ invoice.number }}</td>"
     teaches: [zero-js]
@@ -19,7 +19,7 @@ steps:
       block sorts and filters — one fixture universe, so the gallery reads as one
       product rather than eight demos.
 
-  - title: Digits that line up
+  - title: Use tabular numbers for invoice totals
     file: templates/cotton/billing_panel/invoices.html
     match: '<td class="text-right tabular-nums font-medium whitespace-nowrap">'
     teaches: [theming]
@@ -28,7 +28,7 @@ steps:
       `tabular-nums` on every column of figures. It is the cheapest thing on this
       page and the most obvious difference between a template and a product.
 
-  - title: A card built from theme tokens
+  - title: Use theme tokens for the plan summary
     file: templates/cotton/billing_panel/method.html
     match: 'class="rounded-box bg-base-200'
     teaches: [theming]

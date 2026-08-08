@@ -1,5 +1,5 @@
 steps:
-  - title: Two signals run the whole wizard
+  - title: Declare the step and answer state
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals, multi-step]
@@ -8,7 +8,7 @@ steps:
       One signal holds the step, one holds every answer. There is no view behind
       this block and no session: the wizard is a page that changes what it shows.
 
-  - title: A step is a client-side show
+  - title: Show the active step
     file: templates/pages/index.html
     match: 'data-show="$step === 2"'
     teaches: [signals, multi-step]
@@ -18,7 +18,7 @@ steps:
       back never loses a keystroke — the inputs were never destroyed, and their
       values live in the signal bag anyway.
 
-  - title: The stepper reads the same signal
+  - title: Keep navigation in sync with the step
     file: templates/cotton/horizontal_steps/stepper.html
     match: "data-class=\"{'bg-primary text-primary-content'"
     teaches: [signals, theming]
@@ -28,7 +28,7 @@ steps:
       swaps theme tokens — no fixed colours, so the stepper is legible in every
       daisyUI theme.
 
-  - title: Moving is arithmetic, not a request
+  - title: Move between steps in the browser
     file: templates/cotton/horizontal_steps/nav.html
     match: 'data-on:click="$step = Math.min($step + 1, 3)"'
     teaches: [signals, multi-step]
@@ -38,7 +38,7 @@ steps:
       whole wizard: nothing is sent. The real submit belongs on a server, and that
       is what the onboarding anchor is for.
 
-  - title: Inputs write straight into the bag
+  - title: Bind fields to the answer state
     file: templates/cotton/horizontal_steps/step_data.html
     match: 'data-bind="form.source"'
     teaches: [binding]

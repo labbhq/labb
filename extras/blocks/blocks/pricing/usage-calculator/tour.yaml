@@ -1,5 +1,5 @@
 steps:
-  - title: One signal, derived in the browser
+  - title: Declare the quote state
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -9,7 +9,7 @@ steps:
       It arrives as an object in prop mode, so the page renders a correct quote
       server-side before any JavaScript runs.
 
-  - title: The slider recomputes the quote
+  - title: Recalculate when the range changes
     file: templates/cotton/usage_calc/slider.html
     match: 'data-on:input="$usage = ardenUsage(el.value, $usage.annual)"'
     teaches: [signals]
@@ -19,7 +19,7 @@ steps:
       lives in one small function above, which keeps the handler a single call — and
       keeps the network tab empty, because there is no server in this block at all.
 
-  - title: A component prop follows the derived plan
+  - title: Drive the plan badge from the quote
     file: templates/cotton/usage_calc/slider.html
     match: 'variant="$usage.planVariant:primary"'
     teaches: [reactive-props]
@@ -30,7 +30,7 @@ steps:
       server-rendered fallback. labb recomputes the daisyUI classes client-side — you
       never write a class string by hand.
 
-  - title: Line items read the same signal
+  - title: Reuse the quote across the summary
     file: templates/cotton/usage_calc/slider.html
     match: 'data-text="$usage.seatCost"'
     teaches: [reactive-props]

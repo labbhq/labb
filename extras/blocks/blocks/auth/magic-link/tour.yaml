@@ -1,5 +1,5 @@
 steps:
-  - title: Two signals hold the whole flow
+  - title: Declare the email and sent state
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -9,7 +9,7 @@ steps:
       lives in the browser. There is no view behind this block, no endpoint, and no
       session to keep — the server is not involved at all.
 
-  - title: The email input writes into the signal
+  - title: Bind the email field
     file: templates/cotton/magic_link/form.html
     match: 'bind="$email"'
     teaches: [signals]
@@ -19,7 +19,7 @@ steps:
       field simply is the signal, which is what lets the next screen greet the user
       by the address they typed.
 
-  - title: Sending is a signal assignment
+  - title: Set sent state from the action
     file: templates/cotton/magic_link/form.html
     match: 'data-on:click="$sent = true"'
     teaches: [signals]
@@ -29,7 +29,7 @@ steps:
       state and the wire stays silent. Point the button at a `c-lbr.post` when you
       wire it to a real mailer, and everything else here stays as it is.
 
-  - title: Two panels, one boolean
+  - title: Swap panels from the sent state
     file: templates/cotton/magic_link/sent.html
     match: 'data-show="$sent"'
     teaches: [signals]
@@ -39,7 +39,7 @@ steps:
       screen. The sent card reads the address straight out of `$email`, so it is
       personal without ever having asked a server who is signing in.
 
-  - title: A flow, not a field
+  - title: Keep the supporting panel as a component
     file: templates/cotton/magic_link/aside.html
     match: '<div id="magic-aside"'
     teaches: [theming]

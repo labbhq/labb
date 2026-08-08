@@ -1,5 +1,5 @@
 steps:
-  - title: The chosen photo is a signal, not an upload
+  - title: Declare the selected image state
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -8,7 +8,7 @@ steps:
       One object signal holds the preview URL and the file name. Nothing is sent
       anywhere: the file stays in the browser until the form is saved.
 
-  - title: A helper, because the handler would not fit in an attribute
+  - title: Put image parsing in a small helper
     file: templates/pages/index.html
     match: "function ardenPickAvatar(evt)"
     teaches: [signals]
@@ -18,7 +18,7 @@ steps:
       belong in a function, and `evt` is available inside any Datastar expression, so
       the attribute is left readable.
 
-  - title: The file input assigns the whole object
+  - title: Store the selected file in the signal
     file: templates/cotton/profile_card/avatar.html
     match: 'data-on:change="$avatar = ardenPickAvatar(evt)"'
     teaches: [signals]
@@ -27,7 +27,7 @@ steps:
       Replacing the object updates both readers at once — the preview and the file
       name. Remove sets it back to empty, and the initials avatar comes straight back.
 
-  - title: Two views of one signal
+  - title: Update the preview from the same state
     file: templates/cotton/profile_card/avatar.html
     match: 'data-attr:src="$avatar.url"'
     teaches: [signals, theming]

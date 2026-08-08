@@ -1,5 +1,5 @@
 steps:
-  - title: Type does the work, not JavaScript
+  - title: Build hierarchy with type and spacing
     file: templates/pages/index.html
     match: "text-4xl sm:text-5xl lg:text-6xl"
     teaches: [zero-js]
@@ -8,7 +8,7 @@ steps:
       A centred hero has one job: the sentence. It scales with the viewport and
       ships as plain HTML — no bundle, no hydration, nothing to wait for.
 
-  - title: The proof row is the block
+  - title: Extract the proof row component
     file: templates/pages/index.html
     match: "<c-centred-bold.proof"
     teaches: [zero-js]
@@ -18,7 +18,7 @@ steps:
       as templates. The rating strip, the avatar group and the customer quote are
       what make this one a page.
 
-  - title: Avatars without an asset
+  - title: Use the avatar group for social proof
     file: templates/cotton/centred_bold/proof.html
     match: '<c-lb.avatar.group'
     teaches: [theming]

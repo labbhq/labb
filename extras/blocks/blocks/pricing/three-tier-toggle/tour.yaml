@@ -1,5 +1,5 @@
 steps:
-  - title: One signal holds the billing period
+  - title: Declare the billing period
     file: templates/pages/index.html
     match: "<c-lbr.signals"
     teaches: [signals]
@@ -9,7 +9,7 @@ steps:
       mode — an object literal, no schema and no view behind it. There is no
       pricing endpoint in this block because there is nothing for a server to do.
 
-  - title: Flipping the period is a signal assignment
+  - title: Change the period from the toggle
     file: templates/cotton/tier_toggle/header.html
     match: 'data-on:click="$period = ardenPeriod(true)"'
     teaches: [signals]
@@ -19,7 +19,7 @@ steps:
       no fetch, no request, nothing on the wire. Open the network tab and toggle —
       it stays empty.
 
-  - title: A component prop bound to the signal
+  - title: Style the active choice with a signal
     file: templates/cotton/tier_toggle/header.html
     match: 'btnStyle="$period.annualStyle:ghost"'
     teaches: [reactive-props]
@@ -30,7 +30,7 @@ steps:
       correct before a single byte of JavaScript runs. The button restyles itself
       when the signal changes, and labb recomputes its daisyUI classes in the browser.
 
-  - title: Every price re-renders from the same signal
+  - title: Update each price from the period
     file: templates/cotton/tier_toggle/tier.html
     match: "data-text=\"$period.annual ?"
     teaches: [reactive-props]

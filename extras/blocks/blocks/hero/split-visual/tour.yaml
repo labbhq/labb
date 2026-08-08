@@ -1,5 +1,5 @@
 steps:
-  - title: A hero that ships no JavaScript
+  - title: Start with a server-rendered hero
     file: templates/pages/index.html
     match: "<main"
     teaches: [zero-js]
@@ -9,7 +9,7 @@ steps:
       bundle and no hydration step — Datastar only loads on pages that ask for
       it, and this page never does.
 
-  - title: The product shot is markup, not an image
+  - title: Build the product visual from components
     file: templates/cotton/split_visual/shot.html
     match: "<c-lb.mockup-browser"
     teaches: [theming]
@@ -19,7 +19,7 @@ steps:
       weighs nothing, stays sharp at any density, and recolours with the theme —
       which a screenshot cannot do.
 
-  - title: Colour comes from tokens, never from hex
+  - title: Keep the visual in the active theme
     file: templates/cotton/split_visual/shot.html
     match: "border border-base-300/60 bg-base-200/40"
     teaches: [theming]
@@ -29,7 +29,7 @@ steps:
       the daisyUI theme and it follows. A fixed colour here would look deliberate
       in exactly one theme and broken in the other thirty-four.
 
-  - title: Say something beyond the headline
+  - title: Extract the proof content
     file: templates/pages/index.html
     match: "<c-split-visual.proof"
     teaches: [zero-js]
