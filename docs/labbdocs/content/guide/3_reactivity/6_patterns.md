@@ -22,11 +22,13 @@ Keep template event handlers short. Move longer logic into a named function in a
 
 ## Keep shareable state in the URL
 
-Add `syncQuery` to write signal state to the query string and restore it on load. Use it for filters, sorting, and pagination that a user might bookmark or share.
+Add `syncQuery` to keep filter, sort, and page state in the URL. On a first load, the middleware restores those values before your view reads its signals. The customers block uses this pattern for its search and status filter.
 
 ```html
 <c-lbr.signals :schema=signals syncQuery />
 ```
+
+The default flat encoding keeps URLs readable, with namespaced parameters such as `?lbr.filters.q=atlas&lbr.page=2`. Configure the query key or encoding in `LABB_SETTINGS` when you need a different format.
 
 Do not sync free-text fields such as names or email addresses because the values appear in the URL. Keep query state and page-local state in separate `<c-lbr.signals>` declarations.
 
@@ -34,8 +36,6 @@ Do not sync free-text fields such as names or email addresses because the values
 <c-lbr.signals id="query" :schema=query_signals syncQuery />
 <c-lbr.signals id="ui" :schema=ui_signals />
 ```
-
-`syncQuery` stores an opaque value. For a readable URL such as `?q=atlas&sort=mrr&page=2`, use [`c-lbr.replace-url`]({% doc_url '5_references/7_reactivity_reference.md' 'guide' %}) and load it with `Signals.from_query`. Use one approach for a page, not both.
 
 <c-lbdocs.block_grid refs="lb/data-table/with-filters, lb/data-table/customers, lb/data-table/expandable-rows" />
 

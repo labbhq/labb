@@ -179,7 +179,7 @@ Open the block’s page. A fullstack block now runs against your database, inclu
 
 ## Explore the interactive tour
 
-Open a fullstack block in the [block gallery](/blocks/), switch the previewer to **Code**, and use the tour panel beside the source. It walks through the view, templates, and components that make up the feature.
+Open a fullstack block in the [block gallery](/blocks/), switch the previewer to **Code**, and use the panel beside the source. Each short step starts with one labb feature, jumps to the line that uses it, and links to the guide when you want the full API or pattern. Start with the tour, then follow the code path that matters to the part you are adapting.
 
 ## Related
 

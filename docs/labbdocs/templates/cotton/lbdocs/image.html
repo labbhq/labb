@@ -1,0 +1,29 @@
+<c-vars
+    src=""
+    alt=""
+    caption=""
+    loading="lazy"
+    class=""
+/>
+
+{% with grain="lbdocs-grain-"|add:src|slugify %}
+<figure class="not-prose relative isolate my-10 overflow-hidden rounded-2xl bg-base-200 p-7 sm:p-12 {{ class }}">
+    <div aria-hidden="true" class="absolute inset-0 z-0" style="background:
+        radial-gradient(ellipse 85% 100% at -20% -15%, #0f766e 0%, transparent 60%),
+        radial-gradient(ellipse 90% 80% at 112% 115%, #4f46e5 0%, transparent 62%),
+        linear-gradient(125deg, #1d4ed8 0%, #1d4ed8 38%, #0f766e 70%, #4f46e5 100%);">
+    </div>
+    <div aria-hidden="true" class="absolute -left-12 top-1/2 z-0 h-28 w-2/3 -translate-y-1/2 -rotate-12 rounded-full bg-[#0f766e]/65 blur-xl"></div>
+    <div aria-hidden="true" class="absolute -right-16 top-2 z-0 h-32 w-1/2 rotate-[18deg] rounded-[45%] bg-[#4f46e5]/65 blur-xl"></div>
+    <svg aria-hidden="true" class="pointer-events-none absolute inset-0 z-[1] h-full w-full opacity-[0.13] mix-blend-soft-light" preserveAspectRatio="none">
+        <filter id="{{ grain }}">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#{{ grain }})" />
+    </svg>
+    <img src="{{ src }}" alt="{{ alt }}" loading="{{ loading }}" class="relative z-10 block w-full rounded-lg" />
+    {% if caption %}
+    <figcaption class="px-2 pt-3 text-sm text-base-content/60">{{ caption }}</figcaption>
+    {% endif %}
+</figure>
+{% endwith %}

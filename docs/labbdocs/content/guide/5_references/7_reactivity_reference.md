@@ -1,58 +1,60 @@
 ---
 title: Reactivity
-description: "API reference for labb reactivity: c-lbr.signals, reactive props, c-lbr.get / post / delete, c-lbr.target, request.signals, and the data- attributes."
+description: "Reference for labb’s reactive components, signal bindings, and server request helpers."
 keywords: "labb c-lbr reference, datastar django, labb signals api, django reactivity reference"
 ---
 
-Every reactivity component and prop. The `c-lbr.` components are thin Cotton wrappers over [Datastar](https://data-star.dev/), which does the runtime work of transporting signals and morphing responses into the DOM. For a walkthrough, start with the [Overview]({% doc_url '3_reactivity/1_overview.md' 'guide' %}).
+Use these components and attributes to keep browser state, component props, and Django views in sync. The `c-lbr.` components wrap [Datastar](https://data-star.dev/), which carries signals with requests and applies HTML updates. Start with the [Reactivity overview]({% doc_url '3_reactivity/1_overview.md' 'guide' %}) if you want the guided version.
 
 ## `c-lbr.signals`
 
-Declares signals for the page and loads the reactivity runtime. Place it near the top of the body.
+Declare the state a page needs and load the reactivity runtime. Put the declaration near the top of the page body.
 
 ```html
-<!-- scalar values: "true"/"false" become booleans, everything else is a string -->
+<!-- Scalars are strings, except "true" and "false", which become booleans. -->
 <c-lbr.signals $count="0" $filters.q="" $open="false" />
 
-<!-- a number, list, or object from a Python literal or context variable -->
+<!-- Use a : binding for a number, list, object, or context value. -->
 <c-lbr.signals :$config="{'page': 1, 'sort': 'name'}" />
 
-<!-- a typed schema instance from the view -->
+<!-- A typed schema instance supplied by the view. -->
 <c-lbr.signals :schema=signals syncQuery />
 ```
 
-Set signals in whichever form fits. A plain `$name="..."` prop is JSON-encoded as a literal string, so `$page="1"` is the string `"1"`. For a number, list, or object, use a `:$name="..."` Cotton binding: `:$page="1"` is the number `1`.
+Use a plain `$name="..."` prop for a string. For a number, list, or object, add `:` before the prop name. For example, `$page="1"` declares the string `"1"`, while `:$page="1"` declares the number `1`.
+
+Add `syncQuery` when filters, sorting, or pagination should survive a refresh and appear in a shareable URL. `ReactivityMiddleware` restores those values before the view reads its signals. See [URL state]({% doc_url '3_reactivity/6_patterns.md' 'guide' %}) for the pattern and its trade-offs.
 
 <c-lbdocs.api_table component_name="lbr.signals" />
 
-Signals also accept `$`-prefixed props (`$name="value"`, `$path.sub="value"`) which are not listed above because they are dynamic. The `id` attribute names the element, which matters when a page has more than one `<c-lbr.signals>`.
+You can declare nested signals with dynamic props such as `$filters.q=""`. Give each declaration an `id` when a page has more than one `<c-lbr.signals>` element.
 
 ## Reactive props
 
-Prefix any component prop with `$` and a signal name to make it reactive. The value after the colon is the fallback the server renders on first load:
+Prefix a component prop with a signal name to update it in the browser. The value after the colon supplies the first server-rendered value.
 
 ```html
 <c-lb.badge variant="$status:success" size="lg">Active</c-lb.badge>
 ```
 
-When the signal changes, the component recomputes that prop in the browser. A single reactive `$`-prop loads the runtime on its own, so it works with no other setup. You do not list the possible values anywhere; labb includes the styles for every value of a reactive prop in your CSS automatically.
+labb recalculates the prop when `$status` changes. A reactive prop loads the runtime even without a separate action. labb also includes styles for the prop’s possible component variants in the generated CSS.
 
 ## Client-side attributes
 
-For interactivity that stays in the browser, use these attributes directly. They are available on any element once a `c-lbr.` component or a reactive `$`-prop has loaded the runtime. In an expression, the event is `evt` and the element is `el`, both written without a `$` prefix.
+These Datastar attributes handle browser-only interactions. They work after a `c-lbr.` component or reactive prop loads the runtime. Expressions receive the event as `evt` and the element as `el`.
 
-| Attribute | Does |
-|-----------|------|
-| `bind="$filters.q"` | On a form component, keeps a signal in sync with the input. Accepts a `$`-prefixed path, a bare path (`bind="filters.q"`), or `schema.fields.q`. |
-| `data-on:click="$open = !$open"` | Runs an expression on a DOM event. Add timing with `__debounce.300ms` or `__throttle.50ms`. |
-| `data-show="$open"` | Shows or hides the element. |
-| `data-text="$label"` | Sets the element's text. |
-| `data-class="{'active': $open}"` | Toggles classes. A key may hold several space-separated classes. |
-| `data-attr:href="$url"` | Sets any attribute reactively. |
+| Attribute | Use |
+|-----------|-----|
+| `bind="$filters.q"` | Keep a form component and a signal in sync. Accepts a `$` path, a bare path such as `filters.q`, or `schema.fields.q`. |
+| `data-on:click="$open = !$open"` | Run an expression for a DOM event. Add `__debounce.300ms` or `__throttle.50ms` when the event fires often. |
+| `data-show="$open"` | Show or hide an element. |
+| `data-text="$label"` | Replace an element’s text. |
+| `data-class="{'active': $open}"` | Add or remove classes. A key can contain several space-separated classes. |
+| `data-attr:href="$url"` | Set an attribute from a signal. |
 
 ## `c-lbr.get`
 
-Fires a GET request on any DOM event. Wrap the element that triggers it.
+Send a GET request when the wrapped element fires its event.
 
 ```html
 <c-lbr.get to="todos:detail" pk=todo.pk>
@@ -64,7 +66,7 @@ Fires a GET request on any DOM event. Wrap the element that triggers it.
 
 ## `c-lbr.post`
 
-Fires a POST request. Defaults to a `<form>` on submit and posts the current signal bag as JSON, so the view reads `request.signals`. csrf is handled for you, so there is no manual `{% templatetag openblock %} csrf_token {% templatetag closeblock %}`. To send a classic form-encoded body that the view reads from `request.POST`, opt in with `options="{contentType: 'form'}"`.
+Send a POST request. On a form, it runs on submit and sends the current signal bag as JSON, which you read from `request.signals`. labb handles CSRF protection. Pass `options="{contentType: 'form'}"` when a view expects a classic form body in `request.POST`.
 
 ```html
 <c-lbr.signals $text="" />
@@ -79,7 +81,7 @@ Fires a POST request. Defaults to a `<form>` on submit and posts the current sig
 
 ## `c-lbr.delete`
 
-Fires a DELETE request, optionally behind a browser confirm dialog.
+Send a DELETE request. Add `confirm` when the browser should ask before it sends the request.
 
 ```html
 <c-lbr.delete to="todos:delete" pk=todo.pk confirm="Delete this todo?">
@@ -91,7 +93,7 @@ Fires a DELETE request, optionally behind a browser confirm dialog.
 
 ## `c-lbr.target`
 
-Marks a named region as a stable anchor for updates. Server-side, `@name` resolves to that element.
+Name a stable update region. In a Django response, `@name` resolves to this element.
 
 ```html
 <c-lbr.target name="results">
@@ -103,17 +105,17 @@ Marks a named region as a stable anchor for updates. Server-side, `@name` resolv
 
 ## `c-lbr.replace-url`
 
-Writes a clean, shareable URL into the address bar (`?q=atlas&sort=mrr&page=2`) with `history.replaceState`, so search, sort, and pagination land in a link a user can copy. The server names the URL; `Signals.from_query` reads it back on a cold load. Use this when the URL must be shareable, and `syncQuery` on `<c-lbr.signals>` when nobody reads the state back. Never run both; they fight over the address bar.
+Replace the current address without navigating. Use it when an action changes a route or record URL. It does not serialize signal state. Use `syncQuery` on `<c-lbr.signals>` for filters, sorting, and pagination.
 
 ```html
-<c-lbr.replace-url to="customers:index" />
+<c-lbr.replace-url to="/settings/billing/" />
 ```
 
 <c-lbdocs.api_table component_name="lbr.replace-url" />
 
-## On the server
+## In a Django view
 
-Reactive actions send the current signals with every request. Read them in the view:
+Reactive requests include the current signal bag. Read it from `request.signals`.
 
 ```python
 def index(request):
@@ -121,12 +123,12 @@ def index(request):
     return render(request, "todos/index.html", {"todos": search(q)})
 ```
 
-| Object | Description |
-|--------|------|
-| `request.signals` | A dict of the current signals. |
-| `request.is_datastar` | `True` when the request came from a reactive action, so you can return the page for an in-place update or redirect otherwise. |
+| Object | Use |
+|--------|-----|
+| `request.signals` | The current signals as a dictionary. |
+| `request.is_datastar` | `True` for a reactive request. Use it when a view needs an in-place response for Datastar and a full-page response otherwise. |
 
-`ReactivityMiddleware` populates `request.signals`, so add it to `MIDDLEWARE`:
+`ReactivityMiddleware` reads the signals before the view runs. Add it to `MIDDLEWARE`:
 
 <c-lbdocs.codeblock.title title="settings.py">
 ```python
@@ -139,7 +141,7 @@ MIDDLEWARE = [
 
 ### Typed signals
 
-For validated, typed access, define a `Signals` class instead of reading the dict by hand:
+Define a `Signals` class when you want validated, typed fields instead of reading the dictionary by hand.
 
 ```python
 from labb.signals import Signals, Str, Int
@@ -149,8 +151,20 @@ class TodoSignals(Signals):
     page = Int(default=1, min_value=1)
 
 def index(request):
-    s = TodoSignals(request)
-    return render(request, "todos/index.html", {"signals": s, "todos": search(s.q)})
+    signals = TodoSignals(request)
+    return render(request, "todos/index.html", {"signals": signals, "todos": search(signals.q)})
 ```
 
-Pass the instance to `<c-lbr.signals :schema=signals />` to declare the same signals on the page, and to a form component with `<c-lb.input :bind=signals.fields.q />` to bind by field.
+Pass the instance to `<c-lbr.signals :schema=signals />` to declare the same state in the browser.
+
+### Schema fields in templates
+
+`signals.q` is the parsed value that your view uses. `signals.fields.q` is its `SignalField` descriptor. It carries the field’s declared path, so you can pass it directly to a form component with a Cotton binding.
+
+```html
+<c-lbr.signals :schema=signals />
+
+<c-lb.input type="search" :bind=signals.fields.q placeholder="Search" />
+```
+
+The input reads the descriptor’s `filters.q` path and renders `data-bind:filters.q`. That keeps the schema, template binding, and server-side value on the same name. Use a string path such as `bind="$filters.q"` for small page-local state.
