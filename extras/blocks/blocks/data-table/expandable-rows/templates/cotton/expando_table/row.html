@@ -2,17 +2,26 @@
 
 <tr
     id="expando-row-{{ customer.id }}"
-    class="border-base-300 cursor-pointer hover:bg-base-200/40"
-    data-on:click="$open = $open === {{ customer.id }} ? 0 : {{ customer.id }}"
+    class="border-base-300 hover:bg-base-200/40"
 >
 
     <td class="text-base-content/40">
-        <span data-show="$open !== {{ customer.id }}">
-            <c-lbi.rmx.arrow-right-s w="16" h="16" />
-        </span>
-        <span style="display:none" data-show="$open === {{ customer.id }}">
-            <c-lbi.rmx.arrow-down-s w="16" h="16" />
-        </span>
+        <button
+            id="expando-toggle-{{ customer.id }}"
+            type="button"
+            data-lbb-start
+            class="btn btn-square btn-ghost btn-xs"
+            aria-controls="expando-detail-{{ customer.id }}"
+            aria-label="Toggle details for {{ customer.company }}"
+            data-attr:aria-expanded="$open === {{ customer.id }} ? 'true' : 'false'"
+            data-on:click="$open = $open === {{ customer.id }} ? 0 : {{ customer.id }}">
+            <span data-show="$open !== {{ customer.id }}">
+                <c-lbi.rmx.arrow-right-s w="16" h="16" />
+            </span>
+            <span style="display:none" data-show="$open === {{ customer.id }}">
+                <c-lbi.rmx.arrow-down-s w="16" h="16" />
+            </span>
+        </button>
     </td>
 
     <td>
@@ -25,7 +34,7 @@
         </div>
     </td>
 
-    <td class="text-base-content/70">{{ customer.plan }}</td>
+    <td class="hidden md:table-cell text-base-content/70">{{ customer.plan }}</td>
 
     <td>
         <div class="flex items-center gap-1.5">
@@ -36,8 +45,8 @@
 
     <td class="text-end tabular-nums font-medium">${{ customer.mrr }}</td>
 
-    <td class="text-end tabular-nums text-base-content/70">{{ customer.seats_used }} / {{ customer.seats }}</td>
+    <td class="hidden lg:table-cell text-end tabular-nums text-base-content/70">{{ customer.seats_used }} / {{ customer.seats }}</td>
 
-    <td class="text-end tabular-nums text-base-content/60 whitespace-nowrap">{{ customer.renews }}</td>
+    <td class="hidden md:table-cell text-end tabular-nums text-base-content/60 whitespace-nowrap">{{ customer.renews }}</td>
 
 </tr>

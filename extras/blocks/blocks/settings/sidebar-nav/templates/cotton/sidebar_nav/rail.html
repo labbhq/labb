@@ -28,6 +28,7 @@
         <c-lb.menu.item
             id="nav-{{ item.key }}"
             class="cursor-pointer"
+            data-lbb-start
             data-on:click="$section = '{{ item.key }}'"
             data-class="{'menu-active': $section === '{{ item.key }}'}"
         >

@@ -14,7 +14,7 @@
                 <th>
                     <c-customers.sort-header field="company" label="Customer" :next_dir=next_dir.company :sort_field=sort_field :sort_dir=sort_dir />
                 </th>
-                <th>
+                <th class="hidden md:table-cell">
                     <c-customers.sort-header field="plan" label="Plan" :next_dir=next_dir.plan :sort_field=sort_field :sort_dir=sort_dir />
                 </th>
                 <th>
@@ -23,13 +23,13 @@
                 <th class="text-end">
                     <c-customers.sort-header field="mrr" label="MRR" :next_dir=next_dir.mrr :sort_field=sort_field :sort_dir=sort_dir numeric />
                 </th>
-                <th class="text-end">
+                <th class="hidden lg:table-cell text-end">
                     <c-customers.sort-header field="seats" label="Seats" :next_dir=next_dir.seats :sort_field=sort_field :sort_dir=sort_dir numeric />
                 </th>
-                <th class="text-end">
+                <th class="hidden lg:table-cell text-end">
                     <c-customers.sort-header field="billed" label="Billed" :next_dir=next_dir.billed :sort_field=sort_field :sort_dir=sort_dir numeric />
                 </th>
-                <th class="text-end">
+                <th class="hidden md:table-cell text-end">
                     <c-customers.sort-header field="renews" label="Renews" :next_dir=next_dir.renews :sort_field=sort_field :sort_dir=sort_dir numeric />
                 </th>
                 <th class="w-20"></th>

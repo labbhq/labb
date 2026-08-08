@@ -12,7 +12,7 @@
         </div>
     </td>
 
-    <td class="text-base-content/70">{{ customer.plan }}</td>
+    <td class="hidden md:table-cell text-base-content/70">{{ customer.plan }}</td>
 
     <td>
         <c-lb.badge variant="{{ customer.status_variant }}" style="soft" size="xs">{{ customer.status }}</c-lb.badge>
@@ -20,9 +20,9 @@
 
     <td class="text-end tabular-nums font-medium">${{ customer.mrr }}</td>
 
-    <td class="text-end tabular-nums text-base-content/70">{{ customer.seats }}</td>
+    <td class="hidden lg:table-cell text-end tabular-nums text-base-content/70">{{ customer.seats }}</td>
 
-    <td class="text-end tabular-nums text-base-content/60 whitespace-nowrap">{{ customer.renews }}</td>
+    <td class="hidden md:table-cell text-end tabular-nums text-base-content/60 whitespace-nowrap">{{ customer.renews }}</td>
 
     <td class="text-end">
         <c-lb.badge variant="{{ customer.health_variant }}" style="outline" size="xs">{{ customer.health }}</c-lb.badge>

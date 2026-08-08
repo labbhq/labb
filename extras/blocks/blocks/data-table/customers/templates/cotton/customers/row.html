@@ -20,7 +20,7 @@
         </div>
     </td>
 
-    <td>
+    <td class="hidden md:table-cell">
         <c-lb.badge style="soft" size="sm">{{ customer.plan.name|default:"No plan" }}</c-lb.badge>
     </td>
 
@@ -39,16 +39,16 @@
 
     <td class="text-end tabular-nums font-medium">${{ customer.mrr_display }}</td>
 
-    <td class="text-end tabular-nums text-base-content/70">{{ customer.seats }}</td>
+    <td class="hidden lg:table-cell text-end tabular-nums text-base-content/70">{{ customer.seats }}</td>
 
-    <td class="text-end">
+    <td class="hidden lg:table-cell text-end">
         <div class="tabular-nums text-base-content/70">${{ customer.billed_display }}</div>
         {% if customer.overdue %}
         <div class="text-xs text-error tabular-nums">{{ customer.overdue }} overdue</div>
         {% endif %}
     </td>
 
-    <td class="text-end tabular-nums text-base-content/60 whitespace-nowrap">
+    <td class="hidden md:table-cell text-end tabular-nums text-base-content/60 whitespace-nowrap">
         {{ customer.renews_on|date:"j M Y"|default:"—" }}
     </td>
 

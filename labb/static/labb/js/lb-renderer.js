@@ -52,10 +52,12 @@ if (!window.__lbbFrameLoader) {
     let doc;
     try { doc = frame.contentDocument; } catch (_) { return; }
     if (!doc) return;
-    const el = doc.querySelector('[data-lbb-start]');
-    if (!el || el.dataset.lbbPinging) return;
-    el.dataset.lbbPinging = '1';
-    if (!doc.getElementById('lbb-ping-style')) {
+    const findStart = () => doc.querySelector('[data-lbb-start]');
+    const ping = () => {
+      const el = findStart();
+      if (!el || el.dataset.lbbPinging) return false;
+      el.dataset.lbbPinging = '1';
+      if (!doc.getElementById('lbb-ping-style')) {
       const st = doc.createElement('style');
       st.id = 'lbb-ping-style';
       st.textContent =
@@ -64,20 +66,28 @@ if (!window.__lbbFrameLoader) {
         '.lbb-start-ping{animation:lbbstartglow 1.6s ease-in-out infinite;border-radius:inherit}' +
         '.lbb-start-ping.lbb-start-fade{animation:lbbstartfade .6s ease-out forwards}';
       doc.head.appendChild(st);
-    }
-    el.classList.add('lbb-start-ping');
+      }
+      el.classList.add('lbb-start-ping');
     // Keep glowing until the reader actually engages with the block, then fade.
-    const dismiss = () => {
-      doc.removeEventListener('pointerdown', dismiss, true);
-      doc.removeEventListener('keydown', dismiss, true);
-      el.classList.add('lbb-start-fade');
-      setTimeout(() => {
-        el.classList.remove('lbb-start-ping', 'lbb-start-fade');
-        delete el.dataset.lbbPinging;
-      }, 650);
+      const dismiss = () => {
+        doc.removeEventListener('pointerdown', dismiss, true);
+        doc.removeEventListener('keydown', dismiss, true);
+        el.classList.add('lbb-start-fade');
+        setTimeout(() => {
+          el.classList.remove('lbb-start-ping', 'lbb-start-fade');
+          delete el.dataset.lbbPinging;
+        }, 650);
+      };
+      doc.addEventListener('pointerdown', dismiss, true);
+      doc.addEventListener('keydown', dismiss, true);
+      return true;
     };
-    doc.addEventListener('pointerdown', dismiss, true);
-    doc.addEventListener('keydown', dismiss, true);
+
+    const retry = (remaining = 8) => {
+      if (ping() || remaining === 0) return;
+      setTimeout(() => retry(remaining - 1), 150);
+    };
+    setTimeout(retry, 150);
   };
 
   // Mirror the page's theme into the (same-origin) preview so a block matches the
@@ -232,11 +242,6 @@ function lbbTourHighlight(viewerId, file, start, end) {
   }, 60);
 }
 
-// Line-wrap each code block only AFTER hljs colours it (it stamps
-// data-highlighted="yes"). We never call hljs on the initial blocks — its own
-// highlightAll() does one pass; re-highlighting a block we already wrapped is
-// what collapsed the code (hljs rebuilds from textContent, losing our newlines).
-// Morph-added code (e.g. the homepage slider) is fresh, so colouring it is safe.
 if (!window.__lbbSourceSetup) {
   window.__lbbSourceSetup = true;
   let loaded = false;

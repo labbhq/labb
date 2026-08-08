@@ -17,7 +17,7 @@
 
         {% if withName %}
         <c-split-brand.field label="Full name" required :error=errors.name :validateTo=validateTo>
-            <c-lb.input placeholder="Mira Chen" class="w-full" autocomplete="name" :bind=signals.fields.name />
+            <c-lb.input data-lbb-start placeholder="Mira Chen" class="w-full" autocomplete="name" :bind=signals.fields.name />
         </c-split-brand.field>
         {% endif %}
 

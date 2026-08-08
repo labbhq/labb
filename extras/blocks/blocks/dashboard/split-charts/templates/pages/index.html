@@ -10,13 +10,21 @@
 
 <c-lb.chart color="base-content" legend />
 
-<main class="container mx-auto max-w-6xl px-4 py-10 flex flex-col gap-6">
+<c-lb.drawer drawerId="reports-sidebar" class="min-h-screen lg:drawer-open" sideClass="z-50 lg:z-40 is-drawer-close:overflow-visible lg:overflow-visible">
+    <c-slot name="sideContent"><c-arden.sidebar active="reports" drawerId="reports-sidebar" /></c-slot>
 
-    <c-split-charts.header />
+    <main class="relative min-h-screen bg-base-200/35">
+        <c-lb.drawer.toggle for="reports-sidebar" class="btn btn-square btn-xs absolute left-3 top-3 z-40 border border-base-300 bg-base-100 shadow-sm lg:hidden" aria-label="Toggle sidebar">
+            <c-lbi n="rmx.menu" w="14" h="14" />
+        </c-lb.drawer.toggle>
 
-    <c-split-charts.summary />
+        <div class="container mx-auto max-w-6xl px-4 pb-8 pt-14 sm:px-6 sm:pt-16 lg:px-10 lg:py-8 flex flex-col gap-6">
 
-    <section class="grid gap-6 lg:grid-cols-3 items-start">
+            <c-split-charts.header />
+
+            <c-split-charts.summary />
+
+            <section class="grid gap-6 lg:grid-cols-3 items-start">
 
         <c-split-charts.panel
             class="lg:col-span-2"
@@ -31,9 +39,9 @@
             <c-lb.chart.doughnut id="source-chart" data="$view.source" height="280" legend="bottom" />
         </c-split-charts.panel>
 
-    </section>
+            </section>
 
-    <section class="grid gap-6 lg:grid-cols-3 items-start">
+            <section class="grid gap-6 lg:grid-cols-3 items-start">
 
         <c-split-charts.panel
             class="lg:col-span-2"
@@ -48,8 +56,10 @@
             <c-split-charts.watchlist :accounts=watchlist />
         </c-split-charts.panel>
 
-    </section>
+            </section>
 
-    <c-split-charts.footnote />
+            <c-split-charts.footnote />
 
-</main>
+        </div>
+    </main>
+</c-lb.drawer>
