@@ -23,3 +23,13 @@ Build the index:
 ```
 poetry run labb block dev build
 ```
+
+Refresh thumbnail baselines for both bundled themes:
+```
+poetry run python scripts/capture_thumbnails.py
+```
+
+Check the current previews against those baselines without overwriting them:
+```
+poetry run python scripts/capture_thumbnails.py --check
+```
