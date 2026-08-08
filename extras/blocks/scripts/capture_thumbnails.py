@@ -60,9 +60,10 @@ def wait_for_server(base, timeout=40):
 
 def images_match(reference, candidate):
     """Accept tiny browser raster differences, reject visible regressions."""
-    with Image.open(reference).convert("RGB") as expected, Image.open(candidate).convert(
-        "RGB"
-    ) as actual:
+    with (
+        Image.open(reference).convert("RGB") as expected,
+        Image.open(candidate).convert("RGB") as actual,
+    ):
         if expected.size != actual.size:
             return False, f"size changed from {expected.size} to {actual.size}"
         difference = ImageChops.difference(expected, actual)
@@ -116,11 +117,15 @@ def main(check=False):
                             if check:
                                 baseline = out_dir / screenshot.name
                                 if not baseline.exists():
-                                    failed.append(f"{category}/{slug} ({mode} baseline is missing)")
+                                    failed.append(
+                                        f"{category}/{slug} ({mode} baseline is missing)"
+                                    )
                                 else:
                                     matches, detail = images_match(baseline, screenshot)
                                     if not matches:
-                                        failed.append(f"{category}/{slug} ({mode}: {detail})")
+                                        failed.append(
+                                            f"{category}/{slug} ({mode}: {detail})"
+                                        )
                         captured += 1
                         print(f"✓ {category}/{slug}")
                     except Exception as e:  # noqa: BLE001 — report and keep going
