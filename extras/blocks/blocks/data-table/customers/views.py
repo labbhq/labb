@@ -1,6 +1,5 @@
 import json
 from decimal import Decimal
-from urllib.parse import urlencode
 
 from django.db.models import Count, DecimalField, Q, Sum, Value
 from django.db.models.functions import Coalesce
@@ -46,14 +45,12 @@ STATUS_VARIANT = {
 HEALTH_VARIANT = {"good": "success", "watch": "warning", "at_risk": "error"}
 
 
-# The shareable URL. Each field names the clean query key it restores from
-# (query=), so one query string serves both a cold load and a Datastar request.
 class QuerySignals(Signals):
-    q = Str(path="filters.q", default="", query="q")
-    status = Str(path="filters.status", default="", query="status")
-    sort_field = Str(path="sort.field", default=DEFAULT_SORT, query="sort")
-    sort_dir = Str(path="sort.dir", default="asc", query="dir")
-    page = Int(default=1, min_value=1, query="page")
+    q = Str(path="filters.q", default="")
+    status = Str(path="filters.status", default="")
+    sort_field = Str(path="sort.field", default=DEFAULT_SORT)
+    sort_dir = Str(path="sort.dir", default="asc")
+    page = Int(default=1, min_value=1)
 
 
 class UISignals(Signals):
@@ -62,9 +59,9 @@ class UISignals(Signals):
 
 
 def _query_signals(request):
-    # Datastar requests carry the whole signal bag; a shared link carries only
-    # the clean URL that replace-url wrote, which from_query reads back.
-    s = QuerySignals(request) if request.signals else QuerySignals.from_query(request)
+    # The reactivity middleware restores syncQuery state into request.signals on
+    # a cold load, and Datastar sends the same state on subsequent requests.
+    s = QuerySignals(request)
     if s.sort_field not in SORT_FIELDS:
         s.sort_field = DEFAULT_SORT
     if s.sort_dir not in ("asc", "desc"):
@@ -72,27 +69,6 @@ def _query_signals(request):
     if s.status not in STATUS_VALUES:
         s.status = ""
     return s
-
-
-def _state_params(s, page):
-    params = {}
-    if s.q:
-        params["q"] = s.q
-    if s.status:
-        params["status"] = s.status
-    if s.sort_field != DEFAULT_SORT:
-        params["sort"] = s.sort_field
-    if s.sort_dir != "asc":
-        params["dir"] = s.sort_dir
-    if page > 1:
-        params["page"] = page
-    return params
-
-
-def _url(name, s, page, **kwargs):
-    base = reverse(f"block_data_table_customers:{name}", kwargs=kwargs)
-    query = urlencode(_state_params(s, page))
-    return f"{base}?{query}" if query else base
 
 
 def _money(value):
@@ -172,8 +148,11 @@ def _context(request, editing_pk=None):
         "ui_signals": ui,
         "customers": customers,
         "editing_pk": ui.editing_pk,
-        "update_url": _url("update", s, page, pk=editing.pk) if editing else "",
-        "canonical_url": _url("index", s, page),
+        "update_url": reverse(
+            "block_data_table_customers:update", kwargs={"pk": editing.pk}
+        )
+        if editing
+        else "",
         "sort_field": s.sort_field,
         "sort_dir": s.sort_dir,
         "next_dir": {field: _next_dir(s, field) for field in SORT_FIELDS},
@@ -215,8 +194,6 @@ def update(request, pk):
             customer.plan = LbPlan.objects.filter(pk=plan_pk).first()
         customer.save()
         if request.is_datastar:
-            # A form POST carries form fields, not the signal bag — the query
-            # string on the action URL is what keeps the view state alive.
             return _render(request, _context(request, editing_pk=0))
     return redirect("block_data_table_customers:index")
 
