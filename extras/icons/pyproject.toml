@@ -49,4 +49,5 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "labbicons.tests.settings"
+# Django is configured in tests/conftest.py; this suite needs no pytest-django.
+testpaths = ["labbicons/tests"]

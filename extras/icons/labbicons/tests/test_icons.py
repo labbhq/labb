@@ -3,14 +3,12 @@
 import os
 import tempfile
 
-import pytest
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.test import TestCase
+from django.test import SimpleTestCase
 
 
-@pytest.mark.django_db
-class IconComponentTest(TestCase):
+class IconComponentTest(SimpleTestCase):
     """Test icon components rendering."""
 
     def render_component(self, component_name, **kwargs):
