@@ -11,7 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "@tailwindcss/cli": "4.3",
-    "daisyui": "5.6",
+    "daisyui": "5.7",
     "tailwindcss": "4.3"
   }
 }

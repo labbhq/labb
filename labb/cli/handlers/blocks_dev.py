@@ -15,6 +15,7 @@ from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from labb.cli.handlers.commons import DEFAULT_BLOCKS_DIR, blocks_root, commons_dir
+from labb.versions import DAISYUI_VERSION, TAILWIND_VERSION
 
 console = Console()
 
@@ -589,9 +590,9 @@ def _create_block_package_json(project_path: Path, name: str) -> None:
         "version": "1.0.0",
         "private": True,
         "devDependencies": {
-            "@tailwindcss/cli": "4.3",
-            "daisyui": "5.6",
-            "tailwindcss": "4.3",
+            "@tailwindcss/cli": TAILWIND_VERSION,
+            "daisyui": DAISYUI_VERSION,
+            "tailwindcss": TAILWIND_VERSION,
         },
     }
     (project_path / "package.json").write_text(json.dumps(content, indent=2) + "\n")
