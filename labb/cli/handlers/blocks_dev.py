@@ -174,7 +174,9 @@ def setup_pip_project(project_path: Path) -> bool:
 
 
 def setup_uv_project(project_path: Path) -> bool:
-    return run_command(["uv", "init", "--no-readme"], cwd=project_path)
+    # --no-package keeps uv's application layout; from uv 0.12 the default became
+    # a packaged src/ project, whose module name collides with startproject's.
+    return run_command(["uv", "init", "--no-readme", "--no-package"], cwd=project_path)
 
 
 def install_labb(project_path: Path, package_manager: str) -> bool:
