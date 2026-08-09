@@ -35,8 +35,8 @@ requires-python = ">=3.10,<4"
 packages = [{include = "labb"}]
 dependencies = [
     "django-cotton (>=2.7.2,<3.0.0)",
-    "typer (>=0.19.2,<0.20.0)",
-    "rich (>=14.2.0,<15.0.0)",
+    "typer (>=0.19.2,<1.0.0)",
+    "rich (>=14.2.0,<16.0.0)",
     "pyyaml (>=6.0.3,<7.0.0)",
     "datastar-py (>=1.0.2,<2.0.0)",
     "questionary (>=2.0.0,<3.0.0)",

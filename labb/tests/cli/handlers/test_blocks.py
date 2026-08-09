@@ -3,8 +3,8 @@
 from pathlib import Path
 from unittest.mock import patch
 
-import click
 import pytest
+import typer
 
 from labb.cli.handlers.blocks import (
     block_add,
@@ -218,7 +218,7 @@ def test_block_init_duplicate_name_errors(tmp_path):
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=existing_config),
         patch("labb.cli.handlers.blocks.save_config") as mock_save,
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         block_init(name="blocks", path=str(tmp_path / "blocks"), silent=True)
 
@@ -281,7 +281,7 @@ def test_block_init_no_labb_yaml_errors(tmp_path):
     with (
         patch("labb.cli.handlers.blocks.find_config_file", return_value=None),
         patch("labb.cli.handlers.blocks.save_config") as mock_save,
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         block_init(name="blocks", path=str(tmp_path / "blocks"), silent=True)
 
@@ -477,7 +477,7 @@ def test_block_add_invalid_ref_format(tmp_path):
     with (
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         block_add("lb/crud")
 
@@ -493,7 +493,7 @@ def test_block_add_source_not_found(tmp_path):
     with (
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         block_add("lb/crud/nonexistent")
 
@@ -651,7 +651,7 @@ def test_block_remove_not_installed_errors(tmp_path):
     col = make_installed_block(tmp_path)
     p1, p2 = _patch_remove_config(tmp_path, col)
     with p1, p2:
-        with pytest.raises((SystemExit, click.exceptions.Exit)) as exc_info:
+        with pytest.raises((SystemExit, typer.Exit)) as exc_info:
             block_remove(ref="lb/crud/nonexistent")
     code = (
         exc_info.value.code
@@ -665,7 +665,7 @@ def test_block_remove_invalid_ref_format(tmp_path):
     col = make_installed_block(tmp_path)
     p1, p2 = _patch_remove_config(tmp_path, col)
     with p1, p2:
-        with pytest.raises((SystemExit, click.exceptions.Exit)) as exc_info:
+        with pytest.raises((SystemExit, typer.Exit)) as exc_info:
             block_remove(ref="lb/todos")
     code = (
         exc_info.value.code
@@ -861,7 +861,7 @@ def test_sync_vendor_not_installed_errors(tmp_path):
     with (
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         block_sync(vendor="lb")
 
@@ -886,7 +886,7 @@ def test_sync_no_source_for_vendor_errors(tmp_path):
     with (
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         block_sync(vendor="lb")
 
@@ -1415,7 +1415,7 @@ def test_source_add_duplicate_name_errors(tmp_path):
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=existing_config),
         patch("labb.cli.handlers.blocks.save_config") as mock_save,
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         source_add("labbhq", url="https://github.com/other/repo", path=None)
 
@@ -1432,7 +1432,7 @@ def test_source_add_both_url_and_path_errors(tmp_path):
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=empty_config),
         patch("labb.cli.handlers.blocks.save_config") as mock_save,
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         source_add("mysource", url="https://example.com/repo", path="./local-path")
 
@@ -1449,7 +1449,7 @@ def test_source_add_neither_url_nor_path_errors(tmp_path):
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=empty_config),
         patch("labb.cli.handlers.blocks.save_config") as mock_save,
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         source_add("mysource", url=None, path=None)
 
@@ -1468,7 +1468,7 @@ def test_source_add_no_blocks_section_errors(tmp_path, capsys):
         patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
         patch("labb.cli.handlers.blocks.load_config", return_value=no_blocks_config),
         patch("labb.cli.handlers.blocks.save_config") as mock_save,
-        pytest.raises(click.exceptions.Exit),
+        pytest.raises(typer.Exit),
     ):
         source_add("labbhq", url="https://github.com/labbhq/blocks", path=None)
 

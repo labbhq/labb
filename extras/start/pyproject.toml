@@ -35,8 +35,8 @@ keywords = [
 requires-python = ">=3.10,<4"
 packages = [{include = "labbstart"}]
 dependencies = [
-    "typer (>=0.19.2,<0.20.0)",
-    "rich (>=14.2.0,<15.0.0)",
+    "typer (>=0.19.2,<1.0.0)",
+    "rich (>=14.2.0,<16.0.0)",
     "questionary (>=2.0.0,<3.0.0)",
 ]
 

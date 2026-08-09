@@ -3,7 +3,6 @@
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import click
 import pytest
 import typer
 import yaml
@@ -280,7 +279,7 @@ def test_validate_missing_required_field(tmp_path, capsys):
     (block_dir / "views.py").write_text("from labb.contrib.blocks import lm\n")
     (block_dir / "urls.py").write_text("urlpatterns = []\n")
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -300,7 +299,7 @@ def test_validate_invalid_type(tmp_path, capsys):
     templates.mkdir()
     (templates / "index.html").write_text("<div>todos</div>")
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -313,7 +312,7 @@ def test_validate_fullstack_missing_views_py(tmp_path, capsys):
     block_dir = make_fullstack_block(tmp_path)
     (block_dir / "views.py").unlink()
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -326,7 +325,7 @@ def test_validate_fullstack_missing_urls_py(tmp_path, capsys):
     block_dir = make_fullstack_block(tmp_path)
     (block_dir / "urls.py").unlink()
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -341,7 +340,7 @@ def test_validate_fullstack_with_lt_import(tmp_path, capsys):
         "from labb.contrib.blocks import lt\nLbTodo = lt('LbTodo')\n"
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -356,7 +355,7 @@ def test_validate_empty_templates_dir(tmp_path, capsys):
     for f in templates_dir.iterdir():
         f.unlink()
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -367,7 +366,7 @@ def test_validate_empty_templates_dir(tmp_path, capsys):
 def test_validate_missing_blocks_yaml(tmp_path, capsys):
     make_fullstack_block(tmp_path)
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -388,7 +387,7 @@ def test_validate_returns_false_on_errors(tmp_path):
     (block_dir / "views.py").write_text("from labb.contrib.blocks import lm\n")
     (block_dir / "urls.py").write_text("urlpatterns = []\n")
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -448,7 +447,7 @@ def test_validate_invalid_category(tmp_path, capsys):
     make_repo_with_blocks_yaml(tmp_path)
     _write_block_yaml(tmp_path, "category: widgets\n")
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -461,7 +460,7 @@ def test_validate_invalid_status(tmp_path, capsys):
     make_repo_with_blocks_yaml(tmp_path)
     _write_block_yaml(tmp_path, "status: archived\n")
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -474,7 +473,7 @@ def test_validate_tags_not_a_list(tmp_path, capsys):
     make_repo_with_blocks_yaml(tmp_path)
     _write_block_yaml(tmp_path, "tags: reactive\n")
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -834,7 +833,7 @@ def test_discover_blocks_captures_status_and_tags(tmp_path):
 
 
 def test_serve_missing_blocks_yaml_errors(tmp_path):
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         serve(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -843,7 +842,7 @@ def test_serve_missing_blocks_yaml_errors(tmp_path):
 def test_serve_missing_vendor_errors(tmp_path, capsys):
     (tmp_path / "blocks.yaml").write_text("name: Vendorless Repo\n")
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         serve(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1023,7 +1022,7 @@ def test_validate_tour_match_resolves_to_nothing(tmp_path, capsys):
         ),
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1047,7 +1046,7 @@ def test_validate_tour_match_is_ambiguous(tmp_path, capsys):
         ),
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1072,7 +1071,7 @@ def test_validate_tour_teaches_capability_absent_from_code(tmp_path, capsys):
         ),
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1095,7 +1094,7 @@ def test_validate_tour_teaches_unknown_capability(tmp_path, capsys):
         ),
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1115,7 +1114,7 @@ def test_validate_tour_step_missing_teaches(tmp_path, capsys):
         ),
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1155,7 +1154,7 @@ def test_validate_tour_through_before_match(tmp_path, capsys):
         ),
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1193,7 +1192,7 @@ def test_validate_tour_match_in_missing_file(tmp_path, capsys):
         ),
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1248,7 +1247,7 @@ def test_validate_hex_literal_fails(tmp_path, capsys):
         '<div style="background: #0f172a">Arden</div>\n',
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1263,7 +1262,7 @@ def test_validate_rgb_literal_fails(tmp_path, capsys):
         '<div style="color: rgb(15, 23, 42)">Arden</div>\n',
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1278,7 +1277,7 @@ def test_validate_fixed_palette_utility_fails(tmp_path, capsys):
         '<div class="bg-slate-900 text-zinc-500">Arden</div>\n',
     )
 
-    with pytest.raises(click.exceptions.Exit) as exc:
+    with pytest.raises(typer.Exit) as exc:
         validate(path=str(tmp_path))
 
     assert exc.value.exit_code == 1
@@ -1291,7 +1290,7 @@ def test_validate_hex_error_names_the_remedy(tmp_path, capsys):
     make_repo_with_blocks_yaml(tmp_path)
     make_block_with_template(tmp_path, '<div style="background: #fff">Arden</div>\n')
 
-    with pytest.raises(click.exceptions.Exit):
+    with pytest.raises(typer.Exit):
         validate(path=str(tmp_path))
 
     out = capsys.readouterr().out
