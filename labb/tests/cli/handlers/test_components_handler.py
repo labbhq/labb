@@ -1,8 +1,12 @@
 from unittest.mock import Mock, patch
 
+import pytest
+import typer
+
 from labb.cli.handlers.components_handler import (
     _inspect_specific_component,
     _list_all_components,
+    _list_component_examples,
     inspect_components,
 )
 
@@ -103,12 +107,47 @@ def test_inspect_specific_component_not_found(mock_console):
     mock_registry.get_component.return_value = None
     mock_registry.get_component_names.return_value = ["button", "drawer"]
 
-    _inspect_specific_component("nonexistent", mock_registry, verbose=False)
+    with pytest.raises(typer.Exit) as exc_info:
+        _inspect_specific_component("nonexistent", mock_registry, verbose=False)
+
+    assert exc_info.value.exit_code == 1
 
     error_calls = [
         call for call in mock_console.print.call_args_list if "not found" in str(call)
     ]
     assert len(error_calls) > 0
+
+
+@patch("labb.cli.handlers.components_handler.console")
+def test_list_component_examples_unknown_component_exits(mock_console):
+    """An unknown name is an error, so a typo cannot pass as success."""
+    mock_registry = Mock()
+    mock_registry.get_component_example_names.return_value = []
+    mock_registry.get_component.return_value = None
+    mock_registry.get_available_components_with_examples.return_value = ["button"]
+
+    with pytest.raises(typer.Exit) as exc_info:
+        _list_component_examples(mock_registry, "nonexistent")
+
+    assert exc_info.value.exit_code == 1
+    assert any("not found" in str(call) for call in mock_console.print.call_args_list)
+
+
+@patch("labb.cli.handlers.components_handler.console")
+def test_list_component_examples_known_component_without_examples_succeeds(
+    mock_console,
+):
+    """A real component that ships no examples is a warning, not a failure."""
+    mock_registry = Mock()
+    mock_registry.get_component_example_names.return_value = []
+    mock_registry.get_component.return_value = Mock()
+    mock_registry.get_available_components_with_examples.return_value = ["button"]
+
+    _list_component_examples(mock_registry, "kbd")
+
+    assert any(
+        "No examples found" in str(call) for call in mock_console.print.call_args_list
+    )
 
 
 @patch("labb.cli.handlers.components_handler.console")

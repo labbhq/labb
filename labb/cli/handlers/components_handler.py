@@ -1,5 +1,6 @@
 from typing import Optional
 
+import typer
 import yaml
 from rich.console import Console
 from rich.panel import Panel
@@ -108,7 +109,7 @@ def _inspect_specific_component(
             console.print("\n[yellow]Available components:[/yellow]")
             for name in available:
                 console.print(f"  • {name}")
-        return
+        raise typer.Exit(1)
 
     # Component header
     console.print(f"\n[bold blue]📦 Component: {component}[/bold blue]")
@@ -244,7 +245,15 @@ def _list_component_examples(registry: ComponentRegistry, component: str):
     example_names = registry.get_component_example_names(component)
 
     if not example_names:
-        console.print(f"[yellow]No examples found for component '{component}'[/yellow]")
+        # A real component that simply ships no examples is not a failure; an
+        # unknown name is, otherwise a typo exits 0 and scripts miss it.
+        is_known = registry.get_component(component) is not None
+        if is_known:
+            console.print(
+                f"[yellow]No examples found for component '{component}'[/yellow]"
+            )
+        else:
+            console.print(f"[red]❌ Component '{component}' not found[/red]")
 
         # Suggest available components
         available = registry.get_available_components_with_examples()
@@ -252,6 +261,9 @@ def _list_component_examples(registry: ComponentRegistry, component: str):
             console.print("\n[dim]Components with examples:[/dim]")
             for name in sorted(available):
                 console.print(f"  • {name}")
+
+        if not is_known:
+            raise typer.Exit(1)
         return
 
     console.print(
@@ -340,7 +352,7 @@ def _show_multiple_examples(
             console.print("\n[dim]Components with examples:[/dim]")
             for name in sorted(available_components):
                 console.print(f"  • {name}")
-        return
+        raise typer.Exit(1)
 
     # Get available examples for the component
     available_examples = registry.get_component_example_names(component)
@@ -368,11 +380,12 @@ def _show_multiple_examples(
                 console.print(f"  • [cyan]{name}[/cyan] - {title}")
 
         if not valid_examples:
-            return
+            raise typer.Exit(1)
 
         console.print("\n[yellow]Showing valid examples only...[/yellow]")
 
     # Show valid examples
+    unreadable = False
     for i, example in enumerate(valid_examples):
         if i > 0:
             console.print("\n" + "─" * 80 + "\n")  # Separator between examples
@@ -384,6 +397,7 @@ def _show_multiple_examples(
             console.print(
                 f"[red]❌ Could not read example content for '{example_path}'[/red]"
             )
+            unreadable = True
             continue
 
         title = registry.get_example_title_from_name(example)
@@ -399,3 +413,6 @@ def _show_multiple_examples(
         console.print(
             f"\n[dim]Showed {len(valid_examples)} examples for '{component}'[/dim]"
         )
+
+    if unreadable:
+        raise typer.Exit(1)
