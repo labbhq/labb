@@ -1,6 +1,6 @@
 [project]
 name = "labbblocks"
-version = "0.1.0"
+version = "0.5.0a1"
 description = "Official labb block collection (vendor: lb)"
 authors = [
     {name = "zadiq", email = "dev@zadiq.com"}
