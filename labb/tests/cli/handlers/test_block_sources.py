@@ -28,13 +28,14 @@ class TestSubdir:
         )
         with patch("labb.cli.handlers.blocks.subprocess.run", _ok):
             root = _clone_source(source, "/tmp/clone")
-        assert str(root) == "/tmp/clone/extras/blocks"
+        # as_posix so the assertion holds on Windows, where str() uses backslashes.
+        assert root.as_posix() == "/tmp/clone/extras/blocks"
 
     def test_without_a_subdir_the_clone_root_is_the_source_root(self):
         source = BlockSource(name="s", url="https://x/blocks")
         with patch("labb.cli.handlers.blocks.subprocess.run", _ok):
             root = _clone_source(source, "/tmp/clone")
-        assert str(root) == "/tmp/clone"
+        assert root.as_posix() == "/tmp/clone"
 
     def test_subdir_survives_a_config_round_trip(self):
         from labb.config import BlocksConfig, LabbConfig
