@@ -1180,8 +1180,10 @@ def start(
     if not vendor:
         vendor = questionary.text(
             "Vendor key (e.g. lb, myco):",
-            validate=lambda v: bool(re.match(r"^[a-z][a-z0-9]*$", v.strip()))
-            or "Vendor key must be lowercase letters only (e.g. lb, myco)",
+            validate=lambda v: (
+                bool(re.match(r"^[a-z][a-z0-9]*$", v.strip()))
+                or "Vendor key must be lowercase letters only (e.g. lb, myco)"
+            ),
         ).ask()
         if vendor is None:
             raise typer.Exit(1)

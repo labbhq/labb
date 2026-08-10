@@ -56,17 +56,17 @@ labb = "labb.cli.main:app"
 
 [dependency-groups]
 dev = [
-    "pytest (>=8.4.2,<9.0.0)",
+    "pytest (>=8.4.2,<10.0.0)",
     "pytest-mock (>=3.15.1,<4.0.0)",
     "pytest-xdist (>=3.6.1,<4.0.0)",
-    "ruff (>=0.14.0,<0.15.0)",
+    "ruff (>=0.14.0,<1.0.0)",
     "pytest-django (>=4.11.1,<5.0.0)",
     "pytest-cov (>=7.0.0,<8.0.0)",
     "labbicons @ ./extras/icons",
     "labbdocs @ ./docs",
     "labbstart @ ./extras/start",
     "pre-commit (>=4.3.0,<5.0.0)",
-    "pytest-playwright (>=0.8.0,<0.9.0)",
+    "pytest-playwright (>=0.8.0,<1.0.0)",
 ]
 
 
@@ -109,6 +109,15 @@ addopts = "-n auto --dist loadgroup"
 
 [tool.ruff]
 line-length = 88
+# ruff 0.16 formats python inside markdown fences. Doc examples are written for
+# reading, not for PEP 8, so leave them to the author.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+# Pinned explicitly: ruff widens its default rule set between releases, so
+# leaving this unset makes the lint scope a function of the installed version.
+# Widening the set is a deliberate change, not a side effect of an upgrade.
+select = ["E4", "E7", "E9", "F", "I"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["labb", "labbicons", "labbdocs"]
