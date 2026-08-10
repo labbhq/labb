@@ -1,6 +1,6 @@
 [project]
 name = "labbstart"
-version = "0.4.4"
+version = "0.5.0a1"
 description = "CLI tool to kickstart Django projects with labb"
 authors = [
     {name = "zadiq", email = "dev@zadiq.com"}

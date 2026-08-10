@@ -265,9 +265,12 @@ def setup_uv_project(project_path: Path, django_version: str) -> bool:
 
     min_python = DJANGO_MIN_PYTHON.get(django_version, "3.10")
 
-    # Initialize uv project pinned to the minimum Python for this Django version
+    # Initialize uv project pinned to the minimum Python for this Django version.
+    # --no-package keeps uv's application layout; from uv 0.12 the default became a
+    # packaged src/ project, whose module name then collides with startproject's.
     if not run_command(
-        ["uv", "init", "--no-readme", "--python", min_python], cwd=project_path
+        ["uv", "init", "--no-readme", "--no-package", "--python", min_python],
+        cwd=project_path,
     ):
         return False
 
