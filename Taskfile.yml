@@ -92,12 +92,21 @@ tasks:
     cmds:
       - poetry run pytest {{.CLI_ARGS}}
 
+  test:docs:
+    desc: Run the labbdocs suite (search tests need PostgreSQL, else they skip)
+    dir: .
+    deps: [install]
+    cmds:
+      # docs/ has its own poetry env without the test deps, so run from the root.
+      - poetry run pytest -c docs/pytest.ini docs {{.CLI_ARGS}}
+
   test:all:
     desc: Run every suite (each in its own session — extras have separate settings)
     dir: .
     deps: [install]
     cmds:
       - poetry run pytest labb
+      - poetry run pytest -c docs/pytest.ini docs
       - poetry run pytest extras/icons
       - poetry run pytest extras/start
       - cd extras/blocks && poetry run pytest
