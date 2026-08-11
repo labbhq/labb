@@ -2,8 +2,9 @@ blocks:
 - ref: lb/auth/centred-card
   name: Centred card
   type: fe
-  description: The workhorse sign-in — a centred card with OAuth, a trust footer,
-    and a password reveal driven by one client signal
+  description: 'The workhorse sign-in UI: a centred card with OAuth, a trust footer,
+    and a password reveal driven by one client signal. Markup only, with no server
+    behind it, so it does not sign anyone in.'
   category: auth
   tags:
   - auth
@@ -16,8 +17,9 @@ blocks:
 - ref: lb/auth/magic-link
   name: Magic link
   type: fe
-  description: Passwordless sign-in — the form becomes a 'check your inbox' state
-    from one client signal, with no server behind it
+  description: 'Passwordless sign-in UI: the form becomes a ''check your inbox'' state
+    from one client signal. Markup only, with no server behind it, so it does not
+    send a link or sign anyone in.'
   category: auth
   tags:
   - auth
@@ -30,8 +32,9 @@ blocks:
 - ref: lb/auth/social-proof
   name: Social proof
   type: fe
-  description: Sign-in under a logo cloud and a rating strip — conversion-shaped,
-    and it ships no JavaScript at all
+  description: Sign-in UI under a logo cloud and a rating strip, conversion-shaped
+    and shipping no JavaScript at all. Markup only, with no server behind it, so it
+    does not sign anyone in.
   category: auth
   tags:
   - auth
@@ -44,8 +47,10 @@ blocks:
 - ref: lb/auth/split-brand
   name: Split brand
   type: fullstack
-  description: Sign-in and sign-up on a split brand layout, with live per-field validation
-    over an ordinary Django view
+  description: 'UI demo of sign-in and sign-up on a split brand layout, showing live
+    per-field validation over an ordinary Django view. It does not authenticate anyone:
+    no password is checked, no credential is stored, and no session is started. Replace
+    the views with django.contrib.auth before using it for real.'
   category: auth
   tags:
   - reactive
@@ -53,13 +58,16 @@ blocks:
   - form
   - auth
   - oauth
+  - demo
   status: launch
   thumbnail: thumbnails/split-brand.png
+  demo: true
 - ref: lb/auth/two-column-visual
   name: Two-column visual
   type: fe
-  description: Sign-in beside a framed product shot built from components, not a screenshot
-    — no image asset and no JavaScript
+  description: Sign-in UI beside a framed product shot built from components, not
+    a screenshot, with no image asset and no JavaScript. Markup only, with no server
+    behind it, so it does not sign anyone in.
   category: auth
   tags:
   - auth

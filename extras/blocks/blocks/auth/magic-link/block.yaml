@@ -2,7 +2,7 @@ name: Magic link
 ref: lb/auth/magic-link
 type: fe
 labb_version: ">=0.5.0"
-description: "Passwordless sign-in — the form becomes a 'check your inbox' state from one client signal, with no server behind it"
+description: "Passwordless sign-in UI: the form becomes a 'check your inbox' state from one client signal. Markup only, with no server behind it, so it does not send a link or sign anyone in."
 category: auth
 status: launch
 thumbnail: thumbnails/magic-link.png

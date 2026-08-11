@@ -2,7 +2,7 @@ name: Social proof
 ref: lb/auth/social-proof
 type: fe
 labb_version: ">=0.5.0"
-description: "Sign-in under a logo cloud and a rating strip — conversion-shaped, and it ships no JavaScript at all"
+description: "Sign-in UI under a logo cloud and a rating strip, conversion-shaped and shipping no JavaScript at all. Markup only, with no server behind it, so it does not sign anyone in."
 category: auth
 status: launch
 thumbnail: thumbnails/social-proof.png

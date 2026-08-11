@@ -2,7 +2,8 @@ name: Split brand
 ref: lb/auth/split-brand
 type: fullstack
 labb_version: ">=0.5.0"
-description: "Sign-in and sign-up on a split brand layout, with live per-field validation over an ordinary Django view"
+description: "UI demo of sign-in and sign-up on a split brand layout, showing live per-field validation over an ordinary Django view. It does not authenticate anyone: no password is checked, no credential is stored, and no session is started. Replace the views with django.contrib.auth before using it for real."
+demo: true
 category: auth
 status: launch
 anchor: true
@@ -13,10 +14,14 @@ tags:
   - form
   - auth
   - oauth
+  - demo
 changelog:
   - date: "2026-07-14"
     notes:
       - "Initial release — the catalogue's auth anchor and premium exemplar"
+  - date: "2026-08-11"
+    notes:
+      - "Marked as a UI demo: the views never verified a password or stored a credential, and the description implied otherwise"
 
 allow_fixed_colours:
   - "#0f766e"

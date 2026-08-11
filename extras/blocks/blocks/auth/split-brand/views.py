@@ -1,3 +1,20 @@
+"""Split brand sign-in and sign-up: a UI demo, not an authentication system.
+
+These views authenticate nobody. Read this before wiring them into a project.
+
+`submit` looks up an LbMember by email and declares the sign-in successful. The
+password is length-checked and then never compared against anything. There is
+nothing to compare it to: LbMember is a demo model with no password field and
+no relationship to django.contrib.auth. `sign_up_submit` creates a member with
+no credential at all, and no session is ever started.
+
+The block exists to demonstrate live per-field validation over an ordinary
+Django view. Do not put it in front of anything real. A working sign-in has to
+go through django.contrib.auth: use `authenticate()` and `login()` here, back
+them with a real user model whose password is set via `set_password()`, and
+guard whatever the user reaches next with `login_required`.
+"""
+
 from django.utils import timezone
 
 from labb.contrib.blocks import lm, render_page
@@ -96,6 +113,7 @@ def submit(request):
             "Sign in to Arden",
         )
 
+    # DEMO: a matching email is the whole check. No password, no session.
     s.submitted = True
     return _page(
         request, SIGN_IN, _ctx(s, submitted=True, member=member), "Sign in to Arden"
@@ -140,6 +158,7 @@ def sign_up_submit(request):
             "Create an Arden account",
         )
 
+    # DEMO: LbMember has no password field, so the typed password is discarded.
     workspace = LbWorkspace.objects.first()
     member = LbMember.objects.create(
         workspace=workspace,

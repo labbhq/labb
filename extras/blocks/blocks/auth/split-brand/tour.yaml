@@ -27,3 +27,10 @@ steps:
     teaches: [live-validation]
     docs: [reactivity/actions]
     body: Both pages use the same validation helper. The view decides whether a name is required, which keeps the shared fields and error handling in one place.
+
+  - title: Swap the demo sign-in for real auth
+    file: views.py
+    match: "def submit"
+    teaches: [server-actions]
+    docs: [reactivity/actions]
+    body: These views are a UI demo and authenticate nobody. Submit looks a member up by email and calls it a success, without ever verifying the password. Before this goes in front of real users, replace the lookup with django.contrib.auth authenticate() and login(), and guard the page behind it with login_required.

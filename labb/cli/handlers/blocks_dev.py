@@ -711,6 +711,8 @@ def build_index(path: str = ".") -> None:
         entry["status"] = _block_status(block_data)
         if block_data.get("thumbnail"):
             entry["thumbnail"] = block_data["thumbnail"]
+        if block_data.get("demo"):
+            entry["demo"] = True
 
         blocks.append(entry)
 

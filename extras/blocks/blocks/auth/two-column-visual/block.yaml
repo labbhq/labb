@@ -2,7 +2,7 @@ name: Two-column visual
 ref: lb/auth/two-column-visual
 type: fe
 labb_version: ">=0.5.0"
-description: "Sign-in beside a framed product shot built from components, not a screenshot — no image asset and no JavaScript"
+description: "Sign-in UI beside a framed product shot built from components, not a screenshot, with no image asset and no JavaScript. Markup only, with no server behind it, so it does not sign anyone in."
 category: auth
 status: launch
 thumbnail: thumbnails/two-column-visual.png
