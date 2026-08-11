@@ -1,5 +1,6 @@
 """Tests for blocks.py: block_init, block_add, block_remove, block_sync, block_list, block_search, source_add, source_list."""
 
+import subprocess
 from pathlib import Path
 from unittest.mock import patch
 
@@ -7,6 +8,9 @@ import pytest
 import typer
 
 from labb.cli.handlers.blocks import (
+    _clone_source,
+    _parse_ref,
+    _resolve_source_for_ref,
     block_add,
     block_init,
     block_list,
@@ -1515,3 +1519,267 @@ def test_source_list_shows_remote_and_local(tmp_path, capsys):
     assert "remote" in captured.out
     assert "local" in captured.out
     assert "./my-custom-blocks" in captured.out
+
+
+def test_source_add_remote_with_subdir(tmp_path):
+    config_path = make_config_with_blocks_src(tmp_path)
+    clear_config_cache()
+
+    saved = []
+
+    def fake_save(cfg, path=None):
+        saved.append((cfg, path))
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch("labb.cli.handlers.blocks.save_config", side_effect=fake_save),
+    ):
+        clear_config_cache()
+        source_add(
+            "labbhq",
+            url="https://github.com/labbhq/labb",
+            path=None,
+            subdir="extras/blocks",
+        )
+
+    cfg, _ = saved[0]
+    assert cfg.blocks.sources[0].subdir == "extras/blocks"
+
+
+def test_source_add_without_subdir_leaves_it_unset(tmp_path):
+    config_path = make_config_with_blocks_src(tmp_path)
+    clear_config_cache()
+
+    saved = []
+
+    def fake_save(cfg, path=None):
+        saved.append((cfg, path))
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch("labb.cli.handlers.blocks.save_config", side_effect=fake_save),
+    ):
+        clear_config_cache()
+        source_add("local", url=None, path="./my-blocks")
+
+    cfg, _ = saved[0]
+    assert cfg.blocks.sources[0].subdir is None
+
+
+UNSAFE_REFS = [
+    "../etc/passwd",
+    "lb/../../etc",
+    "lb/crud/..",
+    "lb/./todos",
+    "lb//todos",
+    "/lb/crud/todos",
+    "lb/crud/to dos",
+    "LB/crud/todos",
+    "-lb/crud/todos",
+]
+
+
+@pytest.mark.parametrize(
+    "ref",
+    [
+        "lb/data-table/customers",
+        "lb/auth/centred-card",
+        "lb/wizard/horizontal-steps",
+        "lb/crud/todos",
+        "acme2/dashboard/v1.2",
+        "a_b/c_d/e_f",
+    ],
+)
+def test_parse_ref_accepts_real_refs(ref):
+    vendor, category, slug = _parse_ref(ref)
+    assert f"{vendor}/{category}/{slug}" == ref
+
+
+@pytest.mark.parametrize("ref", UNSAFE_REFS)
+def test_parse_ref_rejects_unsafe_refs(ref):
+    with pytest.raises(typer.Exit):
+        _parse_ref(ref)
+
+
+@pytest.mark.parametrize("ref", UNSAFE_REFS)
+def test_block_add_rejects_unsafe_ref(tmp_path, ref):
+    source_path = make_source_repo(tmp_path)
+    collection_path = make_collection(tmp_path)
+    config_path = make_labb_config_add(tmp_path, source_path, collection_path)
+    config_obj = make_labb_config_object_add(source_path, collection_path)
+
+    clear_config_cache()
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
+        pytest.raises(typer.Exit),
+    ):
+        block_add(ref)
+
+
+def test_block_remove_traversal_ref_leaves_outside_dir_alone(tmp_path):
+    col = make_installed_block(tmp_path)
+    victim = tmp_path / "victim" / "inner"
+    victim.mkdir(parents=True)
+    (victim / "keep.txt").write_text("keep")
+
+    p1, p2 = _patch_remove_config(tmp_path, col)
+    with p1, p2, pytest.raises(typer.Exit):
+        block_remove(ref="../victim/inner")
+
+    assert (victim / "keep.txt").exists()
+
+
+@pytest.mark.parametrize("ref", UNSAFE_REFS)
+def test_block_remove_rejects_unsafe_ref(tmp_path, ref):
+    col = make_installed_block(tmp_path)
+    p1, p2 = _patch_remove_config(tmp_path, col)
+    with p1, p2, pytest.raises(typer.Exit):
+        block_remove(ref=ref)
+
+    assert (col / "lb" / "crud" / "todos").exists()
+
+
+@pytest.mark.parametrize("vendor", ["..", "../lb", "lb/..", "L B"])
+def test_block_sync_rejects_unsafe_vendor(tmp_path, vendor):
+    config_path, config_obj, col = setup_sync_test(tmp_path)
+
+    clear_config_cache()
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
+        pytest.raises(typer.Exit),
+    ):
+        block_sync(vendor=vendor)
+
+
+def test_clone_source_returns_none_on_timeout():
+    def timeout(*args, **kwargs):
+        raise subprocess.TimeoutExpired(cmd="git", timeout=60)
+
+    source = BlockSource(name="slow", url="https://x/hangs")
+    with patch("labb.cli.handlers.blocks.subprocess.run", timeout):
+        assert _clone_source(source, "/tmp/clone") is None
+
+
+def test_clone_source_returns_none_when_git_is_missing():
+    def no_git(*args, **kwargs):
+        raise FileNotFoundError("git")
+
+    source = BlockSource(name="s", url="https://x/blocks")
+    with patch("labb.cli.handlers.blocks.subprocess.run", no_git):
+        assert _clone_source(source, "/tmp/clone") is None
+
+
+def _fake_clone_env(tmp_path, index_ref="lb/crud/other"):
+    """Remote source whose clone lands in tmp_path and never matches."""
+    made = []
+
+    def fake_mkdtemp(*args, **kwargs):
+        d = tmp_path / f"clone{len(made)}"
+        d.mkdir()
+        made.append(d)
+        return str(d)
+
+    def fake_clone(source, tmp_dir):
+        root = Path(tmp_dir)
+        (root / "index.yaml").write_text(f"blocks:\n  - ref: {index_ref}\n")
+        return root
+
+    return made, fake_mkdtemp, fake_clone
+
+
+def test_resolve_source_removes_clones_when_ref_not_found(tmp_path):
+    made, fake_mkdtemp, fake_clone = _fake_clone_env(tmp_path)
+    sources = [BlockSource(name="remote", url="https://x/blocks")]
+
+    with (
+        patch("labb.cli.handlers.blocks.tempfile.mkdtemp", fake_mkdtemp),
+        patch("labb.cli.handlers.blocks._clone_source", fake_clone),
+        pytest.raises(typer.Exit),
+    ):
+        with _resolve_source_for_ref("lb/crud/todos", sources, tmp_path):
+            pass
+
+    assert made
+    assert not any(d.exists() for d in made)
+
+
+def test_resolve_source_removes_clones_when_vendor_not_found(tmp_path):
+    made, fake_mkdtemp, fake_clone = _fake_clone_env(tmp_path)
+    sources = [BlockSource(name="remote", url="https://x/blocks")]
+
+    with (
+        patch("labb.cli.handlers.blocks.tempfile.mkdtemp", fake_mkdtemp),
+        patch("labb.cli.handlers.blocks._clone_source", fake_clone),
+        pytest.raises(typer.Exit),
+    ):
+        with _resolve_source_for_ref("acme", sources, tmp_path, match_by="vendor"):
+            pass
+
+    assert made
+    assert not any(d.exists() for d in made)
+
+
+def test_resolve_source_removes_clones_on_the_match_path(tmp_path):
+    made, fake_mkdtemp, fake_clone = _fake_clone_env(
+        tmp_path, index_ref="lb/crud/todos"
+    )
+    sources = [BlockSource(name="remote", url="https://x/blocks")]
+
+    with (
+        patch("labb.cli.handlers.blocks.tempfile.mkdtemp", fake_mkdtemp),
+        patch("labb.cli.handlers.blocks._clone_source", fake_clone),
+    ):
+        with _resolve_source_for_ref("lb/crud/todos", sources, tmp_path) as (
+            matched,
+            root,
+            entry,
+        ):
+            assert matched.name == "remote"
+            assert root.exists()
+            assert entry["ref"] == "lb/crud/todos"
+
+    assert made
+    assert not any(d.exists() for d in made)
+
+
+def _mark_index_demo(source_path: Path) -> None:
+    index = source_path / "index.yaml"
+    index.write_text(index.read_text() + "    demo: true\n")
+
+
+def test_block_add_warns_for_a_demo_block(tmp_path, capsys):
+    source_path = make_source_repo(tmp_path)
+    _mark_index_demo(source_path)
+    collection_path = make_collection(tmp_path)
+    config_path = make_labb_config_add(tmp_path, source_path, collection_path)
+    config_obj = make_labb_config_object_add(source_path, collection_path)
+
+    clear_config_cache()
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
+    ):
+        block_add("lb/crud/todos")
+
+    assert "is a UI demo" in capsys.readouterr().out
+
+
+def test_block_add_stays_quiet_for_a_normal_block(tmp_path, capsys):
+    source_path = make_source_repo(tmp_path)
+    collection_path = make_collection(tmp_path)
+    config_path = make_labb_config_add(tmp_path, source_path, collection_path)
+    config_obj = make_labb_config_object_add(source_path, collection_path)
+
+    clear_config_cache()
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch("labb.cli.handlers.blocks.load_config", return_value=config_obj),
+    ):
+        block_add("lb/crud/todos")
+
+    assert "is a UI demo" not in capsys.readouterr().out

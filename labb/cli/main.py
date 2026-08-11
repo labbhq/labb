@@ -422,11 +422,14 @@ def source_add_cmd(
     path: Optional[str] = typer.Option(
         None, "--path", "-p", help="Local filesystem path"
     ),
+    subdir: Optional[str] = typer.Option(
+        None, "--subdir", help="Blocks directory inside the repo, for a monorepo source"
+    ),
 ):
     """Add a block source (remote git repo or local path) to labb.yaml"""
     from .handlers.blocks import source_add
 
-    source_add(name=name, url=url, path=path)
+    source_add(name=name, url=url, path=path, subdir=subdir)
 
 
 @source_app.command("list")

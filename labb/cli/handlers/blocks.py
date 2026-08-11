@@ -1,7 +1,9 @@
 import os
+import re
 import shutil
 import subprocess
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Optional
 
@@ -20,20 +22,50 @@ from labb.config import (
 
 # ── Shared helpers ────────────────────────────────────────────────────────────
 
+# Ref segments become path components, so "..", "." and separators must not fit.
+_SEGMENT_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
+
 
 def _title_name(name: str) -> str:
     return name.title().replace("_", "").replace("-", "")
 
 
+def _validate_segment(value: str, kind: str) -> None:
+    if not _SEGMENT_RE.match(value):
+        console.print(
+            f"[red]Invalid {kind} '{value}' — must match {_SEGMENT_RE.pattern}.[/red]"
+        )
+        raise typer.Exit(1)
+
+
+def _parse_ref(ref: str) -> tuple[str, str, str]:
+    """Split a ref into (vendor, category, slug), rejecting unsafe segments."""
+    parts = ref.split("/")
+    if len(parts) != 3:
+        console.print(
+            f"[red]Invalid ref '{ref}' — expected vendor/category/slug (3 parts, got {len(parts)}).[/red]"
+        )
+        raise typer.Exit(1)
+
+    for value, kind in zip(parts, ("vendor", "category", "slug")):
+        _validate_segment(value, kind)
+
+    return parts[0], parts[1], parts[2]
+
+
 def _clone_source(source: BlockSource, tmp_dir: str) -> Optional[Path]:
     """Clone a remote source and return its root, or None if unreachable."""
-    result = subprocess.run(
-        # "--" ensures a URL beginning with "-" is not read as a git option.
-        ["git", "clone", "--depth=1", "--quiet", "--", source.url, tmp_dir],
-        capture_output=True,
-        env={**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_ASKPASS": "true"},
-        timeout=60,
-    )
+    try:
+        result = subprocess.run(
+            # "--" ensures a URL beginning with "-" is not read as a git option.
+            ["git", "clone", "--depth=1", "--quiet", "--", source.url, tmp_dir],
+            capture_output=True,
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_ASKPASS": "true"},
+            timeout=60,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return None
+
     if result.returncode != 0:
         return None
 
@@ -118,6 +150,7 @@ def _print_table(rows: list[dict]) -> None:
         console.print(f"{ref:<30} {name:<20} {btype:<10} {tier:<10} {source:<15}")
 
 
+@contextmanager
 def _resolve_source_for_ref(
     ref_or_vendor: str,
     sources,
@@ -126,65 +159,72 @@ def _resolve_source_for_ref(
 ):
     """
     Find which source owns a block ref (match_by="ref") or vendor prefix (match_by="vendor").
-    Returns (matched_source, source_root, tmp_dirs_to_clean).
-    Caller is responsible for cleaning up tmp_dirs_to_clean.
+    Yields (matched_source, source_root, matched_entry); clones are removed on
+    exit, including when nothing matched.
     Prints error and raises typer.Exit(1) if not found.
     """
     matched_source = None
+    matched_entry: dict = {}
     source_root_map: dict = {}
     tmp_dirs: list = []
 
-    for source in sources:
-        if source.is_local:
-            raw_path = source.path
-            src_root = (
-                (config_dir / raw_path).resolve()
-                if not Path(raw_path).is_absolute()
-                else Path(raw_path)
-            )
-            index_file = src_root / "index.yaml"
-            if not index_file.exists():
+    try:
+        for source in sources:
+            if source.is_local:
+                raw_path = source.path
+                src_root = (
+                    (config_dir / raw_path).resolve()
+                    if not Path(raw_path).is_absolute()
+                    else Path(raw_path)
+                )
+                index_file = src_root / "index.yaml"
+                if not index_file.exists():
+                    continue
+                index_data = yaml.safe_load(index_file.read_text()) or {}
+                source_root_map[source.name] = blocks_root(src_root)
+            elif source.is_remote:
+                tmp_dir = tempfile.mkdtemp()
+                tmp_dirs.append(tmp_dir)
+                src_root = _clone_source(source, tmp_dir)
+                if src_root is None:
+                    continue
+                index_file = src_root / "index.yaml"
+                if not index_file.exists():
+                    continue
+                index_data = yaml.safe_load(index_file.read_text()) or {}
+                source_root_map[source.name] = blocks_root(src_root)
+            else:
                 continue
-            index_data = yaml.safe_load(index_file.read_text()) or {}
-            source_root_map[source.name] = blocks_root(src_root)
-        elif source.is_remote:
-            tmp_dir = tempfile.mkdtemp()
-            tmp_dirs.append(tmp_dir)
-            src_root = _clone_source(source, tmp_dir)
-            if src_root is None:
-                continue
-            index_file = src_root / "index.yaml"
-            if not index_file.exists():
-                continue
-            index_data = yaml.safe_load(index_file.read_text()) or {}
-            source_root_map[source.name] = blocks_root(src_root)
-        else:
-            continue
 
-        blocks_list = index_data.get("blocks", [])
-        for entry in blocks_list:
-            if match_by == "ref" and entry.get("ref") == ref_or_vendor:
-                matched_source = source
+            blocks_list = index_data.get("blocks", [])
+            for entry in blocks_list:
+                if match_by == "ref" and entry.get("ref") == ref_or_vendor:
+                    matched_source = source
+                    matched_entry = entry
+                    break
+                elif match_by == "vendor" and entry.get("ref", "").startswith(
+                    f"{ref_or_vendor}/"
+                ):
+                    matched_source = source
+                    matched_entry = entry
+                    break
+            if matched_source is not None:
                 break
-            elif match_by == "vendor" and entry.get("ref", "").startswith(
-                f"{ref_or_vendor}/"
-            ):
-                matched_source = source
-                break
-        if matched_source is not None:
-            break
 
-    if matched_source is None:
-        if match_by == "ref":
-            console.print(f"[red]No source contains block '{ref_or_vendor}'.[/red]")
-        else:
-            console.print(
-                f"[red]Error: No source found for vendor '{ref_or_vendor}'. "
-                f"Run `labb block list` to see available vendors.[/red]"
-            )
-        raise typer.Exit(1)
+        if matched_source is None:
+            if match_by == "ref":
+                console.print(f"[red]No source contains block '{ref_or_vendor}'.[/red]")
+            else:
+                console.print(
+                    f"[red]Error: No source found for vendor '{ref_or_vendor}'. "
+                    f"Run `labb block list` to see available vendors.[/red]"
+                )
+            raise typer.Exit(1)
 
-    return matched_source, source_root_map[matched_source.name], tmp_dirs
+        yield matched_source, source_root_map[matched_source.name], matched_entry
+    finally:
+        for tmp_dir in tmp_dirs:
+            shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
 def _copy_cotton_dir(src_dir: Path, dest_dir: Path) -> None:
@@ -331,7 +371,12 @@ def block_init(
     except ValueError:
         rel_path = str(collection_path.resolve())
 
-    new_collection = BlockCollection(name=name, path=rel_path, default=False)
+    new_collection = BlockCollection(
+        name=name,
+        path=str(collection_path.resolve()),
+        default=False,
+        raw_path=rel_path,
+    )
 
     if config.blocks is None:
         new_collection.default = True
@@ -378,13 +423,7 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
         clear_config_cache()
         config = load_config(config_path)
 
-    parts = ref.split("/")
-    if len(parts) != 3:
-        console.print(
-            f"[red]Invalid ref '{ref}' — expected vendor/category/slug (3 parts, got {len(parts)}).[/red]"
-        )
-        raise typer.Exit(1)
-    vendor, category, slug = parts
+    vendor, category, slug = _parse_ref(ref)
 
     if collection_name is not None:
         collection = config.blocks.get_collection(collection_name)
@@ -402,11 +441,9 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
             raise typer.Exit(1)
 
     config_dir = config_path.parent
-    matched_source, source_root, tmp_dirs = _resolve_source_for_ref(
+    with _resolve_source_for_ref(
         ref, config.blocks.sources, config_dir, match_by="ref"
-    )
-
-    try:
+    ) as (_, source_root, entry):
         collection_path = Path(collection.path)
         source_block_dir = source_root / category / slug
         target_block_dir = collection_path / vendor / category / slug
@@ -483,6 +520,13 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
             target_fixture.write_text(content)
             new_fixtures = True
 
+        if entry.get("demo"):
+            console.print("")
+            console.print(
+                f"[yellow]⚠ {ref} is a UI demo. Its views do not do what they "
+                f"appear to do — read them before wiring it into anything real.[/yellow]"
+            )
+
         if new_vendor:
             console.print(f"[green]✓ Added {ref}[/green]")
             console.print("")
@@ -517,10 +561,6 @@ def block_add(ref: str, collection_name: Optional[str] = None) -> None:
             console.print(f"  python manage.py makemigrations {collection_app_label}")
             console.print("  python manage.py migrate")
 
-    finally:
-        for tmp_dir in tmp_dirs:
-            shutil.rmtree(tmp_dir, ignore_errors=True)
-
 
 def block_remove(ref: str, collection_name: Optional[str] = None) -> None:
     config_path = find_config_file()
@@ -541,13 +581,7 @@ def block_remove(ref: str, collection_name: Optional[str] = None) -> None:
         )
         raise typer.Exit(1)
 
-    parts = ref.split("/")
-    if len(parts) != 3:
-        console.print(
-            f"[red]Invalid ref '{ref}' — expected vendor/category/slug (3 parts, got {len(parts)}).[/red]"
-        )
-        raise typer.Exit(1)
-    vendor, category, slug = parts
+    vendor, category, slug = _parse_ref(ref)
 
     if collection_name is not None:
         collection = config.blocks.get_collection(collection_name)
@@ -616,6 +650,8 @@ def block_sync(
         )
         raise typer.Exit(1)
 
+    _validate_segment(vendor, "vendor")
+
     if collection_name is not None:
         collection = config.blocks.get_collection(collection_name)
         if collection is None:
@@ -635,11 +671,9 @@ def block_sync(
     collection_app_label = collection_path.name
 
     config_dir = config_path.parent
-    matched_source, source_root, tmp_dirs = _resolve_source_for_ref(
+    with _resolve_source_for_ref(
         vendor, config.blocks.sources, config_dir, match_by="vendor"
-    )
-
-    try:
+    ) as (matched_source, source_root, _):
         vendor_dir = collection_path / vendor
         if not vendor_dir.exists():
             console.print(
@@ -746,10 +780,6 @@ def block_sync(
             console.print(f"  python manage.py makemigrations {collection_app_label}")
             console.print("  python manage.py migrate")
 
-    finally:
-        for tmp_dir in tmp_dirs:
-            shutil.rmtree(tmp_dir, ignore_errors=True)
-
 
 def block_list(source_name: Optional[str] = None) -> None:
     sources, config_dir = _get_sources_and_config_dir()
@@ -807,7 +837,12 @@ def block_search(query: str) -> None:
     _print_table(matched)
 
 
-def source_add(name: str, url: Optional[str], path: Optional[str]) -> None:
+def source_add(
+    name: str,
+    url: Optional[str],
+    path: Optional[str],
+    subdir: Optional[str] = None,
+) -> None:
     config_path = find_config_file()
     config = load_config(config_path)
 
@@ -830,7 +865,7 @@ def source_add(name: str, url: Optional[str], path: Optional[str]) -> None:
         console.print("[red]Provide either a URL or --path.[/red]")
         raise typer.Exit(1)
 
-    new_source = BlockSource(name=name, url=url, path=path)
+    new_source = BlockSource(name=name, url=url, path=path, subdir=subdir)
     config.blocks.sources.append(new_source)
 
     save_config(config, config_path)
