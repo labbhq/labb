@@ -9,8 +9,9 @@ from .conf import category_shortcuts, log_queries
 from .models import SearchDocument, SearchQueryLog
 from .services import TYPE_LABELS, run_search, search_counts
 
-# Palette preview only; /search rides services.MAX_GROUP_RESULTS.
-GROUP_CAP = 5
+# A type facet is the uncapped surface a group's See-all points at.
+PALETTE_GROUP_CAP = 5
+PAGE_GROUP_CAP = 50
 
 # Facet rail order (after the leading "All" facet).
 FACET_TYPES = [
@@ -42,10 +43,12 @@ def _facet_href(q, doc_type):
 
 
 def search_page(request):
-    """Server-rendered /search page: grouped results (every match up to the
-    engine's hard ceiling), a type-facet rail, and a shareable `?q=&type=` URL.
-    Renders identically for a cold/shared GET (no Datastar header — rehydrated
-    via `from_query`) and a reactive morph.
+    """Server-rendered /search page: grouped results, a type-facet rail, and a
+    shareable `?q=&type=` URL. Renders identically for a cold/shared GET (no
+    Datastar header — rehydrated via `from_query`) and a reactive morph.
+
+    Each group shows `PAGE_GROUP_CAP` and links to its own type facet, which
+    shows the rest up to the engine's hard ceiling.
     """
     signals = (
         SearchPageSignals(request)
@@ -58,7 +61,10 @@ def search_page(request):
     # Untyped, so the rail shows every total even while filtered to one type.
     counts = search_counts(q) if q else {}
     total_count = sum(counts.values())
-    groups = run_search(q, type=active_type or None) if q else []
+    groups = []
+    if q:
+        cap = None if active_type else PAGE_GROUP_CAP
+        groups = run_search(q, cap=cap, type=active_type or None)
 
     if log_queries() and q and not request.is_datastar:
         SearchQueryLog.objects.create(
@@ -124,7 +130,7 @@ def palette(request):
     The submitted ``/search`` query is the meaningful analytics event.
     """
     q = (request.signals.get("q") or request.GET.get("q") or "").strip()
-    groups = run_search(q, cap=GROUP_CAP) if q else []
+    groups = run_search(q, cap=PALETTE_GROUP_CAP) if q else []
     return render(
         request,
         "labbdocs/search/palette_results.html",

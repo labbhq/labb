@@ -12,7 +12,9 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
+from .. import services
 from ..models import SearchDocument
+from ..services import run_search, search_counts
 
 SIGNALS_URL = "/docs/guide/reactivity/signals/"
 # a heading that lives on the Signals page, not its title. The syncQuery
@@ -60,6 +62,38 @@ class GuidesSearchTests(TestCase):
         self.assertIn("Guides", body)
         self.assertIn("Blog", body)  # the Blog badge
         self.assertIn(BLOG_URL, body)
+
+    def _guide_group(self, q, cap):
+        groups = run_search(q, cap=cap)
+        return next(g for g in groups if g["type"] == SearchDocument.TYPE_GUIDE)
+
+    def _by_page(self, rows):
+        pages = {}
+        for row in rows:
+            page = (row.metadata or {}).get("page_url", row.url)
+            pages.setdefault(page, []).append(row)
+        return pages
+
+    def test_cap_cuts_guides_by_page_and_keeps_each_page_whole(self):
+        matching = self._by_page(services._matches("s", type=SearchDocument.TYPE_GUIDE))
+        rows = sum(len(page_rows) for page_rows in matching.values())
+        self.assertGreater(rows, len(matching))  # headings really are present
+
+        shown = self._by_page(self._guide_group("s", cap=3)["results"])
+        self.assertEqual(len(shown), 3)
+        for page, page_rows in shown.items():
+            self.assertEqual(len(page_rows), len(matching[page]))
+
+    def test_capped_and_total_and_the_facet_count_are_the_same_unit(self):
+        pages = search_counts("s")[SearchDocument.TYPE_GUIDE]
+
+        capped = self._guide_group("s", cap=3)
+        self.assertEqual(capped["total"], pages)
+        self.assertTrue(capped["capped"])
+
+        whole = self._guide_group("s", cap=pages)
+        self.assertGreater(len(whole["results"]), pages)  # rows outnumber pages
+        self.assertFalse(whole["capped"])
 
     # --- command seam: hybrid emission ---------------------------------------
 

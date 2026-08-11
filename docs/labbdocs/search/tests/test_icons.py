@@ -20,7 +20,8 @@ from django.urls import reverse
 import labbicons
 
 from ..models import SearchDocument
-from ..views import GROUP_CAP
+from ..services import search_counts
+from ..views import PAGE_GROUP_CAP
 
 
 def _text(response):
@@ -68,10 +69,11 @@ class IconSearchTests(TestCase):
         self.assertIn("Icons", body)
         self.assertIn("arrow", body)
 
-    def test_icons_uncapped_and_do_not_suppress_components(self):
+    def test_icons_cap_with_see_all_and_do_not_suppress_components(self):
         # "menu" matches many icons AND the Menu component. Grouping keeps icons
-        # in their own group so they don't drown the component; on the /search
-        # page (unlike the palette) every match is shown — uncapped, no See-all.
+        matching_icons = search_counts("menu")[SearchDocument.TYPE_ICON]
+        self.assertGreater(matching_icons, PAGE_GROUP_CAP)  # the group does cap
+
         response = self._get("menu")
         self.assertEqual(response.status_code, 200)
         body = _text(response)
@@ -81,10 +83,17 @@ class IconSearchTests(TestCase):
         self.assertIn("Components", body)
         self.assertIn("Menu", body)
 
-        # The Icons group is uncapped: one copy affordance per rendered icon
-        # card, far more than the palette's cap, and no See-all truncation.
         shown_icons = body.count("navigator.clipboard.writeText")
-        self.assertGreater(shown_icons, GROUP_CAP)
+        self.assertEqual(shown_icons, PAGE_GROUP_CAP)
+        self.assertIn(f"See all {matching_icons}", body)
+
+    def test_icon_facet_shows_every_match_uncapped(self):
+        matching_icons = search_counts("menu")[SearchDocument.TYPE_ICON]
+        response = self.client.get(
+            reverse("labbdocs_search:page"), {"q": "menu", "type": "icon"}
+        )
+        body = _text(response)
+        self.assertEqual(body.count("navigator.clipboard.writeText"), matching_icons)
         self.assertNotIn("See all", body)
 
     def test_all_pack_icons_are_indexed(self):

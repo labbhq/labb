@@ -14,7 +14,7 @@ from django.contrib.postgres.search import (
     SearchRank,
     TrigramWordSimilarity,
 )
-from django.db.models import Count, F, Q, TextField
+from django.db.models import Count, F, Max, Q, TextField
 from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Coalesce, Greatest
 
@@ -36,7 +36,7 @@ SIM_THRESHOLD = 0.3
 MAX_QUERY_CHARS = 200
 MAX_QUERY_TOKENS = 12
 
-# A backstop against a one-letter prefix, not a display cap.
+# Ceiling a caller's `cap` cannot exceed.
 MAX_GROUP_RESULTS = 500
 
 # Characters that carry meaning in a raw tsquery — strip them from user tokens.
@@ -91,22 +91,47 @@ def _row_counts(qs) -> dict[str, int]:
     return {r["type"]: r["n"] for r in qs.values("type").annotate(n=Count("id"))}
 
 
+def _page_expr():
+    """The page a guide row belongs to: the parent page for a heading record,
+    the row's own url for a page record."""
+    return Coalesce(
+        KeyTextTransform("page_url", "metadata"),
+        F("url"),
+        output_field=TextField(),
+    )
+
+
 def _guide_page_count(qs) -> int:
     """Distinct guide pages, not rows. Guide rows include per-heading records
     that the UI nests under their page, so a row count overcounts what is shown.
     """
     return (
         qs.filter(type=SearchDocument.TYPE_GUIDE)
-        .annotate(
-            page=Coalesce(
-                KeyTextTransform("page_url", "metadata"),
-                F("url"),
-                output_field=TextField(),
-            )
-        )
+        .annotate(page=_page_expr())
         .values("page")
         .distinct()
         .count()
+    )
+
+
+def _guide_rows(qs, limit: int) -> list:
+    """Every matching row of the `limit` best-scoring guide pages, in one query.
+
+    Guides are capped by page rather than by row, so that the cap cuts where the
+    UI nests: a row cap would drop half of a page's headings and would not match
+    the page count the group reports.
+    """
+    top_pages = (
+        qs.annotate(page=_page_expr())
+        .values("page")
+        .annotate(best=Max("score"))
+        .order_by("-best")
+        .values_list("page", flat=True)[:limit]
+    )
+    return list(
+        qs.annotate(page=_page_expr())
+        .filter(page__in=top_pages)
+        .order_by("-score")[:MAX_GROUP_RESULTS]
     )
 
 
@@ -136,10 +161,11 @@ def run_search(query: str, cap: int | None = None, type: str | None = None):
     Returns a list of group dicts in the fixed `TYPE_ORDER` (guides, components,
     blocks, icons):
         [{"type", "label", "results": [SearchDocument, ...], "total", "capped"}]
-    Empty groups are omitted. `results` is limited in the database to `cap` rows
-    per group, and never more than `MAX_GROUP_RESULTS`. `total` is the full
-    pre-limit count (distinct pages for guides) and `capped` says rows were
-    withheld. `type` restricts to one document type.
+    Empty groups are omitted. `results` is limited in the database to `cap` per
+    group, and never more than `MAX_GROUP_RESULTS`. `total` is the full pre-limit
+    count and `capped` says some of it was withheld; both count the same unit the
+    cap does, which is pages for guides and rows for every other type. `type`
+    restricts to one document type.
     """
     qs = _matches(query, type)
     if qs is None:
@@ -158,13 +184,19 @@ def run_search(query: str, cap: int | None = None, type: str | None = None):
 
     groups = []
     for doc_type in ordered:
+        rows = qs.filter(type=doc_type)
+        results = (
+            _guide_rows(rows, limit)
+            if doc_type == SearchDocument.TYPE_GUIDE
+            else list(rows.order_by("-score")[:limit])
+        )
         groups.append(
             {
                 "type": doc_type,
                 "label": TYPE_LABELS.get(doc_type, doc_type.title()),
-                "results": list(qs.filter(type=doc_type).order_by("-score")[:limit]),
+                "results": results,
                 "total": totals[doc_type],
-                "capped": row_counts[doc_type] > limit,
+                "capped": totals[doc_type] > limit,
             }
         )
     return groups

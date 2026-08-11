@@ -5,15 +5,26 @@ affordance, and the blank / no-results states render.
 """
 
 import html as _html
+import re
 
 from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
+from ..models import SearchDocument
+from ..services import search_counts
+from ..views import PAGE_GROUP_CAP
+
 
 def _text(response):
     """Rendered HTML with entities decoded (Cotton escapes attr values)."""
     return _html.unescape(response.content.decode())
+
+
+def _component_cards(body):
+    """How many component cards were rendered. No other card template opens its
+    link with these classes, so this counts them exactly."""
+    return body.count('class="flex items-start gap-3 rounded-lg px-3 py-2')
 
 
 class SearchPageTests(TestCase):
@@ -47,16 +58,29 @@ class SearchPageTests(TestCase):
         self.assertContains(response, "Button")
         self.assertIn("c-lb.button", _text(response))
 
-    def test_broad_query_is_uncapped_no_see_all(self):
-        # Unlike the palette, the /search page shows every match per group. The
-        # literal `c-lb.` tag is rendered only by component cards (icon cards
-        # emit `c-lbi.`, block/guide cards never emit it), so it counts them
-        # exactly. "button" matches far more than the palette's cap of 5, and no
-        # per-group "See all" affordance is rendered (nothing is truncated).
-        response = self._get("button")
+    def test_broad_query_caps_the_group_with_see_all(self):
+        matches = search_counts("button")[SearchDocument.TYPE_COMPONENT]
+        self.assertGreater(matches, PAGE_GROUP_CAP)  # the group does cap
+
+        body = _text(self._get("button"))
+        self.assertEqual(_component_cards(body), PAGE_GROUP_CAP)
+        self.assertIn(f"See all {matches}", body)
+
+    def test_see_all_lands_on_the_uncapped_type_facet(self):
+        matches = search_counts("button")[SearchDocument.TYPE_COMPONENT]
+        response = self.client.get(
+            reverse("labbdocs_search:page"), {"q": "button", "type": "component"}
+        )
         body = _text(response)
-        self.assertGreater(body.count("c-lb."), 5)
+        self.assertEqual(_component_cards(body), matches)
         self.assertNotIn("See all", body)
+
+    def test_facet_count_matches_the_see_all_number(self):
+        matches = search_counts("button")[SearchDocument.TYPE_COMPONENT]
+        body = _text(self._get("button"))
+        rail = re.search(r"Components</span>\s*<span[^>]*>(\d+)</span>", body)
+        self.assertIsNotNone(rail)
+        self.assertEqual(int(rail.group(1)), matches)
 
     def test_blank_query_shows_category_shortcuts(self):
         response = self._get("")
