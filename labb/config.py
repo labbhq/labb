@@ -418,6 +418,26 @@ def load_config(
     return _cached_config
 
 
+def _backup_if_commented(config_path: Path) -> Optional[Path]:
+    """Copy the file aside when it has comments PyYAML is about to drop."""
+    if not config_path.exists():
+        return None
+    try:
+        text = config_path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    if not any(line.lstrip().startswith("#") for line in text.splitlines()):
+        return None
+
+    backup = config_path.with_suffix(config_path.suffix + ".bak")
+    n = 1
+    while backup.exists():
+        backup = config_path.with_suffix(f"{config_path.suffix}.bak.{n}")
+        n += 1
+    backup.write_text(text, encoding="utf-8")
+    return backup
+
+
 def save_config(
     config: LabbConfig, config_path: Optional[Path] = None, merge: bool = True
 ) -> Path:
@@ -425,8 +445,8 @@ def save_config(
 
     By default the managed sections are patched into the file as it stands, so
     top-level keys labb knows nothing about (and any unmanaged keys under `css`)
-    survive a load→save round trip. Comments are still lost — PyYAML cannot
-    round-trip them.
+    survive a load→save round trip. Comments cannot survive (PyYAML does not
+    round-trip them), so a commented file is copied to `.bak` first.
 
     ``merge=False`` writes the managed sections only, discarding whatever else
     was in the file. For callers that mean a genuine overwrite (e.g. `labb init`
@@ -453,7 +473,16 @@ def save_config(
     if "blocks" in managed:
         existing["blocks"] = managed["blocks"]
 
+    backup = _backup_if_commented(config_path)
+
     with open(config_path, "w") as f:
         yaml.dump(existing, f, default_flow_style=False, indent=2, sort_keys=False)
+
+    if backup is not None:
+        warnings.warn(
+            f"Rewriting {config_path.name} dropped its comments and key order; "
+            f"the original is at {backup.name}.",
+            stacklevel=2,
+        )
 
     return config_path

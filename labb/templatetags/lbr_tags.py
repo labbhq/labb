@@ -24,6 +24,9 @@ def lbr_resolve_url(to, kwargs_json="", pk=""):
     """
     if not to:
         return ""
+    # "//host" is protocol-relative, so it leaves the origin despite the leading "/".
+    if to.startswith("//"):
+        return ""
     if to.startswith(("/", "http://", "https://")):
         return to
     try:

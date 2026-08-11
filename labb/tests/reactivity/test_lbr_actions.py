@@ -179,6 +179,12 @@ class TestResolveUrlKwargs(ComponentTestBase):
 
         assert lbr_resolve_url("") == ""
 
+    def test_protocol_relative_url_rejected(self):
+        from labb.templatetags.lbr_tags import lbr_resolve_url
+
+        assert lbr_resolve_url("//evil.example/steal") == ""
+        assert lbr_resolve_url("/ok/") == "/ok/"
+
     def test_graceful_empty_on_bad_viewname(self):
         from labb.templatetags.lbr_tags import lbr_resolve_url
 

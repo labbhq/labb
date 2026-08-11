@@ -9,6 +9,7 @@ from labb.config import (
     BlockSource,
     LabbConfig,
     LabbConfigError,
+    clear_config_cache,
     find_config_file,
     load_config,
     save_config,
@@ -431,3 +432,39 @@ def test_blocks_config_round_trip(temp_dir):
     assert result["blocks"]["sources"][0]["name"] == "labbhq"
     assert result["blocks"]["sources"][0]["url"] == "https://github.com/labbhq/blocks"
     assert "path" not in result["blocks"]["sources"][0]
+
+
+def test_save_config_backs_up_a_commented_file(tmp_path):
+    config_path = tmp_path / "labb.yaml"
+    original = "# keep me\ncss:\n  build:\n    input: in.css\n    output: out.css\n"
+    config_path.write_text(original)
+    clear_config_cache()
+
+    with pytest.warns(UserWarning, match="dropped its comments"):
+        save_config(load_config(config_path), config_path)
+
+    assert (tmp_path / "labb.yaml.bak").read_text() == original
+    assert "# keep me" not in config_path.read_text()
+
+
+def test_save_config_does_not_clobber_an_existing_backup(tmp_path):
+    config_path = tmp_path / "labb.yaml"
+    config_path.write_text("# one\ncss:\n  build:\n    input: a.css\n")
+    (tmp_path / "labb.yaml.bak").write_text("earlier backup")
+    clear_config_cache()
+
+    with pytest.warns(UserWarning):
+        save_config(load_config(config_path), config_path)
+
+    assert (tmp_path / "labb.yaml.bak").read_text() == "earlier backup"
+    assert (tmp_path / "labb.yaml.bak.1").read_text().startswith("# one")
+
+
+def test_save_config_skips_the_backup_when_there_are_no_comments(tmp_path):
+    config_path = tmp_path / "labb.yaml"
+    config_path.write_text("css:\n  build:\n    input: in.css\n")
+    clear_config_cache()
+
+    save_config(load_config(config_path), config_path)
+
+    assert not (tmp_path / "labb.yaml.bak").exists()
