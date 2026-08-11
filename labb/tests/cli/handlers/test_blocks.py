@@ -1325,6 +1325,69 @@ def test_block_search_no_results(tmp_path, capsys):
     assert "No blocks found matching 'xyzzy'." in captured.out
 
 
+def _list_config_for(source_path: Path) -> LabbConfig:
+    return LabbConfig(
+        blocks=BlocksConfig(
+            collections=[],
+            sources=[BlockSource(name="mysource", path=str(source_path))],
+        )
+    )
+
+
+def test_block_list_marks_demo_blocks(tmp_path, capsys):
+    source_path = make_local_source(tmp_path)
+    (source_path / "index.yaml").write_text(
+        (source_path / "index.yaml").read_text() + "    demo: true\n"
+    )
+    config_path = make_config_with_local_source(tmp_path, source_path)
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch(
+            "labb.cli.handlers.blocks.load_config",
+            return_value=_list_config_for(source_path),
+        ),
+    ):
+        block_list()
+
+    assert "demo" in capsys.readouterr().out
+
+
+def test_block_list_leaves_normal_blocks_unmarked(tmp_path, capsys):
+    source_path = make_local_source(tmp_path)
+    config_path = make_config_with_local_source(tmp_path, source_path)
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch(
+            "labb.cli.handlers.blocks.load_config",
+            return_value=_list_config_for(source_path),
+        ),
+    ):
+        block_list()
+
+    assert "demo" not in capsys.readouterr().out
+
+
+def test_block_search_marks_demo_blocks(tmp_path, capsys):
+    source_path = make_local_source(tmp_path)
+    (source_path / "index.yaml").write_text(
+        (source_path / "index.yaml").read_text() + "    demo: true\n"
+    )
+    config_path = make_config_with_local_source(tmp_path, source_path)
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch(
+            "labb.cli.handlers.blocks.load_config",
+            return_value=_list_config_for(source_path),
+        ),
+    ):
+        block_search("contacts")
+
+    assert "demo" in capsys.readouterr().out
+
+
 # ===========================================================================
 # source_add and source_list
 # ===========================================================================

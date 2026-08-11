@@ -149,7 +149,9 @@ def _print_table(rows: list[dict]) -> None:
         btype = (row.get("type") or "")[:10]
         tier = (row.get("tier") or "")[:10]
         source = (row.get("_source") or "")[:15]
-        console.print(f"{ref:<30} {name:<20} {btype:<10} {tier:<10} {source:<15}")
+        demo = "[yellow]demo[/yellow]" if row.get("demo") else ""
+        line = f"{ref:<30} {name:<20} {btype:<10} {tier:<10} {source:<15} {demo}"
+        console.print(line.rstrip())
 
 
 @contextmanager

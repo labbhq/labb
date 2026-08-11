@@ -827,6 +827,20 @@ def test_discover_blocks_captures_status_and_tags(tmp_path):
     assert meta["tags"] == ["reactive", "charts"]
 
 
+def test_discover_blocks_carries_the_demo_flag(tmp_path):
+    repo = make_repo(tmp_path)
+    block_dir = make_fullstack_block_serve(repo, "auth", "split-brand")
+    (block_dir / "block.yaml").write_text(
+        (block_dir / "block.yaml").read_text() + "demo: true\n"
+    )
+    make_fe_block_serve(repo, "landing", "hero")
+
+    result = _discover_blocks(repo)
+
+    assert result[("auth", "split-brand")]["demo"] is True
+    assert result[("landing", "hero")]["demo"] is False
+
+
 # ===========================================================================
 # serve() error handling
 # ===========================================================================

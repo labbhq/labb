@@ -440,6 +440,7 @@ def _discover_blocks(repo_path: Path) -> dict:
             "tags": block_meta.get("tags", []),
             "status": _block_status(block_meta),
             "thumbnail": block_meta.get("thumbnail"),
+            "demo": bool(block_meta.get("demo")),
         }
 
     return discovered
@@ -1375,6 +1376,7 @@ def serve(path: str = ".", port: int = 8765) -> None:
             "tags": block_meta.get("tags", []),
             "status": _block_status(block_meta),
             "thumbnail": block_meta.get("thumbnail"),
+            "demo": bool(block_meta.get("demo")),
         }
         for (category, slug), block_meta in discovered_blocks.items()
     }
