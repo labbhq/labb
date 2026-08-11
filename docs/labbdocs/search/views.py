@@ -7,9 +7,9 @@ from labb.signals import Signals, Str
 
 from .conf import category_shortcuts, log_queries
 from .models import SearchDocument, SearchQueryLog
-from .services import TYPE_LABELS, run_search
+from .services import TYPE_LABELS, run_search, search_counts
 
-# Cap per group in the ⌘K palette preview; the /search page is uncapped.
+# Palette preview only; /search rides services.MAX_GROUP_RESULTS.
 GROUP_CAP = 5
 
 # Facet rail order (after the leading "All" facet).
@@ -42,9 +42,10 @@ def _facet_href(q, doc_type):
 
 
 def search_page(request):
-    """Server-rendered /search page: uncapped grouped results, a type-facet rail,
-    and a shareable `?q=&type=` URL. Renders identically for a cold/shared GET
-    (no Datastar header — rehydrated via `from_query`) and a reactive morph.
+    """Server-rendered /search page: grouped results (every match up to the
+    engine's hard ceiling), a type-facet rail, and a shareable `?q=&type=` URL.
+    Renders identically for a cold/shared GET (no Datastar header — rehydrated
+    via `from_query`) and a reactive morph.
     """
     signals = (
         SearchPageSignals(request)
@@ -54,12 +55,10 @@ def search_page(request):
     q = (signals.q or "").strip()
     active_type = signals.doc_type if signals.doc_type in VALID_TYPES else ""
 
-    # Untyped, uncapped search drives the facet counts, so the rail always shows
-    # per-type totals even while filtered to one type.
-    all_groups = run_search(q) if q else []
-    counts = {g["type"]: g["total"] for g in all_groups}
+    # Untyped, so the rail shows every total even while filtered to one type.
+    counts = search_counts(q) if q else {}
     total_count = sum(counts.values())
-    groups = run_search(q, cap=None, type=active_type or None) if q else []
+    groups = run_search(q, type=active_type or None) if q else []
 
     if log_queries() and q and not request.is_datastar:
         SearchQueryLog.objects.create(
