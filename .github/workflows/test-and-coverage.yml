@@ -109,10 +109,12 @@ jobs:
       - name: Run start tests
         run: poetry run pytest extras/start
 
+      # --with local: the path deps on labbui/labbicons sit in an optional group,
+      # so a plain install would test against the released labbui, not this branch.
       - name: Run blocks tests
         working-directory: extras/blocks
         run: |
-          poetry install
+          poetry install --with local
           poetry run pytest
 
       - name: Upload coverage reports
