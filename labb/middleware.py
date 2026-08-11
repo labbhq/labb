@@ -7,6 +7,19 @@ from labb.django_settings import get_reactivity_setting
 # lbr syncQuery uses a configurable key (LABB_SETTINGS["REACTIVITY"]["QUERY_KEY"]) with a
 # configurable encoding ("base64" | "flat" | "json") for URL-persisted state.
 _DATASTAR_KEY = "datastar"
+_FORM_CONTENT_TYPE = "application/x-www-form-urlencoded"
+
+
+def _form_post(request):
+    """POST params, but only for form-encoded bodies.
+
+    Reading request.POST on a multipart body would parse the upload in middleware.
+    """
+    if request.method != "POST":
+        return {}
+    if not (request.content_type or "").startswith(_FORM_CONTENT_TYPE):
+        return {}
+    return request.POST
 
 
 def _decode_base64(raw: str) -> dict:
@@ -61,7 +74,9 @@ class ReactivityMiddleware:
         request.is_datastar = request.headers.get("Datastar-Request") == "true"
 
         # 1. Datastar's own GET/POST parameter (always raw JSON, hardcoded in Datastar)
-        raw = request.GET.get(_DATASTAR_KEY) or request.POST.get(_DATASTAR_KEY, "")
+        raw = request.GET.get(_DATASTAR_KEY) or _form_post(request).get(
+            _DATASTAR_KEY, ""
+        )
         if raw:
             request.signals = _decode_signals(raw, "json")
             return self.get_response(request)
@@ -79,7 +94,7 @@ class ReactivityMiddleware:
                 request.signals = signals
                 return self.get_response(request)
         else:
-            raw = request.GET.get(key) or request.POST.get(key, "")
+            raw = request.GET.get(key) or _form_post(request).get(key, "")
             if raw:
                 request.signals = _decode_signals(raw, encoding)
                 return self.get_response(request)

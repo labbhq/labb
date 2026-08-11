@@ -14,6 +14,8 @@ import json
 from urllib.parse import urlencode
 
 import pytest
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.test import RequestFactory
 
 from labb.middleware import ReactivityMiddleware
@@ -81,7 +83,11 @@ class TestSignalParsing:
 
     def test_datastar_post_param_parsed(self, factory, mw):
         signals = {"filters": {"q": "bar"}}
-        request = factory.post("/", data={"datastar": json.dumps(signals)})
+        request = factory.post(
+            "/",
+            data=urlencode({"datastar": json.dumps(signals)}),
+            content_type="application/x-www-form-urlencoded",
+        )
         mw(request)
         assert request.signals == {"filters": {"q": "bar"}}
 
@@ -182,3 +188,65 @@ class TestSignalParsing:
         mw = _make_middleware(response=sentinel)
         request = factory.get("/")
         assert mw(request) is sentinel
+
+
+class TestDoesNotConsumeRequestBody:
+    """The middleware must never parse a multipart body — that would run the whole
+    upload through middleware and freeze request.upload_handlers before the view."""
+
+    def _multipart(self, factory, extra=None):
+        data = {"f": SimpleUploadedFile("x.txt", b"hello")}
+        data.update(extra or {})
+        return factory.post("/", data=data)
+
+    def test_multipart_upload_handlers_still_settable(self, factory, mw):
+        request = self._multipart(factory)
+        mw(request)
+        # Raises if the middleware touched request.POST.
+        request.upload_handlers = [TemporaryFileUploadHandler(request)]
+
+    def test_multipart_file_still_readable_after_middleware(self, factory, mw):
+        request = self._multipart(factory)
+        mw(request)
+        assert request.FILES["f"].read() == b"hello"
+
+    def test_multipart_signals_are_empty(self, factory, mw):
+        request = self._multipart(factory, {"datastar": json.dumps({"count": 1})})
+        mw(request)
+        assert request.signals == {}
+
+    def test_multipart_query_key_not_read_from_post(self, factory, mw):
+        from unittest.mock import patch
+
+        with patch(
+            "labb.middleware.get_reactivity_setting",
+            side_effect=lambda k: {"QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"}.get(
+                k
+            ),
+        ):
+            request = self._multipart(factory, {"lbr": _b64({"page": 2})})
+            mw(request)
+        assert request.signals == {}
+        request.upload_handlers = [TemporaryFileUploadHandler(request)]
+
+    def test_get_request_never_reads_post(self, factory, mw):
+        request = factory.get("/")
+        mw(request)
+        assert "_post" not in request.__dict__
+
+    def test_form_encoded_query_key_still_read_from_post(self, factory, mw):
+        from unittest.mock import patch
+
+        with patch(
+            "labb.middleware.get_reactivity_setting",
+            side_effect=lambda k: {"QUERY_KEY": "lbr", "QUERY_ENCODING": "base64"}.get(
+                k
+            ),
+        ):
+            request = factory.post(
+                "/",
+                data=urlencode({"lbr": _b64({"page": 2})}),
+                content_type="application/x-www-form-urlencoded",
+            )
+            mw(request)
+        assert request.signals == {"page": 2}

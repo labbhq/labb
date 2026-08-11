@@ -39,8 +39,12 @@ def lbr_resolve_url(to, kwargs_json="", pk=""):
 
 
 def _safe_json(value):
-    # json.dumps escapes <, >, & to \uXXXX; replace ' to guard single-quoted attrs.
+    # Safe only in a single-quoted attribute: <, > and & are left literal.
     return json.dumps(value).replace("'", "&#x27;")
+
+
+# Anything outside this set would reach the emitted JS raw.
+_SIGNAL_PATH_RE = re.compile(r"^[\w.]+$")
 
 
 def _coerce_signal_value(v):
@@ -126,6 +130,8 @@ def _build_datastar_js_obj(paths):
 
     obj = {}
     for path in paths:
+        if not _SIGNAL_PATH_RE.match(path):
+            continue
         segments = path.split(".")
         d = obj
         for seg in segments[:-1]:
@@ -169,6 +175,7 @@ def lbr_query_sync_js(attrs, schema=""):
         paths = [field.path for field in schema._fields.values()]
     else:
         paths = _sync_query_signals(attrs)
+    paths = [p for p in paths if _SIGNAL_PATH_RE.match(p)]
     if not paths:
         return ""
     key = get_reactivity_setting("QUERY_KEY")
@@ -332,8 +339,7 @@ def lbr_replace_url_js(href, push=""):
         js_href = re.sub(r"\$([\w.]+)", r"${$\1}", safe)
         url_expr = f"`{js_href}`"
     else:
-        # Escape \ before ' — without this, \' in href becomes \\' where JS sees \\ + bare '.
-        url_expr = "'" + href.replace("\\", "\\\\").replace("'", "\\'") + "'"
+        url_expr = "'" + _js_escape(href) + "'"
 
     if push:
         return mark_safe(
@@ -370,12 +376,6 @@ def strip_signal_attrs(attrs):
 # ---------------------------------------------------------------------------
 # Reactive prop system — $signal:fallback convention (D-RX1)
 # ---------------------------------------------------------------------------
-
-
-# A signal path is a dotted identifier chain (e.g. "badge.variant"). Anything
-# outside this set would be interpolated raw into the emitted JS expression, so a
-# non-matching value is treated as static rather than reactive.
-_SIGNAL_PATH_RE = re.compile(r"^[\w.]+$")
 
 
 def _parse_reactive(value: str) -> tuple:

@@ -107,6 +107,21 @@ class TestReplaceUrlJsInjection(ComponentTestBase):
         assert "\\${location.href}" in js
         assert "${$id}" in js  # signal ref still resolved
 
+    def test_newline_in_url_is_escaped(self):
+        js = self._js("/path/\nalert(1)//")
+        assert "\n" not in js
+        assert "\\n" in js
+
+    def test_carriage_return_in_url_is_escaped(self):
+        js = self._js("/path/\rx")
+        assert "\r" not in js
+        assert "\\r" in js
+
+    def test_quote_and_backslash_in_url_are_escaped(self):
+        js = self._js("/path/'x\\y")
+        assert "\\'" in js
+        assert "\\\\y" in js
+
     def test_combined_backtick_and_brace_injection(self):
         js = self._js("/x/`${alert(1)}`/$signal/")
         assert "\\`" in js

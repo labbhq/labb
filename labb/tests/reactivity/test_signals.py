@@ -422,6 +422,39 @@ class TestPlainDict:
         assert s.page == 1 and s.q == ""
 
 
+class TestMissingMiddleware:
+    """A request without .signals means ReactivityMiddleware is not installed —
+    without the check every field would silently fall back to its default."""
+
+    def _request(self):
+        from django.test import RequestFactory
+
+        return RequestFactory().get("/?page=2")
+
+    def test_request_without_signals_raises(self):
+        from django.core.exceptions import ImproperlyConfigured
+
+        class S(Signals):
+            page = Int(default=1)
+
+        with pytest.raises(ImproperlyConfigured, match="ReactivityMiddleware"):
+            S(self._request())
+
+    def test_request_with_empty_signals_is_fine(self):
+        class S(Signals):
+            page = Int(default=1)
+
+        request = self._request()
+        request.signals = {}
+        assert S(request).page == 1
+
+    def test_plain_dict_still_works(self):
+        class S(Signals):
+            page = Int(default=1)
+
+        assert S({"page": 2}).page == 2
+
+
 # ── from_query — clean query string → signals (replace-url reverse) ────────────
 
 

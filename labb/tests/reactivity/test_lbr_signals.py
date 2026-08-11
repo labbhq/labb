@@ -105,6 +105,11 @@ class TestBlobSignals(ComponentTestBase):
         assert "&#x27;" in html  # single quote is HTML-escaped
         assert _blob(html) == {"filters": {"q": "it's"}}
 
+    def test_angle_brackets_stay_literal_inside_the_attribute(self):
+        # Left literal on purpose: the attribute quoting is what makes it safe.
+        html = self._render("$filters.q=q", context={"q": "<script>a&b</script>"})
+        assert _blob(html) == {"filters": {"q": "<script>a&b</script>"}}
+
     def test_deep_dot_path(self):
         assert _blob(self._render('$a.b.c.d="deep"')) == {
             "a": {"b": {"c": {"d": "deep"}}}
@@ -380,3 +385,25 @@ class TestSyncQuery(ComponentTestBase):
     def test_sync_query_false_by_default(self):
         html = self._render('$filters.q="foo"')
         assert "replaceState" not in html
+
+
+class TestSyncQueryPathGuard(ComponentTestBase):
+    """Paths outside [\\w.] are dropped instead of being interpolated raw into JS."""
+
+    def _js(self, attrs):
+        from labb.templatetags.lbr_tags import lbr_query_sync_js
+
+        return lbr_query_sync_js(attrs)
+
+    def test_odd_path_produces_no_js(self):
+        assert self._js({'$q");alert(1);//': "x"}) == ""
+
+    def test_good_path_kept_alongside_odd_one(self):
+        js = self._js({"$page": "1", '$a"b': "x"})
+        assert 'p.set("lbr.page",$page)' in js
+        assert 'a"b' not in js
+
+    def test_odd_path_dropped_from_js_object(self):
+        from labb.templatetags.lbr_tags import _build_datastar_js_obj
+
+        assert _build_datastar_js_obj(['a"b', "page"]) == '{"page":$page}'

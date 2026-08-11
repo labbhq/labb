@@ -61,6 +61,24 @@ def _get_nested(d: dict, path: str, default=None):
     return d
 
 
+def _signal_data(data) -> dict:
+    """Raw signal dict from a request (``.signals``) or a plain mapping."""
+    if data is None:
+        return {}
+    signals = getattr(data, "signals", None)
+    if signals is not None:
+        return signals
+    if hasattr(data, "META") and hasattr(data, "method"):
+        from django.core.exceptions import ImproperlyConfigured
+
+        raise ImproperlyConfigured(
+            "request.signals is missing — add "
+            "'labb.middleware.ReactivityMiddleware' to MIDDLEWARE, or pass a "
+            "plain dict of signals instead of the request."
+        )
+    return data
+
+
 class SignalValidationError(Exception):
     """Raised when a required signal is missing or validate=True encounters errors."""
 
@@ -327,7 +345,7 @@ class Signals(metaclass=_SignalsMeta):
     """
 
     def __init__(self, data=None, validate: bool = False):
-        raw: dict = {} if data is None else getattr(data, "signals", data)
+        raw: dict = _signal_data(data)
         self._raw = raw
         self._errors: dict[str, str] = {}
 
