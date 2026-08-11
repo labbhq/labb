@@ -46,18 +46,23 @@ def test_labb_config_to_dict():
                 "output": "test/output.css",
                 "minify": True,
             },
-            "scan": {
-                "output": "static_src/labb-classes.txt",
-                "templates": [
-                    "templates/**/*.html",
-                    "*/templates/**/*.html",
-                    "**/templates/**/*.html",
-                ],
-                "apps": {},
-            },
         }
     }
     assert result == expected
+
+
+def test_to_dict_emits_scan_only_for_non_default_values():
+    config = LabbConfig()
+    config.classes_output = "custom/classes.txt"
+    config.template_patterns = ["app/templates/**/*.html"]
+    config.scan_apps = {"myapp": ["templates/**/*.html"]}
+
+    scan = config.to_dict()["css"]["scan"]
+    assert scan == {
+        "templates": ["app/templates/**/*.html"],
+        "output": "custom/classes.txt",
+        "apps": {"myapp": ["templates/**/*.html"]},
+    }
 
 
 def test_find_config_file_with_env_var(temp_dir):
@@ -161,6 +166,134 @@ def test_save_config_error(temp_dir, mock_config):
     with patch("builtins.open", side_effect=OSError("write failed")):
         with pytest.raises(Exception):
             save_config(mock_config, config_file)
+
+
+def _write_yaml(path: Path, text: str) -> Path:
+    config_file = path / "labb.yaml"
+    config_file.write_text(text)
+    return config_file
+
+
+def test_save_config_keeps_relative_collection_path(temp_dir):
+    """A relative collection path stays relative; the resolved one is internal only."""
+    config_file = _write_yaml(
+        temp_dir,
+        "css:\n"
+        "  build:\n"
+        "    input: in.css\n"
+        "    output: out.css\n"
+        "blocks:\n"
+        "  collections:\n"
+        "  - name: blocks\n"
+        "    path: blocks\n"
+        "    default: true\n",
+    )
+    config = LabbConfig.from_dict(
+        yaml.safe_load(config_file.read_text()), config_dir=temp_dir
+    )
+    assert config.blocks.collections[0].path == str((temp_dir / "blocks").resolve())
+
+    save_config(config, config_file)
+
+    saved = yaml.safe_load(config_file.read_text())
+    assert saved["blocks"]["collections"][0]["path"] == "blocks"
+
+
+def test_save_config_preserves_unknown_top_level_keys(temp_dir):
+    config_file = _write_yaml(
+        temp_dir,
+        "css:\n"
+        "  build:\n"
+        "    input: in.css\n"
+        "    output: out.css\n"
+        "docs:\n"
+        "  content: docs/content\n"
+        "custom_key: keep me\n",
+    )
+    config = LabbConfig.from_dict(yaml.safe_load(config_file.read_text()))
+
+    save_config(config, config_file)
+
+    saved = yaml.safe_load(config_file.read_text())
+    assert saved["docs"] == {"content": "docs/content"}
+    assert saved["custom_key"] == "keep me"
+    assert saved["css"]["build"]["input"] == "in.css"
+
+
+def test_save_config_merge_false_overwrites_unknown_keys(temp_dir):
+    """An explicit overwrite (e.g. `labb init` after confirmation) drops unmanaged keys."""
+    config_file = _write_yaml(
+        temp_dir,
+        "css:\n  build:\n    input: in.css\n    output: out.css\ncustom_key: drop me\n",
+    )
+    config = LabbConfig.from_dict(yaml.safe_load(config_file.read_text()))
+
+    save_config(config, config_file, merge=False)
+
+    saved = yaml.safe_load(config_file.read_text())
+    assert saved == config.to_dict()
+    assert "custom_key" not in saved
+
+
+def test_save_config_does_not_invent_legacy_scan_block(temp_dir):
+    config_file = _write_yaml(
+        temp_dir,
+        "css:\n  build:\n    input: in.css\n    output: out.css\n",
+    )
+    config = LabbConfig.from_dict(yaml.safe_load(config_file.read_text()))
+
+    save_config(config, config_file)
+
+    saved = yaml.safe_load(config_file.read_text())
+    assert "scan" not in saved["css"]
+
+
+def test_save_config_keeps_unmanaged_css_keys(temp_dir):
+    config_file = _write_yaml(
+        temp_dir,
+        "css:\n"
+        "  build:\n"
+        "    input: in.css\n"
+        "    output: out.css\n"
+        "  experimental:\n"
+        "    thing: true\n",
+    )
+    config = LabbConfig.from_dict(yaml.safe_load(config_file.read_text()))
+
+    save_config(config, config_file)
+
+    saved = yaml.safe_load(config_file.read_text())
+    assert saved["css"]["experimental"] == {"thing": True}
+
+
+def test_save_config_round_trip_is_idempotent(temp_dir):
+    """Loading and saving twice leaves the file byte-identical after the first pass."""
+    config_file = _write_yaml(
+        temp_dir,
+        "css:\n"
+        "  build:\n"
+        "    input: in.css\n"
+        "    output: out.css\n"
+        "    minify: true\n"
+        "blocks:\n"
+        "  collections:\n"
+        "  - name: blocks\n"
+        "    path: ./blocks\n"
+        "    default: true\n"
+        "  sources: []\n",
+    )
+    original = config_file.read_text()
+
+    def _round_trip():
+        config = LabbConfig.from_dict(
+            yaml.safe_load(config_file.read_text()), config_dir=temp_dir
+        )
+        save_config(config, config_file)
+        return config_file.read_text()
+
+    first = _round_trip()
+    assert _round_trip() == first
+    assert yaml.safe_load(first) == yaml.safe_load(original)
 
 
 # ---------------------------------------------------------------------------

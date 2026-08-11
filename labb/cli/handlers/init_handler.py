@@ -57,7 +57,7 @@ def init_project(use_defaults: bool = False, force: bool = False):
         config.packages = {"labb": PackageSpec(groups=["themes", "components"])}
 
     config_path = Path.cwd() / "labb.yaml"
-    save_config(config, config_path)
+    save_config(config, config_path, merge=False)
 
     # Create project structure
     _create_project_structure(config, force)

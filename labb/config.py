@@ -20,6 +20,13 @@ class BlockCollection:
     name: str
     path: str  # resolved to absolute path relative to config file location
     default: bool = False
+    # As written in labb.yaml, so a load/save round trip writes it back unchanged.
+    raw_path: Optional[str] = None
+
+    @property
+    def config_path(self) -> str:
+        """The path to serialise back into labb.yaml."""
+        return self.raw_path if self.raw_path is not None else self.path
 
 
 @dataclass
@@ -167,6 +174,14 @@ class BlocksConfig:
         return self.sources
 
 
+DEFAULT_CLASSES_OUTPUT = "static_src/labb-classes.txt"
+DEFAULT_TEMPLATE_PATTERNS = [
+    "templates/**/*.html",
+    "*/templates/**/*.html",
+    "**/templates/**/*.html",
+]
+
+
 @dataclass
 class LabbConfig:
     """Configuration class for labb"""
@@ -177,13 +192,9 @@ class LabbConfig:
     minify: bool = True
 
     # CSS Scan settings
-    classes_output: str = "static_src/labb-classes.txt"
+    classes_output: str = DEFAULT_CLASSES_OUTPUT
     template_patterns: List[str] = field(
-        default_factory=lambda: [
-            "templates/**/*.html",
-            "*/templates/**/*.html",
-            "**/templates/**/*.html",
-        ]
+        default_factory=lambda: list(DEFAULT_TEMPLATE_PATTERNS)
     )
     scan_apps: Dict[str, List[str]] = field(default_factory=dict)
 
@@ -259,6 +270,7 @@ class LabbConfig:
                         name=entry["name"],
                         path=resolved,
                         default=entry.get("default", False),
+                        raw_path=raw_path,
                     )
                 )
 
@@ -292,8 +304,6 @@ class LabbConfig:
             },
         }
         if self.packages:
-            # New schema: css.packages + a slim scan (templates only; output/apps
-            # are legacy and obsolete under the new pipeline).
             css["packages"] = {
                 pkg: _package_spec_to_yaml(spec) for pkg, spec in self.packages.items()
             }
@@ -301,20 +311,25 @@ class LabbConfig:
                 css["provides"] = {
                     g: _package_css_to_dict(pc) for g, pc in self.provides.items()
                 }
-            css["scan"] = {"templates": self.template_patterns}
-        else:
-            # Legacy shape (no css.packages configured).
-            css["scan"] = {
-                "output": self.classes_output,
-                "templates": self.template_patterns,
-                "apps": self.scan_apps,
-            }
+
+        # Only what the project set: defaults would invent a legacy scan block.
+        scan: Dict[str, Any] = {}
+        if self.template_patterns != DEFAULT_TEMPLATE_PATTERNS:
+            scan["templates"] = self.template_patterns
+        if not self.packages:
+            if self.classes_output != DEFAULT_CLASSES_OUTPUT:
+                scan["output"] = self.classes_output
+            if self.scan_apps:
+                scan["apps"] = self.scan_apps
+        if scan:
+            css["scan"] = scan
+
         result: Dict[str, Any] = {"css": css}
 
         if self.blocks is not None:
             result["blocks"] = {
                 "collections": [
-                    {"name": c.name, "path": c.path, "default": c.default}
+                    {"name": c.name, "path": c.config_path, "default": c.default}
                     for c in self.blocks.collections
                 ],
                 "sources": [
@@ -403,12 +418,42 @@ def load_config(
     return _cached_config
 
 
-def save_config(config: LabbConfig, config_path: Optional[Path] = None) -> Path:
-    """Save configuration to file"""
+def save_config(
+    config: LabbConfig, config_path: Optional[Path] = None, merge: bool = True
+) -> Path:
+    """Save configuration to file.
+
+    By default the managed sections are patched into the file as it stands, so
+    top-level keys labb knows nothing about (and any unmanaged keys under `css`)
+    survive a load→save round trip. Comments are still lost — PyYAML cannot
+    round-trip them.
+
+    ``merge=False`` writes the managed sections only, discarding whatever else
+    was in the file. For callers that mean a genuine overwrite (e.g. `labb init`
+    after the user confirms replacing an existing config).
+    """
     if config_path is None:
         config_path = Path.cwd() / "labb.yaml"
 
+    existing: Dict[str, Any] = {}
+    if merge and config_path.exists():
+        with open(config_path, "r") as f:
+            loaded = yaml.safe_load(f)
+        if isinstance(loaded, dict):
+            existing = loaded
+
+    managed = config.to_dict()
+
+    css = existing.get("css")
+    if not isinstance(css, dict):
+        css = {}
+    css.update(managed["css"])
+    existing["css"] = css
+
+    if "blocks" in managed:
+        existing["blocks"] = managed["blocks"]
+
     with open(config_path, "w") as f:
-        yaml.dump(config.to_dict(), f, default_flow_style=False, indent=2)
+        yaml.dump(existing, f, default_flow_style=False, indent=2, sort_keys=False)
 
     return config_path
