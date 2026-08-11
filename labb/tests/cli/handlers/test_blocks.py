@@ -1369,6 +1369,27 @@ def test_block_list_leaves_normal_blocks_unmarked(tmp_path, capsys):
     assert "demo" not in capsys.readouterr().out
 
 
+def test_block_list_keeps_square_brackets_in_names(tmp_path, capsys):
+    source_path = make_local_source(tmp_path)
+    (source_path / "index.yaml").write_text(
+        (source_path / "index.yaml")
+        .read_text()
+        .replace("name: Todo List", "name: Todo List [beta]")
+    )
+    config_path = make_config_with_local_source(tmp_path, source_path)
+
+    with (
+        patch("labb.cli.handlers.blocks.find_config_file", return_value=config_path),
+        patch(
+            "labb.cli.handlers.blocks.load_config",
+            return_value=_list_config_for(source_path),
+        ),
+    ):
+        block_list()
+
+    assert "Todo List [beta]" in capsys.readouterr().out
+
+
 def test_block_search_marks_demo_blocks(tmp_path, capsys):
     source_path = make_local_source(tmp_path)
     (source_path / "index.yaml").write_text(

@@ -142,15 +142,29 @@ def _get_sources_and_config_dir():
     return config.blocks.sources, config_dir
 
 
+_TABLE_COLUMNS = (
+    ("ref", 30),
+    ("name", 20),
+    ("type", 10),
+    ("tier", 10),
+    ("_source", 15),
+)
+
+
 def _print_table(rows: list[dict]) -> None:
-    for row in rows:
-        ref = (row.get("ref") or "")[:30]
-        name = (row.get("name") or "")[:20]
-        btype = (row.get("type") or "")[:10]
-        tier = (row.get("tier") or "")[:10]
-        source = (row.get("_source") or "")[:15]
-        demo = "[yellow]demo[/yellow]" if row.get("demo") else ""
-        line = f"{ref:<30} {name:<20} {btype:<10} {tier:<10} {source:<15} {demo}"
+    cells = [
+        [(row.get(key) or "")[:cap] for key, cap in _TABLE_COLUMNS] for row in rows
+    ]
+    if not cells:
+        return
+    # Empty columns are dropped, so an unused tier costs no width.
+    used = [i for i in range(len(_TABLE_COLUMNS)) if any(row[i] for row in cells)]
+    widths = {i: max(len(row[i]) for row in cells) for i in used}
+
+    for row, source in zip(cells, rows):
+        line = escape(" ".join(row[i].ljust(widths[i]) for i in used))
+        if source.get("demo"):
+            line = f"{line} [yellow]demo[/yellow]"
         console.print(line.rstrip())
 
 
