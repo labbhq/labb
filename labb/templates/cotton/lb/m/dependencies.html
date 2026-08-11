@@ -30,9 +30,13 @@ function labbGetCSRFToken() {
 {% endif %}
 
 {% if setThemeEndpoint %}
+{{ setThemeEndpoint|json_script:"labb-set-theme-endpoint" }}
 <script>
 
 const LABB_THEME_COOKIE = 'labb_theme';
+const LABB_THEME_ENDPOINT = JSON.parse(
+    document.getElementById('labb-set-theme-endpoint').textContent
+);
 
 function labbWriteThemeCookie(theme) {
     document.cookie = LABB_THEME_COOKIE + '=' + encodeURIComponent(theme)
@@ -76,7 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (controller.type === 'checkbox') {
             controller.checked = !controller.checked;
         } else {
-            const original = document.querySelector(`input[type="radio"].theme-controller[value="${currentTheme}"]`);
+            const selector = 'input[type="radio"].theme-controller'
+                + '[value="' + CSS.escape(currentTheme) + '"]';
+            const original = document.querySelector(selector);
             if (original) original.checked = true;
         }
     }
@@ -100,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
             syncControllers(newTheme);
             labbWriteThemeCookie(newTheme);
 
-            fetch('{{ setThemeEndpoint }}', {
+            fetch(LABB_THEME_ENDPOINT, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

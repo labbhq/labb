@@ -6,7 +6,7 @@ keywords: "labb migration, alpine to datastar, labb 0.5 upgrade, c-lbr, reactive
 
 labb 0.5 replaces Alpine with [Datastar](https://data-star.dev/). The `.x` component variants, `x-model`, and `x-on` are gone. Use this guide to update an existing project.
 
-If your project never used `.x` variants, you do not need to change its static pages.
+If your project never used `.x` variants, its static pages need no changes. Read the section on template tags and settings anyway. Some of the removed API worked without any `.x` component.
 
 <c-lb.alert variant="info" alertStyle="outline" class="my-4">
   <span>Reactivity is opt-in. Datastar loads only on pages that use a `c-lbr.` component or a reactive `$` prop.</span>
@@ -85,6 +85,63 @@ Use a server action for a change Django owns. It calls a normal view, which read
 ## Charts
 
 Bind a chart’s `data` prop to a signal with `data="$signal"`. The chart updates when the signal changes.
+
+## Remove the Alpine template tags and settings
+
+0.5 also removes two template tags and two settings. A removed tag raises `TemplateSyntaxError` on the first render after the upgrade. A removed setting raises nothing at all, so check all four.
+
+| Removed in 0.5 | What to do |
+|---|---|
+| `{% templatetag openblock %} lb_alpine_script {% templatetag closeblock %}` | Delete the tag |
+| `alpine_loaded=` on `{% templatetag openblock %} lb_load_stack {% templatetag closeblock %}` | Drop the argument |
+| `LABB_SETTINGS["ALPINE_JS_PATH"]` | Delete the key |
+| The old `STACK_HELPERS` default | Delete your copy of it |
+
+### The template tags
+
+`{% templatetag openblock %} lb_alpine_script {% templatetag closeblock %}` is gone. It loaded Alpine on pages that had no `.x` component. A template that still calls it raises `TemplateSyntaxError: Invalid block tag`.
+
+`{% templatetag openblock %} lb_load_stack {% templatetag closeblock %}` no longer accepts `alpine_loaded`. Passing it raises `TemplateSyntaxError: received unexpected keyword argument`.
+
+{% verbatim %}
+```html
+<!-- before -->
+{% lb_alpine_script %}
+{% lb_load_stack name="components" alpine_loaded=True %}
+
+<!-- after -->
+{% lb_load_stack name="components" %}
+```
+{% endverbatim %}
+
+`{% templatetag openblock %} lb_alpine_defaults {% templatetag closeblock %}` and the `lb_attrs_to_dict` filter went with them. Both handed component props to Alpine at render time. Nothing replaces them, because a Datastar component reads its state from signals in the browser.
+
+To load the reactive bundle on a page that has no `c-lbr.` component, use the `datastar` prop.
+
+```html
+<c-lb.m.dependencies datastar />
+```
+
+### The settings
+
+`ALPINE_JS_PATH` is no longer read, and the static files it pointed at (`labb/js/alpine/`) no longer ship. Delete the key.
+
+`STACK_HELPERS` still works, but its default is now empty. It used to be this.
+
+```python
+LABB_SETTINGS = {
+    "STACK_HELPERS": {
+        "components": [
+            "labb/js/alpine/labb-component.js",
+            "alpine",
+        ],
+    },
+}
+```
+
+The first entry is a deleted file. The second was a token that emitted the Alpine script tag, and nothing handles it now. If you copied that default into your own settings, delete it and keep the helpers you wrote. labb skips a leftover entry without an error, so the helper never loads and nothing tells you.
+
+Chart.js moved from `labb/js/chart/` to `labb/js/vendor/` in the same release. If you pinned `CHART_JS_PATH` to the old path, update it or drop the key and take the default.
 
 ## Update the CSS configuration
 

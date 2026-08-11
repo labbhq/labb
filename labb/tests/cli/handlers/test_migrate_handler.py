@@ -1,6 +1,6 @@
 import yaml
 
-from labb.cli.handlers.migrate_handler import _plan_packages, migrate_config
+from labb.cli.handlers.migrate_handler import _backup, _plan_packages, migrate_config
 
 
 def test_plan_packages_maps_apps_to_components():
@@ -53,6 +53,29 @@ def test_migrate_rewrites_yaml_input_and_cleans_up(tmp_path):
 
     assert not (tmp_path / "static_src" / "labb-classes.txt").exists()
     assert ".labb/" in (tmp_path / ".gitignore").read_text()
+
+
+def test_migrate_backs_up_every_file_it_overwrites(tmp_path):
+    _legacy_project(tmp_path)
+    original_yaml = (tmp_path / "labb.yaml").read_text()
+    original_css = (tmp_path / "static_src" / "input.css").read_text()
+
+    migrate_config(path=str(tmp_path), assume_yes=True)
+
+    assert (tmp_path / "labb.yaml.bak").read_text() == original_yaml
+    assert (tmp_path / "static_src" / "input.css.bak").read_text() == original_css
+
+
+def test_backup_never_clobbers_an_existing_backup(tmp_path):
+    target = tmp_path / "labb.yaml"
+    target.write_text("first\n")
+    assert _backup(target).name == "labb.yaml.bak"
+
+    target.write_text("second\n")
+    assert _backup(target).name == "labb.yaml.bak.1"
+
+    assert (tmp_path / "labb.yaml.bak").read_text() == "first\n"
+    assert (tmp_path / "labb.yaml.bak.1").read_text() == "second\n"
 
 
 def test_migrate_noop_when_no_scan_apps(tmp_path):

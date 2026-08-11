@@ -124,12 +124,16 @@ Use the utility functions when your app needs custom theme-selection logic inste
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from labb.shortcuts import set_labb_theme, get_labb_theme
+from labb.contrib.theme import is_valid_theme_name
 
 @require_http_methods(["POST"])
 def set_theme(request):
     theme = request.POST.get("theme")
     if not theme:
         return JsonResponse({"success": False, "error": "Theme parameter is required"}, status=400)
+
+    if not is_valid_theme_name(theme):
+        return JsonResponse({"success": False, "error": "Invalid theme name"}, status=400)
 
     success = set_labb_theme(request, theme)
     if success:
@@ -143,6 +147,10 @@ Import these functions from `labb.shortcuts`.
 - `set_labb_theme(request, theme)` stores the theme in the session and returns `True` or `False`
 - `get_labb_theme(request)` returns the current session value
 - `set_theme_view` provides the built-in persistence view
+
+`set_labb_theme` stores whatever you give it. The theme name ends up in a `data-theme` attribute and in a
+CSS selector, so check it first. `set_theme_view` already does; a custom view should call
+`is_valid_theme_name` as above.
 </c-lb.collapse>
 
 ## Fix common problems

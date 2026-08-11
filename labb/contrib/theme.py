@@ -2,12 +2,22 @@
 Theme management functionality for labb Django projects.
 """
 
+import re
+
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from labb.django_settings import get_default_theme
 
 THEME_SESSION_KEY = "LABB_THEME"
+
+# No registry to check against: themes are declared per project.
+THEME_NAME_RE = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
+
+
+def is_valid_theme_name(theme):
+    """True if `theme` is shaped like a theme name (or the `__system__` sentinel)."""
+    return bool(theme) and bool(THEME_NAME_RE.match(theme))
 
 
 def set_labb_theme(request, theme):
@@ -52,7 +62,8 @@ def set_theme_view(request):
     This view can be included in Django projects to provide theme switching functionality.
 
     Expected POST data:
-        theme: Theme name (e.g., 'labb-light', 'labb-dark')
+        theme: Theme name (e.g., 'labb-light', 'labb-dark'). Must match
+            THEME_NAME_RE; anything else is rejected with 400.
 
     Returns:
         JsonResponse with success status and theme information
@@ -62,6 +73,11 @@ def set_theme_view(request):
     if not theme:
         return JsonResponse(
             {"success": False, "error": "Theme parameter is required"}, status=400
+        )
+
+    if not is_valid_theme_name(theme):
+        return JsonResponse(
+            {"success": False, "error": "Invalid theme name"}, status=400
         )
 
     # Set the theme in session

@@ -17,6 +17,21 @@ LABB_IMPORT_LINE = '@import "../.labb/labb.css";'
 LABB_IMPORT_BLOCK = f"/* labb css - don't remove this line */\n{LABB_IMPORT_LINE}\n"
 
 
+def _backup(path: Path) -> Path:
+    """Copy `path` to `path.bak` before it gets overwritten.
+
+    An existing backup is never clobbered: the next free `.bak.1`, `.bak.2`, …
+    is used instead, so re-running the migration keeps every earlier version.
+    """
+    target = path.with_suffix(path.suffix + ".bak")
+    n = 1
+    while target.exists():
+        target = path.with_suffix(f"{path.suffix}.bak.{n}")
+        n += 1
+    target.write_bytes(path.read_bytes())
+    return target
+
+
 def _plan_packages(apps: dict) -> dict:
     """Map legacy scan.apps → css.packages (components only; literals left to the user)."""
     packages = {}
@@ -49,7 +64,9 @@ def _patch_input_css(input_path: Path) -> list:
             )
         else:
             text = LABB_IMPORT_BLOCK + text
+        backup = _backup(input_path)
         input_path.write_text(text, encoding="utf-8")
+        console.print(f"[dim]Backed up {input_path.name} → {backup.name}[/dim]")
 
     # Flag things that must be removed by hand (auto-deleting CSS is unsafe).
     if "@source" in text and any(
@@ -95,6 +112,11 @@ def migrate_config(path: str = ".", assume_yes: bool = False) -> None:
         "templates carry raw utilities (e.g. labb's cotton/lb), add a `literals` "
         "list or use a published group like `labb: all`.\n"
     )
+    console.print(
+        "[yellow]Note:[/yellow] labb.yaml is rewritten from parsed YAML, so comments "
+        "and key order are lost. A .bak copy is written next to every file this "
+        "command overwrites.\n"
+    )
 
     if not assume_yes:
         if not sys.stdin.isatty():
@@ -117,8 +139,12 @@ def migrate_config(path: str = ".", assume_yes: bool = False) -> None:
     else:
         css.pop("scan", None)
     data["css"] = css
+    yaml_backup = _backup(labb_yaml)
     labb_yaml.write_text(yaml.dump(data, sort_keys=False, indent=2), encoding="utf-8")
-    console.print(f"[green]✅ Rewrote {labb_yaml.name}[/green]")
+    console.print(
+        f"[green]✅ Rewrote {labb_yaml.name}[/green] "
+        f"[dim](backup: {yaml_backup.name})[/dim]"
+    )
 
     # 2. patch input.css
     input_file = (css.get("build") or {}).get("input", "static_src/input.css")
