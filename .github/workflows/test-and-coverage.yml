@@ -115,6 +115,7 @@ jobs:
         working-directory: extras/blocks
         run: |
           poetry install --with local --no-root
+          poetry run playwright install --with-deps chromium
           poetry run pytest
 
       - name: Upload coverage reports
