@@ -9,6 +9,7 @@ from typing import Optional
 
 import typer
 import yaml
+from rich.markup import escape
 
 from labb.cli.handlers.commons import blocks_root, commons_dir, console
 from labb.config import (
@@ -33,7 +34,8 @@ def _title_name(name: str) -> str:
 def _validate_segment(value: str, kind: str) -> None:
     if not _SEGMENT_RE.match(value):
         console.print(
-            f"[red]Invalid {kind} '{value}' — must match {_SEGMENT_RE.pattern}.[/red]"
+            f"[red]Invalid {kind} '{value}' — must match "
+            f"{escape(_SEGMENT_RE.pattern)}.[/red]"
         )
         raise typer.Exit(1)
 
