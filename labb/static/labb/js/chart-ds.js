@@ -19,13 +19,40 @@
 
 (function () {
     var _instances = new WeakMap();
+    // Live entries, so theme rebuilds can enumerate. WeakMap cannot be walked.
+    var _live = [];
 
     function _clone(val) {
         try { return JSON.parse(JSON.stringify(val)); } catch (e) { return {}; }
     }
 
+    function _isPlainObject(val) {
+        return val !== null && typeof val === 'object' && !Array.isArray(val);
+    }
+
+    // Chart.js options nest (plugins.legend, scales.y), so a shallow merge would
+    // drop a whole default subtree whenever the caller supplies its parent key.
+    // Arrays replace: passing `datasets` means those datasets, not those appended.
+    function _deepMerge(base, override) {
+        var out = {};
+        var key;
+        for (key in base) {
+            if (Object.prototype.hasOwnProperty.call(base, key)) out[key] = base[key];
+        }
+        for (key in override) {
+            if (!Object.prototype.hasOwnProperty.call(override, key)) continue;
+            if (_isPlainObject(out[key]) && _isPlainObject(override[key])) {
+                out[key] = _deepMerge(out[key], override[key]);
+            } else {
+                out[key] = override[key];
+            }
+        }
+        return out;
+    }
+
     function _buildChart(el, rawData, rawOpts) {
         var canvas = el.querySelector('canvas');
+        if (!canvas) return null;
         canvas.removeAttribute('width');
         canvas.removeAttribute('height');
 
@@ -44,7 +71,7 @@
         var chart = new window.Chart(canvas, {
             type: type,
             data: data,
-            options: Object.assign(
+            options: _deepMerge(
                 {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -58,38 +85,62 @@
         return chart;
     }
 
-    function _init(el, rawData, rawOpts) {
-        var chart = _buildChart(el, rawData, rawOpts);
-        var type  = el.dataset.lbChartType || 'bar';
+    function _forget(entry) {
+        var i = _live.indexOf(entry);
+        if (i !== -1) _live.splice(i, 1);
+        _instances.delete(entry.el);
+        if (entry.chart) entry.chart.destroy();
+    }
 
-        function rebuild() {
-            var entry = _instances.get(el);
-            if (!entry) return;
-            entry.chart.destroy();
-            entry.chart = _buildChart(el, entry.rawData, entry.rawOpts);
+    // Charts that left the DOM are dropped rather than rebuilt, so a morphed-away
+    // chart stops holding its element, its Chart.js instance and its cloned data.
+    function _sweep() {
+        for (var i = _live.length - 1; i >= 0; i--) {
+            if (!_live[i].el.isConnected) _forget(_live[i]);
         }
+    }
 
-        var observer = new MutationObserver(rebuild);
-        observer.observe(document.documentElement, {
+    function _rebuildAll() {
+        _sweep();
+        for (var i = 0; i < _live.length; i++) {
+            var entry = _live[i];
+            if (entry.chart) entry.chart.destroy();
+            entry.chart = _buildChart(entry.el, entry.rawData, entry.rawOpts);
+        }
+    }
+
+    // One observer and one listener for the page, not one per chart. Per-chart
+    // handlers on `document` kept every chart element alive for the page's life.
+    var _watching = false;
+
+    function _watch() {
+        if (_watching) return;
+        _watching = true;
+        new MutationObserver(_rebuildAll).observe(document.documentElement, {
             attributes: true,
             attributeFilter: ['data-theme'],
         });
+        document.addEventListener('lb:chart-defaults-applied', _rebuildAll);
+    }
 
-        document.addEventListener('lb:chart-defaults-applied', rebuild);
+    function _init(el, rawData, rawOpts) {
+        _sweep();
+        _watch();
 
-        _instances.set(el, {
-            chart: chart,
-            type: type,
+        var entry = {
+            el: el,
+            chart: _buildChart(el, rawData, rawOpts),
+            type: el.dataset.lbChartType || 'bar',
             rawData: _clone(rawData),
             rawOpts: _clone(rawOpts),
-            observer: observer,
-            rebuild: rebuild,
-        });
+        };
+        _instances.set(el, entry);
+        _live.push(entry);
     }
 
     function _update(el, signalData) {
         var entry = _instances.get(el);
-        if (!entry) return;
+        if (!entry || !entry.chart) return;
         var chart  = entry.chart;
         var snap   = _clone(signalData);
 
@@ -104,11 +155,14 @@
             chart.data.datasets = resolved.datasets || [];
         }
         if (snap.legend !== undefined) {
+            // Custom `options` may have supplied a plugins object of its own.
+            chart.options.plugins = chart.options.plugins || {};
+            chart.options.plugins.legend = chart.options.plugins.legend || {};
             chart.options.plugins.legend.position = snap.legend === 'none' ? false : snap.legend;
         }
         if (snap.options !== undefined) {
-            entry.rawOpts = _clone(snap.options);
-            Object.assign(chart.options, snap.options);
+            entry.rawOpts = _deepMerge(entry.rawOpts, snap.options);
+            chart.options = _deepMerge(chart.options, snap.options);
         }
 
         var cfg = window.lbChartConfig || {};
@@ -125,7 +179,7 @@
                 // same as the static path. Signal-provided options override it.
                 var attrOpts = {};
                 try { attrOpts = JSON.parse(el.dataset.lbChartOptions || '{}'); } catch (e) {}
-                var rawOpts = Object.assign(attrOpts, data.options !== undefined ? data.options : {});
+                var rawOpts = _deepMerge(attrOpts, data.options !== undefined ? data.options : {});
                 _init(el, rawData, rawOpts);
             } else {
                 _update(el, data);
@@ -140,5 +194,12 @@
             try { rawOpts = JSON.parse(el.dataset.lbChartOptions || '{}'); } catch (e) {}
             _init(el, rawData, rawOpts);
         },
+
+        destroy: function (el) {
+            var entry = _instances.get(el);
+            if (entry) _forget(entry);
+        },
+
+        _internals: { live: _live, deepMerge: _deepMerge, sweep: _sweep, rebuildAll: _rebuildAll },
     };
 })();

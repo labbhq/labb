@@ -100,6 +100,12 @@ tasks:
       # docs/ has its own poetry env without the test deps, so run from the root.
       - poetry run pytest -c docs/pytest.ini docs {{.CLI_ARGS}}
 
+  test:js:
+    desc: Run the browser-script tests (node's built-in runner, no dependencies)
+    dir: .
+    cmds:
+      - node --test js/*.test.js {{.CLI_ARGS}}
+
   test:all:
     desc: Run every suite (each in its own session — extras have separate settings)
     dir: .
@@ -110,6 +116,7 @@ tasks:
       - poetry run pytest extras/icons
       - poetry run pytest extras/start
       - cd extras/blocks && poetry run pytest
+      - node --test js/*.test.js
 
 
   lb-schema:generate:

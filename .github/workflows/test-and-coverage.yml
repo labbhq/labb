@@ -103,6 +103,9 @@ jobs:
       - name: Run labbdocs tests
         run: poetry run pytest -c docs/pytest.ini docs --cov=labbdocs --cov-append --cov-report=xml
 
+      - name: Run browser-script tests
+        run: node --test js/*.test.js
+
       - name: Run icons tests
         run: poetry run pytest extras/icons
 
