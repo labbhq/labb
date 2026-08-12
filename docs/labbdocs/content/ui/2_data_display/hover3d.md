@@ -2,7 +2,7 @@
 doc_layout: component
 component: c-lb.hover3d
 title: Hover 3D
-description: "Hover 3D component for Django: add perspective tilt effects to cards and images. Built with django-cotton, Tailwind CSS, and Alpine.js."
+description: "Hover 3D component for Django: add perspective tilt effects to cards and images. Built with django-cotton and Tailwind CSS, and ships no JavaScript."
 keywords: "django hover 3d component, 3d tilt django, daisyui 3d django, tailwind 3d django, hover effect django, django-cotton hover 3d, interactive card django"
 daisy_ui_component_name: hover-3d
 icon: rmx.box-3

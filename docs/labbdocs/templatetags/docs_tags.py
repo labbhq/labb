@@ -314,7 +314,14 @@ def generate_structured_data(context, doc_info=None):
         description = frontmatter.get("description", "")
         schemas.append(generate_software_schema(component_name, description, site_url))
 
-    json_ld = json.dumps(schemas, indent=2)
+    # json.dumps escapes for JSON, not for a script context: a "</script>" in any
+    # value would close the tag early. \uXXXX stays valid JSON and parses back the same.
+    json_ld = (
+        json.dumps(schemas, indent=2)
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+    )
 
     return mark_safe(f'<script type="application/ld+json">\n{json_ld}\n</script>')
 
