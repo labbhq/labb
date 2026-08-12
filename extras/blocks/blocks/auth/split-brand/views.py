@@ -15,6 +15,7 @@ them with a real user model whose password is set via `set_password()`, and
 guard whatever the user reaches next with `login_required`.
 """
 
+from django.db import IntegrityError
 from django.utils import timezone
 
 from labb.contrib.blocks import lm, render_page
@@ -158,18 +159,37 @@ def sign_up_submit(request):
             "Create an Arden account",
         )
 
-    # DEMO: LbMember has no password field, so the typed password is discarded.
     workspace = LbWorkspace.objects.first()
-    member = LbMember.objects.create(
-        workspace=workspace,
-        name=s.name.strip(),
-        email=s.email,
-        title="",
-        role="member",
-        status="invited",
-        joined_on=timezone.now().date(),
-        last_active_at=timezone.now(),
-    )
+    if workspace is None:
+        return _page(
+            request,
+            SIGN_UP,
+            _ctx(
+                s,
+                failed="There is no Arden workspace yet. Load the demo fixtures first.",
+            ),
+            "Create an Arden account",
+        )
+
+    # DEMO: LbMember has no password field, so the typed password is discarded.
+    try:
+        member = LbMember.objects.create(
+            workspace=workspace,
+            name=s.name.strip(),
+            email=s.email,
+            title="",
+            role="member",
+            status="invited",
+            joined_on=timezone.now().date(),
+            last_active_at=timezone.now(),
+        )
+    except IntegrityError:
+        return _page(
+            request,
+            SIGN_UP,
+            _ctx(s, failed="That email is already on an Arden workspace."),
+            "Create an Arden account",
+        )
 
     s.submitted = True
     return _page(

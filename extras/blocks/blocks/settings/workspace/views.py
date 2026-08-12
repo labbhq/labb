@@ -164,7 +164,8 @@ def _profile_props(request, workspace, errors=None):
 def _team_props(request, workspace, errors=None):
     members = _members(workspace)
     seats_used = _seats_used(members)
-    seats_total = workspace.plan.seats_included
+    # A workspace can sit on no plan (LbWorkspace.plan is nullable): no plan, no seats.
+    seats_total = workspace.plan.seats_included if workspace.plan else 0
     return {
         "workspace": workspace,
         "members": members,
@@ -333,7 +334,9 @@ def invite_save(request):
     errors = _invite_errors(s, workspace, strict=True)
 
     props = _team_props(request, workspace)
-    if props["seats_full"]:
+    if workspace.plan is None:
+        errors["email"] = "This workspace is not on a plan. Choose one to add seats."
+    elif props["seats_full"]:
         errors["email"] = (
             f"All {props['seats_total']} seats on {workspace.plan.name} are in use. "
             "Change plan to add more."
