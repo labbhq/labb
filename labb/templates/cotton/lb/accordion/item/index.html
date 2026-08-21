@@ -1,19 +1,12 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
     name=""
     checked
     title=""
-    style=""
-    :styleClasses="{
-        'arrow': 'collapse-arrow',
-        'plus': 'collapse-plus'
-    }"
-    join
-    border
 />
+{% lbr_props "accordion.item" attrs=attrs as rx %}
 
-<div class="collapse {{ styleClasses|get_dict_item:style }} {% if join %}join-item{% endif %} {% if border %}border border-base-300{% endif %} {{ class }}" {{ attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     <input type="radio" name="{{ name }}" {% if checked %}checked{% endif %} />
     {% if title %}
         <div class="collapse-title font-semibold">{{ title }}</div>

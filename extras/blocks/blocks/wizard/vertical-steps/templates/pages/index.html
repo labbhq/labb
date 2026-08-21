@@ -1,0 +1,31 @@
+<c-lbr.signals id="vsteps" :$step=step :$form=form />
+
+<main class="container mx-auto max-w-5xl px-4 py-10 sm:py-14">
+
+    <div class="grid lg:grid-cols-[16rem_1fr] gap-8 lg:gap-12">
+
+        <c-vertical-steps.rail :steps=steps />
+
+        <c-lb.card class="border border-base-300 shadow-sm h-fit">
+            <c-lb.card.body class="gap-7 p-6 sm:p-8">
+
+                <div data-show="$step === 1">
+                    <c-vertical-steps.step-workspace :regions=regions />
+                </div>
+
+                <div data-show="$step === 2" style="display:none">
+                    <c-vertical-steps.step-billing :currencies=currencies />
+                </div>
+
+                <div data-show="$step === 3" style="display:none">
+                    <c-vertical-steps.step-team :roles=roles />
+                </div>
+
+                <c-vertical-steps.nav />
+
+            </c-lb.card.body>
+        </c-lb.card>
+
+    </div>
+
+</main>

@@ -1,0 +1,38 @@
+steps:
+  - title: Declare the selected image state
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      One object signal holds the preview URL and the file name. Nothing is sent
+      anywhere: the file stays in the browser until the form is saved.
+
+  - title: Put image parsing in a small helper
+    file: templates/pages/index.html
+    match: "function ardenPickAvatar(evt)"
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      `URL.createObjectURL` turns the picked file into a local URL. Long handlers
+      belong in a function, and `evt` is available inside any Datastar expression, so
+      the attribute is left readable.
+
+  - title: Store the selected file in the signal
+    file: templates/cotton/profile_card/avatar.html
+    match: 'data-on:change="$avatar = ardenPickAvatar(evt)"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Replacing the object updates both readers at once — the preview and the file
+      name. Remove sets it back to empty, and the initials avatar comes straight back.
+
+  - title: Update the preview from the same state
+    file: templates/cotton/profile_card/avatar.html
+    match: 'data-attr:src="$avatar.url"'
+    teaches: [signals, theming]
+    docs: [reactivity/patterns]
+    body: |
+      The image reads the URL, the initials avatar shows while it is empty. The
+      fallback is a themed `c-lb.avatar`, so this block ships no image asset at all
+      and recolours with the theme.

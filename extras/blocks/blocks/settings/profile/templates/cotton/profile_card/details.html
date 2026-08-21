@@ -1,0 +1,60 @@
+<c-vars :member="{}" :timezones="[]" />
+
+<c-lb.card class="border border-base-300 shadow-sm">
+    <c-lb.card.body class="gap-6 p-6 sm:p-8">
+
+        <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <h2 class="text-lg font-semibold tracking-tight">Personal details</h2>
+                <p class="text-sm text-base-content/60 mt-1">
+                    Your name and title appear on every approval and invoice you touch.
+                </p>
+            </div>
+            <c-lb.button variant="primary" size="sm">Save changes</c-lb.button>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+                <label class="label label-text text-sm font-medium mb-1">Full name</label>
+                <c-lb.input id="pf-name" type="text" class="w-full" value="{{ member.name }}" data-lbb-start />
+            </div>
+
+            <div>
+                <label class="label label-text text-sm font-medium mb-1">Job title</label>
+                <c-lb.input id="pf-title" type="text" class="w-full" value="{{ member.title }}" />
+            </div>
+
+            <div>
+                <label class="label label-text text-sm font-medium mb-1">
+                    Work email <span class="text-base-content/40 font-normal">(used to sign in)</span>
+                </label>
+                <c-lb.input id="pf-email" type="email" class="w-full" value="{{ member.email }}" />
+            </div>
+
+            <div>
+                <label class="label label-text text-sm font-medium mb-1">Phone</label>
+                <c-lb.input id="pf-phone" type="tel" class="w-full tabular-nums" value="{{ member.phone }}" />
+            </div>
+
+            <div class="sm:col-span-2">
+                <label class="label label-text text-sm font-medium mb-1">
+                    Timezone <span class="text-base-content/40 font-normal">(when your digest arrives)</span>
+                </label>
+                <c-lb.select id="pf-timezone" class="w-full">
+                    {% for value, label in timezones %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </c-lb.select>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-2 text-xs text-base-content/50 border-t border-base-300 pt-4">
+            <c-lbi n="rmx.information" w="1em" h="1em" class="size-4 mt-0.5 shrink-0" />
+            <span>
+                Changing your work email signs you out of every device and sends a
+                confirmation link to the new address.
+            </span>
+        </div>
+
+    </c-lb.card.body>
+</c-lb.card>

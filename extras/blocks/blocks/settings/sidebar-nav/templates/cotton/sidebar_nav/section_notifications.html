@@ -1,0 +1,23 @@
+<c-vars :notifications="[]" />
+
+<c-sidebar-nav.panel
+    title="Notifications"
+    desc="Arden emails you when the revenue graph moves. Nothing else.">
+
+    <div class="rounded-box border border-base-300 divide-y divide-base-300">
+        {% for item in notifications %}
+        <div class="flex items-center justify-between gap-4 p-4">
+            <div>
+                <div class="text-sm font-medium">{{ item.label }}</div>
+                <div class="text-xs text-base-content/55 mt-0.5">{{ item.note }}</div>
+            </div>
+            <c-lb.toggle variant="primary" :checked=item.on />
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="text-xs text-base-content/45">
+        The digest goes to every active member. Alerts go only to admins and the billing role.
+    </p>
+
+</c-sidebar-nav.panel>

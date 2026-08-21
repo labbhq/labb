@@ -1,0 +1,20 @@
+<c-vars :activity="[]" />
+
+<c-lb.card class="border border-base-300">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <h2 class="text-sm font-semibold">Your recent activity</h2>
+
+        <div class="flex flex-col gap-3">
+            {% for item in activity %}
+            <div class="text-xs">
+                <div class="font-medium leading-snug">{{ item.label }}</div>
+                <div class="text-base-content/45 tabular-nums mt-0.5">{{ item.when }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a class="link link-hover text-xs text-base-content/50">See the full audit log</a>
+
+    </c-lb.card.body>
+</c-lb.card>

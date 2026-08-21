@@ -1,0 +1,39 @@
+<c-vars :workspace="{}" :plan="{}" :totals="{}" />
+
+<div class="flex flex-col gap-6 border-b border-base-300 pb-6">
+
+    <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Billing</h1>
+            <p class="text-sm text-base-content/60 mt-1">
+                What {{ workspace.name }} pays Arden, and what Arden has billed on your behalf.
+            </p>
+        </div>
+        <c-lb.badge style="soft" variant="primary" icon="rmx.bank-card">{{ plan.name }}</c-lb.badge>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-4">
+        <div class="rounded-box border border-base-300 p-4">
+            <div class="text-xs uppercase tracking-wider text-base-content/40">Next invoice</div>
+            <div class="text-xl font-semibold tabular-nums mt-1">
+                {{ workspace.currency }} {{ totals.next_amount }}
+            </div>
+            <div class="text-xs text-base-content/50 mt-0.5">{{ plan.renews_on }}</div>
+        </div>
+        <div class="rounded-box border border-base-300 p-4">
+            <div class="text-xs uppercase tracking-wider text-base-content/40">Outstanding</div>
+            <div class="text-xl font-semibold tabular-nums mt-1">
+                {{ workspace.currency }} {{ totals.outstanding }}
+            </div>
+            <div class="text-xs text-base-content/50 mt-0.5">Across two open invoices</div>
+        </div>
+        <div class="rounded-box border border-base-300 p-4">
+            <div class="text-xs uppercase tracking-wider text-base-content/40">Billed in 2026</div>
+            <div class="text-xl font-semibold tabular-nums mt-1">
+                {{ workspace.currency }} {{ totals.paid_this_year }}
+            </div>
+            <div class="text-xs text-base-content/50 mt-0.5">Paid, excluding voided runs</div>
+        </div>
+    </div>
+
+</div>

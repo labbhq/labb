@@ -1,19 +1,14 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
-    effect=""
-    :effectClasses="{
-        'rotate': 'swap-rotate',
-        'flip': 'swap-flip'
-    }"
     checked
     disabled
     inputClass=""
     name=""
     value=""
 />
+{% lbr_props "swap" attrs=attrs as rx %}
 
-<label class="swap {{ effectClasses|get_dict_item:effect }} {{ class }}" {{ attrs }}>
+<label class="{{ rx.classes }}" {{ rx.attrs }}>
     <!-- Hidden checkbox that controls the swap state -->
     <input
         type="checkbox"

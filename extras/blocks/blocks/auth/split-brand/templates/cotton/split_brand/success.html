@@ -1,0 +1,39 @@
+<c-vars :member="None" joined />
+
+<div class="flex flex-col gap-5 text-center">
+
+    <div class="flex justify-center">
+        <c-lb.avatar placeholder icon="rmx.check" bgColor="success" size="lg" rounded="full" />
+    </div>
+
+    <div>
+        <h2 class="text-2xl font-semibold tracking-tight">
+            {% if joined %}Welcome to Arden, {{ member.name }}.{% else %}Welcome back, {{ member.name }}.{% endif %}
+        </h2>
+        <p class="text-base-content/60 text-sm mt-1">
+            {% if joined %}
+            We've sent an invite to {{ member.email }} to finish setting up.
+            {% else %}
+            Signed in to {{ member.workspace.name }}.
+            {% endif %}
+        </p>
+    </div>
+
+    <c-lb.card class="border border-base-300">
+        <c-lb.card.body class="p-4 gap-2 text-left text-sm">
+            <div class="flex justify-between">
+                <span class="text-base-content/50">Workspace</span>
+                <span class="font-medium">{{ member.workspace.name }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-base-content/50">Email</span>
+                <span class="font-medium">{{ member.email }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-base-content/50">Role</span>
+                <span class="font-medium capitalize">{{ member.role }}</span>
+            </div>
+        </c-lb.card.body>
+    </c-lb.card>
+
+</div>

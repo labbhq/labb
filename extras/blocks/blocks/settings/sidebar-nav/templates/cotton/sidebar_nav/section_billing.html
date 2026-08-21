@@ -1,0 +1,63 @@
+<c-vars :workspace="{}" :invoices="[]" />
+
+<c-sidebar-nav.panel
+    title="Billing"
+    desc="What you pay Arden, and what Arden has billed on your behalf.">
+
+    <c-slot name="actions">
+        <c-lb.button btnStyle="outline" size="sm">Change plan</c-lb.button>
+    </c-slot>
+
+    <div class="grid sm:grid-cols-3 gap-4">
+        <div class="rounded-box border border-base-300 p-4">
+            <div class="text-xs uppercase tracking-wider text-base-content/40">Plan</div>
+            <div class="text-lg font-semibold mt-1">{{ workspace.plan }}</div>
+            <div class="text-xs text-base-content/50 tabular-nums mt-0.5">$449 / month</div>
+        </div>
+        <div class="rounded-box border border-base-300 p-4">
+            <div class="text-xs uppercase tracking-wider text-base-content/40">Next invoice</div>
+            <div class="text-lg font-semibold tabular-nums mt-1">$449.00</div>
+            <div class="text-xs text-base-content/50 tabular-nums mt-0.5">1 August 2026</div>
+        </div>
+        <div class="rounded-box border border-base-300 p-4">
+            <div class="text-xs uppercase tracking-wider text-base-content/40">Outstanding</div>
+            <div class="text-lg font-semibold tabular-nums mt-1">$1,023.00</div>
+            <div class="text-xs text-base-content/50 mt-0.5">Two invoices open</div>
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+        <div class="text-xs uppercase tracking-wider text-base-content/40">Recent invoices</div>
+        <div class="overflow-x-auto border border-base-300 rounded-box">
+            <c-lb.table size="sm" class="w-full">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Customer</th>
+                        <th>Issued</th>
+                        <th class="text-right">Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td class="font-medium tabular-nums whitespace-nowrap">{{ invoice.number }}</td>
+                        <td>{{ invoice.customer }}</td>
+                        <td class="tabular-nums whitespace-nowrap text-base-content/60">{{ invoice.issued }}</td>
+                        <td class="text-right tabular-nums font-medium whitespace-nowrap">
+                            USD {{ invoice.amount }}
+                        </td>
+                        <td>
+                            <c-lb.badge size="sm" style="soft" variant="{{ invoice.tone }}">
+                                {{ invoice.status }}
+                            </c-lb.badge>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </c-lb.table>
+        </div>
+    </div>
+
+</c-sidebar-nav.panel>

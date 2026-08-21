@@ -411,14 +411,10 @@ components:
         type: boolean
         default: false
         description: Whether the checkbox is initially checked
-        css_mapping:
-          true: checked
       disabled:
         type: boolean
         default: false
         description: Whether the swap is disabled
-        css_mapping:
-          true: disabled
       inputClass:
         type: string
         default: ''

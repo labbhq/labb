@@ -1,0 +1,22 @@
+<main class="container mx-auto max-w-6xl px-4 py-16 flex flex-col gap-12">
+
+    <div class="flex flex-col items-center gap-4 text-center">
+        <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight text-balance">
+            Three plans. Most teams pick the middle one.
+        </h1>
+        <p class="max-w-xl text-base-content/60">
+            Prices are per workspace, per month, and include every seat listed. Annual
+            billing takes two months off, and you can move between plans whenever the
+            numbers say so.
+        </p>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-3 items-stretch">
+        {% for plan in plans %}
+        <c-highlight-tiers.tier :plan=plan />
+        {% endfor %}
+    </div>
+
+    <c-highlight-tiers.proof :stats=stats />
+
+</main>

@@ -1,0 +1,28 @@
+<c-vars :workspace="{}" />
+
+<div class="flex flex-col gap-5 border-b border-base-300 pb-6">
+
+    <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Team</h1>
+            <p class="text-sm text-base-content/60 mt-1">
+                Everyone with a seat on {{ workspace.name }}, and what each of them can do.
+            </p>
+        </div>
+        <c-lb.badge style="soft" variant="primary" icon="rmx.bank-card">{{ workspace.plan }}</c-lb.badge>
+    </div>
+
+    <div class="flex flex-col gap-2">
+        <div class="flex items-center justify-between text-xs">
+            <span class="text-base-content/55">Seats in use</span>
+            <span class="tabular-nums font-medium">
+                {{ workspace.seats_used }} of {{ workspace.seats_total }}
+            </span>
+        </div>
+        <c-lb.progress variant="primary" value="{{ workspace.seats_pct }}" max="100" class="w-full h-2" />
+        <p class="text-xs text-base-content/45">
+            Invited members hold a seat from the moment they accept. Suspended members do not.
+        </p>
+    </div>
+
+</div>

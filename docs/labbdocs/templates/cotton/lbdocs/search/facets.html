@@ -1,0 +1,19 @@
+<c-vars :facets="[]" />
+
+<nav class="flex flex-row flex-wrap gap-1 md:flex-col" aria-label="Filter results by type">
+    {% for f in facets %}
+    <c-lbr.get to="labbdocs_search:page" on="click__prevent" before="$search.type='{{ f.type }}'" tag="div">
+        <c-lb.button
+            as="a"
+            href="{{ f.href }}"
+            btnStyle="ghost"
+            size="sm"
+            behavior="{{ f.behavior }}"
+            class="w-full justify-between font-normal"
+        >
+            <span>{{ f.label }}</span>
+            <span class="text-xs tabular-nums text-base-content/40">{{ f.count }}</span>
+        </c-lb.button>
+    </c-lbr.get>
+    {% endfor %}
+</nav>

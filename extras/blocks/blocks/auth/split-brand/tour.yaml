@@ -1,0 +1,36 @@
+steps:
+  - title: Start with the form schema
+    file: templates/pages/sign_in.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: The page receives one typed schema from the view. Its fields provide the initial form state and the values Django validates on the next request.
+
+  - title: Bind inputs to schema fields
+    file: templates/cotton/split_brand/form.html
+    match: ':bind=signals.fields.email'
+    teaches: [binding, live-validation]
+    docs: [reactivity/binding]
+    body: Bind accepts the schema field descriptor, so the input and validation view use the same signal path. The template does not need a hand-written change handler.
+
+  - title: Validate as the user fills the form
+    file: templates/cotton/split_brand/field.html
+    match: "<c-lbr.post"
+    through: 'before="if ($submitted) return"'
+    teaches: [server-actions, morphing, live-validation]
+    docs: [reactivity/actions]
+    body: A debounced POST sends the current signals to Django and returns the refreshed field. The before expression stops background checks once the user submits the form.
+
+  - title: Keep sign-in and sign-up rules together
+    file: views.py
+    match: "def _validate"
+    teaches: [live-validation]
+    docs: [reactivity/actions]
+    body: Both pages use the same validation helper. The view decides whether a name is required, which keeps the shared fields and error handling in one place.
+
+  - title: Swap the demo sign-in for real auth
+    file: views.py
+    match: "def submit"
+    teaches: [server-actions]
+    docs: [reactivity/actions]
+    body: These views are a UI demo and authenticate nobody. Submit looks a member up by email and calls it a success, without ever verifying the password. Before this goes in front of real users, replace the lookup with django.contrib.auth authenticate() and login(), and guard the page behind it with login_required.

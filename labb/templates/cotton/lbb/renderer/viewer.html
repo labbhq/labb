@@ -1,0 +1,124 @@
+{% load lb_tags %}
+<c-vars id="block-viewer" slug="" description="" type="" preview_url="" install_cmd="" :tabs="[]" :tree="[]" :tour="[]" :lazy="False" height="600" />
+{% lb_push_stack name="components" path="labb/js/lb-renderer.js" mode="src" %}
+{% with idsafe=id|cut:"-" frame_id="pframe-"|add:id bar_id=id|add:"-path-bar" %}
+<c-lbr.signals id="{{ id }}-signals"
+               data-signals='{"view_{{ idsafe }}":"preview","viewport_{{ idsafe }}":"desktop"}' />
+
+<div class="border border-base-300 rounded-xl bg-base-100">
+
+    <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-2 py-2 border-b border-base-200 bg-base-100 min-h-11 rounded-t-xl">
+
+      <div class="col-start-1 flex items-center gap-2 min-w-0">
+
+        <c-lb.join class="shrink-0">
+            <c-lb.button class="join-item font-medium" size="xs" btnStyle="ghost"
+                         data-class='{"btn-active bg-base-200": $view_{{ idsafe }} === "preview"}'
+                         data-on:click="$view_{{ idsafe }} = 'preview'">Preview</c-lb.button>
+            <c-lb.button class="join-item font-medium" size="xs" btnStyle="ghost"
+                         data-class='{"btn-active bg-base-200": $view_{{ idsafe }} === "code"}'
+                         data-on:click="$view_{{ idsafe }} = 'code'">Code</c-lb.button>
+        </c-lb.join>
+
+        {% if type %}
+        <c-lb.tooltip tip="{% if type == 'fullstack' %}Fullstack: models, views, urls + templates{% else %}Frontend: templates only{% endif %}">
+            <span class="flex items-center gap-1 shrink-0 rounded-md px-2 py-1 text-xs font-medium
+                         {% if type == 'fullstack' %}border border-warning/40 bg-warning/10 text-warning{% else %}border border-base-200 text-base-content/50{% endif %}">
+                <c-lbi n="{% if type == 'fullstack' %}rmx.stack{% else %}rmx.html5{% endif %}" w="13" h="13" />
+                {% if type == 'fullstack' %}Fullstack{% else %}Frontend{% endif %}
+            </span>
+        </c-lb.tooltip>
+        {% endif %}
+
+      </div>
+
+      <div class="col-start-2 hidden lg:flex items-center gap-0.5" data-show="$view_{{ idsafe }} === 'preview'">
+            <c-lb.tooltip tip="Desktop">
+                <c-lb.button modifier="square" size="xs" btnStyle="ghost"
+                             data-class='{"bg-base-200": $viewport_{{ idsafe }} === "desktop"}'
+                             data-on:click="$viewport_{{ idsafe }}='desktop'; document.getElementById('{{ frame_id }}').style.width='100%'">
+                    <c-lbi n="rmx.computer" w="14" h="14" />
+                </c-lb.button>
+            </c-lb.tooltip>
+            <c-lb.tooltip tip="Tablet">
+                <c-lb.button modifier="square" size="xs" btnStyle="ghost"
+                             data-class='{"bg-base-200": $viewport_{{ idsafe }} === "tablet"}'
+                             data-on:click="$viewport_{{ idsafe }}='tablet'; document.getElementById('{{ frame_id }}').style.width='768px'">
+                    <c-lbi n="rmx.tablet" w="14" h="14" />
+                </c-lb.button>
+            </c-lb.tooltip>
+            <c-lb.tooltip tip="Mobile">
+                <c-lb.button modifier="square" size="xs" btnStyle="ghost"
+                             data-class='{"bg-base-200": $viewport_{{ idsafe }} === "mobile"}'
+                             data-on:click="$viewport_{{ idsafe }}='mobile'; document.getElementById('{{ frame_id }}').style.width='390px'">
+                    <c-lbi n="rmx.smartphone" w="14" h="14" />
+                </c-lb.button>
+            </c-lb.tooltip>
+        </div>
+
+      <div class="col-start-3 flex items-center justify-end gap-2 min-w-0">
+
+        {% if install_cmd %}
+        {% comment %}Shrinks before the controls do; below md the command drops, copy stays.{% endcomment %}
+        <div class="flex items-center gap-1.5 min-w-0 border border-base-200 px-2.5 py-0.5 rounded-md"
+             data-install-cmd="{{ install_cmd }}">
+            <c-lbi n="rmx.terminal-box" w="13" h="13" class="shrink-0" />
+            <span class="hidden md:block text-xs font-mono text-base-content/60 truncate">{{ install_cmd }}</span>
+            <c-lb.button modifier="square" size="xs" btnStyle="ghost" class="tooltip -mr-1 shrink-0" data-tip="Copy"
+                         data-on:click="lbbCopyInstall(el)">
+                <span class="i-copy"><c-lbi n="rmx.clipboard" w="13" h="13" class="text-base-content/60" /></span>
+                <span class="i-check" style="display:none"><c-lbi n="rmx.check" w="13" h="13" class="text-success" /></span>
+            </c-lb.button>
+        </div>
+        {% endif %}
+
+        <c-lb.tooltip tip="Refresh" class="shrink-0" data-show="$view_{{ idsafe }} === 'preview'">
+            <c-lb.button modifier="square" size="xs" btnStyle="ghost"
+                         data-on:click="document.getElementById('{{ frame_id }}').contentWindow.location.reload()">
+                <c-lbi n="rmx.refresh" w="14" h="14" />
+            </c-lb.button>
+        </c-lb.tooltip>
+
+        <c-lb.button as="a" href="{{ preview_url }}" target="_blank" size="xs" variant="neutral"
+                     class="shrink-0 gap-1" aria-label="Open preview in a new tab">
+            <span class="hidden sm:inline">Open</span>
+            <c-lbi n="rmx.external-link" w="12" h="12" />
+        </c-lb.button>
+
+      </div>
+
+    </div>
+
+    <div class="flex items-center gap-2 px-3 h-9 border-b border-base-200" data-show="$view_{{ idsafe }} === 'preview'">
+        <c-lbi n="rmx.global" w="12" h="12" class="shrink-0 text-base-content/60" />
+        <span id="{{ bar_id }}" class="text-xs font-mono text-base-content/60 truncate">{{ preview_url }}</span>
+    </div>
+
+    <div data-show="$view_{{ idsafe }} === 'preview'" class="bg-base-200/20 rounded-b-xl overflow-hidden">
+        <div class="overflow-auto flex justify-center bg-base-200">
+            <iframe id="{{ frame_id }}"
+                    title="{{ slug }} preview"
+                    data-lbb-src="{{ preview_url }}"
+                    {% if lazy %}data-lbb-lazy{% endif %}
+                    class="block border-none bg-base-100 transition-[width] duration-200"
+                    style="height:{{ height }}px;width:100%;color-scheme:inherit"
+                    data-lbb-bar="{{ bar_id }}">
+            </iframe>
+        </div>
+    </div>
+
+    <div data-show="$view_{{ idsafe }} === 'code'" style="display:none" class="rounded-b-xl overflow-hidden">
+        <div class="flex" style="height:{{ height }}px">
+            <div class="flex-1 min-w-0">
+                <c-lbb.renderer.source id="{{ id }}" key="{{ slug|slugify }}" :tabs=tabs :tree=tree />
+            </div>
+            {% if tour %}
+            <div class="hidden lg:block w-72 shrink-0 border-l border-base-200 bg-base-100">
+                <c-lbb.renderer.tour id="{{ id }}" idsafe="{{ idsafe }}" :tour=tour />
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endwith %}

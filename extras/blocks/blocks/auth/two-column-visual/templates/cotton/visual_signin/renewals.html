@@ -1,0 +1,62 @@
+<div class="flex flex-col gap-4 border-t border-base-300 bg-base-100 p-4">
+
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <c-arden.mark size="xs" />
+            <span class="text-sm font-semibold tracking-tight">Renewals · next 30 days</span>
+        </div>
+        <c-lb.badge variant="warning" style="soft" size="sm">4 need a decision</c-lb.badge>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2">
+        <c-visual-signin.tile label="Up for renewal" value="$186,300" note="9 contracts" />
+        <c-visual-signin.tile label="Auto-renewing" value="$121,700" note="5 contracts" />
+        <c-visual-signin.tile label="Needs a call" value="$64,600" note="4 contracts" noteClass="text-warning" />
+    </div>
+
+    <c-lb.table size="sm">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th class="text-right">Value</th>
+                <th class="text-right">Renews</th>
+                <th class="text-right">Signal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="font-medium">Ironvale Group</td>
+                <td class="tabular-nums text-right">$41,200</td>
+                <td class="tabular-nums text-right text-base-content/60">18 Jul</td>
+                <td class="text-right">
+                    <c-lb.badge variant="error" style="soft" size="sm">Usage down 34%</c-lb.badge>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-medium">Verity Labs</td>
+                <td class="tabular-nums text-right">$23,400</td>
+                <td class="tabular-nums text-right text-base-content/60">22 Jul</td>
+                <td class="text-right">
+                    <c-lb.badge variant="warning" style="soft" size="sm">Champion left</c-lb.badge>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-medium">AtlasForge</td>
+                <td class="tabular-nums text-right">$58,900</td>
+                <td class="tabular-nums text-right text-base-content/60">29 Jul</td>
+                <td class="text-right">
+                    <c-lb.badge variant="success" style="soft" size="sm">Seats +12</c-lb.badge>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-medium">Kite &amp; Bell</td>
+                <td class="tabular-nums text-right">$62,800</td>
+                <td class="tabular-nums text-right text-base-content/60">04 Aug</td>
+                <td class="text-right">
+                    <c-lb.badge variant="info" style="soft" size="sm">Invoice open</c-lb.badge>
+                </td>
+            </tr>
+        </tbody>
+    </c-lb.table>
+
+</div>

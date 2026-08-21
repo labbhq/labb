@@ -1,0 +1,52 @@
+<c-vars :steps="[]" progress="0" steps_done="0" steps_total="4" class="" />
+
+<c-lb.card border class="bg-base-100 {{ class }}">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+                <h2 class="font-semibold tracking-tight">Set up Arden</h2>
+                <p class="text-xs text-base-content/50 mt-0.5">
+                    Four steps, and only one of them needs your finance team.
+                </p>
+            </div>
+            <c-lb.badge style="soft" size="sm" class="tabular-nums">
+                {{ steps_done }} of {{ steps_total }} done
+            </c-lb.badge>
+        </div>
+
+        <c-lb.progress id="setup-progress" variant="primary" value="{{ progress }}" class="w-full" />
+
+        <ul id="setup-steps" class="flex flex-col divide-y divide-base-200">
+            {% for step in steps %}
+            <li id="step-{{ step.id }}" class="flex items-start gap-3 py-3">
+
+                {% if step.state == "done" %}
+                <c-lb.avatar placeholder size="sm" rounded="full" bgColor="success" icon="rmx.check" />
+                {% elif step.state == "next" %}
+                <c-lb.avatar placeholder size="sm" rounded="full" bgColor="primary" initials="{{ forloop.counter }}" />
+                {% else %}
+                <c-lb.avatar placeholder size="sm" rounded="full" bgColor="neutral" initials="{{ forloop.counter }}" />
+                {% endif %}
+
+                <div class="min-w-0 flex-1 leading-tight">
+                    <p class="text-sm font-medium {% if step.state == 'done' %}text-base-content/50 line-through{% endif %}">
+                        {{ step.title }}
+                    </p>
+                    <p class="text-xs text-base-content/50 mt-0.5">{{ step.detail }}</p>
+                </div>
+
+                {% if step.state == "next" %}
+                <c-lb.button size="sm" variant="primary" icon.end="rmx.arrow-right">{{ step.cta }}</c-lb.button>
+                {% elif step.state == "todo" %}
+                <c-lb.button size="sm" btnStyle="ghost">{{ step.cta }}</c-lb.button>
+                {% else %}
+                <c-lb.badge variant="success" style="soft" size="sm" icon="rmx.check">Done</c-lb.badge>
+                {% endif %}
+
+            </li>
+            {% endfor %}
+        </ul>
+
+    </c-lb.card.body>
+</c-lb.card>

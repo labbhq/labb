@@ -1,0 +1,54 @@
+<c-lb.card border class="bg-base-100 shadow-sm">
+    <c-lb.card.body class="gap-5 p-7">
+
+        <div class="flex flex-col gap-1.5">
+            <h1 class="text-2xl font-semibold tracking-tight">Close the quarter with confidence</h1>
+            <p class="text-sm text-base-content/60">
+                Sign in to the workspace your finance team already trusts.
+            </p>
+        </div>
+
+        <div class="flex flex-col gap-4">
+
+            <div class="flex flex-col gap-1">
+                <label for="sp-email" class="label label-text text-sm font-medium">Work email</label>
+                <c-lb.input
+                    id="sp-email"
+                    type="email"
+                    name="email"
+                    class="w-full"
+                    autocomplete="username"
+                    placeholder="you@company.com" />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <div class="flex items-baseline justify-between">
+                    <label for="sp-password" class="label label-text text-sm font-medium">Password</label>
+                    <a href="#" class="link link-hover text-xs text-base-content/60">Forgot password?</a>
+                </div>
+                <c-lb.input
+                    id="sp-password"
+                    type="password"
+                    name="password"
+                    class="w-full"
+                    autocomplete="current-password"
+                    placeholder="••••••••" />
+            </div>
+
+            <c-lb.button id="sp-submit" type="button" variant="primary" modifier="block">
+                Sign in
+            </c-lb.button>
+
+        </div>
+
+        <c-lb.divider class="my-0 text-xs text-base-content/40">or continue with</c-lb.divider>
+
+        <c-social-signin.oauth />
+
+        <p class="text-center text-sm text-base-content/60">
+            No workspace yet?
+            <a href="#" class="link link-primary">Start a 14-day trial</a>
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

@@ -1,0 +1,30 @@
+name: With logos
+ref: lb/hero/with-logos
+type: fe
+labb_version: ">=0.5.0"
+description: "Hero above a customer logo cloud, with the marks drawn from labb's own icon pack — no third-party assets"
+category: hero
+status: launch
+thumbnail: thumbnails/with-logos.png
+tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+  - social-proof
+preview_context:
+  customers:
+    - name: "AtlasForge"
+      icon: "rmx.hammer"
+    - name: "Kite & Bell"
+      icon: "rmx.service-bell"
+    - name: "Northwind Co"
+      icon: "rmx.windy"
+    - name: "Verity Labs"
+      icon: "rmx.flask"
+    - name: "Ironvale Group"
+      icon: "rmx.building"
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"

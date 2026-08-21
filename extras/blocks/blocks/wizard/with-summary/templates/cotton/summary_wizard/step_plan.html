@@ -1,0 +1,59 @@
+<c-vars :plan_list="[]" :seat_price=12 />
+
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Plan and seats</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            Seats above the included allowance are ${{ seat_price }} each per month. The total on the
+            right updates as you go.
+        </p>
+    </div>
+
+    <div class="flex flex-col gap-2">
+        {% for plan in plan_list %}
+        <label class="flex items-start gap-4 rounded-box border border-base-300 p-4 cursor-pointer
+                      transition-colors hover:border-base-content/30
+                      has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+            <c-lb.radio
+                name="sw-plan"
+                variant="primary"
+                value="{{ plan.key }}"
+                data-bind="form.plan"
+                class="mt-1" />
+            <div class="flex-1">
+                <div class="flex items-baseline justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-sm">{{ plan.name }}</span>
+                        {% if plan.featured %}
+                        <c-lb.badge variant="primary" style="soft" size="sm">Most popular</c-lb.badge>
+                        {% endif %}
+                    </div>
+                    <div class="whitespace-nowrap">
+                        <span class="font-semibold tabular-nums">${{ plan.base }}</span>
+                        <span class="text-xs text-base-content/50">/mo</span>
+                    </div>
+                </div>
+                <p class="text-xs text-base-content/55 mt-1">{{ plan.tagline }}</p>
+                <p class="text-xs text-base-content/45 mt-1 tabular-nums">{{ plan.seats }} seats included</p>
+            </div>
+        </label>
+        {% endfor %}
+    </div>
+
+    <c-summary-wizard.field label="Seats you need on day one">
+        <c-lb.input
+            id="sw-seats"
+            type="number"
+            min="1"
+            max="200"
+            class="w-40 tabular-nums"
+            bind="$form.seats" />
+    </c-summary-wizard.field>
+
+    <div class="rounded-box bg-base-200/60 p-4 text-xs text-base-content/60 leading-relaxed">
+        Suspended members do not hold a seat and are not billed. Most teams start with the
+        finance team plus two account executives.
+    </div>
+
+</div>

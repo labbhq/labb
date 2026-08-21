@@ -1,0 +1,33 @@
+<c-lbr.signals id="mini-wizard" :$step=step :$form=form $tone="primary" />
+
+<main class="container mx-auto max-w-xl px-4 py-12 sm:py-20 flex flex-col gap-8">
+
+    <c-minimal-wizard.progress />
+
+    <c-lb.card class="border border-base-300 shadow-sm">
+        <c-lb.card.body class="gap-7 p-6 sm:p-8">
+
+            <div data-show="$step === 1">
+                <c-minimal-wizard.step-name />
+            </div>
+
+            <div data-show="$step === 2" style="display:none">
+                <c-minimal-wizard.step-model :models=models />
+            </div>
+
+            <div data-show="$step === 3" style="display:none">
+                <c-minimal-wizard.step-source :sources=sources />
+            </div>
+
+            <div data-show="$step === 4" style="display:none">
+                <c-minimal-wizard.step-invite />
+            </div>
+
+            <c-minimal-wizard.nav />
+
+        </c-lb.card.body>
+    </c-lb.card>
+
+    <c-minimal-wizard.reassurance />
+
+</main>

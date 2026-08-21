@@ -1,0 +1,40 @@
+<c-vars :plan="{}" />
+
+<c-lb.card border class="border-primary border-2 shadow-lg">
+    <c-lb.card.body class="gap-5">
+
+        <div class="flex flex-col gap-1">
+            <h2 class="text-lg font-semibold">{{ plan.name }}</h2>
+            <p class="text-sm text-base-content/60">{{ plan.tagline }}</p>
+        </div>
+
+        <div class="flex items-baseline gap-1">
+            <span class="text-2xl font-semibold text-base-content/70">$</span>
+            <span class="text-5xl font-bold tracking-tight tabular-nums">{{ plan.monthly }}</span>
+            <span class="text-sm text-base-content/50">/month</span>
+        </div>
+
+        <p class="text-xs text-base-content/50">
+            Or ${{ plan.annual }} a year, which is two months free. No card for the trial.
+        </p>
+
+        <c-lb.button variant="primary" modifier="block">{{ plan.cta }}</c-lb.button>
+
+        <c-lb.divider class="my-0 text-xs text-base-content/40">Everything, included</c-lb.divider>
+
+        <div class="grid gap-2.5">
+            {% for feature in plan.features %}
+            <div class="flex items-start gap-2 text-sm">
+                <c-lbi n="rmx.checkbox-circle" w="18" h="18" class="shrink-0 mt-0.5 text-success" />
+                <span>{{ feature }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex items-center gap-2 rounded-lg bg-base-200 p-3 text-xs text-base-content/60">
+            <c-lbi n="rmx.shield-check" w="16" h="16" class="shrink-0 text-primary" />
+            <span>Cancel any time and take a full export with you.</span>
+        </div>
+
+    </c-lb.card.body>
+</c-lb.card>

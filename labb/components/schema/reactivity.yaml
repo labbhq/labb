@@ -1,0 +1,229 @@
+# Reactivity component schemas (c-lbr.*)
+#
+# These server-rendered helpers do not add component CSS. The lb-schema.js
+# generator skips this file.
+components:
+  lbr.get:
+    template: lbr/get.html
+    description: Wraps content and sends a GET request when the chosen browser event fires.
+    variables:
+      to:
+        type: string
+        default: ''
+        description: 'Django URL name such as "todos:detail", or a direct URL such as "/todos/1/". Paths and absolute URLs pass through unchanged. labb resolves other values with Django reverse().'
+        required: true
+      pk:
+        type: string
+        default: ''
+        description: Adds a pk URL kwarg when kwargs does not supply one. Has no effect for a direct URL.
+        required: false
+      kwargs:
+        type: string
+        default: ''
+        description: URL kwargs as a dictionary from context or a JSON string. Has no effect for a direct URL.
+        required: false
+      'on':
+        type: string
+        default: click
+        description: 'Browser event that sends the request, such as "click" or "input__debounce.300ms". Use "init" to send it when the page loads.'
+        required: false
+      tag:
+        type: string
+        default: div
+        description: HTML element that wraps the content.
+        required: false
+      before:
+        type: string
+        default: ''
+        description: Datastar expression to run before the request, for example a signal update.
+        required: false
+      options:
+        type: string
+        default: ''
+        description: 'Datastar options passed to @get(), such as "{openWhenHidden:true}".'
+        required: false
+      replaceUrl:
+        type: boolean
+        default: false
+        description: Replace the current history entry with the request URL after the event fires.
+        required: false
+      pushUrl:
+        type: boolean
+        default: false
+        description: Add the request URL as a new browser history entry after the event fires.
+        required: false
+      preserveQuery:
+        type: boolean
+        default: false
+        description: Keep the current query string when replaceUrl or pushUrl updates the history entry.
+        required: false
+    slots:
+      default:
+        description: The request trigger and any nested content.
+
+  lbr.post:
+    template: lbr/post.html
+    description: Wraps content and sends a POST request when the chosen browser event fires. It renders a form that prevents native submit by default.
+    variables:
+      to:
+        type: string
+        default: ''
+        description: 'Django URL name such as "todos:detail", or a direct URL such as "/todos/1/". Paths and absolute URLs pass through unchanged. labb resolves other values with Django reverse().'
+        required: true
+      pk:
+        type: string
+        default: ''
+        description: Adds a pk URL kwarg when kwargs does not supply one. Has no effect for a direct URL.
+        required: false
+      kwargs:
+        type: string
+        default: ''
+        description: URL kwargs as a dictionary from context or a JSON string. Has no effect for a direct URL.
+        required: false
+      'on':
+        type: string
+        default: submit
+        description: 'Browser event that sends the request. The default "submit" prevents the native form submission. Use "init" to send it when the page loads.'
+        required: false
+      tag:
+        type: string
+        default: form
+        description: HTML element that wraps the content. A form handles Enter and native form semantics, while the reactive request still sends signals as JSON.
+        required: false
+      before:
+        type: string
+        default: ''
+        description: Datastar expression to run before the request.
+        required: false
+      options:
+        type: string
+        default: ''
+        description: 'Datastar options passed to @post(). Use "{contentType: ''form''}" when the view reads a classic form body from request.POST instead of request.signals.'
+        required: false
+      noCSRF:
+        type: boolean
+        default: false
+        description: Skip labb’s CSRF header. Use this only for an endpoint that you explicitly exempt from Django CSRF protection.
+        required: false
+    slots:
+      default:
+        description: Form controls or other content inside the wrapper.
+
+  lbr.delete:
+    template: lbr/delete.html
+    description: Wraps content and sends a DELETE request when the chosen browser event fires.
+    variables:
+      to:
+        type: string
+        default: ''
+        description: 'Django URL name such as "todos:detail", or a direct URL such as "/todos/1/". Paths and absolute URLs pass through unchanged. labb resolves other values with Django reverse().'
+        required: true
+      pk:
+        type: string
+        default: ''
+        description: Adds a pk URL kwarg when kwargs does not supply one. Has no effect for a direct URL.
+        required: false
+      kwargs:
+        type: string
+        default: ''
+        description: URL kwargs as a dictionary from context or a JSON string. Has no effect for a direct URL.
+        required: false
+      'on':
+        type: string
+        default: click
+        description: 'Browser event that sends the request. Use "init" to send it when the page loads.'
+        required: false
+      tag:
+        type: string
+        default: span
+        description: HTML element that wraps the content.
+        required: false
+      before:
+        type: string
+        default: ''
+        description: Datastar expression to run before the request.
+        required: false
+      confirm:
+        type: string
+        default: ''
+        description: Message for the browser confirmation dialog. Canceling the dialog prevents the request.
+        required: false
+      options:
+        type: string
+        default: ''
+        description: Datastar options passed to @delete().
+        required: false
+      noCSRF:
+        type: boolean
+        default: false
+        description: Skip labb’s CSRF header. Use this only for an endpoint that you explicitly exempt from Django CSRF protection.
+        required: false
+    slots:
+      default:
+        description: The delete trigger and any nested content.
+
+  lbr.signals:
+    template: lbr/signals.html
+    description: Declares page signals and loads Datastar. Use $-prefixed props for strings and booleans, Cotton :$ bindings for numbers or objects, or a typed Signals instance. Pass raw data-signals for an initial value the browser must calculate on load. Do not combine a raw attribute with $-prefixed props.
+    variables:
+      schema:
+        type: string
+        default: ''
+        description: A Signals instance from the view. labb declares every field, then sends only the fields the view assigned this request. Bind a form component with :bind=schema.fields.name to reuse the field path from the schema.
+        required: false
+      syncQuery:
+        type: boolean
+        default: false
+        description: Persist the declared signals in the page URL on load and after each signal change. Requires ReactivityMiddleware, which restores those values before the view reads request.signals.
+        required: false
+      ifmissing:
+        type: boolean
+        default: false
+        description: Seed only signals the browser does not already have. Without it a $ declaration is re-applied by every morph, resetting state the user changed. It has no effect with :schema.
+        required: false
+    slots:
+      default:
+        description: Not used. The component renders a hidden signal declaration.
+
+  lbr.replace-url:
+    template: lbr/replace_url.html
+    description: Updates browser history when the component renders. It does not navigate or send a request.
+    variables:
+      to:
+        type: string
+        default: ''
+        description: 'Django URL name such as "todos:detail", or a direct URL such as "/todos/1/". Paths and absolute URLs pass through unchanged. labb resolves other values with Django reverse().'
+        required: true
+      pk:
+        type: string
+        default: ''
+        description: Adds a pk URL kwarg when kwargs does not supply one. Has no effect for a direct URL.
+        required: false
+      kwargs:
+        type: string
+        default: ''
+        description: URL kwargs as a dictionary from context or a JSON string. Has no effect for a direct URL.
+        required: false
+      push:
+        type: boolean
+        default: false
+        description: Add a new history entry when the target pathname differs from the current one. Replaces the current entry when the pathname already matches.
+        required: false
+
+  lbr.target:
+    template: lbr/target.html
+    description: Marks a stable region for a partial Datastar update. Server-side @name resolves to this element.
+    variables:
+      name:
+        type: string
+        default: ''
+        description: Name of the target. labb renders it as data-lbr-target="name" so a response can address it with @name.
+        required: true
+      tag:
+        type: string
+        default: div
+        description: HTML element that becomes the target region.
+        required: false
+    slots:
+      default:
+        description: Content inside the named update region.

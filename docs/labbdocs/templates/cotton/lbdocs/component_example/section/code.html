@@ -4,4 +4,12 @@
     code=""
 />
 
-<c-lbdocs.codeblock :code="code" :language="language" class="min-h-64 max-h-96 {{ class }}" codeClass="min-h-64" />
+<div class="bg-black">
+    <c-lbdocs.codeblock
+        :code="code"
+        :language="language"
+        :copyButton="False"
+        class="max-h-96 {{ class }}"
+        codeClass="min-h-64"
+    />
+</div>

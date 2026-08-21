@@ -1,0 +1,42 @@
+<c-lb.stat.group id="range-summary" class="w-full border border-base-300 bg-base-100">
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="primary" icon="rmx.line-chart" />
+        <c-lb.stat.title>Net new MRR</c-lb.stat.title>
+        <c-lb.stat.value class="tabular-nums">
+            <span>$</span><span id="summary-net-new" data-text="$view.netNew">16,740</span>
+        </c-lb.stat.value>
+        <c-lb.stat.desc class="flex items-center gap-1">
+            <c-lb.badge variant="success" style="soft" size="xs" icon="rmx.arrow-up" class="tabular-nums">
+                <span data-text="$view.netNewDelta">+4.2%</span>
+            </c-lb.badge>
+            <span data-text="$view.label">Last 30 days</span>
+        </c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="success" icon="rmx.arrow-up" />
+        <c-lb.stat.title>Expansion</c-lb.stat.title>
+        <c-lb.stat.value class="tabular-nums">
+            <span>$</span><span id="summary-expansion" data-text="$view.expansion">38,100</span>
+        </c-lb.stat.value>
+        <c-lb.stat.desc>Upgrades and seats added</c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="error" icon="rmx.arrow-down" />
+        <c-lb.stat.title>Churn and contraction</c-lb.stat.title>
+        <c-lb.stat.value class="tabular-nums">
+            <span>$</span><span id="summary-churn" data-text="$view.churn">21,360</span>
+        </c-lb.stat.value>
+        <c-lb.stat.desc>Lost logos and downgrades</c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="secondary" icon="rmx.building" />
+        <c-lb.stat.title>New logos</c-lb.stat.title>
+        <c-lb.stat.value id="summary-logos" class="tabular-nums" data-text="$view.logos">11</c-lb.stat.value>
+        <c-lb.stat.desc>First invoice paid in period</c-lb.stat.desc>
+    </c-lb.stat>
+
+</c-lb.stat.group>

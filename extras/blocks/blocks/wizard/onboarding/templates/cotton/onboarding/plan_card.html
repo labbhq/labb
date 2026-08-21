@@ -1,0 +1,40 @@
+<c-vars :plan="None" :people=1 />
+
+<label class="flex items-start gap-4 rounded-box border border-base-300 p-4 cursor-pointer
+              transition-colors hover:border-base-content/30
+              has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+
+    <c-lb.radio name="plan" variant="primary" value="{{ plan.slug }}" data-bind="form.plan" class="mt-1" />
+
+    <div class="flex-1">
+        <div class="flex items-baseline justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <span class="font-semibold">{{ plan.name }}</span>
+                {% if plan.is_featured %}
+                <c-lb.badge variant="primary" style="soft" size="sm">Most popular</c-lb.badge>
+                {% endif %}
+            </div>
+            <div class="text-right">
+                <span class="font-semibold tabular-nums">${{ plan.price_monthly|floatformat:0 }}</span>
+                <span class="text-xs text-base-content/50">/mo</span>
+            </div>
+        </div>
+
+        <p class="text-sm text-base-content/60 mt-1">{{ plan.tagline }}</p>
+
+        <div class="mt-2 flex items-center gap-2 text-xs">
+            {% if people > plan.seats_included %}
+            <span class="text-warning font-medium tabular-nums">
+                {{ plan.seats_included }} seats — too few for your {{ people }}
+            </span>
+            {% else %}
+            <span class="text-base-content/50 tabular-nums">
+                {{ plan.seats_included }} seats included
+            </span>
+            {% endif %}
+            <span class="text-base-content/30">·</span>
+            <span class="text-base-content/50">{{ plan.features|first }}</span>
+        </div>
+    </div>
+
+</label>

@@ -1,0 +1,30 @@
+steps:
+  - title: Use a responsive grid for account cards
+    file: templates/pages/index.html
+    match: 'class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"'
+    teaches: [zero-js]
+    docs: [guide/reactivity]
+    body: |
+      Same eight records as the table view, laid out as cards. There is no JavaScript on
+      this page at all, so a phone downloads markup and stops. A card grid is what you reach
+      for when the row would have to be scrolled sideways to be read.
+
+  - title: Extract the account card component
+    file: templates/cotton/account_cards/card.html
+    match: "<c-lb.progress"
+    teaches: [theming]
+    docs: [ui/components/progress]
+    body: |
+      The health score is a number in the table and a bar here, because the card has the
+      space to draw it. The bar takes its colour from the same theme token as the badge, so
+      it recolours with the theme rather than fighting it.
+
+  - title: Include an empty card state
+    file: templates/cotton/account_cards/flagged.html
+    match: "<c-account-cards.empty"
+    teaches: [theming]
+    docs: [ui/components/card]
+    body: |
+      Nothing is flagged this week, and the block says so with an icon, a sentence that
+      explains what a flag even is, and the one action worth offering. That is the
+      difference between a component and a template.

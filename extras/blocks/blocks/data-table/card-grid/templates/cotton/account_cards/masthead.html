@@ -1,0 +1,33 @@
+<c-vars :total=0 mrr="" seats="" />
+
+<div class="flex flex-wrap items-end justify-between gap-4">
+
+    <div>
+        <div class="flex items-center gap-3">
+            <c-arden.mark size="xs" />
+            <span class="text-xs font-semibold tracking-tight text-base-content/70">Arden</span>
+        </div>
+        <h1 class="mt-6 text-2xl font-semibold tracking-tight">Accounts</h1>
+        <p class="mt-1 text-sm text-base-content/60 max-w-lg">
+            The same records the table view shows, laid out for a screen you hold in one hand.
+            Nothing is truncated into a column that will not fit.
+        </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-5">
+        <div class="flex flex-col">
+            <span class="text-xs text-base-content/50">Recurring revenue</span>
+            <span class="text-lg font-semibold tracking-tight tabular-nums">${{ mrr }}</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-xs text-base-content/50">Accounts</span>
+            <span class="text-lg font-semibold tracking-tight tabular-nums">{{ total }}</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-xs text-base-content/50">Seats</span>
+            <span class="text-lg font-semibold tracking-tight tabular-nums">{{ seats }}</span>
+        </div>
+        <c-lb.button variant="primary" size="sm" icon="rmx.add">New account</c-lb.button>
+    </div>
+
+</div>

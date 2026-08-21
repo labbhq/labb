@@ -1,0 +1,32 @@
+<c-lb.drawer drawerId="activity-sidebar" class="min-h-screen lg:drawer-open" sideClass="z-50 lg:z-40 is-drawer-close:overflow-visible lg:overflow-visible">
+    <c-slot name="sideContent"><c-arden.sidebar active="activity" drawerId="activity-sidebar" /></c-slot>
+
+    <main class="relative min-h-screen bg-base-200/35">
+        <c-lb.drawer.toggle for="activity-sidebar" class="btn btn-square btn-xs absolute left-3 top-3 z-40 border border-base-300 bg-base-100 shadow-sm lg:hidden" aria-label="Toggle sidebar">
+            <c-lbi n="rmx.menu" w="14" h="14" />
+        </c-lb.drawer.toggle>
+
+        <div class="container mx-auto max-w-6xl px-4 pb-8 pt-14 sm:px-6 sm:pt-16 lg:px-10 lg:py-8 flex flex-col gap-6">
+
+            <c-activity-feed.header :today=today />
+
+            <c-activity-feed.stats :stats=stats />
+
+            <section class="grid gap-6 lg:grid-cols-3 items-start">
+
+                <div id="activity-log" class="lg:col-span-2 flex flex-col gap-6">
+                    {% for group in groups %}
+                    <c-activity-feed.day :day=group.day :events=group.events />
+                    {% endfor %}
+                </div>
+
+                <div class="flex flex-col gap-6">
+                    <c-activity-feed.team :team=team />
+                    <c-activity-feed.digest />
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+</c-lb.drawer>

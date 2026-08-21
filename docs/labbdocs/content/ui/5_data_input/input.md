@@ -5,6 +5,7 @@ title: Input
 description: "Input component for Django: create styled text fields and form inputs. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django input component, text input django, daisyui input django, tailwind input django, input django-cotton, django form input, styled text field django, django-cotton"
 daisy_ui_component_name: input
+icon: rmx.input-field
 ---
 
 Input renders a styled `<input>` with any `type` via the prop of the same name, plus daisyUI form styling. Size, colour, and validation state variants keep it consistent with other form components.

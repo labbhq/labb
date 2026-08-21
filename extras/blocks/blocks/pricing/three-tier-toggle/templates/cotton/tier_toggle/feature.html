@@ -1,0 +1,11 @@
+<c-vars :included="True" />
+
+<div class="flex items-start gap-2 text-sm {% if not included %}opacity-40{% endif %}">
+    <c-lbi
+        n="{% if included %}rmx.checkbox-circle{% else %}rmx.close-circle{% endif %}"
+        w="18"
+        h="18"
+        class="shrink-0 mt-0.5 {% if included %}text-success{% else %}text-base-content/40{% endif %}"
+    />
+    <span>{{ slot }}</span>
+</div>

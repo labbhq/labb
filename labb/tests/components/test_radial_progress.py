@@ -106,3 +106,27 @@ class TestRadialProgress(ComponentTestBase):
         """Test radial progress with default value of 0"""
         html = self.render_component("radial-progress")
         assert "--value:0" in html
+
+
+class TestRadialProgressReactive(ComponentTestBase):
+    """A signal-bound value drives --value and aria-valuenow together."""
+
+    def test_signal_value_renders_fallback(self):
+        html = self.render_component("radial-progress", value="$upload.pct:35")
+        assert "--value:35" in html
+        assert 'aria-valuenow="35"' in html
+
+    def test_signal_value_tracks_the_signal(self):
+        html = self.render_component("radial-progress", value="$upload.pct:35")
+        assert "--value:${$upload.pct};" in html
+        assert 'data-attr:aria-valuenow="$upload.pct"' in html
+
+    def test_static_value_stays_inert(self):
+        html = self.render_component("radial-progress", value="35")
+        assert "data-attr:style" not in html
+        assert "data-attr:aria-valuenow" not in html
+
+    def test_variant_is_reactive(self):
+        html = self.render_component("radial-progress", variant="$ui.tone:primary")
+        assert "text-primary" in html
+        assert "data-attr:class" in html

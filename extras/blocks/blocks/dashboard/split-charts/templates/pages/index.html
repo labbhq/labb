@@ -1,0 +1,65 @@
+{{ ranges|json_script:"arden-ranges" }}
+
+<script>
+    function ardenRange(key) {
+        return JSON.parse(document.getElementById('arden-ranges').textContent)[key];
+    }
+</script>
+
+<c-lbr.signals id="split-charts-view" :$view=view />
+
+<c-lb.chart color="base-content" legend />
+
+<c-lb.drawer drawerId="reports-sidebar" class="min-h-screen lg:drawer-open" sideClass="z-50 lg:z-40 is-drawer-close:overflow-visible lg:overflow-visible">
+    <c-slot name="sideContent"><c-arden.sidebar active="reports" drawerId="reports-sidebar" /></c-slot>
+
+    <main class="relative min-h-screen bg-base-200/35">
+        <c-lb.drawer.toggle for="reports-sidebar" class="btn btn-square btn-xs absolute left-3 top-3 z-40 border border-base-300 bg-base-100 shadow-sm lg:hidden" aria-label="Toggle sidebar">
+            <c-lbi n="rmx.menu" w="14" h="14" />
+        </c-lb.drawer.toggle>
+
+        <div class="container mx-auto max-w-6xl px-4 pb-8 pt-14 sm:px-6 sm:pt-16 lg:px-10 lg:py-8 flex flex-col gap-6">
+
+            <c-split-charts.header />
+
+            <c-split-charts.summary />
+
+            <section class="grid gap-6 lg:grid-cols-3 items-start">
+
+        <c-split-charts.panel
+            class="lg:col-span-2"
+            title="Net MRR"
+            note="Where the book sat at the end of each period.">
+            <c-lb.chart.line id="mrr-chart" data="$view.mrr" height="280" legend="none" />
+        </c-split-charts.panel>
+
+        <c-split-charts.panel
+            title="Gross new MRR by source"
+            note="New logos, expansion and win-backs.">
+            <c-lb.chart.doughnut id="source-chart" data="$view.source" height="280" legend="bottom" />
+        </c-split-charts.panel>
+
+            </section>
+
+            <section class="grid gap-6 lg:grid-cols-3 items-start">
+
+        <c-split-charts.panel
+            class="lg:col-span-2"
+            title="Movement"
+            note="Expansion against churn and contraction, same period.">
+            <c-lb.chart.bar id="movement-chart" data="$view.movement" height="260" legend="bottom" />
+        </c-split-charts.panel>
+
+        <c-split-charts.panel
+            title="Accounts to watch"
+            note="Unchanged by the range switch — risk does not have a window.">
+            <c-split-charts.watchlist :accounts=watchlist />
+        </c-split-charts.panel>
+
+            </section>
+
+            <c-split-charts.footnote />
+
+        </div>
+    </main>
+</c-lb.drawer>

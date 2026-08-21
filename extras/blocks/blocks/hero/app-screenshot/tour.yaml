@@ -1,0 +1,37 @@
+steps:
+  - title: Build the app preview from components
+    file: templates/cotton/app_screenshot/shot.html
+    match: "<c-lb.mockup-window"
+    teaches: [theming]
+    docs: [ui/components/mockup-window]
+    body: |
+      Window chrome wrapped around a live Arden dashboard — menu, stat tiles,
+      chart and table, all real components. It stays crisp on any display, weighs
+      nothing to download, and follows the theme. A PNG does none of that.
+
+  - title: Let the preview follow the active theme
+    file: templates/cotton/app_screenshot/bar.html
+    match: "bg-primary/20"
+    teaches: [theming]
+    docs: [ui/theming]
+    body: |
+      The chart bars are `primary` at two opacities. Switch the theme and the
+      chart restyles itself — no palette to maintain, and nothing to re-export.
+
+  - title: Keep the hero server-rendered
+    file: templates/pages/index.html
+    match: "<main"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      There is no script tag in this block. Datastar loads only where a page uses
+      it, so a marketing page that needs nothing ships nothing.
+
+  - title: Pair the call to action with proof
+    file: templates/pages/index.html
+    match: "<c-app-screenshot.trust"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      The security line above the fold and the metrics below it are the block's
+      surrounding matter. They answer the question the screenshot provokes.

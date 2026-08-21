@@ -1,0 +1,28 @@
+steps:
+  - title: Model the wizard as typed signals
+    file: views.py
+    match: "class OnboardingSignals"
+    teaches: [signals, multi-step]
+    docs: [reactivity/signals]
+    body: The schema names the values the flow carries between steps and gives the view validated Python values. Each step reads the same state rather than rebuilding form data.
+
+  - title: Bind a field through the schema
+    file: templates/cotton/onboarding/step_workspace.html
+    match: ":bind=signals.fields.workspace_name"
+    teaches: [binding, multi-step]
+    docs: [reactivity/binding]
+    body: Passing the field descriptor to bind keeps the template on the schema’s path. Rename the path in one place and the form keeps following it.
+
+  - title: Validate before moving forward
+    file: templates/cotton/onboarding/step_workspace.html
+    match: "<c-lbr.post to=\"block_wizard_onboarding:validate\""
+    teaches: [server-actions, morphing, live-validation]
+    docs: [reactivity/actions]
+    body: The step posts its signals to a Django view for validation. The response returns the same step with errors or the next state, so the user stays in the flow.
+
+  - title: Render the next step from Django
+    file: views.py
+    match: "def next_step"
+    teaches: [multi-step, server-actions]
+    docs: [reactivity/actions]
+    body: The next-step view reads the submitted signals, decides which template belongs next, and returns HTML. You can add business rules here without creating a separate client router.

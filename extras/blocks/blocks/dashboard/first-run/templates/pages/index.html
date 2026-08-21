@@ -1,0 +1,25 @@
+<main class="container mx-auto max-w-6xl px-4 py-10 flex flex-col gap-6">
+
+    <c-first-run.header :workspace=workspace />
+
+    <c-first-run.empty />
+
+    <section class="grid gap-6 lg:grid-cols-3 items-start">
+
+        <c-first-run.setup
+            class="lg:col-span-2"
+            :steps=steps
+            :progress=progress
+            :steps_done=steps_done
+            :steps_total=steps_total />
+
+        <div class="flex flex-col gap-6">
+            <c-first-run.upcoming :items=first_looks />
+            <c-first-run.help />
+        </div>
+
+    </section>
+
+    <c-first-run.placeholders :placeholders=placeholders :sources=sources />
+
+</main>

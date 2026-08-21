@@ -430,6 +430,19 @@ components:
           bottom: tooltip-bottom
           left: tooltip-left
           right: tooltip-right
+      align:
+        type: enum
+        values:
+        - ''
+        - start
+        - center
+        - end
+        default: ''
+        description: Align the tooltip along its placement edge (default is centered)
+        css_mapping:
+          start: tooltip-start
+          center: tooltip-center
+          end: tooltip-end
       variant:
         type: enum
         values:

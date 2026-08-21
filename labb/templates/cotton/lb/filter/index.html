@@ -1,5 +1,6 @@
+{% load lbr_tags %}
 <c-vars class="" as="div" multiSelect />
-
-<{{ as }} class="{% if not multiSelect %}filter{% endif %} {{ class }}" {{ attrs }}>
+{% lbr_props "filter" attrs=attrs as rx %}
+<{{ as }} class="{% if not multiSelect %}filter {% endif %}{{ class }}" {{ rx.attrs }}>
     {{ slot }}
 </{{ as }}>

@@ -8,11 +8,10 @@ except ImportError:
 # Default settings
 DEFAULT_SETTINGS = {
     "DEFAULT_THEME": "__system__",  # system's default theme
-    "ALPINE_JS_PATH": "labb/js/alpine/alpine.min.js",  # local static path or full URL
-    "STACK_HELPERS": {
-        # Maps stack name → ordered list of helpers to prepend.
-        # "alpine" is a special token: emits a <script defer src="..."> using ALPINE_JS_PATH.
-        "components": ["labb/js/alpine/labb-component.js", "alpine"],
+    "STACK_HELPERS": {},
+    "REACTIVITY": {
+        "QUERY_KEY": "lbr",  # query param name for syncQuery URL persistence
+        "QUERY_ENCODING": "flat",  # "base64" | "flat" | "json"
     },
 }
 
@@ -36,6 +35,18 @@ def get_labb_setting(key, default=None):
 
     # Return the setting value, falling back to defaults
     return labb_settings.get(key, DEFAULT_SETTINGS.get(key, default))
+
+
+def get_reactivity_setting(key, default=None):
+    """Get a reactivity setting from LABB_SETTINGS['REACTIVITY'], falling back to defaults."""
+    if not DJANGO_SETTINGS_AVAILABLE:
+        return DEFAULT_SETTINGS["REACTIVITY"].get(key, default)
+
+    labb_settings = getattr(settings, "LABB_SETTINGS", {})
+    reactivity_settings = labb_settings.get("REACTIVITY", {})
+    return reactivity_settings.get(
+        key, DEFAULT_SETTINGS["REACTIVITY"].get(key, default)
+    )
 
 
 def get_default_theme():

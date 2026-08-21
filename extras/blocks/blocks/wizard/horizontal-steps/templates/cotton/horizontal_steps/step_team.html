@@ -1,0 +1,49 @@
+<c-vars :roles="[]" />
+
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Invite the revenue team</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            Arden is worth more with finance in it. Invites go out when you finish setup.
+        </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+        <c-horizontal-steps.field label="Teammate">
+            <c-lb.input
+                id="hz-invite1"
+                type="email"
+                placeholder="jonah@kiteandbell.co"
+                class="w-full"
+                bind="$form.invite1" />
+        </c-horizontal-steps.field>
+
+        <c-horizontal-steps.field label="Teammate" hint="(optional)">
+            <c-lb.input
+                id="hz-invite2"
+                type="email"
+                placeholder="rosa@kiteandbell.co"
+                class="w-full"
+                bind="$form.invite2" />
+        </c-horizontal-steps.field>
+
+        <c-horizontal-steps.field label="They join as">
+            <c-lb.select id="hz-role" class="w-full" bind="$form.role">
+                {% for value, label in roles %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </c-lb.select>
+        </c-horizontal-steps.field>
+    </div>
+
+    <div class="flex items-center gap-3 rounded-box border border-base-300 p-4">
+        <c-lb.avatar placeholder initials="JP" bgColor="secondary" size="sm" />
+        <p class="text-xs text-base-content/60 leading-relaxed">
+            “Our controller was in Arden before our first standup. She found $18,400 of
+            unbilled renewals that week.”
+            <span class="text-base-content/45">— Jonah Price, Head of Finance, Kite &amp; Bell</span>
+        </p>
+    </div>
+
+</div>

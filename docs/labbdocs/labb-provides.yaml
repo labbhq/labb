@@ -1,0 +1,11 @@
+# CSS groups the labbdocs package publishes to consumers (e.g. labbio).
+# Subscribe with `css.packages.labbdocs: [docs]`.
+# Paths are relative to the labbdocs package root, import-resolved at build time.
+provides:
+  docs:
+    components:
+    - templates/**/*.html
+    literals:
+    - templates/**/*.html
+    imports:
+    - css/blocks.css

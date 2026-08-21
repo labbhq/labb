@@ -5,9 +5,10 @@ title: Carousel
 description: "Carousel component for Django: build image sliders and content carousels. Built with django-cotton, Tailwind CSS, and daisyUI 5. Zero JavaScript by default."
 keywords: "django carousel component, carousel django, daisyui carousel django, tailwind carousel django, carousel django-cotton, django ui carousel, image slider django, django-cotton"
 daisy_ui_component_name: carousel
+icon: rmx.carousel-view
 ---
 
-Carousel renders a horizontally scrollable sequence of slides using CSS scroll snapping — no JavaScript needed. Each `c-lb.carousel.item` is a slide, and navigation uses anchor links targeting each item's ID.
+Carousel renders a horizontally scrollable sequence of slides using CSS scroll snapping and no JavaScript. Each `c-lb.carousel.item` is a slide, and navigation uses anchor links targeting each item's ID.
 
 ## Basic Carousel
 <c-lbdocs.component_example path="carousel/basic" />

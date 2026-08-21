@@ -1,31 +1,8 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'neutral': 'file-input-neutral',
-        'primary': 'file-input-primary',
-        'secondary': 'file-input-secondary',
-        'accent': 'file-input-accent',
-        'info': 'file-input-info',
-        'success': 'file-input-success',
-        'warning': 'file-input-warning',
-        'error': 'file-input-error'
-    }"
-    size="md"
-    :sizeClasses="{
-        'xs': 'file-input-xs',
-        'sm': 'file-input-sm',
-        'md': 'file-input-md',
-        'lg': 'file-input-lg',
-        'xl': 'file-input-xl'
-    }"
-    ghost
-    validate
-/>
+{% load lbr_tags %}
+{% lbr_props "file-input" attrs=attrs as rx %}
 
 <input
     type="file"
-    class="file-input {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {% if ghost %}file-input-ghost{% endif %} {% if validate %}validator{% endif %} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 />

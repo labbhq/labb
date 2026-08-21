@@ -1,0 +1,13 @@
+<c-vars :doc="{}" />
+
+<button
+    type="button"
+    data-tag="c-lbi.{{ doc.metadata.component_name }}"
+    title="Copy c-lbi.{{ doc.metadata.component_name }}"
+    aria-label="Copy c-lbi.{{ doc.metadata.component_name }}"
+    data-on:click="navigator.clipboard.writeText('<' + el.dataset.tag + ' />'); el.classList.add('lb-copied'); setTimeout(() => el.classList.remove('lb-copied'), 700)"
+    class="flex flex-col items-center gap-1.5 rounded-lg px-1 py-3 text-center transition-colors hover:bg-base-200"
+>
+    <c-component is="lbi" n="{{ doc.metadata.component_name }}" w="1.4em" h="1.4em" class="text-base-content/80" />
+    <span class="w-full truncate text-[10px] leading-tight text-base-content/50">{{ doc.title }}</span>
+</button>

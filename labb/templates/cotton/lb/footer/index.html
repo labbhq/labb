@@ -1,18 +1,10 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    as="footer"
-    center
-    direction="horizontal"
-    :directionClasses="{
-        'vertical': 'footer-vertical',
-        'horizontal': 'footer-horizontal'
-    }"
-/>
+{% load lbr_tags %}
+<c-vars as="footer" />
+{% lbr_props "footer" attrs=attrs as rx %}
 
 <{{ as }}
-    class="footer {% if center %}footer-center{% endif %} {{ directionClasses|get_dict_item:direction }} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     {{ slot }}
 </{{ as }}>

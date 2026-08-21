@@ -1,0 +1,51 @@
+<c-lb.card border class="bg-base-100 shadow-sm">
+    <c-lb.card.body class="gap-5 p-7">
+
+        <div class="flex flex-col gap-1.5">
+            <h1 class="text-2xl font-semibold tracking-tight">Sign in to your workspace</h1>
+            <p class="text-sm text-base-content/60">
+                Arden reconciled 18,402 invoices for your team overnight. Pick up the numbers
+                where they landed.
+            </p>
+        </div>
+
+        <c-centred-card.oauth />
+
+        <c-lb.divider class="my-0 text-xs text-base-content/40">or with your email</c-lb.divider>
+
+        <div class="flex flex-col gap-4">
+
+            <div class="flex flex-col gap-1">
+                <label for="cc-email" class="label label-text text-sm font-medium">Work email</label>
+                <c-lb.input
+                    id="cc-email"
+                    type="email"
+                    name="email"
+                    class="w-full"
+                    autocomplete="username"
+                    placeholder="you@company.com" />
+            </div>
+
+            <c-centred-card.password />
+
+            <div class="flex items-center justify-between">
+                <label class="flex items-center gap-2 text-sm text-base-content/70 cursor-pointer">
+                    <c-lb.checkbox id="cc-remember" size="sm" name="remember" />
+                    Keep me signed in for 30 days
+                </label>
+                <a href="#" class="link link-hover text-sm text-base-content/60">Forgot password?</a>
+            </div>
+
+            <c-lb.button id="cc-submit" type="button" variant="primary" modifier="block">
+                Sign in
+            </c-lb.button>
+
+        </div>
+
+        <p class="text-center text-sm text-base-content/60">
+            New to Arden?
+            <a href="#" class="link link-primary">Start a 14-day trial</a>
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

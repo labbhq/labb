@@ -1,0 +1,39 @@
+steps:
+  - title: Declare the password visibility state
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      The card needs exactly one piece of client state — whether the password is
+      showing. It is declared here in prop mode: no schema, no view, no store.
+      Everything else on the page is plain server-rendered markup.
+
+  - title: Toggle visibility from the button
+    file: templates/cotton/centred_card/password.html
+    match: 'data-on:click="$reveal = !$reveal"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Clicking the eye toggles the signal. That is the whole interaction — no
+      handler to register, no request on the wire, and nothing for a server to do.
+
+  - title: Update the input attribute from state
+    file: templates/cotton/centred_card/password.html
+    match: "data-attr:type="
+    teaches: [signals, theming]
+    docs: [reactivity/patterns]
+    body: |
+      The field is rendered as a password input by the server, so it is correct
+      before any JavaScript runs. The signal only ever swaps the type attribute,
+      which is the smallest change that does the job.
+
+  - title: Keep supporting content in a component
+    file: templates/cotton/centred_card/assurance.html
+    match: "SOC 2 Type II"
+    teaches: [theming]
+    docs: [ui/theming]
+    body: |
+      A centred card is the easiest layout to leave bare. The OAuth row, the trust
+      line and the audit footer are what turn it into a page — and every colour on
+      it comes from a theme token, so it recolours rather than breaking.

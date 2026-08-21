@@ -1,0 +1,18 @@
+<c-vars message="" detail="" />
+
+{% if message %}
+<c-lb.toast vertical="bottom" horizontal="end" data-init="setTimeout(() => el.remove(), 5000)">
+    <c-lb.alert
+        variant="success"
+        alertStyle="soft"
+        icon="rmx.checkbox-circle"
+        class="border border-base-300 shadow-lg">
+        <div>
+            <div class="font-medium">{{ message }}</div>
+            {% if detail %}
+            <div class="text-xs opacity-70">{{ detail }}</div>
+            {% endif %}
+        </div>
+    </c-lb.alert>
+</c-lb.toast>
+{% endif %}

@@ -1,0 +1,21 @@
+<c-vars points="" tone="primary" />
+
+<svg
+    viewBox="0 0 100 32"
+    preserveAspectRatio="none"
+    role="presentation"
+    aria-hidden="true"
+    class="h-8 w-full {% if tone == 'error' %}text-error{% elif tone == 'success' %}text-success{% else %}text-primary{% endif %}">
+
+    <polygon points="{{ points }} 100,32 0,32" fill="currentColor" class="opacity-10" />
+
+    <polyline
+        points="{{ points }}"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        vector-effect="non-scaling-stroke" />
+
+</svg>

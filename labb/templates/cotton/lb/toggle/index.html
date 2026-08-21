@@ -1,34 +1,16 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'primary': 'toggle-primary',
-        'secondary': 'toggle-secondary',
-        'accent': 'toggle-accent',
-        'neutral': 'toggle-neutral',
-        'info': 'toggle-info',
-        'success': 'toggle-success',
-        'warning': 'toggle-warning',
-        'error': 'toggle-error'
-    }"
-    size="md"
-    :sizeClasses="{
-        'xs': 'toggle-xs',
-        'sm': 'toggle-sm',
-        'md': 'toggle-md',
-        'lg': 'toggle-lg',
-        'xl': 'toggle-xl'
-    }"
     checked
     disabled
-    validate
+    bind=""
 />
+{% lbr_props "toggle" attrs=attrs as rx %}
 
 <input
     type="checkbox"
-    class="toggle {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {% if validate %}validator{% endif %} {{ class }}"
+    class="{{ rx.classes }}"
     {% if checked %}checked{% endif %}
     {% if disabled %}disabled{% endif %}
-    {{ attrs }}
+    {% lbr_bind "toggle" bind %}
+    {{ rx.attrs }}
 />

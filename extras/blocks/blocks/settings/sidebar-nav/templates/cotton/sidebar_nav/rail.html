@@ -1,0 +1,51 @@
+<c-vars :workspace="{}" :sections="[]" />
+
+<aside class="flex flex-col gap-6">
+
+    <div class="flex items-center gap-3">
+        <c-lb.avatar placeholder initials="{{ workspace.initials }}" bgColor="primary" />
+        <div class="min-w-0">
+            <div class="font-semibold truncate">{{ workspace.name }}</div>
+            <div class="text-xs font-mono text-base-content/50 truncate">arden.app/{{ workspace.slug }}</div>
+        </div>
+    </div>
+
+    <div class="rounded-box border border-base-300 p-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+            <c-lb.badge size="sm" style="soft" variant="primary" icon="rmx.bank-card">{{ workspace.plan }}</c-lb.badge>
+            <span class="text-xs text-base-content/50 tabular-nums">
+                {{ workspace.seats_used }}/{{ workspace.seats_total }} seats
+            </span>
+        </div>
+        <c-lb.progress variant="primary" value="{{ workspace.seats_pct }}" max="100" class="w-full h-1.5" />
+        <p class="text-xs text-base-content/45">
+            Thirteen seats left. Suspended members are not billed.
+        </p>
+    </div>
+
+    <c-lb.menu size="md" class="w-full p-0 gap-1">
+        {% for item in sections %}
+        <c-lb.menu.item
+            id="nav-{{ item.key }}"
+            class="cursor-pointer"
+            data-lbb-start
+            data-on:click="$section = '{{ item.key }}'"
+            data-class="{'menu-active': $section === '{{ item.key }}'}"
+        >
+            <c-lbi n="{{ item.icon }}" w="1em" h="1em" class="size-4 shrink-0" />
+            <span class="text-sm">{{ item.label }}</span>
+        </c-lb.menu.item>
+        {% endfor %}
+    </c-lb.menu>
+
+    <div class="flex items-start gap-3 rounded-box bg-base-200/60 p-4 mt-2">
+        <c-lb.avatar placeholder initials="HI" bgColor="accent" size="sm" />
+        <div class="text-xs">
+            <div class="font-medium">Something look wrong?</div>
+            <div class="text-base-content/50 mt-0.5">
+                Hana on support answers billing questions in under an hour.
+            </div>
+        </div>
+    </div>
+
+</aside>

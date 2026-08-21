@@ -1,0 +1,26 @@
+<c-lbr.signals id="auth-signals" :schema=signals />
+
+<c-split-brand.shell>
+
+    <c-slot name="brand">
+        <c-split-brand.brand
+            headline="Start knowing your revenue."
+            sub="Set up your workspace in a couple of minutes." />
+    </c-slot>
+
+    {% if submitted %}
+    <c-split-brand.success :member=member joined />
+    {% else %}
+    <c-split-brand.form
+        title="Create your Arden account"
+        lede="Fourteen days free. No card required."
+        action="block_auth_split_brand:sign_up_submit"
+        validateTo="block_auth_split_brand:sign_up_validate"
+        cta="Create account"
+        withName
+        :signals=signals
+        :errors=errors
+        :failed=failed />
+    {% endif %}
+
+</c-split-brand.shell>

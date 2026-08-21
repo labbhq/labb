@@ -26,6 +26,16 @@ class TestRange(ComponentTestBase):
             html = self.render_component("range", variant=variant)
             assert f"range-{variant}" in html
 
+    def test_range_vertical(self):
+        """Test vertical orientation applies range-vertical"""
+        html = self.render_component("range", orientation="vertical")
+        assert "range-vertical" in html
+
+    def test_range_horizontal_default(self):
+        """Test horizontal orientation has no range-vertical class"""
+        html = self.render_component("range")
+        assert "range-vertical" not in html
+
     def test_range_sizes(self):
         """Test range size variants"""
         sizes = ["xs", "sm", "md", "lg", "xl"]

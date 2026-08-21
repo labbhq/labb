@@ -1,0 +1,38 @@
+steps:
+  - title: Declare the billing period
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      Prop mode: an object literal straight from the page context. No schema, no
+      view, no endpoint — the matrix is a static page with one moving part.
+
+  - title: Style the selected period
+    file: templates/cotton/plan_matrix/header.html
+    match: 'btnStyle="$period.annualStyle:ghost"'
+    teaches: [reactive-props]
+    docs: [reactivity/reactive-props]
+    body: |
+      `$period.annualStyle` is the signal, `ghost` is what the server renders. The
+      button picks up its daisyUI classes again in the browser when the signal moves.
+
+  - title: Recalculate the plan price in the browser
+    file: templates/cotton/plan_matrix/matrix.html
+    match: "data-text=\"$period.annual ?"
+    teaches: [reactive-props]
+    docs: [reactivity/reactive-props]
+    body: |
+      Each column header reads the same signal. Flipping to annual re-renders all
+      three prices at once and the network tab stays empty — the annual figures were
+      already in the HTML.
+
+  - title: Extract the comparison cell component
+    file: templates/cotton/plan_matrix/cell.html
+    match: '{% if value == "yes" %}'
+    teaches: [theming]
+    docs: [ui/table]
+    body: |
+      Tick, dash or a value — decided once, in one small component, so the table body
+      stays an outline you can read. The icon colours come from theme tokens, so the
+      matrix survives every daisyUI theme.

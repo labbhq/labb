@@ -1,7 +1,4 @@
-<c-vars
-    class=""
-    as="div"
-    text
-/>
-
-<{{ as }} class="skeleton {% if text %}skeleton-text{% endif %} {{ class }}" {{ attrs }}>{{ slot }}</{{ as }}>
+{% load lbr_tags %}
+<c-vars as="div" />
+{% lbr_props "skeleton" attrs=attrs as rx %}
+<{{ as }} class="{{ rx.classes }}" {{ rx.attrs }}>{{ slot }}</{{ as }}>

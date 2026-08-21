@@ -5,9 +5,10 @@ title: Steps
 description: "Steps component for Django: display multi-step processes, wizards, and progress indicators. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django steps component, stepper django, daisyui steps django, tailwind steps django, steps django-cotton, django ui steps, progress steps django, wizard django"
 daisy_ui_component_name: steps
+icon: rmx.footprint
 ---
 
-Steps shows a user's progress through a sequential process. Each `c-lb.steps.step` accepts a colour variant and optional content, making it straightforward to mark completed, active, and upcoming stages.
+Steps shows a user's progress through a sequential process. Each `c-lb.steps.step` takes a colour variant and optional content, so you can mark completed, active, and upcoming stages.
 
 ## Basic Steps
 <c-lbdocs.component_example path="steps/basic" />

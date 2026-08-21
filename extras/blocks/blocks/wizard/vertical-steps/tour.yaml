@@ -1,0 +1,37 @@
+steps:
+  - title: Declare the active step
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals, multi-step]
+    docs: [reactivity/signals]
+    body: |
+      `step` is a client signal and so is the answer bag. The rail on the left and
+      the card on the right both read it — they are two views of one number.
+
+  - title: Style the active step in the rail
+    file: templates/cotton/vertical_steps/rail.html
+    match: "data-class=\"{'bg-primary/5 border-primary/30'"
+    teaches: [signals, theming]
+    docs: [reactivity/patterns]
+    body: |
+      Current, done and upcoming come out of a comparison against the step signal.
+      Every colour is a theme token, so the rail reads correctly in any daisyUI theme.
+
+  - title: Move through the flow without a request
+    file: templates/cotton/vertical_steps/nav.html
+    match: 'data-on:click="$step = Math.max($step - 1, 1)"'
+    teaches: [signals, multi-step]
+    docs: [reactivity/patterns]
+    body: |
+      Back subtracts one. The panels were never removed from the page and the answers
+      never left the signal bag, so there is nothing to restore and nothing to fetch.
+
+  - title: Bind a field to the wizard state
+    file: templates/cotton/vertical_steps/step_workspace.html
+    match: 'data-bind="form.region"'
+    teaches: [binding]
+    docs: [reactivity/binding]
+    body: |
+      A radio group writes one path in the bag. The card styling comes from
+      `has-[:checked]`, so the selected region is obvious without any JavaScript of
+      its own.

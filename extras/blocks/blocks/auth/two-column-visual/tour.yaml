@@ -1,0 +1,39 @@
+steps:
+  - title: Start with the two-column page layout
+    file: templates/pages/index.html
+    match: "<main"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      The whole treatment is server-rendered markup. Nothing here asks for a signal
+      or an action, so nothing is downloaded — a sign-in page has no business
+      shipping a framework.
+
+  - title: Build the product visual from components
+    file: templates/cotton/visual_signin/shot.html
+    match: "<c-lb.mockup-browser"
+    teaches: [theming]
+    docs: [ui/components/mockup-browser]
+    body: |
+      Browser chrome around a real Arden renewals view, built from the same
+      components the app uses. No asset to license, no file to ship, and it stays
+      sharp at any pixel density.
+
+  - title: Let the product visual follow the theme
+    file: templates/cotton/visual_signin/shot.html
+    match: "border border-base-300 bg-base-200 shadow-xl"
+    teaches: [theming]
+    docs: [ui/theming]
+    body: |
+      The mockup chrome is base tokens — `border-base-300`, `bg-base-200`. A
+      screenshot would be frozen at whatever theme it was taken in; this shot
+      follows the user's. Behind it sits a soft, borderless brand-colour wash.
+
+  - title: Add a reusable product caption
+    file: templates/cotton/visual_signin/shot.html
+    match: 'id="tv-caption"'
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      The panel is the surrounding matter. It answers the only question a returning
+      user has — what is waiting for me — before they have typed anything.

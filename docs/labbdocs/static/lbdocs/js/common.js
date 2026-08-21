@@ -1,15 +1,13 @@
 // Common JavaScript functionality for Labb documentation
 
-// Initialize common functionality when DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
-
-    // Initialize syntax highlighting
     if (typeof hljs !== 'undefined') {
         hljs.highlightAll();
     }
 
-    // Scroll to active menu item in docs sidebar
     scrollToActiveMenuItem();
+    initTocScrollspy();
+    initBannerDismiss();
 });
 
 /**
@@ -45,6 +43,100 @@ function scrollToActiveMenuItem() {
             behavior: 'smooth'
         });
     }, 100);
+}
+
+
+/**
+ * Highlight the TOC entry for the heading currently in view.
+ */
+function initTocScrollspy() {
+    const toc = document.getElementById('toc-sidebar');
+    const article = document.querySelector('article');
+    if (!toc || !article) return;
+
+    const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
+    if (!links.length) return;
+
+    const linkById = new Map();
+    links.forEach(function (link) {
+        const id = decodeURIComponent(link.getAttribute('href').slice(1));
+        if (id) linkById.set(id, link);
+    });
+
+    const headings = Array.from(article.querySelectorAll('h2, h3, h4'))
+        .filter(function (h) { return h.id && linkById.has(h.id); });
+    if (!headings.length) return;
+
+    let activeId = null;
+    function setActive(id) {
+        if (id === activeId || !linkById.has(id)) return;
+        activeId = id;
+        links.forEach(function (link) { link.classList.remove('menu-active'); });
+        linkById.get(id).classList.add('menu-active');
+    }
+
+    const visible = new Set();
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) visible.add(entry.target);
+            else visible.delete(entry.target);
+        });
+        if (visible.size) {
+            // When several headings are visible, the topmost one wins.
+            const top = Array.from(visible).sort(function (a, b) {
+                return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+            })[0];
+            setActive(top.id);
+        }
+    }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+
+    headings.forEach(function (h) { observer.observe(h); });
+
+    // Clamp the edges: first heading active at the top, last at the bottom.
+    function clampEdges() {
+        if (window.scrollY <= 8) {
+            setActive(headings[0].id);
+            return;
+        }
+        const bottom = window.innerHeight + window.scrollY;
+        if (bottom >= document.documentElement.scrollHeight - 8) {
+            setActive(headings[headings.length - 1].id);
+        }
+    }
+    window.addEventListener('scroll', clampEdges, { passive: true });
+
+    setActive(headings[0].id);
+    clampEdges();
+}
+
+/**
+ * Dismiss the announcement banner and persist it server-side.
+ *
+ * Persisting matters: a Datastar full-page morph would otherwise re-emit the
+ * banner. Config comes from data attributes so this file stays static.
+ */
+function initBannerDismiss() {
+    const button = document.querySelector('[data-banner-dismiss]');
+    if (!button) return;
+
+    button.addEventListener('click', function () {
+        const id = button.dataset.bannerDismiss;
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+
+        // Drop the header-height offset immediately so content reflows
+        // without waiting for a full-page morph.
+        document.documentElement.classList.remove('lb-has-banner');
+
+        fetch(button.dataset.dismissUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': button.dataset.csrfToken,
+            },
+            body: 'banner_id=' + encodeURIComponent(id),
+        }).catch(function () {});
+    });
 }
 
 

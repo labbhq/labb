@@ -1,0 +1,35 @@
+{% load docs_tags %}
+
+{% labb_docs_banner as banner %}
+
+{% if banner %}
+    <div
+        id="{{ banner.id|default:'lbdocs-banner' }}"
+        class="flex justify-center items-center gap-2 py-1 text-xs"
+        {{ attrs }}
+    >
+        <c-lb.link
+            href="{{ banner.href }}"
+            class="inline-flex items-center justify-center gap-2 text-base-content/80 hover:text-primary"
+        >
+            {% if banner.icon %}
+                <c-lbi n="{{ banner.icon }}" w="1em" h="1em" aria-hidden="true" />
+            {% endif %}
+            {{ banner.text }}
+        </c-lb.link>
+
+        {% if banner.dismissible %}
+            <c-lb.button
+                size="xs"
+                btnStyle="ghost"
+                modifier="circle"
+                aria-label="Dismiss announcement"
+                data-banner-dismiss="{{ banner.id|default:'lbdocs-banner' }}"
+                data-dismiss-url="{% url 'dismiss_banner' %}"
+                data-csrf-token="{{ csrf_token }}"
+            >
+                <c-lbi n="rmx.close" w="1em" h="1em" aria-hidden="true" />
+            </c-lb.button>
+        {% endif %}
+    </div>
+{% endif %}

@@ -1,0 +1,51 @@
+<c-vars :plan="{}" />
+
+<c-lb.card
+    border
+    class="h-full bg-base-100 {% if plan.featured %}border-primary border-2 shadow-lg ring-1 ring-primary/20{% endif %}"
+>
+    <c-lb.card.body class="gap-5">
+
+        <div class="flex items-center justify-between gap-3">
+            <h2 class="text-lg font-semibold">{{ plan.name }}</h2>
+            {% if plan.featured %}
+            <c-lb.badge variant="primary" size="sm">Most popular</c-lb.badge>
+            {% endif %}
+        </div>
+
+        <p class="text-sm text-base-content/60">{{ plan.lede }}</p>
+
+        <div class="flex items-baseline gap-1">
+            <span class="text-2xl font-semibold text-base-content/70">$</span>
+            <span class="text-5xl font-bold tracking-tight tabular-nums">{{ plan.monthly }}</span>
+            <span class="text-sm text-base-content/50">/month</span>
+        </div>
+
+        <p class="text-xs text-base-content/50">
+            ${{ plan.annual }} billed annually, which is two months free.
+        </p>
+
+        {% if plan.featured %}
+        <c-lb.button variant="primary" modifier="block">{{ plan.cta }}</c-lb.button>
+        {% else %}
+        <c-lb.button btnStyle="outline" modifier="block">{{ plan.cta }}</c-lb.button>
+        {% endif %}
+
+        <c-lb.divider class="my-0 text-xs text-base-content/40">Includes</c-lb.divider>
+
+        <div class="flex flex-col gap-2.5">
+            {% for feature in plan.features %}
+            <div class="flex items-start gap-2 text-sm">
+                <c-lbi
+                    n="rmx.checkbox-circle"
+                    w="18"
+                    h="18"
+                    class="shrink-0 mt-0.5 {% if plan.featured %}text-primary{% else %}text-success{% endif %}"
+                />
+                <span>{{ feature }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+    </c-lb.card.body>
+</c-lb.card>

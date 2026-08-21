@@ -120,3 +120,21 @@ class TestAccordion(ComponentTestBase):
         assert "checked" in html
         assert "custom-item" in html
         assert "Test Title" in html
+
+
+class TestAccordionItemAttributes(ComponentTestBase):
+    """checked is an HTML attribute on the radio, never a CSS class.
+
+    It briefly had a css_mapping in the schema, which injected a literal
+    "checked" class onto the wrapper.
+    """
+
+    def test_checked_sets_the_input_attribute(self):
+        html = self.render_component("accordion.item", checked=True, title="x")
+        assert '<input type="radio"' in html
+        assert "checked />" in html or "checked/>" in html
+
+    def test_checked_is_not_a_class(self):
+        html = self.render_component("accordion.item", checked=True, title="x")
+        assert 'class="collapse checked"' not in html
+        assert 'class="collapse"' in html

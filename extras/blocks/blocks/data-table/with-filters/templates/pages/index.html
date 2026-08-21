@@ -1,0 +1,48 @@
+<script>
+    const ARDEN_ACCOUNTS = [
+        {% for customer in customers %}
+        { status: "{{ customer.status_key }}", health: "{{ customer.health_key }}" }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    function ardenFilters(status, health) {
+        var narrowed = status !== '' || health !== '';
+        return {
+            status: status,
+            health: health,
+            tone: narrowed ? 'primary' : 'neutral',
+            summary: narrowed ? 'Filtered' : 'All accounts'
+        };
+    }
+
+    function ardenMatches(status, health, filters) {
+        return (filters.status === '' || filters.status === status)
+            && (filters.health === '' || filters.health === health);
+    }
+
+    function ardenVisible(filters) {
+        return ARDEN_ACCOUNTS.filter(function (account) {
+            return ardenMatches(account.status, account.health, filters);
+        }).length;
+    }
+</script>
+
+<c-lbr.signals id="account-filters" :$filters=filters />
+
+<main class="container mx-auto max-w-7xl px-4 py-10 flex flex-col gap-6">
+
+    <c-filter-table.masthead />
+
+    <c-filter-table.toolbar
+        :status_chips=status_chips
+        :health_chips=health_chips
+        :total=total />
+
+    <c-filter-table.table :customers=customers />
+
+    <p class="text-xs text-base-content/40 max-w-2xl">
+        Health is recomputed nightly from product usage, invoice history and support volume.
+        An account moves to At risk when two of the three fall below their plan's baseline.
+    </p>
+
+</main>

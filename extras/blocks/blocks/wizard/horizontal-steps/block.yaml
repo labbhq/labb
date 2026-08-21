@@ -1,0 +1,57 @@
+name: Horizontal steps
+ref: lb/wizard/horizontal-steps
+type: fe
+labb_version: ">=0.5.0"
+description: "Three-step workspace setup with a numbered stepper across the top — the step and every answer live in client signals, so nothing touches the wire and going back loses nothing"
+category: wizard
+thumbnail: thumbnails/horizontal-steps.png
+status: launch
+tags:
+  - wizard
+  - multi-step
+  - reactive
+  - zero-server
+  - onboarding
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  step: 1
+  form:
+    company: ""
+    slug: ""
+    region: "eu-west-1"
+    source: "stripe"
+    invite1: ""
+    invite2: ""
+    role: "member"
+  steps:
+    - n: 1
+      label: "Workspace"
+      hint: "Name and address"
+    - n: 2
+      label: "Revenue data"
+      hint: "Where it lives"
+    - n: 3
+      label: "Team"
+      hint: "Who joins you"
+  regions:
+    - ["eu-west-1", "EU West · Ireland"]
+    - ["us-east-1", "US East · Virginia"]
+    - ["ap-south-1", "Asia Pacific · Mumbai"]
+  sources:
+    - value: "stripe"
+      name: "Stripe"
+      note: "Subscriptions, invoices and refunds. Synced every 5 minutes."
+    - value: "chargebee"
+      name: "Chargebee"
+      note: "Plans, add-ons and credit notes. Synced hourly."
+    - value: "csv"
+      name: "Monthly CSV"
+      note: "Upload a file. Best if your billing lives in a spreadsheet."
+  roles:
+    - ["member", "Member — sees revenue, cannot change billing"]
+    - ["admin", "Admin — invites people and changes billing"]
+    - ["viewer", "Viewer — read-only dashboards"]

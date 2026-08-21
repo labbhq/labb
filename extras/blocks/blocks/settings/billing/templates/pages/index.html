@@ -1,0 +1,19 @@
+<main class="container mx-auto max-w-5xl px-4 py-10 sm:py-14 flex flex-col gap-8">
+
+    <c-billing-panel.header :workspace=workspace :plan=plan :totals=totals />
+
+    <div class="grid lg:grid-cols-[1fr_18rem] gap-8">
+
+        <div class="flex flex-col gap-6">
+            <c-billing-panel.plan :workspace=workspace :plan=plan />
+            <c-billing-panel.invoices :workspace=workspace :invoices=invoices :totals=totals />
+        </div>
+
+        <aside class="flex flex-col gap-6">
+            <c-billing-panel.method :workspace=workspace :card=card />
+            <c-billing-panel.contacts :workspace=workspace :contacts=contacts />
+        </aside>
+
+    </div>
+
+</main>

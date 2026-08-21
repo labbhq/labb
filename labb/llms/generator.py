@@ -5,7 +5,73 @@ This module generates concise documentation specifically formatted for LLMs,
 following the llms.txt standard for token efficiency.
 """
 
+from pathlib import Path
+
 from labb.components.registry import ComponentRegistry
+
+DOCS_BASE_URL = "https://labb.io"
+
+# Sections whose pages are worth citing from llms.txt. Each doc page is also
+# available as raw markdown by appending .md to its URL.
+REFERENCE_SECTIONS = [
+    ("guide", "3_reactivity", "Reactivity"),
+    ("guide", "5_references", "Reference"),
+    ("guide", "6_about", "About"),
+]
+
+
+def _page_url(doc_name: str, relative_path: str) -> str:
+    """Map a content file path to its published .md URL.
+
+    "3_reactivity/2_signals.md" -> "/docs/guide/reactivity/signals.md"
+    """
+    parts = []
+    for segment in relative_path.replace(".md", "").split("/"):
+        if "_" in segment and segment.split("_")[0].isdigit():
+            segment = "_".join(segment.split("_")[1:])
+        parts.append(segment.replace("_", "-"))
+    prefix = "/blog" if doc_name == "blog" else f"/docs/{doc_name}"
+    return f"{DOCS_BASE_URL}{prefix}/{'/'.join(parts)}.md"
+
+
+def _content_root():
+    """The labbdocs content directory, when generating from a repo checkout."""
+    root = Path(__file__).resolve().parents[2] / "docs" / "labbdocs" / "content"
+    return root if root.is_dir() else None
+
+
+def generate_doc_references() -> str:
+    """List the doc pages worth reading in full, as raw-markdown URLs.
+
+    Reactivity is far too broad to inline here; these are the pages to fetch
+    when the summary above is not enough. Derived from the content tree, so new
+    pages appear without editing this module.
+    """
+    root = _content_root()
+    if root is None:
+        return ""
+
+    blocks = []
+    for doc_name, section, title in REFERENCE_SECTIONS:
+        section_dir = root / doc_name / section
+        if not section_dir.is_dir():
+            continue
+        lines = []
+        for md in sorted(section_dir.glob("*.md")):
+            relative = f"{section}/{md.name}"
+            lines.append(f"- {_page_url(doc_name, relative)}")
+        if lines:
+            blocks.append(f"### {title}\n" + "\n".join(lines))
+
+    if not blocks:
+        return ""
+
+    return (
+        "\n## Further Reading\n"
+        "Every doc page is available as raw markdown by appending `.md` to its URL. "
+        "Fetch these when the summaries above are not enough — reactivity in particular "
+        "is covered in far more depth than fits here.\n\n" + "\n\n".join(blocks) + "\n"
+    )
 
 
 def generate_component_descriptions() -> str:
@@ -77,8 +143,8 @@ def generate_component_descriptions() -> str:
 def generate_llms_txt() -> str:
     """Generate the complete llms.txt content."""
 
-    # Generate component descriptions first
     component_descriptions = generate_component_descriptions()
+    doc_references = generate_doc_references()
 
     content = f"""# labb - Django Component Library
 
@@ -88,6 +154,8 @@ labb is a Django component library providing components built with Django Cotton
 - **Django Cotton Integration**: HTML-like component syntax
 - **Backend Rendered**: Server-side rendering for fast loads and SEO
 - **No JavaScript Required**: Components work without JS by default
+- **Opt-in Reactivity**: Datastar-powered signals, reactive props, and server actions load only on pages that use them
+- **Blocks**: 35 installable UI blocks across 7 surfaces (auth, dashboard, data-table, hero, pricing, settings, wizard)
 - **Theme Support**: Built-in light/dark themes with custom theme creation
 - **CLI Tool**: `labb` command for project setup, CSS building, and component scanning
 
@@ -113,6 +181,7 @@ Install labbicons for icon support: `pip install labbicons` or `poetry add labbi
 
 **Icon Usage:**
 - Search icons: `labb icons search "arrow"`
+- Search several at once: `labb icons search "arrow,heart,user"` (comma-separated; each term gets its own results section)
 - List packs: `labb icons packs`
 - Get icon info: `labb icons info rmx.arrow-down`
 - Use in components that supports icon: `<c-lb.button icon="rmx.arrow-down">Button</c-lb.button>`
@@ -182,12 +251,13 @@ See: https://django-cotton.com/ for complete Django Cotton documentation.
 
 ## CLI Help
 - Get help: `labb --help` or `labb <command> --help`
-- Main commands: `init`, `setup`, `dev`, `build`, `scan`, `components`, `icons`, `llms`
+- Main commands: `init`, `setup`, `dev`, `build`, `scan`, `components`, `icons`, `block`, `llms`
 - Development workflow: `labb dev` (watches files and rebuilds automatically)
 - Component inspection: `labb components inspect <component>` (shows specs, variables, types)
 - View examples: `labb components ex <component> [example1] [example2]` (shows raw HTML code)
 - Browse all examples: `labb components ex --tree` (hierarchical view of all examples)
 - Icon management: `labb icons search/packs/info` (requires labbicons package)
+- Block management: `labb block list/search/add/sync/remove` (installable UI blocks)
 - Display llms.txt content for AI/LLM consumption: `labb llms`
 
 ## Configuration (labb.yaml)
@@ -220,16 +290,10 @@ Configure labb settings in your Django `settings.py`:
 ```python
 LABB_SETTINGS = {{
     'DEFAULT_THEME': 'labb-light',       # Default theme for new users
-    'ALPINE_JS_PATH': 'labb/js/alpine/alpine.min.js',  # or a CDN URL
-    'STACK_HELPERS': {{
-        'components': ['labb/js/alpine/labb-component.js', 'alpine'],
-    }},
 }}
 ```
 
 - `DEFAULT_THEME`: any daisyUI theme defined in your `input.css`. `"__system__"` defers to OS preference.
-- `ALPINE_JS_PATH`: path or full URL to Alpine.js. Defaults to the bundled file.
-- `STACK_HELPERS`: maps stack names to helper scripts. `"alpine"` is a special token that emits a deferred script tag using `ALPINE_JS_PATH`.
 
 **Access settings in code:**
 ```python
@@ -240,51 +304,91 @@ default_theme = get_default_theme()
 ```
 
 ## Reactivity
-labb components are zero-JS by default. Reactivity is opt-in via Alpine.js using `.x` component variants.
+This is a summary. The full treatment — signals, reactive props, events and bindings, server actions, morphing — is in the reactivity guide; see Further Reading at the end for the raw-markdown URLs of each page.
 
-**How it works:**
-- Use `<c-lb.button.x>` instead of `<c-lb.button>` to get a reactive version
-- Each `.x` component registers an Alpine data object; use `this.lbProps` inside extended components to read/write reactive props
-- Scripts only load when `.x` components are actually used on the page — Alpine is never included otherwise
-- Props with a CSS class mapping (marked with `*` in these docs) can be changed at runtime
-— For sub-components, use dot notation (e.g. `<c-lb.stat.group.x>`)
+labb components are zero-JS by default. Labb reactivity is opt-in and uses two complementary tools: **signal props** for client-side state binding, and **reactivity directives** for server-driven interactions. Both rely on Datastar under the hood; static pages ship zero JavaScript.
 
-**Basic usage:**
+**Setup:** add `ReactivityMiddleware` to your `MIDDLEWARE` in `settings.py`:
+```python
+MIDDLEWARE = [
+    ...
+    'labb.middleware.ReactivityMiddleware',
+    ...
+]
+```
+Ensure `<c-lb.m.dependencies />` is in your base `<head>`. The `lb-schema.js` bundle loads automatically when `c-lbr.signals` is present on the page.
+
+### Signal props
+Signal props bind any labb component prop to a Datastar signal at the client level. Prefix a prop value with `$` to enable the binding; the `:fallback` value is server-rendered on first paint.
+
+**Declare signals:**
 ```html
-<!-- Static initial props (server-rendered) -->
-<c-lb.button.x variant="primary" size="lg">Save</c-lb.button.x>
-
-<!-- Runtime binding with x-model -->
-<div x-data="{{ btn: {{ variant: 'primary', size: 'md' }} }}">
-    <c-lb.button.x x-model="btn" variant="primary" size="md">
-        Click me
-    </c-lb.button.x>
-    <select x-model="btn.variant">
-        <option value="primary">Primary</option>
-        <option value="error">Error</option>
-    </select>
-</div>
+<c-lbr.signals $ui.variant="neutral" />
 ```
 
-**Prop format:** plain JS object with camelCase keys matching schema variable names (e.g. `{{ variant: '', btnStyle: '', size: 'md' }}`). Empty string means no value.
-
-**Extending a reactive component** with custom state and methods:
-```js
-document.addEventListener('alpine:init', () => {{
-    Alpine.data('myComp', lb.extendComponent('button', {{
-        loading: false,
-        save() {{ this.lbProps.variant = 'success'; }}
-    }}));
-}});
-```
-Pass the extended factory as `x-data` on the `.x` component. Sub-components use dot notation: `lb.extendComponent('stat.group', {{ ... }})`.
-
-**Force-load Alpine** (for pages using Alpine without `.x` components):
+**Bind to a component prop:**
 ```html
-<c-lb.m.dependencies alpine />
+<c-lb.badge variant="$ui.variant:neutral">Status</c-lb.badge>
+```
+The syntax is `"$signal.path:fallback"`. The fallback after `:` is used for the initial server render.
+
+**Read signals in a Django view:**
+```python
+from labb.signals import Signals, Str
+
+class MySignals(Signals):
+    variant = Str(default="neutral")
+
+def my_view(request):
+    signals = MySignals.from_request(request)
+    current_variant = signals.variant   # e.g. "success"
+    ...
 ```
 
-**Setup:** ensure `<c-lb.m.dependencies />` is in your base `<head>`. No other config needed.
+**Update signals from a view** (before rendering):
+```python
+signals.variant = "success"
+context = {{"signals": signals, ...}}
+return render(request, "my_template.html", context)
+```
+
+### Reactivity directives
+Reactivity directives (`c-lbr.*`) drive server-side interactions. On the triggering event labb fetches a normal Django view; Datastar morphs the full-page HTML response in place. No partials and no JSON are required.
+
+| Directive | What it does |
+|---|---|
+| `c-lbr.signals` | Declares initial signal values |
+| `c-lbr.get` | Fetches a URL on an event (default: click) |
+| `c-lbr.post` | Posts form data to a URL |
+| `c-lbr.delete` | Sends DELETE to a URL |
+| `c-lbr.replace-url` | Updates the browser URL without navigation |
+| `c-lbr.target` | Scopes a morph to a specific DOM element |
+
+**Example — fetch on click:**
+```html
+<c-lbr.get url="{{% url 'my_view' %}}" event="click">
+    <c-lb.button variant="primary">Refresh</c-lb.button>
+</c-lbr.get>
+```
+
+## Blocks
+Blocks are ready-made page sections and features built from labb components. Frontend blocks ship templates and components. Fullstack blocks also ship models, views, URLs, fixtures, and templates. `labb block add` creates a default collection when one is missing, then copies the block into your project for you to edit.
+
+**Catalogue:** 35 blocks across 7 surfaces (5 each): `auth`, `dashboard`, `data-table`, `hero`, `pricing`, `settings`, `wizard`.
+
+**Workflow:**
+```bash
+labb block list                 # list all blocks from configured sources
+labb block search "dashboard"   # search by name or description
+labb block init --name blocks                 # optionally choose the collection name
+labb block add lb/data-table/customers         # creates the default collection if needed
+labb block sync <surface/slug>  # re-fetch and overwrite vendored code from source
+labb block remove <surface/slug>
+labb block source               # manage block sources
+labb block dev                  # block authoring and development tools
+```
+
+Blocks are reactive where it makes sense (search, sort, filter, inline edit) using the same Datastar signal props and `c-lbr.*` directives described above. Full-feature blocks wire their own `views.py` and `urls.py`, which you include from your project urls.
 
 ## General Rules
 - Boolean attributes can be set implicitly to true by just adding them (no need for `="true"`)
@@ -357,7 +461,7 @@ labb components ex --tree
 
 **Common Mistakes to Avoid:**
 - DON'T guess parameter names - Use `labb components inspect`
-- DON'T guess icon names - Use `labb icons search "term"` or `labb llms` to find exact icon names. Guessing (e.g. `rmx.rocket-2-line`) often causes: `TypeError: cannot unpack non-iterable NoneType object` when the icon does not exist.
+- DON'T guess icon names - Use `labb icons search "term"` or `labb llms` to find exact icon names. Looking up several at once is one command: `labb icons search "arrow,heart,user"`. Guessing (e.g. `rmx.rocket-2-line`) often causes: `TypeError: cannot unpack non-iterable NoneType object` when the icon does not exist.
 - DON'T create manual icons - Use built-in `icon="rmx.iconname"` (search with `labb icons search`)
 - DON'T skip CLI examples - They show correct syntax
 
@@ -412,20 +516,21 @@ Anything you put in `data` or `options` is merged on top of labb's defaults, so 
 ```
 
 **Reactivity:**
-Chart components accept `x-model` natively — no `.x` variant needed. Bind to an object with `data`, `options`, and/or `legend`; reassign the whole object to trigger an update.
+Chart components update reactively via signal props. Bind a chart's `data` prop to a signal declared with `c-lbr.signals`; updating the signal (e.g. via a reactivity directive) causes the chart to re-render without a full page reload.
 ```html
-<div x-data="{{ cfg: {{ data: {{ labels: [...], datasets: [...] }} }},
-               randomize() {{ this.cfg = {{ data: {{ ... }} }}; }} }}">
-    <c-lb.button @click="randomize()">Shuffle</c-lb.button>
-    <c-lb.chart.bar x-model="cfg" />
-</div>
+<c-lbr.signals $chart.data='{{ "labels": [...], "datasets": [...] }}' />
+<c-lb.chart.bar data="$chart.data:{{}}" />
+<c-lbr.get url="{{% url 'refresh_chart' %}}" event="click">
+    <c-lb.button>Shuffle</c-lb.button>
+</c-lbr.get>
 ```
 
 **Theme switching:** charts destroy + rebuild automatically when `<html data-theme>` changes, so all DaisyUI-named colours re-resolve without a refresh.
 
 ## Components
-Props marked with `*` are reactive — they can be changed at runtime via the `.x` variant (e.g. `<c-lb.button.x>`).
+Props marked with `*` have a CSS class mapping — they can be driven at runtime via signal props (e.g. `variant="$ui.variant:neutral"`).
 {component_descriptions}
+{doc_references}
 """
 
     return content

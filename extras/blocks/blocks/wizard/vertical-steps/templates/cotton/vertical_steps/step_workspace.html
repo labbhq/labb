@@ -1,0 +1,53 @@
+<c-vars :regions="[]" />
+
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Your workspace</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            The name your team signs in to, and the region their revenue data lives in.
+        </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+        <c-vertical-steps.field label="Workspace name">
+            <c-lb.input
+                data-lbb-start
+                id="vt-company"
+                type="text"
+                placeholder="Verity Labs"
+                class="w-full"
+                bind="$form.company" />
+        </c-vertical-steps.field>
+
+        <c-vertical-steps.field label="Workspace address" hint="(arden.app/…)">
+            <c-lb.input
+                id="vt-slug"
+                type="text"
+                placeholder="verity-labs"
+                class="w-full font-mono"
+                bind="$form.slug" />
+        </c-vertical-steps.field>
+    </div>
+
+    <div class="flex flex-col gap-2">
+        <span class="label label-text text-sm font-medium">Data region</span>
+        {% for region in regions %}
+        <label class="flex items-start gap-3 rounded-box border border-base-300 p-4 cursor-pointer
+                      transition-colors hover:border-base-content/30
+                      has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+            <c-lb.radio
+                name="vt-region"
+                variant="primary"
+                value="{{ region.value }}"
+                data-bind="form.region"
+                class="mt-0.5" />
+            <div>
+                <div class="font-medium text-sm">{{ region.name }}</div>
+                <div class="text-xs text-base-content/55 mt-0.5">{{ region.note }}</div>
+            </div>
+        </label>
+        {% endfor %}
+    </div>
+
+</div>

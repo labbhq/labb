@@ -1,0 +1,40 @@
+steps:
+  - title: Declare the open row
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      `open` holds the id of the row that is expanded, and zero means none. One signal, one
+      number. There is no view behind this block: the detail is already in the page, so
+      opening a row is a state change, not a request.
+
+  - title: Change the open row on click
+    file: templates/cotton/expando_table/row.html
+    match: 'data-on:click="$open = $open === '
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Clicking the row sets the signal to its id, or back to zero if it was already open.
+      Because only one id fits in the signal, opening a second row closes the first for
+      free. That is the accordion, and it took no code to get.
+
+  - title: Show details for the open row
+    file: templates/cotton/expando_table/detail.html
+    match: 'data-show="$open === '
+    teaches: [signals]
+    docs: [reactivity/events-and-bindings]
+    body: |
+      The detail is a second `<tr>` rendered next to the row it belongs to, hidden until the
+      signal names it. It expands in place: the table does not navigate, no drawer slides
+      over the data you were comparing, and the scroll position is exactly where you left it.
+
+  - title: Give the detail area an empty state
+    file: templates/cotton/expando_table/detail.html
+    match: "<c-expando-table.empty"
+    teaches: [theming]
+    docs: [ui/components/table]
+    body: |
+      Northwind Co is on trial, so it has no invoices, and the panel says so rather than
+      showing an empty box. Every region that can be empty gets a state, not just the table
+      as a whole.

@@ -1,0 +1,55 @@
+name: Profile settings
+ref: lb/settings/profile
+type: fe
+labb_version: ">=0.5.0"
+description: "Personal details with an avatar upload that previews in the browser — the chosen file becomes an object URL held in a signal, so nothing is uploaded until the form is saved"
+category: settings
+thumbnail: thumbnails/profile.png
+status: launch
+tags:
+  - settings
+  - profile
+  - reactive
+  - upload
+  - zero-server
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  avatar:
+    url: ""
+    name: ""
+  member:
+    name: "Nadia Kessler"
+    initials: "NK"
+    title: "Founder & CEO"
+    email: "nadia.kessler@beaconlabs.com"
+    phone: "+353 1 555 0142"
+    workspace: "Beacon Labs"
+    role: "Owner"
+    joined: "6 February 2023"
+    timezone: "Europe/Dublin"
+  timezones:
+    - ["Europe/Dublin", "Europe / Dublin (GMT+1)"]
+    - ["Europe/Berlin", "Europe / Berlin (GMT+2)"]
+    - ["America/New_York", "America / New York (GMT-4)"]
+    - ["Asia/Kolkata", "Asia / Kolkata (GMT+5:30)"]
+  sessions:
+    - device: "MacBook Pro · Dublin"
+      note: "This device, active now"
+      current: true
+    - device: "iPhone 15 · Dublin"
+      note: "Last used yesterday, 18:41"
+      current: false
+    - device: "Chrome on Windows · London"
+      note: "Last used 2 July 2026"
+      current: false
+  activity:
+    - label: "Moved Northwind Co to Arden Scale"
+      when: "Yesterday, 16:20"
+    - label: "Approved the July invoice run"
+      when: "2 July 2026"
+    - label: "Invited Elise Vandermeer"
+      when: "9 July 2026"

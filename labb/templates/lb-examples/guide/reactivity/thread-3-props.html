@@ -1,0 +1,24 @@
+<c-lbr.signals $filters.q="" $status="idle" $tone="neutral" />
+
+<div class="flex flex-col gap-3 w-full max-w-sm">
+    <div class="flex items-center gap-2">
+        <c-lb.input
+            type="search"
+            bind="$filters.q"
+            class="flex-1"
+            placeholder="Search customers"
+            data-on:input="$status = $filters.q ? 'searching' : 'idle'; $tone = $filters.q ? 'info' : 'neutral'"
+        />
+        <c-lb.badge variant="$tone:neutral" size="sm">
+            <span data-text="$status"></span>
+        </c-lb.badge>
+    </div>
+
+    <c-lb.button
+        btnStyle="ghost"
+        size="sm"
+        class="self-start"
+        data-show="$filters.q"
+        data-on:click="$filters.q = ''; $status = 'idle'; $tone = 'neutral'"
+    >Clear</c-lb.button>
+</div>

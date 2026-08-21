@@ -1,0 +1,38 @@
+steps:
+  - title: Mark the sections Django can replace
+    file: templates/pages/index.html
+    match: '<c-lbr.target name="section-profile"'
+    teaches: [scoped-morph]
+    docs: [reactivity/morphing]
+    body: Each settings area has a named target. A view can return the profile, team, or billing section without rebuilding the rest of the page.
+
+  - title: Bind a field and its preview to one value
+    file: templates/cotton/workspace/profile.html
+    match: ':bind=signals.fields.slug'
+    teaches: [signals, binding]
+    docs: [reactivity/signals, reactivity/binding]
+    body: The input writes to profile.slug and the preview reads that same value. The schema keeps the browser binding and the server-side field name aligned.
+
+  - title: Validate a field through a normal view
+    file: templates/cotton/workspace/field.html
+    match: "<c-lbr.post"
+    through: 'on="{{ on }}"'
+    teaches: [server-actions, live-validation]
+    docs: [reactivity/actions]
+    body: A debounced POST sends the field state to Django. The response returns the target section with the current validation result beside the field.
+
+  - title: Save the sections that changed
+    file: views.py
+    match: "def profile_save"
+    through: '"Profile saved",'
+    teaches: [scoped-morph, server-actions]
+    docs: [reactivity/actions, reactivity/morphing]
+    body: The save view validates, writes the workspace, then returns the profile target and a toast. Other settings sections keep their existing DOM and scroll position.
+
+  - title: Include related state in the response
+    file: views.py
+    match: "def plan_change"
+    through: '_patch_toast(request, "Plan changed"'
+    teaches: [scoped-morph, server-actions]
+    docs: [reactivity/morphing]
+    body: Changing a plan also changes the team allowance, so this response updates both targets. Use the same rule when one action affects more than one part of a page.

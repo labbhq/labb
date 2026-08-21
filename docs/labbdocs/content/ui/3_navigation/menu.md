@@ -5,6 +5,7 @@ title: Menu
 description: "Menu component for Django: build navigation menus, sidebars, and dropdown lists. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django menu component, navigation menu django, daisyui menu django, tailwind menu django, menu django-cotton, django ui menu, sidebar menu django, django-cotton"
 daisy_ui_component_name: menu
+icon: rmx.menu
 ---
 
 Menu renders a styled list of navigation items using daisyUI's menu layout. Use it for sidebars, dropdown contents, or any vertical link list. The `horizontal` prop switches to a row layout.

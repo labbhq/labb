@@ -5,6 +5,7 @@ title: Alert
 description: "Alert component for Django: display success, error, warning, and info messages. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django alert component, alert django, daisyui alert django, tailwind alert django, alert django-cotton, django ui alert, notification alert django, django-cotton"
 daisy_ui_component_name: alert
+icon: rmx.alert
 ---
 
 Alerts render semantic feedback banners with colour variants for each severity level. Drop one above a form or inside a card to surface validation errors, success states, or informational messages.

@@ -1,0 +1,29 @@
+# CSS groups the labbui package publishes to consumers.
+# A consumer subscribes by name: `css.packages.labb: [themes, blocks]` (or `all`).
+# Paths are relative to the labb package root, import-resolved at build time.
+# `components` = usage-scan for <c-lb.*> variant classes; `literals` = Tailwind
+# @source for the raw utility/part classes written literally in the markup.
+provides:
+  themes:
+    imports:
+    - css/themes.css
+  components:
+    components:
+    - templates/cotton/lb/**/*.html
+    literals:
+    - templates/cotton/lb/**/*.html
+  reactivity:
+    components:
+    - templates/cotton/lbr/**/*.html
+    literals:
+    - templates/cotton/lbr/**/*.html
+  blocks:
+    components:
+    - templates/cotton/lbb/**/*.html
+    literals:
+    - templates/cotton/lbb/**/*.html
+  examples:
+    components:
+    - templates/lb-examples/**/*.html
+    literals:
+    - templates/lb-examples/**/*.html

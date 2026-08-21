@@ -1,17 +1,4 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'primary': 'text-primary',
-        'secondary': 'text-secondary',
-        'accent': 'text-accent',
-        'neutral': 'text-neutral',
-        'info': 'text-info',
-        'success': 'text-success',
-        'warning': 'text-warning',
-        'error': 'text-error'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "stat.value" attrs=attrs as rx %}
 
-<div class="stat-value {{ variantClasses|get_dict_item:variant }} {{ class }}" {{ attrs }}>{{ slot }}</div>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>{{ slot }}</div>

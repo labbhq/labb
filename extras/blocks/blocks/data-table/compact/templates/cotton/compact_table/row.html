@@ -1,0 +1,31 @@
+<c-vars :customer="{}" :index=0 />
+
+<tr id="compact-row-{{ index }}" class="border-base-300 hover:bg-base-200/40">
+
+    <td>
+        <div class="flex items-center gap-2.5">
+            <c-lb.avatar placeholder initials="{{ customer.initials }}" bgColor="neutral" size="xs" rounded="md" />
+            <div class="min-w-0 leading-tight">
+                <div class="font-medium truncate">{{ customer.company }}</div>
+                <div class="text-xs text-base-content/50 truncate">{{ customer.contact }}</div>
+            </div>
+        </div>
+    </td>
+
+    <td class="hidden md:table-cell text-base-content/70">{{ customer.plan }}</td>
+
+    <td>
+        <c-lb.badge variant="{{ customer.status_variant }}" style="soft" size="xs">{{ customer.status }}</c-lb.badge>
+    </td>
+
+    <td class="text-end tabular-nums font-medium">${{ customer.mrr }}</td>
+
+    <td class="hidden lg:table-cell text-end tabular-nums text-base-content/70">{{ customer.seats }}</td>
+
+    <td class="hidden md:table-cell text-end tabular-nums text-base-content/60 whitespace-nowrap">{{ customer.renews }}</td>
+
+    <td class="text-end">
+        <c-lb.badge variant="{{ customer.health_variant }}" style="outline" size="xs">{{ customer.health }}</c-lb.badge>
+    </td>
+
+</tr>

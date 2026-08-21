@@ -5,6 +5,7 @@ title: Join
 description: "Join component for Django: group buttons, inputs, and elements into unified controls. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django join component, button group django, daisyui join django, tailwind join django, join django-cotton, django ui join, grouped elements django, django-cotton"
 daisy_ui_component_name: join
+icon: rmx.merge-cells-horizontal
 ---
 
 Join connects adjacent buttons, inputs, or select elements into a visually unified group by removing the border radius between them. Use it for button groups, search-with-select combos, or pagination sets.

@@ -1,9 +1,7 @@
-<c-vars
-    class=""
-    duration=""
-/>
-
-<span class="text-rotate {% if duration %}{{ duration }}{% endif %} {{ class }}" {{ attrs }}>
+{% load lbr_tags %}
+<c-vars duration="" />
+{% lbr_props "text-rotate" attrs=attrs as rx %}
+<span class="{{ rx.classes }}{% if duration %} {{ duration }}{% endif %}" {{ rx.attrs }}>
     <span>
         {{ slot }}
     </span>

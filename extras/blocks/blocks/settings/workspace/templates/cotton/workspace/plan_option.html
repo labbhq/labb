@@ -1,0 +1,32 @@
+<c-vars :option="None" :current="False" currency="USD" />
+
+<div id="plan-{{ option.slug }}"
+     class="flex items-center justify-between gap-4 p-4 rounded-box border
+            {% if current %}border-primary bg-primary/5{% else %}border-base-300{% endif %}">
+
+    <div class="min-w-0">
+        <div class="flex items-center gap-2">
+            <span class="font-medium">{{ option.name }}</span>
+            {% if current %}
+            <c-lb.badge size="xs" variant="primary">Current</c-lb.badge>
+            {% endif %}
+        </div>
+        <p class="text-xs text-base-content/50 mt-1">
+            {{ option.seats_included }} seats · {{ option.tagline }}
+        </p>
+    </div>
+
+    <div class="flex items-center gap-3 shrink-0">
+        <div class="text-right">
+            <div class="font-semibold tabular-nums">{{ currency }} {{ option.price_monthly|floatformat:0 }}</div>
+            <div class="text-xs text-base-content/40">per month</div>
+        </div>
+
+        {% if not current %}
+        <c-lbr.post to="block_settings_workspace:plan_change" pk=option.pk tag="div" on="click">
+            <c-lb.button type="button" size="sm" btnStyle="outline">Switch</c-lb.button>
+        </c-lbr.post>
+        {% endif %}
+    </div>
+
+</div>

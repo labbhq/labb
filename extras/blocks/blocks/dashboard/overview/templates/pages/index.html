@@ -1,0 +1,82 @@
+<c-lbr.signals
+    id="overview-charts"
+    $series="{{ series }}"
+    :$revenueChart=revenue_chart
+    :$cohortChart=cohort_chart
+    :$planChart=plan_chart />
+
+<c-lbr.signals id="overview-live" ifmissing $collected.total="$0" $collected.count="0" />
+
+<c-lb.chart color="base-content" legend />
+
+<c-lbr.get to="block_dashboard_overview:cash_stream" on="init" />
+
+<c-lb.drawer
+    drawerId="overview-sidebar"
+    class="min-h-screen lg:drawer-open"
+    sideClass="z-50 lg:z-40 is-drawer-close:overflow-visible lg:overflow-visible">
+    <c-slot name="sideContent">
+        <c-arden.sidebar drawerId="overview-sidebar" />
+    </c-slot>
+
+    <main class="relative min-h-screen bg-base-200/35">
+        <c-lb.drawer.toggle
+            for="overview-sidebar"
+            class="btn btn-square btn-xs absolute left-3 top-3 z-40 border border-base-300 bg-base-100 shadow-sm lg:hidden"
+            aria-label="Toggle sidebar">
+            <c-lbi n="rmx.menu" w="14" h="14" />
+        </c-lb.drawer.toggle>
+
+        <div class="container mx-auto max-w-6xl px-4 pb-8 pt-14 sm:px-6 sm:pt-16 lg:px-10 lg:py-8 flex flex-col gap-6">
+
+            <c-overview.header :workspace=workspace :period=period />
+
+            <c-overview.kpis
+                :mrr=mrr
+                :arr=arr
+                :net_new=net_new
+                :net_new_up=net_new_up
+                :active_count=active_count
+                :customer_count=customer_count
+                :churn_rate=churn_rate
+                :churned_count=churned_count />
+
+            <section class="grid gap-6 lg:grid-cols-3">
+                <c-overview.panel
+                    class="lg:col-span-2"
+                    title="Revenue"
+                    note="Cash collected against invoices issued, by month.">
+                    <c-slot name="actions">
+                        <c-overview.switcher :choices=series_choices :active=series />
+                    </c-slot>
+                    <c-lb.chart.bar id="revenue-chart" data="$revenueChart" height="260" legend="bottom" />
+                </c-overview.panel>
+
+                <c-overview.panel title="Plan mix" note="Where the {{ mrr }} of MRR sits today.">
+                    <c-lb.chart.doughnut id="plan-chart" data="$planChart" height="260" legend="bottom" />
+                </c-overview.panel>
+            </section>
+
+            <section class="grid gap-6 lg:grid-cols-3">
+                <c-overview.panel
+                    title="Cohort retention"
+                    note="Share of each signup year still paying."
+                    class="lg:col-span-1">
+                    <c-lb.chart.bar id="cohort-chart" data="$cohortChart" height="220" legend="none" />
+                </c-overview.panel>
+
+                <c-overview.panel
+                    class="lg:col-span-2"
+                    title="Accounts to watch"
+                    note="{{ at_risk_mrr }} of MRR sitting on accounts flagged at risk or past due.">
+                    <c-overview.watchlist :accounts=at_risk />
+                </c-overview.panel>
+            </section>
+
+            <c-overview.panel title="Movements" note="Every change to the book, newest first.">
+                <c-overview.movements :events=movements />
+            </c-overview.panel>
+
+        </div>
+    </main>
+</c-lb.drawer>

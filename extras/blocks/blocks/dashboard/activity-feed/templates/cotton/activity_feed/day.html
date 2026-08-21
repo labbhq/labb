@@ -1,0 +1,27 @@
+<c-vars day="" :events="[]" />
+
+<section class="flex flex-col gap-3">
+
+    <div class="flex items-center gap-3">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-base-content/50">{{ day }}</h2>
+        <span class="h-px flex-1 bg-base-300"></span>
+        <span class="text-xs tabular-nums text-base-content/40">{{ events|length }} events</span>
+    </div>
+
+    <c-lb.timeline direction="vertical" compact snap>
+        {% for event in events %}
+        <c-lb.timeline.item
+            variant="{{ event.tone }}"
+            icon="{{ event.icon }}"
+            {% if forloop.first %}first{% endif %}
+            {% if forloop.last %}last{% endif %}>
+
+            <c-slot name="endSlot">
+                <c-activity-feed.event :event=event />
+            </c-slot>
+
+        </c-lb.timeline.item>
+        {% endfor %}
+    </c-lb.timeline>
+
+</section>

@@ -1,0 +1,31 @@
+<c-lbr.signals id="hsteps" :$step=step :$form=form />
+
+<main class="container mx-auto max-w-3xl px-4 py-10 sm:py-14 flex flex-col gap-8">
+
+    <c-horizontal-steps.header />
+
+    <c-lb.card class="border border-base-300 shadow-sm">
+        <c-lb.card.body class="gap-7 p-6 sm:p-8">
+
+            <c-horizontal-steps.stepper :steps=steps />
+
+            <div data-show="$step === 1">
+                <c-horizontal-steps.step-workspace :regions=regions />
+            </div>
+
+            <div data-show="$step === 2" style="display:none">
+                <c-horizontal-steps.step-data :sources=sources />
+            </div>
+
+            <div data-show="$step === 3" style="display:none">
+                <c-horizontal-steps.step-team :roles=roles />
+            </div>
+
+            <c-horizontal-steps.nav />
+
+        </c-lb.card.body>
+    </c-lb.card>
+
+    <c-horizontal-steps.trust />
+
+</main>

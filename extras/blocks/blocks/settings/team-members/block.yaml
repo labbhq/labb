@@ -1,0 +1,145 @@
+name: Team members
+ref: lb/settings/team-members
+type: fe
+labb_version: ">=0.5.0"
+description: "A member list with editable roles and an invite row — every role dropdown binds to a client signal, and the unsaved-changes bar is derived from the difference"
+category: settings
+thumbnail: thumbnails/team-members.png
+status: launch
+tags:
+  - settings
+  - team
+  - reactive
+  - roles
+  - zero-server
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  workspace:
+    name: "Beacon Labs"
+    plan: "Arden Scale"
+    seats_used: 12
+    seats_total: 25
+    seats_pct: 48
+  roles:
+    nadia: "owner"
+    tom: "admin"
+    priya: "billing"
+    marcus: "admin"
+    jenny: "member"
+    hana: "member"
+    yusuf: "viewer"
+  saved:
+    nadia: "owner"
+    tom: "admin"
+    priya: "billing"
+    marcus: "admin"
+    jenny: "member"
+    hana: "member"
+    yusuf: "viewer"
+  rolelabels:
+    owner: "Owner"
+    admin: "Admin"
+    member: "Member"
+    billing: "Billing"
+    viewer: "Viewer"
+  invite:
+    email: ""
+    role: "member"
+  role_options:
+    - ["owner", "Owner"]
+    - ["admin", "Admin"]
+    - ["member", "Member"]
+    - ["billing", "Billing"]
+    - ["viewer", "Viewer"]
+  members:
+    - key: "nadia"
+      role: "owner"
+      name: "Nadia Kessler"
+      initials: "NK"
+      tone: "primary"
+      title: "Founder & CEO"
+      email: "nadia.kessler@beaconlabs.com"
+      status: "Active"
+      status_tone: "success"
+      last_seen: "2 hours ago"
+    - key: "tom"
+      role: "admin"
+      name: "Tom Ainsworth"
+      initials: "TA"
+      tone: "secondary"
+      title: "Head of Revenue"
+      email: "tom.ainsworth@beaconlabs.com"
+      status: "Active"
+      status_tone: "success"
+      last_seen: "Yesterday"
+    - key: "priya"
+      role: "billing"
+      name: "Priya Raghunathan"
+      initials: "PR"
+      tone: "accent"
+      title: "Finance Lead"
+      email: "priya.raghunathan@beaconlabs.com"
+      status: "Active"
+      status_tone: "success"
+      last_seen: "31 minutes ago"
+    - key: "marcus"
+      role: "admin"
+      name: "Marcus Oduya"
+      initials: "MO"
+      tone: "secondary"
+      title: "RevOps Manager"
+      email: "marcus.oduya@beaconlabs.com"
+      status: "Active"
+      status_tone: "success"
+      last_seen: "3 days ago"
+    - key: "jenny"
+      role: "member"
+      name: "Jenny Faulkner"
+      initials: "JF"
+      tone: "neutral"
+      title: "Account Executive"
+      email: "jenny.faulkner@beaconlabs.com"
+      status: "Active"
+      status_tone: "success"
+      last_seen: "6 days ago"
+    - key: "hana"
+      role: "member"
+      name: "Hana Ishikawa"
+      initials: "HI"
+      tone: "neutral"
+      title: "Customer Success"
+      email: "hana.ishikawa@beaconlabs.com"
+      status: "Active"
+      status_tone: "success"
+      last_seen: "5 days ago"
+    - key: "yusuf"
+      role: "viewer"
+      name: "Yusuf Demir"
+      initials: "YD"
+      tone: "neutral"
+      title: "Board Observer"
+      email: "yusuf.demir@beaconlabs.com"
+      status: "Active"
+      status_tone: "success"
+      last_seen: "4 weeks ago"
+  pending:
+    - name: "Elise Vandermeer"
+      initials: "EV"
+      email: "elise.vandermeer@beaconlabs.com"
+      role: "Member"
+      invited: "Invited 9 July 2026"
+    - name: "Gabriel Nunes"
+      initials: "GN"
+      email: "gabriel.nunes@beaconlabs.com"
+      role: "Member"
+      invited: "Invited 11 July 2026"
+  suspended:
+    - name: "Ilse Bergman"
+      initials: "IB"
+      email: "ilse.bergman@beaconlabs.com"
+      role: "Viewer"
+      note: "Suspended 11 May 2026 · not billed"

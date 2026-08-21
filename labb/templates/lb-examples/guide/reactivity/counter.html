@@ -1,0 +1,7 @@
+<c-lbr.signals :$count="0" />
+
+<div class="flex items-center gap-4">
+    <c-lb.button btnStyle="outline" size="sm" data-on:click="$count--">-</c-lb.button>
+    <span class="text-2xl font-mono tabular-nums w-10 text-center" data-text="$count"></span>
+    <c-lb.button btnStyle="outline" size="sm" data-on:click="$count++">+</c-lb.button>
+</div>

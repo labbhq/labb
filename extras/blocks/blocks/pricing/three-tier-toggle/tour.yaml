@@ -1,0 +1,42 @@
+steps:
+  - title: Declare the billing period
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      The whole block runs off one client signal. It is declared here in prop
+      mode — an object literal, no schema and no view behind it. There is no
+      pricing endpoint in this block because there is nothing for a server to do.
+
+  - title: Change the period from the toggle
+    file: templates/cotton/tier_toggle/header.html
+    match: 'data-on:click="$period = ardenPeriod(true)"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Clicking Annual replaces the period object. That is the entire interaction:
+      no fetch, no request, nothing on the wire. Open the network tab and toggle —
+      it stays empty.
+
+  - title: Style the active choice with a signal
+    file: templates/cotton/tier_toggle/header.html
+    match: 'btnStyle="$period.annualStyle:ghost"'
+    teaches: [reactive-props]
+    docs: [reactivity/reactive-props]
+    body: |
+      This is the canonical reactive prop. Prefix any prop with `$` and it tracks a
+      signal; the part after the colon is what the server renders, so the page is
+      correct before a single byte of JavaScript runs. The button restyles itself
+      when the signal changes, and labb recomputes its daisyUI classes in the browser.
+
+  - title: Update each price from the period
+    file: templates/cotton/tier_toggle/tier.html
+    match: "data-text=\"$period.annual ?"
+    teaches: [reactive-props]
+    docs: [reactivity/reactive-props]
+    body: |
+      Three cards, three prices, one signal. Each price reads the period directly,
+      with the monthly figure rendered server-side as the fallback. This is what
+      opt-in reactivity buys you: a static page that stays static, plus exactly the
+      one interactive thing you asked for.

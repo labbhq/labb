@@ -1,0 +1,53 @@
+<c-vars :customers="[]" :plans="[]" :status_choices="[]" :editing_pk=0 update_url="" sort_field="" sort_dir="" :next_dir="{}" page_pks="[]" :searching="False" />
+
+{% if customers %}
+<div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+    <c-lb.table size="sm" class="align-middle">
+        <thead>
+            <tr class="border-base-300">
+                <th class="w-10">
+                    <c-lb.checkbox
+                        size="sm"
+                        :validate="False"
+                        aria-label="Select every customer on this page"
+                        data-on:change="{{ page_pks }}.forEach(k => $selected[k] = el.checked)"
+                        data-effect="el.checked = {{ page_pks }}.every(k => !!$selected[k]); el.indeterminate = !el.checked && {{ page_pks }}.some(k => !!$selected[k])" />
+                </th>
+                <th>
+                    <c-customers.sort-header field="company" label="Customer" :next_dir=next_dir.company :sort_field=sort_field :sort_dir=sort_dir />
+                </th>
+                <th class="hidden md:table-cell">
+                    <c-customers.sort-header field="plan" label="Plan" :next_dir=next_dir.plan :sort_field=sort_field :sort_dir=sort_dir />
+                </th>
+                <th>
+                    <c-customers.sort-header field="status" label="Status" :next_dir=next_dir.status :sort_field=sort_field :sort_dir=sort_dir />
+                </th>
+                <th class="text-end">
+                    <c-customers.sort-header field="mrr" label="MRR" :next_dir=next_dir.mrr :sort_field=sort_field :sort_dir=sort_dir numeric />
+                </th>
+                <th class="hidden lg:table-cell text-end">
+                    <c-customers.sort-header field="seats" label="Seats" :next_dir=next_dir.seats :sort_field=sort_field :sort_dir=sort_dir numeric />
+                </th>
+                <th class="hidden lg:table-cell text-end">
+                    <c-customers.sort-header field="billed" label="Billed" :next_dir=next_dir.billed :sort_field=sort_field :sort_dir=sort_dir numeric />
+                </th>
+                <th class="hidden md:table-cell text-end">
+                    <c-customers.sort-header field="renews" label="Renews" :next_dir=next_dir.renews :sort_field=sort_field :sort_dir=sort_dir numeric />
+                </th>
+                <th class="w-20"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+                {% if customer.pk == editing_pk %}
+                <c-customers.edit-row :customer=customer :plans=plans :status_choices=status_choices :update_url=update_url :edit_signals=edit_signals />
+                {% else %}
+                <c-customers.row :customer=customer />
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </c-lb.table>
+</div>
+{% else %}
+<c-customers.empty :searching=searching />
+{% endif %}

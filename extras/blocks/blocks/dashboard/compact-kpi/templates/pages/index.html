@@ -1,0 +1,18 @@
+<main class="container mx-auto max-w-6xl px-4 py-10 flex flex-col gap-6">
+
+    <c-compact-kpi.header :period=period :synced=synced />
+
+    <section id="kpi-grid" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {% for kpi in kpis %}
+        <c-compact-kpi.tile :kpi=kpi />
+        {% endfor %}
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-3 items-start">
+        <c-compact-kpi.segments :segments=segments class="lg:col-span-2" />
+        <c-compact-kpi.accounts :accounts=accounts />
+    </section>
+
+    <c-compact-kpi.footnote :synced=synced />
+
+</main>

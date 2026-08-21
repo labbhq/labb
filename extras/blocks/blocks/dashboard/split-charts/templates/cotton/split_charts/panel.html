@@ -1,0 +1,14 @@
+<c-vars title="" note="" class="" />
+
+<c-lb.card border class="bg-base-100 {{ class }}">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <div>
+            <h2 class="font-semibold tracking-tight">{{ title }}</h2>
+            <p class="text-xs text-base-content/50 mt-0.5">{{ note }}</p>
+        </div>
+
+        {{ slot }}
+
+    </c-lb.card.body>
+</c-lb.card>

@@ -2,12 +2,13 @@
 doc_layout: component
 component: c-lb.chart.line
 title: Line Chart
-description: "Line chart component for Django: render trend lines and time-series data with Chart.js and daisyUI theming. Server-rendered with django-cotton."
+description: "Time series and trends in a Django template: line, area, and stacked datasets drawn by Chart.js, themed by daisyUI, rendered from a django-cotton component."
 keywords: "django line chart, line chart django, chart.js django, daisyui line chart django, tailwind line chart django, django data visualization, line chart django-cotton"
 daisy_ui_component_name: ""
+icon: rmx.line-chart
 ---
 
-Line charts are ideal for time series, trends, and continuous data. Datasets can be filled (area chart), stacked, or mixed with bar datasets in the same component, all styled automatically with the active daisyUI theme.
+Time series, trends, anything continuous: this is the chart for it. Datasets can be filled to make an area chart, stacked, or mixed with bar datasets in the same component, and they all take their styling from the active daisyUI theme. The live feed example below redraws as new points arrive.
 
 ## Basic Line Chart
 <c-lbdocs.component_example path="chart/line" />

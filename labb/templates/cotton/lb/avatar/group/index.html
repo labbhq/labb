@@ -1,16 +1,6 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    spacing="tight"
-    :spacingClasses="{
-        'wide': '',
-        'normal': '-space-x-2',
-        'tight': '-space-x-6',
-        'tighter': '-space-x-8',
-        'tightest': '-space-x-12'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "avatar.group" attrs=attrs as rx %}
 
-<div class="avatar-group {{ spacingClasses|get_dict_item:spacing }} {{ class }}" {{ attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </div>

@@ -1,0 +1,49 @@
+<c-vars :customer="{}" />
+
+<c-lb.card id="account-card-{{ customer.initials|lower }}" border size="sm" class="h-full bg-base-100">
+    <c-lb.card.body class="gap-4">
+
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <c-lb.avatar placeholder initials="{{ customer.initials }}" bgColor="neutral" size="sm" rounded="md" />
+                <div class="min-w-0 leading-tight">
+                    <h2 class="font-semibold truncate">{{ customer.company }}</h2>
+                    <p class="text-xs text-base-content/50 truncate">{{ customer.contact }}</p>
+                </div>
+            </div>
+            <c-lb.badge variant="{{ customer.status_variant }}" style="soft" size="sm">{{ customer.status }}</c-lb.badge>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 rounded-box bg-base-200/50 px-3 py-2.5">
+            <div class="flex flex-col">
+                <span class="text-xs text-base-content/50">MRR</span>
+                <span class="font-semibold tabular-nums">${{ customer.mrr }}</span>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-xs text-base-content/50">Seats</span>
+                <span class="font-semibold tabular-nums">{{ customer.seats }}</span>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-xs text-base-content/50">Plan</span>
+                <span class="font-semibold truncate">{{ customer.plan }}</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+                <span class="text-xs text-base-content/50">Health</span>
+                <span class="text-xs font-medium tabular-nums">{{ customer.health }} · {{ customer.health_score }}</span>
+            </div>
+            <c-lb.progress variant="{{ customer.health_variant }}" value="{{ customer.health_score }}" max="100" class="w-full" />
+        </div>
+
+        <div class="flex items-center justify-between gap-2 border-t border-base-300 pt-3">
+            <span class="text-xs text-base-content/50 tabular-nums whitespace-nowrap">Renews {{ customer.renews }}</span>
+            <div class="flex items-center gap-1">
+                <c-lb.button btnStyle="ghost" size="xs" icon="rmx.receipt" aria-label="Invoices for {{ customer.company }}" />
+                <c-lb.button btnStyle="outline" size="xs">Open</c-lb.button>
+            </div>
+        </div>
+
+    </c-lb.card.body>
+</c-lb.card>

@@ -17,6 +17,25 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: labbdocs
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,8 +86,40 @@ jobs:
           poetry run ruff format --check
           poetry run ruff check --select I
 
-      - name: Run tests
+      - name: Run library tests
         run: poetry run pytest --cov=labb --cov=labbstart --cov-report=xml --cov-report=html
+
+      - name: Fail if the search tests would skip
+        run: |
+          poetry run python - <<'PY'
+          import os, sys
+          sys.path.insert(0, "docs")
+          os.environ["DJANGO_SETTINGS_MODULE"] = "tests.settings"
+          from django.conf import settings
+          if settings.SEARCH_SKIP_REASON:
+              sys.exit(f"search tests would not run: {settings.SEARCH_SKIP_REASON}")
+          PY
+
+      - name: Run labbdocs tests
+        run: poetry run pytest -c docs/pytest.ini docs --cov=labbdocs --cov-append --cov-report=xml
+
+      - name: Run browser-script tests
+        run: node --test js/*.test.js
+
+      - name: Run icons tests
+        run: poetry run pytest extras/icons
+
+      - name: Run start tests
+        run: poetry run pytest extras/start
+
+      # --with local: the path deps on labbui/labbicons sit in an optional group,
+      # so a plain install would test against the released labbui, not this branch.
+      - name: Run blocks tests
+        working-directory: extras/blocks
+        run: |
+          poetry install --with local --no-root
+          poetry run playwright install --with-deps chromium
+          poetry run pytest
 
       - name: Upload coverage reports
         if: inputs.upload-coverage == true

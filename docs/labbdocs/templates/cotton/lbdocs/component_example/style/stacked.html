@@ -3,20 +3,25 @@
     previewStyle
 />
 
-<div class="border border-base-300 rounded-lg p-2 {{ class }}">
-    <!-- Preview Card -->
-    <c-lb.card class="rounded-b-none rounded-t-lg">
-        <c-lb.card.body class="p-0">
-            <c-lbdocs.component_example.section.preview :style=previewStyle class="rounded-t-lg">
-                {{ slot }}
-            </c-lbdocs.component_example.section.preview>
-        </c-lb.card.body>
-    </c-lb.card>
+<div class="codeblock-container relative border border-base-300 rounded-xl overflow-hidden bg-base-100 {{ class }}">
 
-    <!-- Code Card -->
-    <c-lb.card class="rounded-t-none rounded-b-lg">
-        <c-lb.card.body class="p-0">
-            <c-lbdocs.component_example.section.code code="{{ code }}" />
-        </c-lb.card.body>
-    </c-lb.card>
+    <div class="absolute top-2 right-2 z-20">
+        <c-lb.button
+            href="#"
+            onclick="copyCodeBlock(this)"
+            size="xs"
+            variant="ghost"
+            class="bg-base-200/80 hover:bg-base-200 text-base-content/60 backdrop-blur copy-code-btn"
+        >
+            <c-lbi n="rmx.file-copy" w="1em" h="1em" />
+        </c-lb.button>
+        <span class="copy-notification hidden absolute top-full right-0 mt-1 whitespace-nowrap bg-base-200 text-base-content/70 text-xs px-2 py-1 rounded pointer-events-none">Copied!</span>
+    </div>
+
+    <c-lbdocs.component_example.section.preview :style=previewStyle>
+        {{ slot }}
+    </c-lbdocs.component_example.section.preview>
+
+    <c-lbdocs.component_example.section.code code="{{ code }}" />
+
 </div>

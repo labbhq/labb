@@ -1,16 +1,28 @@
-{% load lb_tags %}
+{% load lb_tags lbr_tags %}
 <c-vars type="" height="300" legend="top" data="{}" options="{}" class="" />
 
 {% lb_chart_deps %}
-{% lb_push_stack name="components" path="labb/js/alpine/custom/chart.js" %}
+{% lbr_chart_signal data as chart_signal %}
 
+{% if chart_signal %}
 <div class="lb-chart {{ class }}"
-    x-data="lbChartComp"
-    x-modelable="modelValue"
+    data-lb-chart-type="{{ type }}"
+    data-lb-chart-legend="{{ legend }}"
+    data-lb-chart-options="{{ options }}"
+    data-effect="lbChart.handle(el, {{ chart_signal }})"
+    data-ignore-morph
+    {{ attrs }}>
+    <canvas style="height: {{ height }}px; width: 100%;"></canvas>
+</div>
+{% else %}
+<div class="lb-chart {{ class }}"
     data-lb-chart-type="{{ type }}"
     data-lb-chart-legend="{{ legend }}"
     data-lb-chart-data="{{ data }}"
     data-lb-chart-options="{{ options }}"
+    data-init="lbChart.initFromEl(el)"
+    data-ignore-morph
     {{ attrs }}>
-    <canvas x-ref="canvas" style="height: {{ height }}px; width: 100%;"></canvas>
+    <canvas style="height: {{ height }}px; width: 100%;"></canvas>
 </div>
+{% endif %}

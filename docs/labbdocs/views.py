@@ -1,16 +1,37 @@
 from pathlib import Path
 
 from django.conf import settings
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template import Context, Template
 from django.urls import reverse
 from django.views.decorators.cache import cache_control
+from django.views.decorators.http import require_http_methods
 from django_cotton import render_component
 
 from labbicons.metadata import remix
 
+from .constants import DISMISSED_BANNERS_SESSION_KEY
 from .doc_parser import DocRender
+
+
+@require_http_methods(["POST"])
+def dismiss_banner(request):
+    """Record an announcement banner as dismissed for this session.
+
+    Persisting dismissal server-side is what stops the banner being re-emitted on
+    the next render, including a Datastar full-page morph.
+    """
+    banner_id = request.POST.get("banner_id")
+    if not banner_id:
+        return JsonResponse(
+            {"success": False, "error": "banner_id is required"}, status=400
+        )
+    dismissed = request.session.get(DISMISSED_BANNERS_SESSION_KEY, [])
+    if banner_id not in dismissed:
+        dismissed.append(banner_id)
+        request.session[DISMISSED_BANNERS_SESSION_KEY] = dismissed
+    return JsonResponse({"success": True})
 
 
 def _build_docs_context(

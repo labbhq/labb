@@ -1,0 +1,114 @@
+<c-lb.card border class="bg-base-100">
+    <c-lb.card.body class="gap-6">
+
+        <div class="flex items-end justify-between gap-4">
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-medium" for="seat-count">
+                    How many people need an Arden seat?
+                </label>
+                <p class="text-xs text-base-content/50">
+                    Read-only viewers are free on every plan.
+                </p>
+            </div>
+            <div class="flex items-baseline gap-1.5 shrink-0">
+                <span
+                    id="seat-count-value"
+                    class="text-3xl font-bold tabular-nums"
+                    data-text="$usage.seats"
+                >12</span>
+                <span class="text-sm text-base-content/50">seats</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <c-lb.range
+                id="seat-count"
+                variant="primary"
+                min="3"
+                max="60"
+                step="1"
+                value="12"
+                class="w-full"
+                data-lbb-start
+                data-on:input="$usage = ardenUsage(el.value, $usage.annual)"
+            />
+            <div class="flex justify-between text-xs text-base-content/40">
+                <span>3</span>
+                <span>60</span>
+            </div>
+        </div>
+
+        <c-lb.divider class="my-0" />
+
+        <div class="flex flex-col gap-3">
+
+            <div class="flex items-center justify-between gap-3">
+                <span class="text-sm text-base-content/70">Recommended plan</span>
+                <c-lb.badge
+                    id="recommended-plan"
+                    size="sm"
+                    style="soft"
+                    variant="$usage.planVariant:primary"
+                    data-text="$usage.plan"
+                >Growth</c-lb.badge>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 text-sm">
+                <span class="text-base-content/70">
+                    <span data-text="$usage.plan">Growth</span> platform fee
+                </span>
+                <span class="tabular-nums font-medium">
+                    $<span data-text="$usage.platform">149</span>
+                </span>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 text-sm">
+                <span class="text-base-content/70">
+                    <span data-text="$usage.seats">12</span> seats &times; $9
+                </span>
+                <span class="tabular-nums font-medium">
+                    $<span data-text="$usage.seatCost">108</span>
+                </span>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 border-t border-base-300 pt-3">
+                <div class="flex flex-col">
+                    <span class="text-sm font-semibold">Your total</span>
+                    <span class="text-xs text-base-content/50" data-text="$usage.note">
+                        Billed monthly. Cancel any time.
+                    </span>
+                </div>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-xl font-semibold text-base-content/70">$</span>
+                    <span
+                        id="usage-total"
+                        class="text-4xl font-bold tabular-nums"
+                        data-text="$usage.total"
+                    >257</span>
+                    <span class="text-sm text-base-content/50" data-text="$usage.suffix">/month</span>
+                </div>
+            </div>
+
+        </div>
+
+        <c-lb.join class="self-end p-1 bg-base-200 rounded-lg">
+            <c-lb.button
+                type="button"
+                class="join-item"
+                size="xs"
+                variant="primary"
+                btnStyle="$usage.monthlyStyle:"
+                data-on:click="$usage = ardenUsage($usage.seats, false)"
+            >Monthly</c-lb.button>
+            <c-lb.button
+                type="button"
+                class="join-item"
+                size="xs"
+                variant="primary"
+                btnStyle="$usage.annualStyle:ghost"
+                data-on:click="$usage = ardenUsage($usage.seats, true)"
+            >Annual</c-lb.button>
+        </c-lb.join>
+
+    </c-lb.card.body>
+</c-lb.card>

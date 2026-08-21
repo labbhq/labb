@@ -1,32 +1,11 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'neutral': 'select-neutral',
-        'primary': 'select-primary',
-        'secondary': 'select-secondary',
-        'accent': 'select-accent',
-        'info': 'select-info',
-        'success': 'select-success',
-        'warning': 'select-warning',
-        'error': 'select-error'
-    }"
-    size="md"
-    :sizeClasses="{
-        'xs': 'select-xs',
-        'sm': 'select-sm',
-        'md': 'select-md',
-        'lg': 'select-lg',
-        'xl': 'select-xl'
-    }"
-    ghost
-    validate
-/>
+{% load lbr_tags %}
+<c-vars bind="" />
+{% lbr_props "select" attrs=attrs as rx %}
 
 <select
-    class="select {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {% if ghost %}select-ghost{% endif %} {% if validate %}validator{% endif %} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {% lbr_bind "select" bind %}
+    {{ rx.attrs }}
 >
     {{ slot }}
 </select>

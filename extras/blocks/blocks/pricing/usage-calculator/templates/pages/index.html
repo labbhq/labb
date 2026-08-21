@@ -1,0 +1,52 @@
+<script>
+    function ardenMoney(n) {
+        return n.toLocaleString('en-US');
+    }
+
+    function ardenUsage(seats, annual) {
+        var n = Math.min(60, Math.max(3, Math.round(Number(seats) || 3)));
+        var tier = n <= 10
+            ? { plan: 'Starter', platform: 49, variant: 'neutral', included: '1,000 tracked customers' }
+            : n <= 30
+                ? { plan: 'Growth', platform: 149, variant: 'primary', included: '10,000 tracked customers' }
+                : { plan: 'Scale', platform: 449, variant: 'secondary', included: 'Unlimited tracked customers' };
+        var months = annual ? 10 : 1;
+        var seatCost = n * 9;
+
+        return {
+            seats: n,
+            annual: annual,
+            plan: tier.plan,
+            planVariant: tier.variant,
+            included: tier.included,
+            platform: ardenMoney(tier.platform * months),
+            seatCost: ardenMoney(seatCost * months),
+            total: ardenMoney((tier.platform + seatCost) * months),
+            suffix: annual ? '/year' : '/month',
+            monthlyStyle: annual ? 'ghost' : '',
+            annualStyle: annual ? '' : 'ghost',
+            note: annual
+                ? 'Billed once a year. Two months on us.'
+                : 'Billed monthly. Cancel any time.'
+        };
+    }
+</script>
+
+<c-lbr.signals id="usage-signals" :$usage=usage />
+
+<main class="container mx-auto max-w-5xl px-4 py-16 flex flex-col gap-12">
+
+    <c-usage-calc.header />
+
+    <div class="grid gap-6 lg:grid-cols-5 items-start">
+        <div class="lg:col-span-3">
+            <c-usage-calc.slider />
+        </div>
+        <div class="lg:col-span-2">
+            <c-usage-calc.quote />
+        </div>
+    </div>
+
+    <c-usage-calc.reassurance />
+
+</main>

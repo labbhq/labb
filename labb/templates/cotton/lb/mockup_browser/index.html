@@ -1,6 +1,7 @@
-<c-vars class="" url="" />
-
-<div class="mockup-browser {{ class }}" {{ attrs }}>
+{% load lbr_tags %}
+<c-vars url="" />
+{% lbr_props "mockup-browser" attrs=attrs as rx %}
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {% if url %}<div class="mockup-browser-toolbar"><div class="input">{{ url }}</div></div>{% endif %}
     {{ slot }}
 </div>

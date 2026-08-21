@@ -2,6 +2,9 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+import typer
+
 from labb.cli.handlers.config_handler import (
     _load_config_with_metadata,
     _show_config_metadata,
@@ -199,7 +202,9 @@ def test_validate_config_template_scanning(mock_glob, mock_console, mock_config)
         metadata = {"warnings": []}
         mock_load.return_value = (mock_config, metadata)
 
-        validate_config()
+        # The missing input CSS file is a hard error, so validate exits non-zero.
+        with pytest.raises(typer.Exit):
+            validate_config()
 
     # Should find 2 HTML files
     call_args = str(mock_console.print.call_args_list)
@@ -311,7 +316,8 @@ def test_show_raw_config_file_read_error(mock_console, mock_show_effective, temp
 
     # Mock open to raise an exception
     with patch("builtins.open", side_effect=PermissionError("Access denied")):
-        _show_raw_config(str(config_file), config)
+        with pytest.raises(typer.Exit):
+            _show_raw_config(str(config_file), config)
 
     # Should show error and fall back to effective config
     error_calls = [
@@ -419,7 +425,8 @@ def test_show_effective_config_yaml_error(mock_console):
         "labb.cli.handlers.config_handler.yaml.dump",
         side_effect=Exception("YAML error"),
     ):
-        _show_effective_config(config)
+        with pytest.raises(typer.Exit):
+            _show_effective_config(config)
 
     mock_console.print.assert_called_with(
         "[red]❌ Error generating configuration YAML: YAML error[/red]"
@@ -440,7 +447,10 @@ def test_validate_config_with_issues(mock_console, temp_dir):
     ) as mock_load:
         mock_load.return_value = (config, {})
 
-        validate_config()
+        with pytest.raises(typer.Exit) as exc_info:
+            validate_config()
+
+        assert exc_info.value.exit_code == 1
 
     # Should show issues
     issue_calls = [
@@ -640,7 +650,8 @@ def test_edit_config_error(mock_run, mock_console, temp_dir):
         "labb.cli.handlers.config_handler.find_config_file", return_value=config_file
     ):
         with patch("sys.platform", "darwin"):
-            edit_config()
+            with pytest.raises(typer.Exit):
+                edit_config()
 
     error_calls = [
         call

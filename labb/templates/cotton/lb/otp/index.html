@@ -1,0 +1,14 @@
+{% load lb_tags lbr_tags %}
+<c-vars
+    length="4"
+    name="otp"
+    size="md"
+    variant=""
+    joined
+/>
+{% lbr_props "otp" attrs=attrs size=size variant=variant joined=joined as rx %}
+
+<label class="{{ rx.classes }}" {{ rx.attrs }}>
+    {% for i in length|make_range %}<span></span>{% endfor %}
+    <input type="text" inputmode="numeric" pattern="[0-9]{% templatetag openbrace %}{{ length }}{% templatetag closebrace %}" autocomplete="one-time-code" name="{{ name }}" maxlength="{{ length }}" aria-label="One-time passcode" {{ attrs }} />
+</label>

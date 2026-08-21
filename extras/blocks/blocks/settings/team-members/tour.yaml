@@ -1,0 +1,50 @@
+steps:
+  - title: Declare roles and saved state
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      `roles` is what the dropdowns write to. `saved` is what the server last knew and
+      is never mutated. Keeping both is what makes an unsaved-changes bar possible
+      without any bookkeeping.
+
+  - title: Bind each member role
+    file: templates/cotton/team_members/roster.html
+    match: 'bind="$roles.{{ member.key }}"'
+    teaches: [binding]
+    docs: [reactivity/binding]
+    body: |
+      One select per member, one path each. The server renders the current role as
+      `selected`, so the list is correct before the runtime loads and the binding takes
+      over from there. Bound paths must be lowercase — the browser lowercases attribute
+      names, and a mismatched path silently binds to nothing.
+
+  - title: Mark rows with unsaved changes
+    file: templates/cotton/team_members/roster.html
+    match: "data-class=\"{'bg-warning/5': $roles.{{ member.key }} !== $saved.{{ member.key }}}\""
+    teaches: [signals, theming]
+    docs: [reactivity/patterns]
+    body: |
+      A comparison between the two signals, rendered as a theme-token tint. Nothing
+      tracks which rows changed — the difference *is* the state.
+
+  - title: Show the save bar from derived state
+    file: templates/cotton/team_members/savebar.html
+    match: 'data-show="Object.keys($roles).filter(k => $roles[k] !== $saved[k]).length > 0"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Count the keys that differ. Change a dropdown and the bar appears; change it back
+      and it goes away, with no request in between. Discard copies `saved` back over
+      `roles` and the whole page settles.
+
+  - title: Build the invitation preview from state
+    file: templates/cotton/team_members/invite.html
+    match: "data-text=\"($invite.email || 'They') + ' will join as a ' + $rolelabels[$invite.role] + '.'\""
+    teaches: [signals, binding]
+    docs: [reactivity/patterns]
+    body: |
+      The email, the role, and a label lookup held in the signal bag. Putting the labels
+      in signals is the same trick the summary wizard uses for prices: it turns a
+      server round-trip into an expression.

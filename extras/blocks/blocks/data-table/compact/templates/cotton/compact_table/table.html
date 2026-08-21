@@ -1,0 +1,33 @@
+<c-vars :customers="[]" />
+
+{% if customers %}
+<div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+    <c-lb.table size="xs" class="align-middle">
+        <thead>
+            <tr class="border-base-300">
+                <th class="font-medium text-base-content/50">Account</th>
+                <th class="hidden md:table-cell font-medium text-base-content/50">Plan</th>
+                <th class="font-medium text-base-content/50">Status</th>
+                <th class="font-medium text-base-content/50 text-end">MRR</th>
+                <th class="hidden lg:table-cell font-medium text-base-content/50 text-end">Seats</th>
+                <th class="hidden md:table-cell font-medium text-base-content/50 text-end">Renews</th>
+                <th class="font-medium text-base-content/50 text-end">Health</th>
+            </tr>
+        </thead>
+        <tbody id="compact-rows">
+            {% for customer in customers %}
+            <c-compact-table.row :customer=customer :index=forloop.counter />
+            {% endfor %}
+        </tbody>
+    </c-lb.table>
+</div>
+{% else %}
+<div class="rounded-box border border-dashed border-base-300 bg-base-100">
+    <c-compact-table.empty
+        id="compact-accounts-empty"
+        icon="rmx.building"
+        title="No accounts yet"
+        body="Arden starts billing the moment an account lands here. Add the first one, or import the book you already have."
+        action="Import from CSV" />
+</div>
+{% endif %}

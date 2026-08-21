@@ -1,13 +1,8 @@
-<c-vars
-    class=""
-    name="filter"
-    label=""
-    type="radio"
-    reset
-/>
-
+{% load lbr_tags %}
+<c-vars type="radio" name="filter" label="" />
+{% lbr_props "filter.item" attrs=attrs as rx %}
 {% if type == "reset" %}
-<input class="btn btn-square {{ class }}" type="reset" value="&times;" {{ attrs }} />
+<input class="{{ rx.classes }} btn-square" type="reset" value="&times;" {{ rx.attrs }} />
 {% else %}
-<input class="btn {% if reset %}filter-reset{% endif %} {{ class }}" type="{{ type }}" name="{{ name }}" aria-label="{{ label }}" {{ attrs }} />
+<input class="{{ rx.classes }}" type="{{ type }}" name="{{ name }}" aria-label="{{ label }}" {{ rx.attrs }} />
 {% endif %}

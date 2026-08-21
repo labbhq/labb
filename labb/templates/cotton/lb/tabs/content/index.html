@@ -1,12 +1,12 @@
-{% load lb_tags %}
+{% load lb_tags lbr_tags %}
 <c-vars
-    class=""
     name=""
     checked
     disabled
     title=""
 />
 {% parse_icon attrs as i %}
+{% lbr_props "tabs.content" attrs=attrs checked=checked disabled=disabled as rx %}
 
 {% if not input %}
     <label class="tab">
@@ -25,6 +25,6 @@
     {{ input }}
 {% endif %}
 
-<div class="tab-content {% if checked %}tab-active{% endif %} {% if disabled %}tab-disabled{% endif %} {{ class }}" {{ attrs|strip_icon_attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </div>
