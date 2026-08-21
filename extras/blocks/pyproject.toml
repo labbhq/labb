@@ -33,7 +33,7 @@ keywords = [
 ]
 requires-python = ">=3.10,<4"
 dependencies = [
-    "django (>=5.0)",
+    "django (>=4.2)",
     "labbui (>=0.4.4,<1.0.0)",
     "labbicons (>=0.4.4,<1.0.0)",
 ]

@@ -849,6 +849,7 @@ files = []
 develop = true
 
 [package.dependencies]
+django = ">=4.2"
 django-cotton = ">=2.1.3,<3.0.0"
 rich = ">=14.2.0,<16.0.0"
 typer = ">=0.19.2,<1.0.0"
@@ -1864,4 +1865,4 @@ start = ["labbstart"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4"
-content-hash = "c7129b3763d1bf48b201974906934e15ccdcf228a8d6fe2d780430aaa2d0633a"
+content-hash = "9b1ae4f6579f746c6a73d249bc3f4d224e42016e80894f6ec9fdd924e3cff628"
