@@ -21,8 +21,6 @@ if _labb_pkg_root not in sys.path:
 SECRET_KEY = "labb-test-not-for-production"
 DEBUG = True
 
-# Explicit: the default flipped to True in Django 5.0, and the fixtures write
-# timezone-aware datetimes, so leaving it implicit breaks the tests on 4.2.
 USE_TZ = True
 ALLOWED_HOSTS = ["*"]
 

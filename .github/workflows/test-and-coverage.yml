@@ -129,7 +129,6 @@ jobs:
         working-directory: extras/blocks
         run: |
           poetry install --with local --no-root
-          # blocks resolves its own lock, so the root override does not reach it
           if [ -n "${{ inputs.django-version }}" ]; then
             poetry run pip install "django~=${{ inputs.django-version }}.0"
           fi

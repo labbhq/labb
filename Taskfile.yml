@@ -91,10 +91,6 @@ tasks:
     deps: [install]
     cmds:
       - poetry run pytest {{.CLI_ARGS}}
-      # labbdocs is not reachable from the root pytest run, so CI caught a
-      # palette regression that `task test` alone reported as green.
-      # CLI_ARGS is cleared: a path or -k meant for the labb suite would
-      # otherwise be replayed against docs under the wrong settings.
       - task: test:docs
         vars: {CLI_ARGS: ""}
 
