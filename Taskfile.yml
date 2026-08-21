@@ -79,7 +79,7 @@ tasks:
       - poetry run pre-commit run --all-files
 
   test:icons:
-    desc: Run tests for the icons project (parallel execution enabled)
+    desc: Run tests for the icons project
     dir: .
     deps: [install]
     cmds:

@@ -330,7 +330,7 @@ class TestIconPropGroup:
         declared = {spec["template"] for spec in self.icon_components().values()}
 
         using_parse_icon = {
-            str(path.relative_to(self.TEMPLATE_ROOT))
+            path.relative_to(self.TEMPLATE_ROOT).as_posix()
             for path in self.TEMPLATE_ROOT.rglob("*.html")
             if "{% parse_icon" in path.read_text(encoding="utf-8")
         }
