@@ -307,6 +307,7 @@ class ComponentSchemaTestMixin:
                         "boolean",
                         "enum",
                         "map",
+                        "modifier",
                     ], f"Invalid type for '{var_name}'"
 
 

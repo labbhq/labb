@@ -59,17 +59,7 @@ components:
           vertical: alert-vertical
           horizontal: alert-horizontal
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Alert content

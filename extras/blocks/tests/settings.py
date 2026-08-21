@@ -20,6 +20,8 @@ if _labb_pkg_root not in sys.path:
 
 SECRET_KEY = "labb-test-not-for-production"
 DEBUG = True
+
+USE_TZ = True
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [

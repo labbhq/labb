@@ -34,6 +34,7 @@ keywords = [
 requires-python = ">=3.10,<4"
 packages = [{include = "labb"}]
 dependencies = [
+    "django (>=4.2)",
     "django-cotton (>=2.7.2,<3.0.0)",
     "typer (>=0.19.2,<1.0.0)",
     "rich (>=14.2.0,<16.0.0)",

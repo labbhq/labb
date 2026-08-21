@@ -1,3 +1,4 @@
+from itertools import permutations
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -5,9 +6,106 @@ import yaml
 
 SCHEMA_DIR = Path(__file__).parent / "schema"
 
+SHARED_SCHEMA = SCHEMA_DIR / "_shared.yaml"
+
 # Guide-only examples live under lb-examples/guide/<topic>/. They are not
 # components, so the component listings skip this directory.
 GUIDE_EXAMPLES_DIR = "guide"
+
+
+def _load_prop_groups() -> Dict[str, Any]:
+    """Load the shared prop group definitions from schema/_shared.yaml."""
+    if not SHARED_SCHEMA.exists():
+        return {}
+    with open(SHARED_SCHEMA, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    return data.get("prop_groups", {}) or {}
+
+
+def _modifier_variables(
+    trigger: str,
+    modifiers: List[str],
+    group_modifiers: Dict[str, str],
+    combine: bool,
+) -> Dict[str, Any]:
+    """Variable entries for one component's dot-notation modifiers.
+
+    A combining group accepts every ordering, so fill and end also give
+    `icon.fill.end` and `icon.end.fill` - what parse_icon parses.
+    """
+    variables: Dict[str, Any] = {}
+
+    def add(parts: List[str], description: str):
+        variables[trigger + "." + ".".join(parts)] = {
+            "type": "modifier",
+            "default": "",
+            "description": description,
+            "required": False,
+            "modifier_of": trigger,
+        }
+
+    for modifier in modifiers:
+        add([modifier], group_modifiers.get(modifier, ""))
+
+    if combine and len(modifiers) > 1:
+        for size in range(2, len(modifiers) + 1):
+            for combo in permutations(modifiers, size):
+                combined = " and ".join(f"{trigger}.{m}" for m in combo)
+                add(list(combo), f"Combines {combined}")
+
+    return variables
+
+
+def apply_prop_groups(
+    spec: Dict[str, Any], prop_groups: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Merge shared prop groups into a component spec.
+
+    A component opts in by declaring the group's trigger variable (`icon`); the
+    group supplies the rest of the attribute names it accepts, so readers of
+    `variables` see the full set. Component declarations win over inherited ones.
+    """
+    for group_name, group in (prop_groups or {}).items():
+        trigger = group.get("trigger", group_name)
+        declared = spec.get("variables") or {}
+        if trigger not in declared:
+            continue
+
+        own = declared[trigger] or {}
+        modifiers = own.get("dot_modifiers") or []
+        if isinstance(modifiers, dict):  # {name: description} form
+            modifiers = list(modifiers)
+
+        group_variables = dict(group.get("variables") or {})
+        # Modifiers first so `inspect` lists them directly under the trigger.
+        inherited = _modifier_variables(
+            trigger,
+            modifiers,
+            group.get("modifiers") or {},
+            bool(group.get("combine")),
+        )
+        inherited[trigger] = group_variables.pop(trigger, {})
+        inherited.update(group_variables)
+
+        variables: Dict[str, Any] = {}
+        for name, var_spec in declared.items():
+            if name == trigger:
+                merged = {**inherited.pop(trigger, {}), **(own or {})}
+                merged.pop("dot_modifiers", None)
+                variables[trigger] = merged
+                for extra_name, extra_spec in inherited.items():
+                    variables.setdefault(extra_name, extra_spec)
+            else:
+                variables[name] = var_spec
+
+        # Re-apply: a declaration after the trigger beats the inherited entry.
+        for name, var_spec in declared.items():
+            if name != trigger:
+                variables[name] = var_spec
+
+        spec = {**spec, "variables": variables}
+
+    return spec
 
 
 class ComponentRegistry:
@@ -15,6 +113,7 @@ class ComponentRegistry:
 
     _instance = None
     _components = None
+    _prop_groups = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -28,11 +127,20 @@ class ComponentRegistry:
     def _load_components(self):
         """Load and merge components from all YAML files in the schema directory"""
         self._components = {}
+        self._prop_groups = _load_prop_groups()
         for yaml_file in SCHEMA_DIR.glob("*.yaml"):
+            if yaml_file == SHARED_SCHEMA:
+                continue
             with open(yaml_file, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f) or {}
                 group = data.get("components", {})
                 self._components.update(group)
+        for name, spec in self._components.items():
+            self._components[name] = apply_prop_groups(spec, self._prop_groups)
+
+    def get_prop_groups(self) -> Dict[str, Any]:
+        """Get the shared prop group definitions"""
+        return dict(self._prop_groups)
 
     def get_component(self, name: str) -> Optional[Dict[str, Any]]:
         """Get component specification by name"""

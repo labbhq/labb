@@ -79,18 +79,20 @@ tasks:
       - poetry run pre-commit run --all-files
 
   test:icons:
-    desc: Run tests for the icons project (parallel execution enabled)
+    desc: Run tests for the icons project
     dir: .
     deps: [install]
     cmds:
       - poetry run pytest extras/icons {{.CLI_ARGS}}
 
   test:
-    desc: Run unit tests
+    desc: Run unit tests and the labbdocs suite
     dir: .
     deps: [install]
     cmds:
       - poetry run pytest {{.CLI_ARGS}}
+      - task: test:docs
+        vars: {CLI_ARGS: ""}
 
   test:docs:
     desc: Run the labbdocs suite (search tests need PostgreSQL, else they skip)
