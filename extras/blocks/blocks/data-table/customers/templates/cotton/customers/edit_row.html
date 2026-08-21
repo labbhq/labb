@@ -3,7 +3,7 @@
 <tr id="customer-{{ customer.pk }}" class="border-base-300 bg-base-200/50">
     <td colspan="9" class="p-3">
 
-        <c-lbr.signals :schema=edit_signals />
+        <c-lbr.signals id="customer-edit-signals" :schema=edit_signals />
 
         <c-lbr.post :to=update_url>
 
@@ -45,7 +45,7 @@
                 <c-customers.edit-field label="Plan" class="w-36">
                     <c-lb.select name="plan" bind="$edit.plan" size="sm" class="w-full" :validate="False">
                         {% for plan in plans %}
-                        <option value="{{ plan.pk }}" {% if customer.plan_id == plan.pk %}selected{% endif %}>{{ plan.name }}</option>
+                        <option value="{{ plan.pk }}" {% if edit_signals.plan == plan.pk|stringformat:"s" %}selected{% endif %}>{{ plan.name }}</option>
                         {% endfor %}
                     </c-lb.select>
                 </c-customers.edit-field>
@@ -53,7 +53,7 @@
                 <c-customers.edit-field label="Status" class="w-32">
                     <c-lb.select name="status" bind="$edit.status" size="sm" class="w-full" :validate="False">
                         {% for value, label in status_choices %}
-                        <option value="{{ value }}" {% if customer.status == value %}selected{% endif %}>{{ label }}</option>
+                        <option value="{{ value }}" {% if edit_signals.status == value %}selected{% endif %}>{{ label }}</option>
                         {% endfor %}
                     </c-lb.select>
                 </c-customers.edit-field>

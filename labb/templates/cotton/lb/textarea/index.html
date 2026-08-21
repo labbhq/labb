@@ -6,6 +6,6 @@
 
 <textarea
     class="{{ rx.classes }}"
-    {% if bind %}data-bind:{{ bind|lbr_bind_path }}{% endif %}
+    {% lbr_bind "textarea" bind %}
     {{ rx.attrs }}
 >{{ slot }}</textarea>

@@ -5,7 +5,7 @@
     :$cohortChart=cohort_chart
     :$planChart=plan_chart />
 
-<c-lbr.signals id="overview-live" $collected.total="$0" $collected.count="0" />
+<c-lbr.signals id="overview-live" ifmissing $collected.total="$0" $collected.count="0" />
 
 <c-lb.chart color="base-content" legend />
 

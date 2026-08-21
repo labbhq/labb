@@ -64,6 +64,8 @@ class EditSignals(Signals):
 
 class UISignals(Signals):
     editing_pk = Int(path="ui.editingPk", default=0)
+    # Which row the browser's edit buffer belongs to.
+    buffer_pk = Int(path="ui.editBufferPk", default=0)
     selected = Dict(default_factory=dict)
 
 
@@ -128,6 +130,36 @@ def _summary(qs):
     }
 
 
+def _edit_signals(request, ui, editing):
+    """The edit buffer to render, and who owns it.
+
+    The declaration never disturbs a buffer the browser holds. buffer_pk exists
+    only to spot the one case that must overwrite: a different row loaded in.
+    """
+    if not ui.editing_pk:
+        ui.buffer_pk = 0
+        return None
+    if editing is None:
+        return None  # row is off this page; the buffer stays with it
+    if ui.buffer_pk == editing.pk:
+        return EditSignals(request)
+    ui.buffer_pk = editing.pk
+    signals = EditSignals(
+        {
+            "edit": {
+                "contact_name": editing.contact_name,
+                "email": editing.email,
+                "status": editing.status,
+                "plan": str(editing.plan_id or ""),
+                "seats": editing.seats,
+                "mrr": str(editing.mrr),
+            }
+        }
+    )
+    signals.mark_changed()
+    return signals
+
+
 def _context(request, editing_pk=None):
     s = _query_signals(request)
     ui = UISignals(request)
@@ -151,6 +183,7 @@ def _context(request, editing_pk=None):
         c.health_variant = HEALTH_VARIANT.get(c.health, "neutral")
 
     editing = next((c for c in customers if c.pk == ui.editing_pk), None)
+    edit_signals = _edit_signals(request, ui, editing)
 
     return {
         "query_signals": s,
@@ -162,20 +195,7 @@ def _context(request, editing_pk=None):
         )
         if editing
         else "",
-        "edit_signals": EditSignals(
-            {
-                "edit": {
-                    "contact_name": editing.contact_name,
-                    "email": editing.email,
-                    "status": editing.status,
-                    "plan": str(editing.plan_id or ""),
-                    "seats": editing.seats,
-                    "mrr": str(editing.mrr),
-                }
-            }
-        )
-        if editing
-        else None,
+        "edit_signals": edit_signals,
         "sort_field": s.sort_field,
         "sort_dir": s.sort_dir,
         "next_dir": {field: _next_dir(s, field) for field in SORT_FIELDS},
@@ -219,22 +239,28 @@ def update(request, pk):
     return redirect("block_data_table_customers:index")
 
 
+def _deselect(ui, keys):
+    """Switch `keys` off. Signals merge, so {} would leave every key set."""
+    ui.selected = {**ui.selected, **{str(key): False for key in keys}}
+
+
 def delete(request, pk):
     if request.method in ("POST", "DELETE"):
         get_object_or_404(LbCustomer, pk=pk).delete()
         if request.is_datastar:
-            return _render(request, _context(request))
+            ctx = _context(request)
+            _deselect(ctx["ui_signals"], [pk])
+            return _render(request, ctx)
     return redirect("block_data_table_customers:index")
 
 
 def bulk_delete(request):
     if request.method == "POST":
-        ui = UISignals(request)
-        pks = [int(key) for key, on in ui.selected.items() if on]
+        pks = [int(key) for key, on in UISignals(request).selected.items() if on]
         if pks:
             LbCustomer.objects.filter(pk__in=pks).delete()
         if request.is_datastar:
             ctx = _context(request)
-            ctx["ui_signals"].selected = {}
+            _deselect(ctx["ui_signals"], pks)
             return _render(request, ctx)
     return redirect("block_data_table_customers:index")

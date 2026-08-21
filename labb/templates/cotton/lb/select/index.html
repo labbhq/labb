@@ -4,7 +4,7 @@
 
 <select
     class="{{ rx.classes }}"
-    {% if bind %}data-bind:{{ bind|lbr_bind_path }}{% endif %}
+    {% lbr_bind "select" bind %}
     {{ rx.attrs }}
 >
     {{ slot }}

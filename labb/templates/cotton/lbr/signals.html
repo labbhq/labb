@@ -4,15 +4,16 @@
 <c-vars
     syncQuery=""
     schema=""
+    ifmissing=""
 />
 
 {% lbr_query_sync_js attrs schema as sync_js %}
 
 <div
     {% if schema %}
-        data-signals='{{ schema|lbr_signals_json }}'
+        {% lbr_schema_signals schema %}
     {% else %}
-        {% lbr_build_signals attrs %}
+        {% lbr_build_signals attrs ifmissing %}
     {% endif %}
     {{ attrs|strip_signal_attrs }}
     {% if syncQuery %}

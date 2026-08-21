@@ -18,6 +18,7 @@ keywords: "labb changelog, labbui release notes, django labb versions"
 - **Signals and reactive props.** Declare browser state with `<c-lbr.signals>`, bind inputs to it, and drive compatible props with values such as `variant="$status:primary"`.
 - **Server actions.** `c-lbr.get`, `c-lbr.post`, and `c-lbr.delete` call ordinary Django views and morph their responses into the page. `post` handles CSRF.
 - **Reactive charts.** Pass `data="$signal"` to update a chart when the signal changes.
+- **Signals survive a morph.** A `:schema` declaration sends only the fields a view changed, so a response never overwrites what the user is part-way through. Bound inputs keep their value the same way. Add `ifmissing` to a `$` declaration for state the browser owns after the first render.
 - **Opt-in runtime.** Datastar loads only on pages that use reactive features.
 
 ### Blocks

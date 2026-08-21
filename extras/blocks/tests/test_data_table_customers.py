@@ -330,3 +330,102 @@ def test_clearing_from_the_empty_state_brings_the_table_back(
 
     page.wait_for_selector("tbody tr")
     assert _rows(page).count() == 8
+
+
+# --- state the browser owns survives a morph --------------------------------
+
+
+def _open_editor(page, company, value):
+    page.get_by_role("button", name=f"Edit {company}").click()
+    page.wait_for_selector('input[name="contact_name"]')
+    field = page.locator('input[name="contact_name"]')
+    field.fill(value)
+    field.dispatch_event("input")
+    return field
+
+
+def test_an_unsaved_edit_survives_a_search(page, live_server, customers):
+    """A morph that keeps the row on screen must not touch the open editor.
+
+    Asserts the server sent no change blob. Checking the input alone passes on a
+    broken server, since Datastar skips an attribute whose string did not change.
+    """
+    atlas = customers[0]
+    page.goto(f"{live_server.url}{BASE}/")
+    field = _open_editor(page, "AtlasForge", "Dana Reyes")
+
+    _search(page, "atlas")  # AtlasForge stays, so the editor stays with it
+    page.wait_for_function("document.querySelectorAll('tbody tr').length === 1")
+
+    edit_signals = page.locator("#customer-edit-signals")
+    assert edit_signals.get_attribute("data-signals") is None, (
+        "the search response sent edit values the browser already owns"
+    )
+    assert edit_signals.get_attribute("data-signals__ifmissing") is not None
+    assert field.input_value() == "Dana Reyes"
+    atlas.refresh_from_db()
+    assert atlas.contact_name != "Dana Reyes"  # still unsaved
+
+
+def test_an_unsaved_edit_survives_the_row_leaving_the_page(
+    page, live_server, customers
+):
+    """The buffer belongs to the row, not the page, so it survives the round trip."""
+    page.goto(f"{live_server.url}{BASE}/")
+    _open_editor(page, "AtlasForge", "Dana Reyes")
+
+    sort = page.get_by_role("button", name="Customer", exact=True)
+    sort.click()  # desc — AtlasForge off page 1
+    page.wait_for_function("!document.body.innerText.includes('AtlasForge')")
+    sort.click()  # asc — and back
+    page.wait_for_selector('input[name="contact_name"]')
+
+    assert page.locator('input[name="contact_name"]').input_value() == "Dana Reyes"
+
+
+def test_editing_another_row_loads_that_row(page, live_server, customers):
+    """The one case that must overwrite: the buffer belongs to another row."""
+    page.goto(f"{live_server.url}{BASE}/")
+    page.get_by_role("button", name="Edit AtlasForge").click()
+    page.wait_for_selector('input[name="contact_name"]')
+    page.locator('input[name="contact_name"]').fill("Dana Reyes")
+
+    page.get_by_role("button", name="Edit Beacon Labs").click()
+    page.wait_for_function(
+        "document.querySelector('input[name=\"contact_name\"]')?.value === 'Mira Chen'"
+    )
+
+
+def test_select_all_tracks_the_rows_it_selected(page, live_server, customers):
+    page.goto(f"{live_server.url}{BASE}/")
+    header = page.locator("thead input[type='checkbox']")
+    rows = page.locator("tbody input[type='checkbox']")
+
+    header.check()
+    page.wait_for_timeout(200)
+    assert rows.count() == 8
+    for i in range(rows.count()):
+        assert rows.nth(i).is_checked()
+
+    rows.nth(0).uncheck()
+    page.wait_for_timeout(200)
+    assert not header.is_checked()
+    assert header.evaluate("el => el.indeterminate")
+
+
+def test_deleting_a_row_drops_it_from_the_selection(page, live_server, customers):
+    """A deleted row must stop counting towards the selection."""
+    atlas, beacon = customers[0], customers[1]
+    page.goto(f"{live_server.url}{BASE}/")
+    page.locator(f"#customer-{atlas.pk} input[type='checkbox']").check()
+    page.locator(f"#customer-{beacon.pk} input[type='checkbox']").check()
+
+    count = page.locator("text=selected")
+    assert count.inner_text().strip() == "2 selected"
+
+    page.get_by_role("button", name="Delete", exact=True).click()
+    page.wait_for_function("!document.body.innerText.includes('AtlasForge')")
+
+    # The rows are gone either way, so checkboxes prove nothing; the toolbar does.
+    assert not count.is_visible()
+    assert page.locator("tbody input[type='checkbox']:checked").count() == 0

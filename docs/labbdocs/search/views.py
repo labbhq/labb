@@ -25,8 +25,8 @@ VALID_TYPES = set(FACET_TYPES)
 
 class SearchPageSignals(Signals):
     """Shareable /search state. Clean query keys `?q=` and `?type=` map onto the
-    `search.*` signal namespace (kept separate from the global palette's `q`
-    signal, which is also on this page). A Datastar request carries the whole
+    `search.*` signal namespace (kept separate from the palette's `palette.*`
+    signals, which are also on this page). A Datastar request carries the whole
     bag; a cold/shared link carries only these keys, read back via `from_query`.
     """
 
@@ -129,7 +129,9 @@ def palette(request):
     record every prefix ("b", "bu", "but", ...) and drown the zero-result signal.
     The submitted ``/search`` query is the meaningful analytics event.
     """
-    q = (request.signals.get("q") or request.GET.get("q") or "").strip()
+    q = (
+        (request.signals.get("palette") or {}).get("q") or request.GET.get("q") or ""
+    ).strip()
     groups = run_search(q, cap=PALETTE_GROUP_CAP) if q else []
     return render(
         request,

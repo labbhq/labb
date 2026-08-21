@@ -137,7 +137,7 @@ Use raw `data-signals` on `<c-lbr.signals>` when the browser must calculate the 
 />
 ```
 
-Do not combine raw `data-signals` and `$` props on the same element. This is the only case where you need to write `data-signals` yourself.
+Use `data-signals__ifmissing` when the browser should compute a value once and retain it through later morphs. Do not combine a raw attribute and `$` props on the same element. Writing a raw signal attribute is the only time you need to write one yourself.
 
 ## Related
 

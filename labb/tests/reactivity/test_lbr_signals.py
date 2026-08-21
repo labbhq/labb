@@ -1,10 +1,13 @@
 """
 Tests for c-lbr.signals and lbr_build_signals.
 
-- $key=val              → data-signals JSON blob
+- $key=val              → data-signals JSON blob (add ifmissing to seed only)
 - $path.key__mod=val    → individual data-signals:path.key__mod attr
 - dots before __        → path separators
 - dots after __         → modifier options (e.g. __case.kebab)
+
+A schema adds a second, plain data-signals blob carrying only the fields the
+view changed. See TestDeclarationAndChanges.
 """
 
 import html as _html
@@ -14,17 +17,30 @@ import re
 from labb.tests.components.test_base import ComponentTestBase
 
 
-def _blob(html):
-    """Extract and parse the data-signals JSON blob.
+def _parse(html, attr):
+    m = re.search(rf"{re.escape(attr)}='([^']*)'", html)
+    return None if m is None else json.loads(_html.unescape(m.group(1)))
 
-    HTML-decodes the attribute value before JSON-parsing to match browser behaviour
-    (browsers decode HTML entities in attribute values before JS reads them).
+
+def _blob(html):
+    """The declared signals. A schema declares with the non-clobbering
+    `__ifmissing`; `$` props are applied as written unless asked otherwise.
     """
-    m = re.search(r"data-signals='([^']*)'(?!\s*data-signals)", html)
-    if not m:
-        m = re.search(r"data-signals='([^']*)'", html)
-    assert m, f"data-signals blob not found in: {html}"
-    return json.loads(_html.unescape(m.group(1)))
+    blob = _parse(html, "data-signals__ifmissing")
+    if blob is None:
+        blob = _parse(html, "data-signals")
+    assert blob is not None, f"no signal declaration found in: {html}"
+    return blob
+
+
+def _blob_count(html):
+    """How many signal-blob attributes the element carries, any modifier."""
+    return len(re.findall(r"data-signals(?:__[\w.]+)?='", html))
+
+
+def _changed(html):
+    """The signals the view changed, or None when it changed nothing."""
+    return _parse(html, "data-signals")
 
 
 def _signal_attrs(html):
@@ -156,10 +172,8 @@ class TestSignalInjection(ComponentTestBase):
         payload = "x' data-signals='{\"admin\":true}"
         html = self._render("$q=q", context={"q": payload})
         # Only one data-signals blob should exist — the injected one won't parse cleanly.
-        import re
 
-        blob_count = len(re.findall(r"data-signals='", html))
-        assert blob_count == 1, f"Extra data-signals attribute injected:\n{html}"
+        assert _blob_count(html) == 1, f"Extra data-signals attribute injected:\n{html}"
         assert _blob(html) == {"q": payload}
 
     def test_multiple_single_quotes_all_escaped(self):
@@ -272,8 +286,7 @@ class TestStripSignalAttrs(ComponentTestBase):
         # Attempt to inject a second data-signals attr to override state.
         payload = 'x" data-signals=\'{"admin":true}\' y="z'
         html = self._render('id=x $count="0"', context={"x": payload})
-        blob_count = len(re.findall(r"data-signals='", html))
-        assert blob_count == 1, f"Extra data-signals injected:\n{html}"
+        assert _blob_count(html) == 1, f"Extra data-signals injected:\n{html}"
 
     def test_script_tag_injection_blocked(self):
         payload = '"><script>alert(1)</script><span x="'
@@ -316,9 +329,7 @@ class TestSignalModifiers(ComponentTestBase):
         """$a.b__case.kebab → path=a.b, modifier=case.kebab (not a.b.case)"""
         html = self._render('$a.b__case.kebab="v"')
         assert "a.b__case.kebab" in _signal_attrs(html)
-        assert (
-            "data-signals='" not in html
-        )  # no blob — modifier signals never go in blob
+        assert _blob_count(html) == 0  # modifier signals never go in a blob
 
 
 class TestSyncQuery(ComponentTestBase):
@@ -407,3 +418,148 @@ class TestSyncQueryPathGuard(ComponentTestBase):
         from labb.templatetags.lbr_tags import _build_datastar_js_obj
 
         assert _build_datastar_js_obj(['a"b', "page"]) == '{"page":$page}'
+
+
+class TestDeclarationAndChanges(ComponentTestBase):
+    """The schema declares with `__ifmissing` and sends changes as a plain blob."""
+
+    def _render(self, attrs_str, context=None):
+        return self.render_template_string(
+            f"{{% load lbr_tags %}}<c-lbr.signals {attrs_str} />",
+            context=context or {},
+        )
+
+    def _schema(self, values):
+        from labb.signals import Int, Signals, Str
+
+        class QuerySignals(Signals):
+            q = Str(path="filters.q", default="")
+            page = Int(default=1)
+
+        return QuerySignals(values)
+
+    def test_dollar_attrs_are_applied_as_written(self):
+        html = self._render('$ui.editingPk="0"')
+        assert "data-signals__ifmissing=" not in html
+        assert _changed(html) == {"ui": {"editingPk": "0"}}
+
+    def test_ifmissing_opts_a_dollar_declaration_out_of_clobbering(self):
+        html = self._render('$open="false" ifmissing')
+        assert _blob(html) == {"open": False}
+        assert _changed(html) is None
+
+    def test_schema_declares_every_field(self):
+        schema = self._schema({"filters": {"q": "acme"}, "page": 3})
+        html = self._render(":schema=schema", {"schema": schema})
+        assert _blob(html) == {"filters": {"q": "acme"}, "page": 3}
+
+    def test_untouched_schema_changes_nothing(self):
+        schema = self._schema({"filters": {"q": "acme"}})
+        html = self._render(":schema=schema", {"schema": schema})
+        assert _changed(html) is None
+
+    def test_assigned_field_is_sent_as_a_change(self):
+        schema = self._schema({"filters": {"q": "acme"}, "page": 9})
+        schema.page = 1
+        html = self._render(":schema=schema", {"schema": schema})
+        assert _changed(html) == {"page": 1}
+        # ...and the declaration still carries the whole schema.
+        assert _blob(html) == {"filters": {"q": "acme"}, "page": 1}
+
+    def test_assigning_the_same_value_is_not_a_change(self):
+        # `s.page = min(s.page, total_pages)` on a page needing no clamp.
+        schema = self._schema({"page": 3})
+        schema.page = 3
+        html = self._render(":schema=schema", {"schema": schema})
+        assert _changed(html) is None
+
+    def test_mark_changed_is_how_a_schema_forces_a_value(self):
+        schema = self._schema({"filters": {"q": "acme"}})
+        schema.mark_changed()
+        html = self._render(":schema=schema", {"schema": schema})
+        assert _changed(html) == {"filters": {"q": "acme"}, "page": 1}
+
+
+class TestChangeTracking(ComponentTestBase):
+    def _schema(self, values=None):
+        from labb.signals import Int, Signals, Str
+
+        class S(Signals):
+            q = Str(path="filters.q", default="")
+            page = Int(default=1)
+
+        return S(values or {})
+
+    def test_parsing_the_request_is_not_a_change(self):
+        assert self._schema({"filters": {"q": "acme"}, "page": 4}).changed == set()
+
+    def test_assignment_records_the_field(self):
+        s = self._schema()
+        s.page = 7
+        assert s.changed == {"page"}
+
+    def test_changed_dict_uses_the_field_path(self):
+        s = self._schema()
+        s.q = "acme"
+        assert s.changed_signals_dict() == {"filters": {"q": "acme"}}
+
+    def test_changed_dict_follows_field_declaration_order(self):
+        from labb.signals import Int, Signals
+
+        class Ordered(Signals):
+            first = Int(default=1)
+            second = Int(default=2)
+            third = Int(default=3)
+
+        s = Ordered()
+        s.third = 30
+        s.first = 10
+        s.second = 20
+
+        assert list(s.changed_signals_dict()) == ["first", "second", "third"]
+
+    def test_mark_changed_forces_a_matching_value(self):
+        s = self._schema({"page": 4})
+        s.page = 4
+        assert s.changed == set()
+        s.mark_changed("page")
+        assert s.changed_signals_dict() == {"page": 4}
+
+    def test_mark_changed_with_no_args_marks_everything(self):
+        s = self._schema({"filters": {"q": "acme"}, "page": 4})
+        s.mark_changed()
+        assert s.changed_signals_dict() == {"filters": {"q": "acme"}, "page": 4}
+
+    def test_mark_changed_rejects_an_unknown_field(self):
+        import pytest
+
+        with pytest.raises(KeyError, match="nope"):
+            self._schema().mark_changed("nope")
+
+    def test_changed_is_a_copy(self):
+        s = self._schema()
+        s.changed.add("page")
+        assert s.changed == set()
+
+
+class TestSignalPatches:
+    def test_patch_delegates_named_fields(self, monkeypatch):
+        from datastar_py import ServerSentEventGenerator
+
+        from labb.signals import Int, Signals
+
+        class S(Signals):
+            page = Int(default=1)
+            size = Int(default=20)  # a second field, so "named" can fail
+
+        calls = []
+
+        def patch_signals(signals, only_if_missing=False):
+            calls.append((signals, only_if_missing))
+            return "signal-patch"
+
+        monkeypatch.setattr(ServerSentEventGenerator, "patch_signals", patch_signals)
+        s = S()
+
+        assert s.patch("page") == "signal-patch"
+        assert calls == [({"page": 1}, False)]

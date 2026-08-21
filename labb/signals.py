@@ -43,6 +43,15 @@ Usage::
 
     # Tests — pass a plain dict instead of a request:
     s = EmployeeSignals({"filters": {"q": "foo"}, "page": 2})
+
+Sending state back
+------------------
+Assigning to a field marks it changed, and only changed fields travel back to
+the browser. `mark_changed` covers what an assignment cannot express: forcing a
+value the browser already sent, and in-place Dict/List edits::
+
+    s.page = min(s.page, total_pages)
+    s.mark_changed("page")
 """
 
 from __future__ import annotations
@@ -77,6 +86,9 @@ def _signal_data(data) -> dict:
             "plain dict of signals instead of the request."
         )
     return data
+
+
+_UNSET = object()
 
 
 class SignalValidationError(Exception):
@@ -353,9 +365,54 @@ class Signals(metaclass=_SignalsMeta):
             # required=True raises SignalValidationError immediately on missing/bad value
             setattr(self, attr_name, field.parse(raw))
 
+        # After parsing, so the initial read is not a change.
+        self._changed: set[str] = set()
+
         if validate:
             if not self.validate():
                 raise SignalValidationError(self._errors)
+
+    def __setattr__(self, name, value):
+        """Record a field as changed, but only when the value actually differs."""
+        if (
+            name in self._fields
+            and getattr(self, "_changed", None) is not None
+            and self.__dict__.get(name, _UNSET) != value
+        ):
+            self._changed.add(name)
+        object.__setattr__(self, name, value)
+
+    def mark_changed(self, *field_names: str):
+        """Force fields into the changed set whatever their value; no args marks all."""
+        names = field_names or tuple(self._fields)
+        unknown = [name for name in names if name not in self._fields]
+        if unknown:
+            raise KeyError(f"Unknown signal field(s): {', '.join(sorted(unknown))}")
+        self._changed.update(names)
+
+    @property
+    def changed(self) -> set[str]:
+        """Names of the fields assigned since this instance was built."""
+        return set(self._changed)
+
+    def _nest(self, names) -> dict:
+        result: dict = {}
+        for attr_name in names:
+            parts = self._fields[attr_name].path.split(".")
+            node = result
+            for part in parts[:-1]:
+                node = node.setdefault(part, {})
+            node[parts[-1]] = getattr(self, attr_name)
+        return result
+
+    def changed_signals_dict(self) -> dict:
+        """Nested signal dict of only the fields this request changed."""
+        # `_changed` is a set, so iterating it would give each worker a
+        # potentially different JSON attribute. Datastar re-applies a signal
+        # declaration when that attribute changes, making stable declaration
+        # order part of the delivery contract.
+        changed_names = (name for name in self._fields if name in self._changed)
+        return self._nest(changed_names)
 
     @classmethod
     def from_query(cls, source):
@@ -425,15 +482,7 @@ class Signals(metaclass=_SignalsMeta):
 
         Useful for passing a schema instance to <c-lbr.signals :schema=s />.
         """
-        result = {}
-        for attr_name, field in self._fields.items():
-            value = getattr(self, attr_name)
-            parts = field.path.split(".")
-            d = result
-            for part in parts[:-1]:
-                d = d.setdefault(part, {})
-            d[parts[-1]] = value
-        return result
+        return self._nest(self._fields)
 
     def patch(self, *field_names: str, only_if_missing: bool = False):
         """Return a DatastarEvent patching this schema's current signal values.
@@ -443,17 +492,7 @@ class Signals(metaclass=_SignalsMeta):
         """
         from datastar_py import ServerSentEventGenerator as _DS
 
-        if field_names:
-            signals: dict = {}
-            for name in field_names:
-                field = self._fields[name]
-                parts = field.path.split(".")
-                d = signals
-                for part in parts[:-1]:
-                    d = d.setdefault(part, {})
-                d[parts[-1]] = getattr(self, name)
-        else:
-            signals = self.to_signals_dict()
+        signals = self._nest(field_names) if field_names else self.to_signals_dict()
         return _DS.patch_signals(signals, only_if_missing=only_if_missing)
 
     @property

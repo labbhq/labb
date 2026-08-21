@@ -23,6 +23,8 @@ Declare the state a page needs and load the reactivity runtime. Put the declarat
 
 Use a plain `$name="..."` prop for a string. For a number, list, or object, add `:` before the prop name. For example, `$page="1"` declares the string `"1"`, while `:$page="1"` declares the number `1`.
 
+Add `ifmissing` when a `$` declaration holds state the browser owns after the first render, so a later morph does not reset it. A `:schema` declaration does this on its own. See [who owns a signal]({% doc_url '3_reactivity/2_signals.md' 'guide' %}).
+
 Add `syncQuery` when filters, sorting, or pagination should survive a refresh and appear in a shareable URL. `ReactivityMiddleware` restores those values before the view reads its signals. See [URL state]({% doc_url '3_reactivity/6_patterns.md' 'guide' %}) for the pattern and its trade-offs.
 
 <c-lbdocs.api_table component_name="lbr.signals" />
@@ -157,6 +159,39 @@ def index(request):
 
 Pass the instance to `<c-lbr.signals :schema=signals />` to declare the same state in the browser.
 
+### Sending a change back
+
+Assigning to a field is how a view changes a signal. labb sends that field back only when its value differs and leaves the other schema signals unchanged.
+
+```python
+s = TodoSignals(request)
+s.page = min(s.page, total_pages)   # sent only if the clamp did something
+```
+
+| Method | What it does |
+|---|---|
+| `s.mark_changed("page")` | Send a field even though its value already matches what the browser sent |
+| `s.mark_changed()` | Send every field |
+| `s.changed` | Names of the fields selected to send back |
+| `s.changed_signals_dict()` | Those fields as a nested signal dict |
+
+`mark_changed` covers the two cases an assignment cannot express: overwriting a value the browser sent, and mutating a `Dict` or `List` field in place.
+
+### Sending a forced patch
+
+An HTML morph reapplies a changed signal declaration only when its rendered attribute changes. When the server must apply the same value more than once, return a signal patch through `SSEResponse` instead:
+
+```python
+from labb.reactivity import SSEResponse
+
+def reset_page(request):
+    signals = TodoSignals(request)
+    signals.page = 1
+    return SSEResponse([signals.patch("page")])
+```
+
+`signals.patch()` emits a Datastar signal event every time the response yields it. Pass field names to patch only those fields, or omit them to patch the whole schema.
+
 ### Schema fields in templates
 
 `signals.q` is the parsed value that your view uses. `signals.fields.q` is its `SignalField` descriptor. It carries the field’s declared path, so you can pass it directly to a form component with a Cotton binding.
@@ -168,3 +203,5 @@ Pass the instance to `<c-lbr.signals :schema=signals />` to declare the same sta
 ```
 
 The input reads the descriptor’s `filters.q` path and renders `data-bind:filters.q`. That keeps the schema, template binding, and server-side value on the same name. Use a string path such as `bind="$filters.q"` for small page-local state.
+
+A bind path may contain only word characters and dots. labb validates the rendered path, so a template-built path such as `bind="$selected.{{ customer.pk }}"` works when it renders to a valid path.

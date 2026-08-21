@@ -9,7 +9,9 @@
                     <c-lb.checkbox
                         size="sm"
                         :validate="False"
-                        data-on:change="$selected = event.target.checked ? Object.fromEntries({{ page_pks }}.map(k => [k, true])) : {}" />
+                        aria-label="Select every customer on this page"
+                        data-on:change="{{ page_pks }}.forEach(k => $selected[k] = el.checked)"
+                        data-effect="el.checked = {{ page_pks }}.every(k => !!$selected[k]); el.indeterminate = !el.checked && {{ page_pks }}.some(k => !!$selected[k])" />
                 </th>
                 <th>
                     <c-customers.sort-header field="company" label="Customer" :next_dir=next_dir.company :sort_field=sort_field :sort_dir=sort_dir />

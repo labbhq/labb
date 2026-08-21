@@ -66,15 +66,27 @@ def _coerce_signal_value(v):
     return v
 
 
+def _blob_attr(blob: dict, ifmissing=False) -> str:
+    """Render a signal blob as a data-signals attribute.
+
+    `__ifmissing` seeds only what the browser lacks, so a morph cannot clobber it.
+    """
+    if not blob:
+        return ""
+    mod = "__ifmissing" if ifmissing else ""
+    return f"data-signals{mod}='{_safe_json(blob)}'"
+
+
 @register.simple_tag
-def lbr_build_signals(attrs):
+def lbr_build_signals(attrs, ifmissing=""):
     """Build data-signals HTML attribute(s) from $-prefixed Cotton attrs.
 
     - $key=val            → JSON blob:  data-signals='{"key": val}'
     - $path.key__mod=val  → per-signal: data-signals:path.key__mod='"val"'
 
     Dots before __ are path separators; dots after __ are modifier options.
-    Both forms can coexist on the same element.
+    Both forms can coexist on the same element. Pass ifmissing for state the
+    browser owns after the first render.
     """
     blob = {}
     individual = []
@@ -96,11 +108,8 @@ def lbr_build_signals(attrs):
                 d = d.setdefault(part, {})
             d[parts[-1]] = _coerce_signal_value(value)
 
-    out = []
-    if blob:
-        out.append(f"data-signals='{_safe_json(blob)}'")
-    out.extend(individual)
-    return mark_safe(" ".join(out))
+    out = [_blob_attr(blob, ifmissing), *individual]
+    return mark_safe(" ".join(part for part in out if part))
 
 
 def _sync_query_signals(attrs):
@@ -159,6 +168,49 @@ def lbr_bind_path(bind):
     return path[1:] if path.startswith("$") else path
 
 
+# What a morph would rewrite on each bindable element. "" means the element
+# cannot be guarded this way (select: the attribute is on each <option>;
+# textarea: the value is child text). Both are covered in the guide.
+BIND_PRESERVE = {
+    "checkbox": "checked",
+    "input": "value",
+    "range": "value",
+    "select": "",
+    "textarea": "",
+    "toggle": "checked",
+}
+
+
+@register.simple_tag
+def lbr_bind(component_name, bind):
+    """Render the data-bind attribute for a form component, plus its morph guard."""
+    if not bind:
+        return ""
+    if component_name not in BIND_PRESERVE:
+        raise KeyError(
+            f"'{component_name}' binds a signal but has no BIND_PRESERVE entry. "
+            'Add one naming the attribute a morph would rewrite, or "" when '
+            "the element cannot be guarded this way."
+        )
+
+    path = lbr_bind_path(bind)
+    # Attribute-NAME position: a space alone breaks out, so escaping is not enough.
+    if not _SIGNAL_PATH_RE.match(path):
+        raise ValueError(
+            f"bind={path!r} is not a signal path. Datastar camel-cases attribute "
+            "keys, so a name survives the round trip only as word characters and "
+            "dots: a hyphen would bind to a different signal than the one you "
+            "named. Strip them from a UUID or slug key, as in "
+            "{{ customer.pk|stringformat:'s'|cut:'-' }}."
+        )
+
+    out = f"data-bind:{path}"
+    preserve = BIND_PRESERVE[component_name]
+    if preserve:
+        out += f' data-preserve-attr="{preserve}"'
+    return mark_safe(out)
+
+
 @register.filter
 def lbr_signals_json(schema):
     """Convert a Signals instance to a JSON string for data-signals='...'."""
@@ -167,6 +219,24 @@ def lbr_signals_json(schema):
     if not isinstance(schema, Signals):
         return mark_safe("{}")
     return mark_safe(_safe_json(schema.to_signals_dict()))
+
+
+@register.simple_tag
+def lbr_schema_signals(schema):
+    """Render a Signals instance as the data-signals attribute(s) for an element.
+
+    Two blobs: the whole schema as `__ifmissing`, plus the fields the view
+    assigned as a plain blob. See the reactivity guide, "Who owns a signal".
+    """
+    from labb.signals import Signals
+
+    if not isinstance(schema, Signals):
+        return ""
+    out = [
+        _blob_attr(schema.to_signals_dict(), ifmissing=True),
+        _blob_attr(schema.changed_signals_dict()),
+    ]
+    return mark_safe(" ".join(part for part in out if part))
 
 
 @register.simple_tag

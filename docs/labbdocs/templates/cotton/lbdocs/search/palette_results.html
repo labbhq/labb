@@ -1,6 +1,6 @@
 <c-vars :groups="[]" :shortcuts="[]" has_query="" no_results="" q="" />
 
-<div id="search-palette-results" data-effect="palHighlight($cursor)">
+<div id="search-palette-results" data-effect="palHighlight($palette.cursor)">
     {% if has_query %}
         {% if no_results %}
         <div class="px-3 py-10 text-center">

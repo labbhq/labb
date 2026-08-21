@@ -164,17 +164,22 @@ components:
 
   lbr.signals:
     template: lbr/signals.html
-    description: Declares page signals and loads Datastar. Use $-prefixed props for strings and booleans, Cotton :$ bindings for numbers or objects, or a typed Signals instance. Pass raw data-signals for an initial value the browser must calculate on load. Do not combine raw data-signals with $-prefixed props.
+    description: Declares page signals and loads Datastar. Use $-prefixed props for strings and booleans, Cotton :$ bindings for numbers or objects, or a typed Signals instance. Pass raw data-signals for an initial value the browser must calculate on load. Do not combine a raw attribute with $-prefixed props.
     variables:
       schema:
         type: string
         default: ''
-        description: A Signals instance from the view. labb uses schema.to_signals_dict() for the browser declaration and ignores $-prefixed props. Bind a form component with :bind=schema.fields.name to reuse the field path from the schema.
+        description: A Signals instance from the view. labb declares every field, then sends only the fields the view assigned this request. Bind a form component with :bind=schema.fields.name to reuse the field path from the schema.
         required: false
       syncQuery:
         type: boolean
         default: false
         description: Persist the declared signals in the page URL on load and after each signal change. Requires ReactivityMiddleware, which restores those values before the view reads request.signals.
+        required: false
+      ifmissing:
+        type: boolean
+        default: false
+        description: Seed only signals the browser does not already have. Without it a $ declaration is re-applied by every morph, resetting state the user changed. It has no effect with :schema.
         required: false
     slots:
       default:

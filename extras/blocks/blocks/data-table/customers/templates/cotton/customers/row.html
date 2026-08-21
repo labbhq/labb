@@ -6,8 +6,7 @@
         <c-lb.checkbox
             size="sm"
             :validate="False"
-            data-attr:checked="!!$selected['{{ customer.pk }}']"
-            data-on:change="$selected = {...$selected, '{{ customer.pk }}': event.target.checked}" />
+            bind="$selected.{{ customer.pk }}" />
     </td>
 
     <td>

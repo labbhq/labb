@@ -7,6 +7,6 @@
 <input
     type="range"
     class="{{ rx.classes }}"
-    {% if bind %}data-bind:{{ bind|lbr_bind_path }}{% endif %}
+    {% lbr_bind "range" bind %}
     {{ rx.attrs }}
 />

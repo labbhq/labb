@@ -86,6 +86,57 @@ Bind each form field through its descriptor so the path comes from the schema.
 
 Use a schema when the state has several paths or needs validation. Props suit a small number of local values. You can use both on the same page.
 
+## Keep signal state through morphs
+
+A [server action]({% doc_url '3_reactivity/5_server_actions.md' 'guide' %}) re-renders the whole page, including the `<c-lbr.signals>` declaration. `:schema` and `$` declarations behave differently after that morph.
+
+A `:schema` declaration seeds signals the browser does not have, then sends back only fields the view changed. Suppose an input sends a request at `atla` and you type `atlas` before its response arrives. If the view did not assign `q`, labb leaves `q` alone.
+
+A `$` declaration cannot identify fields the view changed, so labb reapplies its declared value with each morph. Add `ifmissing` for a value the browser owns after the first render:
+
+```html
+<c-lbr.signals $open="false" ifmissing />
+```
+
+Without it, opening the dropdown and then triggering any server action closes it again.
+
+A view changes a schema signal by assigning to it:
+
+```python
+def index(request):
+    s = TodoSignals(request)
+    s.page = min(s.page, total_pages)   # a clamp the browser must accept
+    return render(request, "todos/index.html", {"signals": s})
+```
+
+An assignment sends a field back only when its value differs. `s.page = 1` on a page that was already `1` sends nothing.
+
+Two cases need `mark_changed`, because the value alone does not show the intent:
+
+```python
+s.mark_changed("page")          # overwrite even though the value matches
+ui.selected["7"] = False        # in-place mutation of a Dict field
+ui.mark_changed("selected")     # ...never passes through the assignment
+```
+
+Datastar reapplies a changed signal declaration only when its rendered attribute changes. Two consecutive responses that set a signal to the same value apply it once. Use `Signals.patch()` in an `SSEResponse` when the server must apply the same value more than once.
+
+## Bound fields and morphing
+
+A bound field's value belongs to its signal. labb marks `<c-lb.input>`, `<c-lb.checkbox>`, `<c-lb.toggle>`, and `<c-lb.range>` so Datastar leaves their values intact while it morphs the page. To change one from the server, change its signal.
+
+Datastar updates a `<c-lb.select>` through its `<option>` attributes and a `<c-lb.textarea>` through its child text, so the same marker cannot protect them. Render their selected state or text from the bound signal rather than from the record:
+
+```html
+<c-lb.select :bind=edit_signals.fields.status>
+    {% for value, label in status_choices %}
+    <option value="{{ value }}" {% if edit_signals.status == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+</c-lb.select>
+```
+
+Read `edit_signals.status` rather than `customer.status` so an unsaved choice survives the next morph.
+
 ## A search box, step one
 
 The next three pages build a search control one step at a time. It starts with two unused signals.
