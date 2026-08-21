@@ -15,6 +15,20 @@ jobs:
       python-version: ${{ matrix.python-version }}
       upload-coverage: ${{ matrix.python-version == '3.12' }}
 
+  django-matrix:
+    strategy:
+      matrix:
+        include:
+          - django-version: "4.2"
+            python-version: "3.12"
+          - django-version: "6.1"
+            python-version: "3.13"
+      fail-fast: false
+    uses: ./.github/workflows/test-and-coverage.yml
+    with:
+      python-version: ${{ matrix.python-version }}
+      django-version: ${{ matrix.django-version }}
+
   test-windows:
     runs-on: windows-latest
     env:

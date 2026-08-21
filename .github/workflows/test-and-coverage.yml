@@ -13,6 +13,11 @@ on:
         required: false
         type: boolean
         default: false
+      django-version:
+        description: 'Override Django after install, e.g. "4.2" or "6.1". Empty uses the lock.'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   test:
@@ -71,7 +76,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ inputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ inputs.python-version }}-dj${{ inputs.django-version || 'lock' }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
@@ -80,6 +85,12 @@ jobs:
       - name: Install dependencies (cached)
         if: steps.cached-poetry-dependencies.outputs.cache-hit == 'true'
         run: poetry install --with dev --no-root
+
+      - name: Override Django version
+        if: inputs.django-version != ''
+        run: |
+          poetry run pip install "django~=${{ inputs.django-version }}.0"
+          poetry run python -c "import django; print('testing against Django', django.get_version())"
 
       - name: Run linting
         run: |
@@ -118,6 +129,10 @@ jobs:
         working-directory: extras/blocks
         run: |
           poetry install --with local --no-root
+          # blocks resolves its own lock, so the root override does not reach it
+          if [ -n "${{ inputs.django-version }}" ]; then
+            poetry run pip install "django~=${{ inputs.django-version }}.0"
+          fi
           poetry run playwright install --with-deps chromium
           poetry run pytest
 
