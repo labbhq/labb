@@ -1,8 +1,9 @@
 """HTTP seam — the ⌘K palette fragment view (`labbdocs_search:palette`).
 
 Driven the way the live overlay drives it: the query rides in the Datastar
-signal bag (`?datastar={"q": ...}`), which the reactivity middleware decodes into
-`request.signals`. Asserts observable facts: grouped/capped results for a query,
+signal bag (`?datastar={"palette": {"q": ...}}`), which the reactivity middleware
+decodes into `request.signals`. The palette namespaces its signals so they do not
+collide with the `/search` page's own `q`, which shares the same document. Asserts observable facts: grouped/capped results for a query,
 each source type reachable, blank-query shortcuts, and — the load-bearing one —
 that the response is ONLY the `#search-palette-results` region (never the dialog
 shell or a full page), which is what lets the open dialog survive a morph.
@@ -34,7 +35,8 @@ class PaletteViewTests(TestCase):
         if plain:
             return self.client.get(reverse("labbdocs_search:palette"), {"q": q})
         return self.client.get(
-            reverse("labbdocs_search:palette"), {"datastar": json.dumps({"q": q})}
+            reverse("labbdocs_search:palette"),
+            {"datastar": json.dumps({"palette": {"q": q}})},
         )
 
     # --- results shape -----------------------------------------------------
