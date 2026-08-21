@@ -1,3 +1,4 @@
+from pathlib import Path
 from unittest.mock import Mock, mock_open, patch
 
 import pytest
@@ -266,3 +267,99 @@ class TestConvenienceFunctions:
 
         assert result == ["button", "drawer"]
         mock_registry.get_component_names.assert_called_once()
+
+
+class TestIconPropGroup:
+    """The icon prop group is declared once in schema/_shared.yaml and merged
+    into every component that declares `icon`."""
+
+    TEMPLATE_ROOT = Path(__file__).parent.parent.parent / "templates" / "cotton"
+
+    @staticmethod
+    def icon_components():
+        registry = ComponentRegistry()
+        return {
+            name: registry.get_component(name)
+            for name in registry.get_component_names()
+            if "icon" in (registry.get_component_variables(name) or {})
+        }
+
+    def template_source(self, spec):
+        return (self.TEMPLATE_ROOT / spec["template"]).read_text(encoding="utf-8")
+
+    def test_full_attribute_set_is_reported(self):
+        """A component supporting both modifiers reports every accepted form"""
+        variables = ComponentRegistry().get_component_variables("button")
+
+        assert {
+            "icon",
+            "icon.class",
+            "icon.fill",
+            "icon.end",
+            "icon.fill.end",
+            "icon.end.fill",
+        } <= set(variables)
+
+    def test_modifiers_are_marked_as_such(self):
+        """Modifier entries name the prop they modify"""
+        variables = ComponentRegistry().get_component_variables("button")
+
+        assert variables["icon.fill"]["modifier_of"] == "icon"
+        assert variables["icon.fill"]["type"] == "modifier"
+        assert "modifier_of" not in variables["icon"]
+
+    def test_unsupported_modifiers_are_not_reported(self):
+        """`end` is only declared where the template places the icon at the end"""
+        variables = ComponentRegistry().get_component_variables("alert")
+
+        assert "icon.fill" in variables
+        assert "icon.end" not in variables
+        assert "icon.fill.end" not in variables
+
+    def test_component_overrides_win_over_the_group(self):
+        """A component may describe its own icon prop"""
+        variables = ComponentRegistry().get_component_variables("avatar")
+
+        assert variables["icon"]["description"] == (
+            "Icon name for placeholder avatars (alternative to initials)"
+        )
+        assert variables["icon"]["type"] == "string"
+
+    def test_every_parse_icon_template_opts_in(self):
+        """Any template calling parse_icon belongs to a component declaring `icon`"""
+        declared = {spec["template"] for spec in self.icon_components().values()}
+
+        using_parse_icon = {
+            str(path.relative_to(self.TEMPLATE_ROOT))
+            for path in self.TEMPLATE_ROOT.rglob("*.html")
+            if "{% parse_icon" in path.read_text(encoding="utf-8")
+        }
+
+        assert using_parse_icon == declared
+
+    def test_declared_modifiers_match_the_templates(self):
+        """`icon.end` is declared exactly where the template reads `i.end`"""
+        for name, spec in self.icon_components().items():
+            variables = ComponentRegistry().get_component_variables(name)
+            source = self.template_source(spec)
+
+            assert ("icon.end" in variables) == ("i.end" in source), (
+                f"{name}: icon.end declaration does not match its template"
+            )
+            assert ("icon.fill" in variables) == ("i.fill" in source), (
+                f"{name}: icon.fill declaration does not match its template"
+            )
+
+    def test_parse_icon_accepts_every_declared_form(self):
+        """Every declared attribute form is one parse_icon actually parses"""
+        from labb.templatetags.lb_tags import parse_icon
+
+        for name in self.icon_components():
+            for attr in ComponentRegistry().get_component_variables(name):
+                if not attr.startswith("icon") or attr == "icon.class":
+                    continue
+                parsed = parse_icon({attr: "rmx.heart"})
+
+                assert parsed["name"] == "rmx.heart", f"{name}: {attr} not parsed"
+                assert parsed["fill"] is ("fill" in attr)
+                assert parsed["end"] is ("end" in attr)

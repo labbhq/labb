@@ -156,17 +156,16 @@ def _inspect_specific_component(
             # Show dash for empty defaults
             default_display = str(default) if default else "-"
 
-            var_table.add_row(var_name, var_type, default_display, desc)
-
-            # Show dot modifiers as indented sub-rows (e.g. icon.fill, icon.end)
-            dot_modifiers = var_spec.get("dot_modifiers", {})
-            for modifier, modifier_desc in dot_modifiers.items():
+            # Indent dot-notation modifiers under the prop they modify.
+            if var_spec.get("modifier_of"):
                 var_table.add_row(
-                    f"[dim]  {var_name}.{modifier}[/dim]",
+                    f"[dim]  {var_name}[/dim]",
                     "[dim]modifier[/dim]",
-                    "[dim]-[/dim]",
-                    f"[dim]{modifier_desc}[/dim]",
+                    f"[dim]{default_display}[/dim]",
+                    f"[dim]{desc}[/dim]",
                 )
+            else:
+                var_table.add_row(var_name, var_type, default_display, desc)
 
         console.print(var_table)
 

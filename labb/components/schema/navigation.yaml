@@ -295,17 +295,7 @@ components:
         default: ''
         description: Tab title text (alternative to slot for simple text)
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Tab content (main content area)
@@ -427,17 +417,7 @@ components:
         description: 'Django view name to resolve (alternative to href). Use l: prefixed attributes for URL arguments'
         required: false
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Breadcrumb item content (text or custom content)
@@ -527,7 +507,7 @@ components:
         description: Pagination items using pagination.item components
 
   pagination.item:
-    template: lb/pagination/item.html
+    template: lb/pagination/item/index.html
     description: Individual pagination button item
     base_classes:
     - join-item
@@ -568,18 +548,7 @@ components:
           lg: btn-lg
           xl: btn-xl
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-          end: Place at the end of the text
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill, end]
     slots:
       default:
         description: Button content (page number or navigation text)
@@ -610,7 +579,7 @@ components:
         description: Step items using steps.item components
 
   steps.item:
-    template: lb/steps/item.html
+    template: lb/steps/item/index.html
     description: Individual step in a steps sequence
     base_classes:
     - step
@@ -651,17 +620,7 @@ components:
         description: Custom data-content for the step marker (e.g., a checkmark or symbol)
         required: false
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Step label text

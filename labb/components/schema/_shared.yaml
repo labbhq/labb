@@ -1,0 +1,25 @@
+# Shared prop groups, merged by the registry into every component that opts in.
+#
+# icon: parse_icon (labb/templatetags/lb_tags.py) reads icon attributes off
+# `attrs`, so icon-capable components accept the same forms. A component opts in
+# by declaring `icon`; `dot_modifiers` lists the modifiers its template honours.
+# Modifiers go in the attribute name (icon.fill="rmx.heart") and combine in any
+# order. A component may override any inherited entry by declaring it itself.
+prop_groups:
+  icon:
+    trigger: icon
+    variables:
+      icon:
+        type: string
+        default: ''
+        description: Icon name to display
+        required: false
+      icon.class:
+        type: string
+        default: ''
+        description: Additional CSS classes for the icon
+        required: false
+    modifiers:
+      fill: Render in filled (solid) style
+      end: Place at the end of the text
+    combine: true

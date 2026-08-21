@@ -98,6 +98,10 @@ def generate_component_descriptions() -> str:
         other_vars = []
 
         for var_name, var_spec in variables.items():
+            # Dot-notation modifiers are documented once above, under Icons.
+            if var_spec.get("modifier_of"):
+                continue
+
             var_type = var_spec.get("type", "string")
             reactive = "*" if var_spec.get("css_mapping") else ""
 
