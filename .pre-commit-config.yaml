@@ -9,16 +9,16 @@ repos:
         pass_filenames: false
         always_run: true
 
-      - id: alpine-generate
-        name: Generate Alpine.js component JS files
+      - id: lb-schema-generate
+        name: Generate lb-schema.js
         entry: task
-        args: ["alpine:generate"]
+        args: ["lb-schema:generate"]
         language: system
         pass_filenames: false
         always_run: true
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.2
+    rev: v0.16.2
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]

@@ -2,12 +2,13 @@
 doc_layout: component
 component: c-lb.chart.pie
 title: Pie Chart
-description: "Pie chart component for Django: display proportional data as a pie chart with Chart.js and daisyUI theming. Server-rendered with django-cotton."
+description: "Show how a total splits across a handful of categories. Chart.js pie charts for Django, coloured from the daisyUI palette, written as one django-cotton tag."
 keywords: "django pie chart, pie chart django, chart.js django, daisyui pie chart django, tailwind chart django, django data visualization, pie chart django-cotton"
 daisy_ui_component_name: ""
+icon: rmx.pie-chart
 ---
 
-Pie charts show proportional data as segments of a circle. Segment colours default to the daisyUI palette but can be overridden per-dataset. For a hollow variant, see `c-lb.chart.doughnut`.
+A pie chart splits a total into segments of a circle, and it reads best with a handful of categories rather than a dozen. Segment colours come from the daisyUI palette by default and can be overridden per dataset. For the hollow-centre version, see `c-lb.chart.doughnut`.
 
 ## Basic Pie Chart
 <c-lbdocs.component_example path="chart/pie" />

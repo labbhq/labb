@@ -1,0 +1,32 @@
+<div class="flex flex-col gap-3">
+
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-primary
+                        flex items-center justify-center text-primary-content font-bold text-xs">A</div>
+            <span class="text-sm font-semibold tracking-tight">Arden</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div id="mw-count" class="text-xs text-base-content/50 tabular-nums">
+                Step <span data-text="$step">1</span> of 4
+            </div>
+            <c-lb.badge
+                id="mw-tone"
+                size="sm"
+                style="soft"
+                variant="$tone:primary"
+                data-text="$step === 4 ? 'Ready' : 'In progress'"
+            >In progress</c-lb.badge>
+        </div>
+    </div>
+
+    <c-lb.progress
+        id="mw-bar"
+        variant="primary"
+        value="25"
+        max="100"
+        class="w-full h-1.5"
+        data-attr:value="$step * 25" />
+
+</div>

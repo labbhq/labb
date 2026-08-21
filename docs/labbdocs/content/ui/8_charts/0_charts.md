@@ -5,9 +5,10 @@ title: Charts
 description: "Chart.js charts for Django with labb: bar, line, pie, doughnut, radar, polar, scatter, and bubble. DaisyUI colours, django-cotton components, server-friendly defaults."
 keywords: "django charts, chart.js django, django data visualization, daisyui charts django, django-cotton charts, labb chart"
 daisy_ui_component_name: ""
+icon: rmx.bar-chart-box
 ---
 
-Chart components for Django wrap Chart.js with django-cotton and DaisyUI theming. Pass JSON from your views; charts redraw when users switch themes. Use them for analytics, dashboards, and reporting without a separate frontend build.
+Eight chart types, from a plain bar chart to radar and bubble. Each one takes a JSON string from your view and renders through Chart.js in DaisyUI's colours, so a dashboard chart matches the page around it without a separate frontend build.
 
 <c-lbdocs.component_example path="chart/bar" />
 
@@ -29,7 +30,7 @@ labb wraps [Chart.js](https://www.chartjs.org/) with django-cotton components. E
 | <a href="{% doc_url '8_charts/scatter.md' 'ui' %}">`c-lb.chart.scatter`</a> | Scatter plot with {x, y} point objects |
 | <a href="{% doc_url '8_charts/bubble.md' 'ui' %}">`c-lb.chart.bubble`</a> | Bubble chart with {x, y, r} point objects |
 
-`<c-lb.chart />` is optional. Use it when you want to set global defaults (grid lines, animations, font size, etc.) that apply to every chart on the page. Without it, charts still render with sensible labb-aligned defaults.
+`<c-lb.chart />` is optional. Use it when you want to set global defaults (grid lines, animations, font size, etc.) that apply to every chart on the page. Without it, charts render with labb's own defaults.
 
 ## Setup
 
@@ -45,7 +46,7 @@ Drop any chart component into your template and pass a JSON data string:
 To share global defaults across all charts on a page, place `<c-lb.chart />` once in your base template:
 
 ```html
-{# base.html — optional, for global defaults #}
+{# base.html, optional, for global defaults #}
 <c-lb.chart grid animation="False" />
 
 {# any page #}
@@ -92,7 +93,7 @@ Charts automatically redraw when the user switches DaisyUI theme.
 
 ## Dynamic data
 
-For charts that update at runtime (live feeds, interactive dashboards, user-driven filters) use `window.Chart` directly inside an Alpine component. labb's theming applies automatically to all `new Chart()` calls on the page.
+For charts that update at runtime (live feeds, interactive dashboards, user-driven filters), bind the chart to a signal: declare the data on `<c-lbr.signals>` and pass it to the chart as `data="$chartData"`. Mutating the signal redraws the chart in place, with no page reload, and labb's theming still applies automatically.
 
 <c-lbdocs.component_example path="chart/bar-update" />
 

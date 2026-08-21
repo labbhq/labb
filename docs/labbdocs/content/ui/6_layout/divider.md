@@ -5,6 +5,7 @@ title: Divider
 description: "Divider component for Django: add horizontal and vertical separators between content sections. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django divider component, divider django, daisyui divider django, tailwind divider django, divider django-cotton, django ui divider, separator django, django-cotton"
 daisy_ui_component_name: divider
+icon: rmx.separator
 ---
 
 Divider renders a styled separator with optional label text centred on the line. Use horizontal dividers between page sections and vertical dividers to split side-by-side panels.

@@ -1,5 +1,6 @@
 {% load lb_tags %}
 {% load static %}
+{% load docs_tags %}
 
 <c-vars
     topnavTitle
@@ -16,9 +17,7 @@
 {% labb_theme_val as theme %}
 
 <div class="fixed top-0 inset-x-0 z-50 bg-base-100 py-1">
-    <div class="flex justify-center">
-        <c-labbio.section.press_callout/>
-    </div>
+    <c-lbdocs.nav.banner />
 
     <c-lb.navbar>
         <c-lb.navbar.start class="flex items-center gap-2 lg:w-full">
@@ -36,6 +35,7 @@
                 <c-lb.menu.item title="guide" href="{% url 'guide_docs' %}" />
                 <c-lb.menu.item title="ui" href="{% url 'ui_docs' %}" />
                 <c-lb.menu.item title="charts" href="{% doc_url '8_charts/0_charts.md' 'ui' %}" />
+                <c-lb.menu.item title="blocks" href="/blocks/" />
                 <c-lb.menu.item title="icons" href="{% url 'icons_docs' %}" />
                 <c-lb.menu.item title="blog" href="{% url 'blog_docs' %}" />
                 {% comment %}
@@ -69,6 +69,7 @@
                         <c-lb.menu.item title="guide" href="{% url 'guide_docs' %}" />
                         <c-lb.menu.item title="ui" href="{% url 'ui_docs' %}" />
                         <c-lb.menu.item title="charts" href="{% doc_url '8_charts/0_charts.md' 'ui' %}" />
+                        <c-lb.menu.item title="blocks" href="/blocks/" />
                         <c-lb.menu.item title="icons" href="{% url 'icons_docs' %}" />
                         <c-lb.menu.item title="blog" href="{% url 'blog_docs' %}" />
                         {% comment %} <c-lb.menu.item type="submenu-details" title="community" open>
@@ -81,9 +82,21 @@
         </c-lb.navbar.center>
 
         <c-lb.navbar.end class="flex items-center gap-2">
-            <c-lb.button size="sm" btnStyle="ghost" icon="rmx.search" onclick="search_modal.showModal()">
-                Search
-            </c-lb.button>
+            {% search_enabled as has_search %}
+            {% if has_search %}
+                <c-lb.button
+                    as="a"
+                    href="{% url 'labbdocs_search:page' %}"
+                    size="sm"
+                    btnStyle="ghost"
+                    icon="rmx.search"
+                    class="gap-2"
+                    onclick="event.preventDefault(); palOpen()"
+                >
+                    <span class="hidden sm:inline">Search</span>
+                    <c-lb.kbd size="xs">⌘K</c-lb.kbd>
+                </c-lb.button>
+            {% endif %}
             <c-lb.dropdown alignment="end" size="sm">
                 <c-lb.dropdown.trigger class="btn btn-sm btn-ghost btn-circle">
                     <c-lbi.rmx.sun w="1.25em" h="1.25em" />
@@ -109,40 +122,3 @@
         </c-lb.navbar.end>
     </c-lb.navbar>
 </div>
-<c-lb.modal id="search_modal" withBackdrop boxClass="border border-base-200 shadow">
-    <h3 class="text-lg font-bold">Search</h3>
-    <p class="py-4">Search features are coming soon!</p>
-    <c-lb.modal.action>
-        <form method="dialog">
-            <c-lb.button>Close</c-lb.button>
-        </form>
-    </c-lb.modal.action>
-</c-lb.modal>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const currentTheme = "{{ theme }}";
-    const themeInputs = document.querySelectorAll('input[name="doc-theme"].theme-controller');
-
-    function updateActiveState() {
-        themeInputs.forEach(function(input) {
-            if (input.value === currentTheme) {
-                input.classList.add('btn-active');
-            } else {
-                input.classList.remove('btn-active');
-            }
-        });
-    }
-
-    updateActiveState();
-
-    themeInputs.forEach(function(input) {
-        input.addEventListener('change', function() {
-            themeInputs.forEach(function(btn) {
-                btn.classList.remove('btn-active');
-            });
-            this.classList.add('btn-active');
-        });
-    });
-});
-</script>

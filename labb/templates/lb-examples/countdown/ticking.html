@@ -1,0 +1,11 @@
+<c-lbr.signals $timer.left="10" />
+
+<div class="flex flex-col items-start gap-4">
+
+    <c-lb.countdown value="$timer.left:10" class="text-5xl" />
+
+    <div data-on-interval__duration.1s="$timer.left = $timer.left > 0 ? $timer.left - 1 : 0"></div>
+
+    <c-lb.button size="sm" data-on:click="$timer.left = 10">Reset</c-lb.button>
+
+</div>

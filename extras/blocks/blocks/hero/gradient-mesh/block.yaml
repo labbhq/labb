@@ -1,0 +1,26 @@
+name: Gradient mesh
+ref: lb/hero/gradient-mesh
+type: fe
+labb_version: ">=0.5.0"
+description: "A hero crowned by a deliberate fixed-colour mesh gradient that renders identically in every theme, over content built from daisyUI tokens"
+category: hero
+status: launch
+thumbnail: thumbnails/gradient-mesh.png
+# The one sanctioned fixed-colour exception: a curated brand mesh that must look
+# the same in light and dark, so it cannot be a theme token. Everything else in
+# the block stays token-only.
+allow_fixed_colours:
+  - "#0f766e"
+  - "#0284c7"
+  - "#4f46e5"
+tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+  - theming
+preview_context: {}
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"

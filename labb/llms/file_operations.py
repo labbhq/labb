@@ -29,8 +29,10 @@ def write_llms_txt(output_path: Optional[str] = None) -> str:
     # Generate content
     content = generate_llms_txt()
 
-    # Write to file
+    # Exactly one trailing newline. The generated body ends with a blank line,
+    # which end-of-file-fixer strips on commit; regenerating then put it back,
+    # so the two hooks fought each other every run.
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(content)
+        f.write(content.rstrip("\n") + "\n")
 
     return str(output_path)

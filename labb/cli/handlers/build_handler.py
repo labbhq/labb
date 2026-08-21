@@ -72,6 +72,26 @@ def build_css(
     config = confirm_load_config(console)
 
     input_path = input_file or config.input_file
+
+    # Regenerate the generated Tailwind inputs (.labb/labb.css) before building.
+    # A project opts in by importing labb.css from input.css, so plain/legacy
+    # sites (no reference) gain no .labb/ dir.
+    from .scan_handler import LABB_REF_MARKERS, generate_css_artifacts
+
+    try:
+        input_text = Path(input_path).read_text(encoding="utf-8")
+    except OSError:
+        input_text = ""
+
+    if any(marker in input_text for marker in LABB_REF_MARKERS):
+        from labb.config import LabbConfigError
+
+        try:
+            generate_css_artifacts(config)
+        except LabbConfigError as e:
+            console.print(f"[red]❌ CSS config error (css.packages):[/red] {e}")
+            sys.exit(1)
+
     output_path = output_file or config.output_file
     should_minify = minify if minify is not None else config.minify
 

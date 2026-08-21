@@ -1,0 +1,36 @@
+<c-vars :nodes="[]" idsafe="" />
+
+{% for node in nodes %}
+
+{% if node.type == "dir" %}
+<c-lb.menu.item type="submenu-details" open>
+    <c-slot name="titleSlot">
+        <summary class="flex items-center gap-1.5 font-mono text-xs">
+            <c-lbi n="rmx.folder" w="1em" h="1em" class="shrink-0 text-base-content/60" />
+            {{ node.name }}
+        </summary>
+    </c-slot>
+    <c-lbb.renderer.source.tree :nodes=node.children idsafe="{{ idsafe }}" />
+</c-lb.menu.item>
+
+{% else %}
+<li>
+    <a class="w-full gap-1.5 font-mono text-xs"
+       data-fname="{{ node.fname }}"
+       data-on:click="$activeFile_{{ idsafe }} = event.currentTarget.dataset.fname"
+       data-class='{"bg-base-200 font-medium": $activeFile_{{ idsafe }} === "{{ node.fname }}"}'>
+        {% if ".py" in node.name %}
+        <c-lbi n="rmx.file-code" w="1em" h="1em" class="shrink-0 text-info" />
+        {% elif ".yaml" in node.name or ".yml" in node.name %}
+        <c-lbi n="rmx.file-settings" w="1em" h="1em" class="shrink-0 text-warning" />
+        {% elif ".html" in node.name %}
+        <c-lbi n="rmx.html5" w="1em" h="1em" class="shrink-0 text-error" />
+        {% else %}
+        <c-lbi n="rmx.file" w="1em" h="1em" class="shrink-0 text-base-content/60" />
+        {% endif %}
+        <span class="truncate">{{ node.name }}</span>
+    </a>
+</li>
+{% endif %}
+
+{% endfor %}

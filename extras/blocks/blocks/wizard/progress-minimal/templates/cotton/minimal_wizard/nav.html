@@ -1,0 +1,36 @@
+<div class="flex items-center justify-between gap-4 border-t border-base-300 pt-5">
+
+    <c-lb.button
+        id="mw-back"
+        type="button"
+        btnStyle="ghost"
+        size="sm"
+        icon="rmx.arrow-left"
+        disabled
+        data-attr:disabled="$step === 1"
+        data-on:click="$step = Math.max($step - 1, 1); $tone = $step === 4 ? 'success' : 'primary'"
+    >Back</c-lb.button>
+
+    <div>
+        <c-lb.button
+            id="mw-next"
+            type="button"
+            variant="primary"
+            size="sm"
+            icon.end="rmx.arrow-right"
+            data-show="$step < 4"
+            data-on:click="$step = Math.min($step + 1, 4); $tone = $step === 4 ? 'success' : 'primary'"
+        >Continue</c-lb.button>
+
+        <c-lb.button
+            id="mw-finish"
+            type="button"
+            variant="success"
+            size="sm"
+            icon="rmx.check"
+            data-show="$step === 4"
+            style="display:none"
+        >Open Arden</c-lb.button>
+    </div>
+
+</div>

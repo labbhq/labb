@@ -1,0 +1,61 @@
+<div class="flex flex-col gap-4 border-t border-base-300 bg-base-100 p-4">
+
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <c-arden.mark size="xs" />
+            <span class="text-sm font-semibold tracking-tight">Revenue · Q3</span>
+        </div>
+        <c-lb.badge variant="success" style="soft" size="sm">Synced 2m ago</c-lb.badge>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2">
+        <c-split-visual.tile label="Net MRR" value="$412,900" delta="+4.2%" />
+        <c-split-visual.tile label="Expansion" value="$38,100" delta="+11.6%" />
+        <c-split-visual.tile label="At risk" value="$21,400" delta="-2.8%" deltaClass="text-error" />
+    </div>
+
+    <div class="rounded-lg border border-base-300 bg-base-100 p-3">
+        <div class="flex items-end gap-1.5 h-20" aria-hidden="true">
+            <c-split-visual.bar height="34%" muted />
+            <c-split-visual.bar height="42%" muted />
+            <c-split-visual.bar height="38%" muted />
+            <c-split-visual.bar height="51%" muted />
+            <c-split-visual.bar height="47%" muted />
+            <c-split-visual.bar height="63%" muted />
+            <c-split-visual.bar height="58%" muted />
+            <c-split-visual.bar height="72%" />
+            <c-split-visual.bar height="69%" />
+            <c-split-visual.bar height="88%" />
+            <c-split-visual.bar height="81%" />
+            <c-split-visual.bar height="100%" />
+        </div>
+        <div class="mt-2 text-xs text-base-content/50">Net revenue, last 12 months</div>
+    </div>
+
+    <c-lb.table size="sm">
+        <tbody>
+            <tr>
+                <td class="font-medium">AtlasForge</td>
+                <td class="tabular-nums text-right">$128,400</td>
+                <td class="text-right">
+                    <c-lb.badge variant="success" style="soft" size="sm">Renewed</c-lb.badge>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-medium">Kite &amp; Bell</td>
+                <td class="tabular-nums text-right">$96,200</td>
+                <td class="text-right">
+                    <c-lb.badge variant="warning" style="soft" size="sm">At risk</c-lb.badge>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-medium">Northwind Co</td>
+                <td class="tabular-nums text-right">$74,800</td>
+                <td class="text-right">
+                    <c-lb.badge variant="info" style="soft" size="sm">Expanding</c-lb.badge>
+                </td>
+            </tr>
+        </tbody>
+    </c-lb.table>
+
+</div>

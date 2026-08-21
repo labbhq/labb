@@ -11,6 +11,56 @@ from ...metadata import get_available_packs, load_all_packs_metadata, load_pack_
 console = Console()
 
 
+def parse_search_terms(query: str) -> List[str]:
+    """Split a search query on commas, keeping order and dropping blanks.
+
+    A query with no comma is one term, so the single-term path is unchanged.
+    """
+    return [term.strip() for term in query.split(",") if term.strip()]
+
+
+def _match_icons(
+    all_icons: List[dict],
+    term: str,
+    category: Optional[str],
+    variant: Optional[str],
+) -> List[dict]:
+    """Icons whose name contains `term`, after the category/variant filters."""
+    matches = []
+    term_lower = term.lower()
+
+    for icon in all_icons:
+        icon_name = icon.get("name", "").lower()
+        icon_category = icon.get("category", "").lower()
+        icon_variants = icon.get("variants", [])
+
+        if term_lower not in icon_name:
+            continue
+        if category and category.lower() not in icon_category:
+            continue
+        if variant and variant.lower() not in [v.lower() for v in icon_variants]:
+            continue
+
+        matches.append(icon)
+
+    return matches
+
+
+def _print_no_matches(
+    term: str,
+    pack: Optional[str],
+    category: Optional[str],
+    variant: Optional[str],
+):
+    console.print(f"[yellow]⚠️  No icons found matching '{term}'[/yellow]")
+    if pack:
+        console.print(f"[dim]Pack filter: {pack}[/dim]")
+    if category:
+        console.print(f"[dim]Category filter: {category}[/dim]")
+    if variant:
+        console.print(f"[dim]Variant filter: {variant}[/dim]")
+
+
 def search_icons(
     query: str,
     pack: Optional[str] = None,
@@ -18,7 +68,18 @@ def search_icons(
     variant: Optional[str] = None,
     limit: int = 20,
 ):
-    """Search for icons by name, pack, category, or variant"""
+    """Search for icons by name, pack, category, or variant.
+
+    `query` may hold several comma-separated terms. Each is searched and
+    reported in its own section, because picking one icon per slot is the
+    reason to search for several at once: a merged table loses which term
+    matched. `limit` applies per term, so a broad term cannot starve the rest.
+    """
+
+    terms = parse_search_terms(query)
+    if not terms:
+        console.print("[yellow]⚠️  No search terms given[/yellow]")
+        return
 
     console.print(f"[bold blue]🔍 Searching icons for: '{query}'[/bold blue]")
 
@@ -40,46 +101,24 @@ def search_icons(
             console.print("[red]❌ No icons found in any pack[/red]")
             return
 
-    # Filter icons based on search criteria
-    filtered_icons = []
-    query_lower = query.lower()
+    multi = len(terms) > 1
 
-    for icon in all_icons:
-        icon_name = icon.get("name", "").lower()
-        icon_category = icon.get("category", "").lower()
-        icon_variants = icon.get("variants", [])
+    for term in terms:
+        if multi:
+            console.print(f"\n[bold]{term}[/bold]")
 
-        # Check if query matches icon name
-        if query_lower in icon_name:
-            # Apply category filter if specified
-            if category and category.lower() not in icon_category:
-                continue
+        matches = _match_icons(all_icons, term, category, variant)
 
-            # Apply variant filter if specified
-            if variant and variant.lower() not in [v.lower() for v in icon_variants]:
-                continue
+        if not matches:
+            _print_no_matches(term, pack, category, variant)
+            continue
 
-            filtered_icons.append(icon)
+        total = len(matches)
+        if total > limit:
+            matches = matches[:limit]
+            console.print(f"[dim]Showing first {limit} results (total: {total})[/dim]")
 
-    if not filtered_icons:
-        console.print(f"[yellow]⚠️  No icons found matching '{query}'[/yellow]")
-        if pack:
-            console.print(f"[dim]Pack filter: {pack}[/dim]")
-        if category:
-            console.print(f"[dim]Category filter: {category}[/dim]")
-        if variant:
-            console.print(f"[dim]Variant filter: {variant}[/dim]")
-        return
-
-    # Limit results
-    if len(filtered_icons) > limit:
-        filtered_icons = filtered_icons[:limit]
-        console.print(
-            f"[dim]Showing first {limit} results (total: {len(filtered_icons)})[/dim]"
-        )
-
-    # Display results
-    _display_icon_results(filtered_icons, query)
+        _display_icon_results(matches, term)
 
 
 def list_packs():

@@ -2,12 +2,13 @@
 doc_layout: component
 component: c-lb.hero
 title: Hero
-description: "Hero component for Django: build eye-catching landing page hero sections. Built with django-cotton, Tailwind CSS, and daisyUI 5."
+description: "Hero component for Django: build full-width landing page hero sections. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django hero component, hero section django, daisyui hero django, tailwind hero django, hero django-cotton, django ui hero, landing page hero django, django-cotton"
 daisy_ui_component_name: hero
+icon: rmx.artboard
 ---
 
-Hero renders a full-width centred section with content and an optional overlay image. Use it for landing pages, empty states, or feature sections that need prominent visual presence.
+Hero renders a full-width centred section with content and an optional overlay image. Use it for landing pages, empty states, and feature sections.
 
 ## Basic Hero
 <c-lbdocs.component_example path="hero/basic" />

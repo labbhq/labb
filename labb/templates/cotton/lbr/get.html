@@ -1,0 +1,26 @@
+{% load lbr_tags lb_tags %}
+{% lb_push_stack name="components" path="labb/js/vendor/datastar.js" mode="module" %}
+<c-vars
+    to=""
+    pk=""
+    kwargs=""
+    on="click"
+    tag="div"
+    before=""
+    options=""
+    replaceUrl=""
+    pushUrl=""
+    preserveQuery=""
+/>
+
+{% lbr_resolve_url to kwargs pk as lbr_href %}
+{% lbr_get_action lbr_href before replaceUrl pushUrl preserveQuery options as lbr_action %}
+
+<{{ tag }}
+    {% if on == "init" %}
+        data-init="{{ lbr_action }}"
+    {% else %}
+        data-on:{{ on }}="{{ lbr_action }}"
+    {% endif %}
+    {{ attrs }}
+>{{ slot }}</{{ tag }}>

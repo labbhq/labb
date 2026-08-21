@@ -1,0 +1,30 @@
+<c-vars :signals="{}" :regions="[]" :errors="{}" />
+
+<div>
+    <h2 class="text-xl font-semibold tracking-tight">Name your workspace</h2>
+    <p class="text-sm text-base-content/60 mt-1">
+        This is what your team will see when they sign in. You can rename it later.
+    </p>
+</div>
+
+<c-lbr.post to="block_wizard_onboarding:validate" tag="div" on="input__debounce.500ms" class="grid gap-4">
+
+    <c-onboarding.field label="Workspace name" :error=errors.name>
+        <c-lb.input type="text" placeholder="Kite &amp; Bell" class="w-full" data-lbb-start
+                    :bind=signals.fields.workspace_name />
+    </c-onboarding.field>
+
+    <c-onboarding.field label="Workspace address" hint="(arden.app/…)" :error=errors.slug>
+        <c-lb.input type="text" placeholder="kite-and-bell" class="w-full font-mono"
+                    :bind=signals.fields.workspace_slug />
+    </c-onboarding.field>
+
+</c-lbr.post>
+
+<c-onboarding.field label="Data region" hint="(where your revenue data is stored)">
+    <c-lb.select class="w-full" :bind=signals.fields.region>
+        {% for value, label in regions %}
+        <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+    </c-lb.select>
+</c-onboarding.field>

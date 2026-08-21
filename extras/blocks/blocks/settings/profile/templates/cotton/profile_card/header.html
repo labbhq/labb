@@ -1,0 +1,14 @@
+<c-vars :member="{}" />
+
+<div class="flex flex-wrap items-end justify-between gap-4 border-b border-base-300 pb-6">
+    <div>
+        <h1 class="text-2xl font-semibold tracking-tight">Your profile</h1>
+        <p class="text-sm text-base-content/60 mt-1">
+            How you appear to the rest of {{ member.workspace }}, and how Arden reaches you.
+        </p>
+    </div>
+    <div class="flex items-center gap-2">
+        <c-lb.badge size="sm" style="soft" variant="primary">{{ member.role }}</c-lb.badge>
+        <c-lb.badge size="sm" style="outline">Member since {{ member.joined }}</c-lb.badge>
+    </div>
+</div>

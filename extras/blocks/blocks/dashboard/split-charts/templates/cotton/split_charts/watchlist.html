@@ -1,0 +1,24 @@
+<c-vars :accounts="[]" />
+
+<ul id="watchlist" class="flex flex-col divide-y divide-base-200">
+    {% for account in accounts %}
+    <li class="flex items-center gap-3 py-2.5">
+        <c-lb.avatar
+            placeholder
+            size="xs"
+            rounded="lg"
+            bgColor="{{ account.tone }}"
+            initials="{{ account.name|slice:':2'|upper }}" />
+
+        <div class="min-w-0 flex-1 leading-tight">
+            <p class="truncate text-sm font-medium">{{ account.name }}</p>
+            <p class="text-xs text-base-content/50">{{ account.reason }}</p>
+        </div>
+
+        <div class="text-right leading-tight">
+            <p class="text-sm font-medium tabular-nums">{{ account.mrr }}</p>
+            <p class="text-xs text-base-content/40">{{ account.plan }}</p>
+        </div>
+    </li>
+    {% endfor %}
+</ul>

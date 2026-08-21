@@ -1,0 +1,27 @@
+<c-vars :flagged="[]" />
+
+<section class="flex flex-col gap-3">
+
+    <div class="flex items-baseline justify-between gap-3">
+        <h2 class="text-sm font-semibold tracking-tight">Flagged for review</h2>
+        <span class="text-xs text-base-content/50 tabular-nums">{{ flagged|length }} this week</span>
+    </div>
+
+    {% if flagged %}
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {% for customer in flagged %}
+        <c-account-cards.card :customer=customer />
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="rounded-box border border-dashed border-base-300 bg-base-100">
+        <c-account-cards.empty
+            id="flagged-empty"
+            icon="rmx.shield-check"
+            title="No account flagged this week"
+            body="A flag is raised when health falls two bands in seven days, or an invoice passes thirty days late. Nothing has done either."
+            action="Review the flag rules" />
+    </div>
+    {% endif %}
+
+</section>

@@ -1,0 +1,75 @@
+/* Styles for c-lbdocs.blocks.card. Not expressible as utilities: the theme
+   is a data attribute and the ring needs a registered custom property. */
+
+@property --lbb-ring-a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.lbb-fs-ring {
+  position: relative;
+}
+
+.lbb-fs-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--lbb-ring-a),
+    #8b5cf6,
+    #d946ef,
+    #f472b6,
+    #fb923c,
+    #8b5cf6
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: lbb-ring-spin 5s linear infinite;
+}
+
+@keyframes lbb-ring-spin {
+  to {
+    --lbb-ring-a: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lbb-fs-ring::before {
+    animation: none;
+  }
+}
+
+.lbb-thumb-dark {
+  display: none;
+}
+
+[data-theme="labb-dark"] .lbb-thumb-light,
+[data-theme="dark"] .lbb-thumb-light {
+  display: none;
+}
+
+[data-theme="labb-dark"] .lbb-thumb-dark,
+[data-theme="dark"] .lbb-thumb-dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .lbb-thumb-light {
+    display: none;
+  }
+
+  html:not([data-theme]) .lbb-thumb-dark {
+    display: block;
+  }
+}

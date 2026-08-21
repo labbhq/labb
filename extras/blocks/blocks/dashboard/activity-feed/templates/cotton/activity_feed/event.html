@@ -1,0 +1,22 @@
+<c-vars :event="{}" />
+
+<c-lb.timeline.end box class="mb-3 w-full border border-base-300 bg-base-100 p-4">
+
+    <div id="event-{{ event.id }}" class="flex flex-col gap-1.5 text-left">
+
+        <div class="flex items-baseline justify-between gap-4">
+            <p class="text-sm font-medium">{{ event.title }}</p>
+            {% if event.amount %}
+            <span class="shrink-0 whitespace-nowrap text-sm font-semibold tabular-nums {% if event.tone == 'error' %}text-error{% elif event.tone == 'warning' %}text-warning{% elif event.tone == 'success' %}text-success{% else %}text-base-content{% endif %}">
+                {{ event.amount }}
+            </span>
+            {% endif %}
+        </div>
+
+        <p class="text-sm text-base-content/60">{{ event.detail }}</p>
+
+        <p class="text-xs text-base-content/40 tabular-nums">{{ event.time }} · {{ event.actor }}</p>
+
+    </div>
+
+</c-lb.timeline.end>

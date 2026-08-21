@@ -10,7 +10,6 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
 
-            {# Brand #}
             <div class="col-span-2 md:col-span-1">
                 <div class="flex items-center gap-2 mb-3">
                     <c-lbdocs.ui.logo height="28" />
@@ -31,17 +30,15 @@
                 </p>
             </div>
 
-            {# Product #}
             <nav aria-label="Product" class="flex flex-col gap-2">
                 <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70 mb-1">Product</h2>
                 <a href="{% url 'guide_docs' %}" class="link link-hover text-sm" title="Django UI library getting started guide">Getting Started</a>
                 <a href="{% url 'ui_docs' %}" class="link link-hover text-sm" title="Browse all Django UI components">All Components</a>
-                <a href="{% url 'icons_docs' %}" class="link link-hover text-sm" title="Django icon library — Remix icons">Icons</a>
+                <a href="{% url 'icons_docs' %}" class="link link-hover text-sm" title="Django icon library, Remix icons">Icons</a>
                 <a href="{% doc_url '2_concepts/2_theming.md' 'guide' %}" class="link link-hover text-sm" title="Theming and design tokens for Django apps">Theming</a>
                 <a href="{% url 'blog_docs' %}" class="link link-hover text-sm" title="labb blog — Django UI tips and updates">Blog</a>
             </nav>
 
-            {# Popular components (SEO anchor text) #}
             <nav aria-label="Popular components" class="flex flex-col gap-2">
                 <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70 mb-1">Popular Components</h2>
                 <a href="{% doc_url '1_actions/button.md' 'ui' %}" class="link link-hover text-sm" title="Django Button Component">Django Button Component</a>
@@ -52,7 +49,6 @@
                 <a href="{% doc_url '5_data_input/input.md' 'ui' %}" class="link link-hover text-sm" title="Django Form Input Component">Django Form Inputs</a>
             </nav>
 
-            {# Resources #}
             <nav aria-label="Resources" class="flex flex-col gap-2">
                 <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70 mb-1">Resources</h2>
                 <a href="{% doc_url '1_getting_started/2_installation.md' 'guide' %}" class="link link-hover text-sm" title="Install labb in your Django project">Installation</a>

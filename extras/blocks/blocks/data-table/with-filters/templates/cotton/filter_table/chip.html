@@ -1,0 +1,24 @@
+<c-vars group="status" value="" label="" />
+
+{% if group == 'status' %}
+<c-lb.button
+    data-lbb-start
+    type="button"
+    id="chip-status-{{ value|default:'all' }}"
+    size="xs"
+    btnStyle="ghost"
+    class="rounded-full {% if not value %}btn-active{% endif %}"
+    data-class="{'btn-active': $filters.status === '{{ value }}'}"
+    data-on:click="$filters = ardenFilters('{{ value }}', $filters.health)"
+>{{ label }}</c-lb.button>
+{% else %}
+<c-lb.button
+    type="button"
+    id="chip-health-{{ value|default:'all' }}"
+    size="xs"
+    btnStyle="ghost"
+    class="rounded-full {% if not value %}btn-active{% endif %}"
+    data-class="{'btn-active': $filters.health === '{{ value }}'}"
+    data-on:click="$filters = ardenFilters($filters.status, '{{ value }}')"
+>{{ label }}</c-lb.button>
+{% endif %}

@@ -1,0 +1,36 @@
+steps:
+  - title: Give each chart a signal
+    file: templates/pages/index.html
+    match: ":$revenueChart=revenue_chart"
+    through: ":$planChart=plan_chart"
+    teaches: [signals, charts]
+    docs: [reactivity/signals, ui/chart]
+    body: Django prepares ordinary chart data and the page declares it as signals. The chart components receive their first values during the server render.
+
+  - title: Bind a chart to changing data
+    file: templates/pages/index.html
+    match: 'data="$revenueChart"'
+    teaches: [charts, reactive-props]
+    docs: [ui/chart, reactivity/reactive-props]
+    body: Pass a signal to a chart’s data prop to update the existing chart when the value changes. You keep the chart configuration in the component and the data in the view.
+
+  - title: Switch a range through the page view
+    file: templates/cotton/overview/switcher.html
+    match: "before=\"$series = '{{ key }}'\""
+    teaches: [server-actions, morphing, charts]
+    docs: [reactivity/server-actions, ui/chart]
+    body: The control updates the selected range before it sends its GET request. The page view reads that signal, builds the matching series, and returns the next chart data.
+
+  - title: Keep live values separate from page state
+    file: views.py
+    match: "return SSEResponse"
+    teaches: [sse, signals]
+    docs: [reactivity/streaming]
+    body: The live metric arrives through a small SSE view that patches its own signal. Keeping it separate means a range change can refresh the dashboard without resetting the live value.
+
+  - title: Let theme tokens colour the charts
+    file: templates/cotton/overview/header.html
+    match: "data-on:click=\"document.documentElement.dataset.theme"
+    teaches: [theming, charts]
+    docs: [ui/chart, guide/theming]
+    body: Chart series use semantic theme tokens instead of fixed colours. Changing the page theme gives the charts the same palette as the rest of the interface.

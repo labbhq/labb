@@ -1,0 +1,31 @@
+<script>
+    function ardenPeriod(annual) {
+        return {
+            annual: annual,
+            monthlyStyle: annual ? 'ghost' : '',
+            annualStyle: annual ? '' : 'ghost',
+            suffix: annual ? '/year' : '/month',
+            saveVariant: annual ? 'success' : 'neutral',
+            saveLabel: annual ? 'Saving 2 months' : '2 months free',
+            note: annual ? 'Billed once a year. Two months on us.' : 'Billed monthly. Cancel any time.'
+        };
+    }
+</script>
+
+<c-lbr.signals id="pricing-period" :$period=period />
+
+<main class="container mx-auto max-w-6xl px-4 py-16 flex flex-col gap-12">
+
+    <c-tier-toggle.header />
+
+    <div class="grid gap-6 lg:grid-cols-3 items-stretch">
+        {% for plan in plans %}
+        <c-tier-toggle.tier :plan=plan />
+        {% endfor %}
+    </div>
+
+    <c-tier-toggle.assurance />
+
+    <c-tier-toggle.trust />
+
+</main>

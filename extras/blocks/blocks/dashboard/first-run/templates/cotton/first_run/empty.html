@@ -1,0 +1,54 @@
+<c-lb.card border id="first-run-empty" class="overflow-hidden bg-base-100">
+    <div class="grid gap-0 lg:grid-cols-5">
+
+        <div class="lg:col-span-3">
+            <c-lb.card.body class="gap-5 p-8">
+
+                <c-lb.badge variant="primary" style="soft" size="sm" icon="rmx.plug">
+                    One connection away
+                </c-lb.badge>
+
+                <h2 class="text-3xl font-semibold tracking-tight text-balance">
+                    Your revenue graph starts with one connection.
+                </h2>
+
+                <p class="text-base-content/70 max-w-lg">
+                    There is nothing here yet, and on day one there shouldn't be. Connect the
+                    system that already bills your customers and Arden backfills 24 months of
+                    invoices, renewals and cancellations overnight. Most workspaces are looking
+                    at their MRR curve inside four minutes.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <c-lb.button variant="primary" icon="rmx.plug" icon.end="rmx.arrow-right">
+                        Connect billing
+                    </c-lb.button>
+                    <c-lb.button btnStyle="outline" icon="rmx.file-upload">
+                        Import a CSV instead
+                    </c-lb.button>
+                </div>
+
+                <p class="text-xs text-base-content/50">
+                    Not ready to connect production?
+                    <a class="link link-hover font-medium" href="#sample-data">
+                        Load a sample workspace
+                    </a>
+                    and delete it whenever you like — it never touches your billing account.
+                </p>
+
+            </c-lb.card.body>
+        </div>
+
+        <div class="lg:col-span-2 flex items-center justify-center border-t border-base-300 bg-base-200 p-8 lg:border-l lg:border-t-0">
+            <div class="flex flex-col items-center gap-4 text-center">
+                <div class="flex size-16 items-center justify-center rounded-2xl bg-base-100/70 shadow-sm">
+                    <c-lbi.rmx.line-chart w="32" h="32" class="text-primary" />
+                </div>
+                <p class="text-sm font-medium text-base-content/80 max-w-[24ch]">
+                    Every chart on this page fills itself in the moment your first invoice lands.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</c-lb.card>

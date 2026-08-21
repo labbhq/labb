@@ -1,30 +1,11 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'neutral': 'input-neutral',
-        'primary': 'input-primary',
-        'secondary': 'input-secondary',
-        'accent': 'input-accent',
-        'info': 'input-info',
-        'success': 'input-success',
-        'warning': 'input-warning',
-        'error': 'input-error'
-    }"
-    size="md"
-    :sizeClasses="{
-        'xs': 'input-xs',
-        'sm': 'input-sm',
-        'md': 'input-md',
-        'lg': 'input-lg',
-        'xl': 'input-xl'
-    }"
-    ghost
-    validate
+    bind=""
 />
+{% lbr_props "input" attrs=attrs as rx %}
 
 <input
-    class="input {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {% if ghost %}input-ghost{% endif %} {% if validate %}validator{% endif %} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {% lbr_bind "input" bind %}
+    {{ rx.attrs }}
 />

@@ -1,28 +1,18 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
     id=""
-    placement="middle"
-    open
     size=""
     boxClass=""
     withBackdrop
     withCloseBtn
     closeBtnPosition="top-right"
-    :stateClasses="{
-        'top': 'modal-top',
-        'middle': 'modal-middle',
-        'bottom': 'modal-bottom',
-        'start': 'modal-start',
-        'end': 'modal-end',
-        'open': 'modal-open'
-    }"
 />
+{% lbr_props "modal" attrs=attrs as rx %}
 
 <dialog
     id="{{ id }}"
-    class="modal {{ stateClasses|get_dict_item:placement }} {% if open %}{{ stateClasses|get_dict_item:'open' }}{% endif %} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     {% if not box %}
         <c-lb.modal.box :size=size :class=boxClass>

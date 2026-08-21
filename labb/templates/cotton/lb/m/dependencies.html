@@ -3,7 +3,7 @@
 
 <c-vars
     :noGlobalCSS="False"
-    :alpine="False"
+    :datastar="False"
     setThemeEndpoint=""
 />
 
@@ -12,40 +12,46 @@
     <link rel="stylesheet" href="{% static css_path %}">
 {% endif %}
 
+{% comment %}
+CSRF helper — used by reactive write actions (c-lbr.post/delete) and the theme
+endpoint. Defined once whenever the reactive bundle loads (datastar prop OR a body
+component pushed datastar.js onto the stack) or a theme endpoint is set.
+{% endcomment %}
+{% lb_stack_has "components" "labb/js/vendor/datastar.js" as lbr_bundle_active %}
+{% if datastar or lbr_bundle_active or setThemeEndpoint %}
+<script>
+function labbGetCSRFToken() {
+    const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    if (csrfInput?.value) return csrfInput.value;
+    const match = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('csrftoken='));
+    return match ? decodeURIComponent(match.slice(10)) : '';
+}
+</script>
+{% endif %}
+
 {% if setThemeEndpoint %}
+{{ setThemeEndpoint|json_script:"labb-set-theme-endpoint" }}
 <script>
 
-function labbGetCSRFToken() {
-    // First try to get from hidden input field
-    const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
-    if (csrfInput && csrfInput.value) {
-        return csrfInput.value;
-    }
+const LABB_THEME_COOKIE = 'labb_theme';
+const LABB_THEME_ENDPOINT = JSON.parse(
+    document.getElementById('labb-set-theme-endpoint').textContent
+);
 
-    // Fallback to cookie
-    const name = 'csrftoken';
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue || '';
+function labbWriteThemeCookie(theme) {
+    document.cookie = LABB_THEME_COOKIE + '=' + encodeURIComponent(theme)
+        + ';path=/;max-age=31536000;samesite=lax';
 }
-document.addEventListener('DOMContentLoaded', function() {
-    // Get CSRF token from cookie or hidden input
 
+function labbReadThemeCookie() {
+    const prefix = LABB_THEME_COOKIE + '=';
+    const match = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith(prefix));
+    return match ? decodeURIComponent(match.slice(prefix.length)) : null;
+}
 
-    // Get current theme from data-theme attribute
+document.addEventListener('DOMContentLoaded', function () {
     const currentTheme = document.documentElement.getAttribute('data-theme') || '__system__';
-
-    // Find all theme controllers (checkboxes and radios)
-    const themeControllers = document.querySelectorAll('input[type="checkbox"].theme-controller, input[type="radio"].theme-controller');
+    const controllers = document.querySelectorAll('input[type="checkbox"].theme-controller, input[type="radio"].theme-controller');
 
     function setTheme(theme) {
         if (theme && theme !== '__system__') {
@@ -55,81 +61,73 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    themeControllers.forEach(function(controller) {
-        // Set initial state based on current theme
+    // Keep every theme-controller group in sync with the active theme. daisyUI
+    // applies themes globally via :root:has(.theme-controller:checked); if a page
+    // has two groups (e.g. the topnav toggle and a demo strip) and they hold
+    // different checked values, both :has() rules match and fight. Reflecting the
+    // chosen theme in all controllers leaves exactly one value checked page-wide.
+    function syncControllers(theme) {
+        controllers.forEach(function (c) {
+            c.checked = c.type === 'checkbox'
+                ? (theme !== '__system__' && c.value === theme)
+                : c.value === theme;
+        });
+    }
+
+    function revert(controller) {
+        setTheme(currentTheme);
+        labbWriteThemeCookie(currentTheme);
         if (controller.type === 'checkbox') {
-            // For checkboxes, check if the current theme matches the checkbox's value
-            controller.checked = (controller.value === currentTheme);
-        } else if (controller.type === 'radio') {
-            // For radios, check the one that matches current theme exactly
-            if (controller.value === currentTheme) {
-                controller.checked = true;
-            }
+            controller.checked = !controller.checked;
+        } else {
+            const selector = 'input[type="radio"].theme-controller'
+                + '[value="' + CSS.escape(currentTheme) + '"]';
+            const original = document.querySelector(selector);
+            if (original) original.checked = true;
         }
+    }
 
-        // Add change event listener
-        controller.addEventListener('change', function() {
-            let newTheme;
+    window.addEventListener('pageshow', function (event) {
+        const shown = document.documentElement.getAttribute('data-theme') || '__system__';
+        const theme = event.persisted ? (labbReadThemeCookie() || shown) : shown;
+        if (theme !== shown) setTheme(theme);
+        syncControllers(theme);
+    });
 
-            if (this.type === 'checkbox') {
-                // For checkboxes, use the checkbox's value if checked, otherwise use default
-                newTheme = this.checked ? this.value : '__system__';
-            } else if (this.type === 'radio') {
-                // For radios, use the value directly
-                newTheme = this.value;
-            }
+    controllers.forEach(function (controller) {
+        controller.checked = controller.value === currentTheme;
 
+        controller.addEventListener('change', function () {
+            const newTheme = this.type === 'checkbox'
+                ? (this.checked ? this.value : '__system__')
+                : this.value;
 
-            // Update the HTML data-theme attribute immediately for instant feedback
             setTheme(newTheme);
+            syncControllers(newTheme);
+            labbWriteThemeCookie(newTheme);
 
-            // Send AJAX request to save theme preference
-            fetch('{{ setThemeEndpoint }}', {
+            fetch(LABB_THEME_ENDPOINT, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': labbGetCSRFToken()
+                    'X-CSRFToken': labbGetCSRFToken(),
                 },
-                body: 'theme=' + encodeURIComponent(newTheme)
+                body: 'theme=' + encodeURIComponent(newTheme),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    console.error('Failed to save theme preference:', data.error);
-                    // Revert the theme if save failed
-                    setTheme(currentTheme);
-                    if (this.type === 'checkbox') {
-                        this.checked = !this.checked;
-                    } else if (this.type === 'radio') {
-                        // Find and check the radio that matches the original theme
-                        const originalRadio = document.querySelector(`input[type="radio"].theme-controller[value="${currentTheme}"]`);
-                        if (originalRadio) {
-                            originalRadio.checked = true;
-                        }
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error saving theme preference:', error);
-                // Revert the theme if request failed
-                setTheme(currentTheme);
-                if (this.type === 'checkbox') {
-                    this.checked = !this.checked;
-                } else if (this.type === 'radio') {
-                    // Find and check the radio that matches the original theme
-                    const originalRadio = document.querySelector(`input[type="radio"].theme-controller[value="${currentTheme}"]`);
-                    if (originalRadio) {
-                        originalRadio.checked = true;
-                    }
-                }
-            });
+            .then(r => r.json())
+            .then(data => { if (!data.success) revert(this); })
+            .catch(() => revert(this));
         });
     });
 });
 </script>
 {% endif %}
 
-{% if alpine %}{% lb_alpine_script %}{% endif %}
-{% lb_load_stack name="components" alpine_loaded=alpine %}
+{% if datastar %}
+{% lb_push_stack name="components" path="labb/js/lb-schema.js" mode="src" %}
+{% lb_push_stack name="components" path="labb/js/vendor/datastar.js" mode="module" %}
+{% endif %}
+
+{% lb_load_stack name="components" %}
 
 {{ slot }}

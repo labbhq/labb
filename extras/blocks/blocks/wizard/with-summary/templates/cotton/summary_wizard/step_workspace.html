@@ -1,0 +1,36 @@
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Name your workspace</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            Type it and watch the summary fill in. Nothing is sent anywhere yet.
+        </p>
+    </div>
+
+    <div class="grid gap-4">
+        <c-summary-wizard.field label="Workspace name">
+            <c-lb.input
+                data-lbb-start
+                id="sw-company"
+                type="text"
+                placeholder="Ironvale Group"
+                class="w-full"
+                bind="$form.company" />
+        </c-summary-wizard.field>
+
+        <c-summary-wizard.field label="Workspace address" hint="(arden.app/…)">
+            <c-lb.input
+                id="sw-slug"
+                type="text"
+                placeholder="ironvale-group"
+                class="w-full font-mono"
+                bind="$form.slug" />
+        </c-summary-wizard.field>
+    </div>
+
+    <div class="flex items-start gap-2 text-xs text-base-content/50">
+        <c-lbi n="rmx.information" w="1em" h="1em" class="size-4 mt-0.5 shrink-0" />
+        <span>The address is how your team reaches Arden, and it appears on every invoice.</span>
+    </div>
+
+</div>

@@ -5,9 +5,10 @@ title: Drawer
 description: "Drawer component for Django: build slide-out sidebars and off-canvas panels. Built with django-cotton, Tailwind CSS, and daisyUI 5. Zero JavaScript by default."
 keywords: "django drawer component, sidebar drawer django, daisyui drawer django, tailwind drawer django, drawer django-cotton, django ui drawer, slide-out panel django, django-cotton"
 daisy_ui_component_name: drawer
+icon: rmx.layout-left
 ---
 
-Drawer renders a CSS-driven slide-out panel using checkbox toggle state — no JavaScript needed. `c-lb.drawer.side` holds the panel content; `c-lb.drawer.content` holds the main page area.
+Drawer renders a CSS-driven slide-out panel using checkbox toggle state, with no JavaScript needed. `c-lb.drawer.side` holds the panel content; `c-lb.drawer.content` holds the main page area.
 
 ## Basic Drawer
 <c-lbdocs.component_example path="drawer/basic" />

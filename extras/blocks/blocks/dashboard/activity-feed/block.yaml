@@ -1,0 +1,126 @@
+name: Activity feed
+ref: lb/dashboard/activity-feed
+type: fe
+labb_version: ">=0.5.0"
+description: "Today's revenue numbers beside the event log that produced them — a timeline dashboard with no JavaScript"
+category: dashboard
+status: launch
+thumbnail: thumbnails/activity-feed.png
+tags:
+  - dashboard
+  - timeline
+  - static
+  - zero-js
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  today: "Thursday, 9 July 2026"
+  stats:
+    - id: net-new
+      label: "Net new MRR today"
+      value: "$4,740"
+      caption: "3 upgrades, 1 contraction"
+      icon: "rmx.line-chart"
+      tone: "success"
+    - id: settled
+      label: "Invoices settled"
+      value: "$38,900"
+      caption: "7 of 11 open invoices"
+      icon: "rmx.bank-card"
+      tone: "primary"
+    - id: at-risk
+      label: "MRR at risk"
+      value: "$21,400"
+      caption: "4 accounts flagged this week"
+      icon: "rmx.alert"
+      tone: "warning"
+  groups:
+    - day: "Today"
+      events:
+        - id: ironvale-upgrade
+          title: "Ironvale Group upgraded to Scale"
+          detail: "Seat count went from 18 to 40 after their finance team came on."
+          amount: "+$4,200"
+          time: "09:12"
+          icon: "rmx.arrow-up"
+          tone: "success"
+          actor: "Automatic · Stripe webhook"
+        - id: atlasforge-paid
+          title: "AtlasForge paid invoice INV-2043"
+          detail: "Settled 4 days early. Next renewal 1 October 2026."
+          amount: "$12,400"
+          time: "08:47"
+          icon: "rmx.bank-card"
+          tone: "primary"
+          actor: "Automatic · Chargebee"
+        - id: kite-at-risk
+          title: "Kite & Bell flagged at risk"
+          detail: "Weekly active seats down 41% over 14 days, two support escalations open."
+          amount: "$5,940 MRR"
+          time: "08:05"
+          icon: "rmx.alert"
+          tone: "warning"
+          actor: "Health model"
+    - day: "Yesterday"
+      events:
+        - id: verity-renewal
+          title: "Verity Labs renewed for 12 months"
+          detail: "Moved to annual billing and took the two-month discount."
+          amount: "$96,200 ARR"
+          time: "17:22"
+          icon: "rmx.refresh"
+          tone: "success"
+          actor: "Priya Raman"
+        - id: northwind-seats
+          title: "Northwind Co added 6 seats"
+          detail: "Their ops team joined the workspace mid-cycle; prorated on the July invoice."
+          amount: "+$540"
+          time: "15:04"
+          icon: "rmx.user-add"
+          tone: "success"
+          actor: "Automatic · Stripe webhook"
+        - id: ironvale-card
+          title: "Ironvale Group card expires in 9 days"
+          detail: "Dunning email queued for Monday if the card is not replaced."
+          amount: "$6,120 MRR"
+          time: "11:30"
+          icon: "rmx.error-warning"
+          tone: "warning"
+          actor: "Billing"
+    - day: "Earlier this week"
+      events:
+        - id: kite-downgrade
+          title: "Kite & Bell downgraded from Scale to Growth"
+          detail: "Cited unused forecasting seats. Save call booked for Tuesday."
+          amount: "-$3,000"
+          time: "Mon 14:18"
+          icon: "rmx.arrow-down"
+          tone: "error"
+          actor: "Tom Beck"
+        - id: beacon-invite
+          title: "Priya Raman invited Tom Beck as an analyst"
+          detail: "Read-only access to revenue and invoices, no billing rights."
+          amount: ""
+          time: "Mon 09:40"
+          icon: "rmx.team"
+          tone: "primary"
+          actor: "Priya Raman"
+  team:
+    - name: "Priya Raman"
+      initials: "PR"
+      role: "Head of revenue ops"
+      tone: "primary"
+      note: "6 events today"
+    - name: "Tom Beck"
+      initials: "TB"
+      role: "Revenue analyst"
+      tone: "secondary"
+      note: "Save call on Kite & Bell"
+    - name: "Mira Chen"
+      initials: "MC"
+      role: "Finance lead"
+      tone: "accent"
+      note: "Signed off the June close"

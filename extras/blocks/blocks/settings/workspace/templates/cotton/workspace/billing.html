@@ -1,0 +1,137 @@
+<c-vars :workspace="None" :plan="None" :plans="[]" :invoices="[]" outstanding="0.00" :billing_contacts="[]" failed="" />
+
+<c-workspace.section
+    title="Plan and billing"
+    desc="What you pay Arden, and what Arden has billed on your behalf.">
+
+    <c-slot name="actions">
+        <c-lb.badge style="soft" variant="primary" icon="rmx.bank-card">{{ plan.name }}</c-lb.badge>
+    </c-slot>
+
+    {% if failed %}
+    <c-lb.alert variant="error" alertStyle="soft" icon="rmx.error-warning">
+        {{ failed }}
+    </c-lb.alert>
+    {% endif %}
+
+    <div class="grid lg:grid-cols-3 gap-8">
+
+        <div class="lg:col-span-2 flex flex-col gap-5">
+
+            <div class="flex flex-col gap-2">
+                <div class="text-xs uppercase tracking-wider text-base-content/40">Your plan</div>
+                {% for option in plans %}
+                <c-workspace.plan-option
+                    :option=option
+                    :current=option.is_current
+                    currency="{{ workspace.currency }}" />
+                {% endfor %}
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <div class="flex items-end justify-between">
+                    <div class="text-xs uppercase tracking-wider text-base-content/40">
+                        Recent invoices
+                    </div>
+                    <div class="text-xs text-base-content/50 tabular-nums">
+                        {{ workspace.currency }} {{ outstanding }} outstanding
+                    </div>
+                </div>
+
+                {% if invoices %}
+                <div class="overflow-x-auto border border-base-300 rounded-box">
+                    <c-lb.table size="sm" class="w-full">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Customer</th>
+                                <th>Issued</th>
+                                <th class="text-right">Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for invoice in invoices %}
+                            <tr id="invoice-{{ invoice.pk }}">
+                                <td class="font-medium tabular-nums whitespace-nowrap">{{ invoice.number }}</td>
+                                <td class="truncate">{{ invoice.customer.company }}</td>
+                                <td class="tabular-nums whitespace-nowrap text-base-content/60">
+                                    {{ invoice.issued_on|date:"d/m/Y" }}
+                                </td>
+                                <td class="text-right tabular-nums font-medium whitespace-nowrap">
+                                    {{ invoice.currency }} {{ invoice.amount|floatformat:2 }}
+                                </td>
+                                <td>
+                                    <c-lb.badge size="sm" style="soft" variant="{{ invoice.status_variant }}">
+                                        {{ invoice.get_status_display }}
+                                    </c-lb.badge>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </c-lb.table>
+                </div>
+                {% else %}
+                <div class="border border-dashed border-base-300 rounded-box p-8 text-center">
+                    <p class="font-medium">No invoices yet.</p>
+                    <p class="text-sm text-base-content/60 mt-1">
+                        The first one appears the day after your first customer renews.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="flex flex-col gap-5">
+
+            <c-lb.card class="border border-base-300 bg-base-200/40 h-fit">
+                <c-lb.card.body class="p-5 gap-3">
+                    <div class="text-xs uppercase tracking-wider text-base-content/40">
+                        {{ plan.name }}
+                    </div>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-3xl font-semibold tabular-nums">
+                            {{ workspace.currency }} {{ plan.price_monthly|floatformat:0 }}
+                        </span>
+                        <span class="text-sm text-base-content/50">/ month</span>
+                    </div>
+                    <p class="text-xs text-base-content/60 leading-relaxed">{{ plan.tagline }}</p>
+
+                    <ul class="flex flex-col gap-2 border-t border-base-300 pt-3">
+                        {% for feature in plan.features|slice:":4" %}
+                        <li class="flex items-start gap-2 text-sm">
+                            <c-lbi n="rmx.check" w="1em" h="1em" class="size-4 mt-0.5 text-success shrink-0" />
+                            <span>{{ feature }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <p class="text-xs text-base-content/50 tabular-nums border-t border-base-300 pt-3">
+                        Yearly: {{ workspace.currency }} {{ plan.price_yearly|floatformat:0 }} — two months free.
+                    </p>
+                </c-lb.card.body>
+            </c-lb.card>
+
+            <div class="flex flex-col gap-3">
+                <div class="text-xs uppercase tracking-wider text-base-content/40">Billing contacts</div>
+                {% for contact in billing_contacts %}
+                <div class="flex items-center gap-3">
+                    <c-lb.avatar placeholder initials="{{ contact.name|slice:':1' }}" bgColor="accent" size="sm" />
+                    <div class="text-sm min-w-0">
+                        <div class="font-medium truncate">{{ contact.name }}</div>
+                        <div class="text-xs text-base-content/50 truncate">{{ contact.email }}</div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-sm text-base-content/50">
+                    No one holds the billing role. Invoices go to the workspace email only.
+                </p>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+</c-workspace.section>

@@ -11,9 +11,9 @@ components:
     description: Main drawer wrapper component - use with drawer sub-components for full functionality
     base_classes:
     - drawer
+    optional_base_classes:
     - drawer-toggle
     - drawer-content
-    optional_base_classes:
     - drawer-side
     - drawer-overlay
     variables:
@@ -269,7 +269,7 @@ components:
         description: Content to attach indicator to
 
   indicator.item:
-    template: lb/indicator/item.html
+    template: lb/indicator/item/index.html
     description: Item positioned on corner of sibling element
     base_classes:
     - indicator-item
@@ -342,17 +342,7 @@ components:
         default: ''
         description: Size (classes depend on shape)
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Indicator content (badge, status, etc.)

@@ -1,11 +1,6 @@
-<c-vars
-    class=""
-    as="ul"
-/>
-
-<{{ as }}
-    class="list {{ class }}"
-    {{ attrs }}
->
+{% load lbr_tags %}
+<c-vars as="ul" />
+{% lbr_props "list" attrs=attrs as rx %}
+<{{ as }} class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
 </{{ as }}>

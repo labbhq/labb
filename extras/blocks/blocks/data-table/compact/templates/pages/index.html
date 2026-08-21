@@ -1,0 +1,17 @@
+<main class="container mx-auto max-w-7xl px-4 py-10 flex flex-col gap-6">
+
+    <c-compact-table.masthead :total=total :updated=updated />
+
+    <c-compact-table.metrics :metrics=metrics />
+
+    <c-compact-table.table :customers=customers />
+
+    <c-compact-table.attention :invoices=overdue_invoices />
+
+    <p class="text-xs text-base-content/40 max-w-2xl">
+        MRR is the current run rate on the account's live plan. Trials and churned accounts
+        carry no run rate until their first invoice is raised. Renewal dates follow the plan
+        term, not the billing anniversary.
+    </p>
+
+</main>

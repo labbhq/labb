@@ -1,0 +1,36 @@
+<c-vars :workspace="{}" :card="{}" />
+
+<c-lb.card class="border border-base-300">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <h2 class="text-sm font-semibold">Payment method</h2>
+
+        <div class="rounded-box bg-base-200
+                    border border-base-300 p-4 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-semibold tracking-wide">{{ card.brand }}</span>
+                <c-lbi n="rmx.bank-card" w="1em" h="1em" class="size-5 text-base-content/50" />
+            </div>
+            <div class="font-mono tabular-nums text-base tracking-widest">
+                •••• •••• •••• {{ card.last4 }}
+            </div>
+            <div class="flex items-center justify-between text-xs text-base-content/60">
+                <span class="truncate">{{ card.holder }}</span>
+                <span class="tabular-nums whitespace-nowrap">Expires {{ card.expires }}</span>
+            </div>
+        </div>
+
+        <c-lb.button btnStyle="outline" size="sm" class="w-full">Update card</c-lb.button>
+
+        <div class="flex flex-col gap-1 border-t border-base-300 pt-3 text-xs text-base-content/50">
+            <span class="font-medium text-base-content/70">Billed to</span>
+            <span>{{ workspace.address }}</span>
+            <span class="tabular-nums">VAT {{ workspace.tax_id }}</span>
+        </div>
+
+        <p class="text-xs text-base-content/45">
+            A failed charge is retried on days 3 and 7 before the workspace is limited.
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

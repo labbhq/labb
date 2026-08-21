@@ -1,0 +1,43 @@
+<c-vars :segments="[]" class="" />
+
+<c-lb.card border class="bg-base-100 {{ class }}">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <div>
+            <h2 class="font-semibold tracking-tight">Where the money moved</h2>
+            <p class="text-xs text-base-content/50 mt-0.5">
+                Net new is expansion less contraction and churn, by segment.
+            </p>
+        </div>
+
+        <c-lb.table size="sm" id="segment-table">
+            <thead>
+                <tr>
+                    <th class="text-left">Segment</th>
+                    <th class="text-right">Accounts</th>
+                    <th class="text-right">MRR</th>
+                    <th class="text-right">Net new</th>
+                    <th class="text-right">Churn</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for segment in segments %}
+                <tr id="segment-{{ segment.name|slugify }}">
+                    <td class="font-medium">{{ segment.name }}</td>
+                    <td class="text-right tabular-nums">{{ segment.accounts }}</td>
+                    <td class="text-right tabular-nums">{{ segment.mrr }}</td>
+                    <td class="text-right tabular-nums {% if segment.tone == 'error' %}text-error{% else %}text-success{% endif %}">
+                        {{ segment.net_new }}
+                    </td>
+                    <td class="text-right">
+                        <c-lb.badge variant="{{ segment.tone }}" style="soft" size="xs" class="tabular-nums">
+                            {{ segment.churn }}
+                        </c-lb.badge>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </c-lb.table>
+
+    </c-lb.card.body>
+</c-lb.card>

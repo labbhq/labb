@@ -1,0 +1,19 @@
+name: Revenue overview
+ref: lb/dashboard/overview
+type: fullstack
+labb_version: ">=0.5.0"
+description: "A revenue dashboard whose charts are signals — server-driven series switching, live theming, and a metric streaming in over SSE"
+category: dashboard
+status: launch
+anchor: true
+thumbnail: thumbnails/overview.png
+tags:
+  - reactive
+  - charts
+  - sse
+  - theming
+  - dashboard
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's dashboard anchor and its only SSE stream"

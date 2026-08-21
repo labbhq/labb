@@ -1,6 +1,7 @@
-<c-vars class="" legend="" />
-
-<fieldset class="fieldset {{ class }}" {{ attrs }}>
+{% load lbr_tags %}
+<c-vars legend="" />
+{% lbr_props "fieldset" attrs=attrs as rx %}
+<fieldset class="{{ rx.classes }}" {{ rx.attrs }}>
     {% if legendSlot %}
         {{ legendSlot }}
     {% elif legend %}

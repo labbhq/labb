@@ -1,0 +1,98 @@
+<c-vars :customer="{}" :plans="[]" :status_choices="[]" update_url="" :edit_signals="None" />
+
+<tr id="customer-{{ customer.pk }}" class="border-base-300 bg-base-200/50">
+    <td colspan="9" class="p-3">
+
+        <c-lbr.signals id="customer-edit-signals" :schema=edit_signals />
+
+        <c-lbr.post :to=update_url>
+
+            <div class="flex flex-wrap items-end gap-2">
+
+                <div class="flex items-center gap-3 min-w-48 pb-1.5">
+                    <c-lb.avatar placeholder initials="{{ customer.initials }}" bgColor="neutral" size="sm" rounded="lg" />
+                    <div class="min-w-0">
+                        <div class="font-medium truncate">{{ customer.company }}</div>
+                        <div class="text-xs text-base-content/50">Editing</div>
+                    </div>
+                </div>
+
+                <c-customers.edit-field label="Contact" class="flex-1 min-w-40">
+                    <c-lb.input
+                        type="text"
+                        name="contact_name"
+                        bind="$edit.contact_name"
+                        size="sm"
+                        class="w-full"
+                        :ghost="False"
+                        :validate="False"
+                        autofocus
+                        required />
+                </c-customers.edit-field>
+
+                <c-customers.edit-field label="Email" class="flex-1 min-w-48">
+                    <c-lb.input
+                        type="email"
+                        name="email"
+                        bind="$edit.email"
+                        size="sm"
+                        class="w-full"
+                        :ghost="False"
+                        :validate="False"
+                        required />
+                </c-customers.edit-field>
+
+                <c-customers.edit-field label="Plan" class="w-36">
+                    <c-lb.select name="plan" bind="$edit.plan" size="sm" class="w-full" :validate="False">
+                        {% for plan in plans %}
+                        <option value="{{ plan.pk }}" {% if edit_signals.plan == plan.pk|stringformat:"s" %}selected{% endif %}>{{ plan.name }}</option>
+                        {% endfor %}
+                    </c-lb.select>
+                </c-customers.edit-field>
+
+                <c-customers.edit-field label="Status" class="w-32">
+                    <c-lb.select name="status" bind="$edit.status" size="sm" class="w-full" :validate="False">
+                        {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if edit_signals.status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </c-lb.select>
+                </c-customers.edit-field>
+
+                <c-customers.edit-field label="MRR" class="w-28">
+                    <c-lb.input
+                        type="number"
+                        name="mrr"
+                        bind="$edit.mrr"
+                        min="0"
+                        step="1"
+                        size="sm"
+                        class="w-full tabular-nums"
+                        :ghost="False"
+                        :validate="False" />
+                </c-customers.edit-field>
+
+                <c-customers.edit-field label="Seats" class="w-20">
+                    <c-lb.input
+                        type="number"
+                        name="seats"
+                        bind="$edit.seats"
+                        min="1"
+                        step="1"
+                        size="sm"
+                        class="w-full tabular-nums"
+                        :ghost="False"
+                        :validate="False" />
+                </c-customers.edit-field>
+
+                <div class="flex gap-1 pb-0.5">
+                    <c-lb.button type="submit" variant="primary" size="sm">Save</c-lb.button>
+                    <c-lbr.get to="block_data_table_customers:index" before="$ui.editingPk=0">
+                        <c-lb.button type="button" btnStyle="ghost" size="sm">Cancel</c-lb.button>
+                    </c-lbr.get>
+                </div>
+
+            </div>
+        </c-lbr.post>
+
+    </td>
+</tr>

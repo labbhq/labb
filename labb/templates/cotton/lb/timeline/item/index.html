@@ -1,6 +1,5 @@
-{% load lb_tags %}
+{% load lb_tags lbr_tags %}
 <c-vars
-    class=""
     first
     last
     start=""
@@ -30,8 +29,9 @@
     }"
 />
 {% parse_icon attrs as i %}
+{% lbr_props "timeline.item" attrs=attrs as rx %}
 
-<li class="{{ class }}" {{ attrs|strip_icon_attrs }}>
+<li class="{{ rx.classes }}" {{ rx.attrs }}>
     {% if not first %}<hr {% if variant %}class="{{ variantHrClasses|get_dict_item:variant }}"{% endif %} />{% endif %}
 
     {% if startSlot %}

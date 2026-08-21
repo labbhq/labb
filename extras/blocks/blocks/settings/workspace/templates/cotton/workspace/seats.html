@@ -1,0 +1,33 @@
+<c-vars :seats_used=0 :seats_total=0 :seats_left=0 :seats_pct=0 :seats_full="False" :plan="None" />
+
+<c-lb.card class="border border-base-300 bg-base-200/40">
+    <c-lb.card.body class="p-5 gap-3">
+
+        <div class="flex items-end justify-between gap-4">
+            <div>
+                <div class="text-xs uppercase tracking-wider text-base-content/40">Seats</div>
+                <div class="mt-1 text-2xl font-semibold tabular-nums">
+                    {{ seats_used }} <span class="text-base-content/40">/ {{ seats_total }}</span>
+                </div>
+            </div>
+            <c-lb.badge style="soft" variant="{% if seats_full %}warning{% else %}neutral{% endif %}">
+                {{ plan.name }}
+            </c-lb.badge>
+        </div>
+
+        <c-lb.progress
+            variant="{% if seats_full %}warning{% else %}primary{% endif %}"
+            value="{{ seats_pct }}"
+            max="100"
+            class="w-full" />
+
+        <p class="text-xs text-base-content/50">
+            {% if seats_full %}
+            Every seat is in use. Change plan to invite anyone else.
+            {% else %}
+            {{ seats_left }} seat{{ seats_left|pluralize }} left. Suspended members do not hold a seat.
+            {% endif %}
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

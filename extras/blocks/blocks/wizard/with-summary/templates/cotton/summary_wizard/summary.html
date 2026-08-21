@@ -1,0 +1,100 @@
+<c-vars :seat_price=12 />
+
+<aside class="lg:sticky lg:top-8 h-fit flex flex-col gap-4">
+
+    <c-lb.card class="border border-base-300 bg-base-200/40">
+        <c-lb.card.body class="gap-5 p-6">
+
+            <div class="flex items-center justify-between">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-base-content/50">
+                    Your Arden plan
+                </h2>
+                <c-lb.badge size="sm" style="soft" variant="success">14-day trial</c-lb.badge>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <div id="sw-summary-name" class="font-semibold truncate"
+                     data-text="$form.company || 'Untitled workspace'">Untitled workspace</div>
+                <div id="sw-summary-address" class="text-xs font-mono text-base-content/50 truncate"
+                     data-text="'arden.app/' + ($form.slug || 'your-workspace')">arden.app/your-workspace</div>
+            </div>
+
+            <div class="flex flex-col gap-3 border-t border-base-300 pt-4">
+
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div id="sw-summary-plan" class="text-sm font-medium"
+                             data-text="$plans[$form.plan].name">Arden Growth</div>
+                        <div class="text-xs text-base-content/50">
+                            <span data-text="$plans[$form.plan].seats">10</span> seats included
+                        </div>
+                    </div>
+                    <div class="text-sm tabular-nums whitespace-nowrap">
+                        <span>$</span><span id="sw-summary-base" data-text="$plans[$form.plan].base">149</span>
+                    </div>
+                </div>
+
+                <div
+                    id="sw-summary-extra-row"
+                    class="flex items-start justify-between gap-3"
+                    data-show="Number($form.seats) > $plans[$form.plan].seats"
+                    style="display:none"
+                >
+                    <div>
+                        <div class="text-sm font-medium">Extra seats</div>
+                        <div class="text-xs text-base-content/50 tabular-nums">
+                            <span id="sw-summary-extra"
+                                  data-text="Math.max(0, Number($form.seats) - $plans[$form.plan].seats)">0</span>
+                            × <span>$</span><span data-text="$seatprice">{{ seat_price }}</span> per month
+                        </div>
+                    </div>
+                    <div class="text-sm tabular-nums whitespace-nowrap">
+                        <span>$</span><span id="sw-summary-extra-cost"
+                              data-text="Math.max(0, Number($form.seats) - $plans[$form.plan].seats) * $seatprice">0</span>
+                    </div>
+                </div>
+
+                <div class="flex items-start justify-between gap-3">
+                    <div class="text-sm text-base-content/60">Seats in total</div>
+                    <div id="sw-summary-seats" class="text-sm tabular-nums" data-text="$form.seats">8</div>
+                </div>
+
+            </div>
+
+            <div class="flex items-end justify-between border-t border-base-300 pt-4">
+                <div>
+                    <div class="text-sm font-semibold">Monthly total</div>
+                    <div class="text-xs text-base-content/50">After the trial ends.</div>
+                </div>
+                <div class="text-2xl font-bold tabular-nums">
+                    <span class="text-base font-semibold text-base-content/60">$</span><span
+                        id="sw-summary-total"
+                        data-text="$plans[$form.plan].base + Math.max(0, Number($form.seats) - $plans[$form.plan].seats) * $seatprice"
+                    >149</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs text-base-content/50 border-t border-base-300 pt-4">
+                <c-lbi n="rmx.mail" w="1em" h="1em" class="size-4 shrink-0" />
+                <span id="sw-summary-contact" class="truncate"
+                      data-text="$form.contact || 'No billing contact yet'">No billing contact yet</span>
+            </div>
+
+        </c-lb.card.body>
+    </c-lb.card>
+
+    <div class="flex items-start gap-3 rounded-box border border-base-300 p-4">
+        <c-lb.avatar placeholder initials="PR" bgColor="accent" size="sm" />
+        <p class="text-xs text-base-content/60 leading-relaxed">
+            “We started on ten seats and were on fourteen by the second month. The bill
+            changed by forty-eight dollars, not by a sales call.”
+            <span class="text-base-content/45">— Priya Raghunathan, Finance Lead, Beacon Labs</span>
+        </p>
+    </div>
+
+    <p class="text-xs text-base-content/45 leading-relaxed">
+        No card is charged today. Cancel during the trial and the workspace closes with
+        nothing owed.
+    </p>
+
+</aside>

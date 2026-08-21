@@ -1,0 +1,36 @@
+<c-vars :role_options="[]" />
+
+<c-lb.card class="border border-base-300 bg-base-200/40">
+    <c-lb.card.body class="gap-3 p-5">
+
+        <div class="flex flex-col sm:flex-row gap-3 sm:items-end">
+            <div class="flex-1">
+                <label class="label label-text text-sm font-medium mb-1">Invite by email</label>
+                <c-lb.input
+                    data-lbb-start
+                    id="tm-invite-email"
+                    type="email"
+                    placeholder="rafael.sorensen@beaconlabs.com"
+                    class="w-full"
+                    bind="$invite.email" />
+            </div>
+
+            <div class="sm:w-44">
+                <label class="label label-text text-sm font-medium mb-1">Role</label>
+                <c-lb.select id="tm-invite-role" class="w-full" bind="$invite.role">
+                    {% for value, label in role_options %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </c-lb.select>
+            </div>
+
+            <c-lb.button variant="primary" icon="rmx.user-add">Send invite</c-lb.button>
+        </div>
+
+        <p id="tm-invite-preview" class="text-xs text-base-content/50"
+           data-text="($invite.email || 'They') + ' will join as a ' + $rolelabels[$invite.role] + '.'">
+            They will join as a Member.
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

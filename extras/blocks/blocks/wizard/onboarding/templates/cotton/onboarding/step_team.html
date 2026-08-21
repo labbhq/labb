@@ -1,0 +1,29 @@
+<c-vars :signals="{}" :roles="[]" :invite_slots="[]" :errors="{}" />
+
+<div>
+    <h2 class="text-xl font-semibold tracking-tight">Invite your revenue team</h2>
+    <p class="text-sm text-base-content/60 mt-1">
+        Arden earns its keep when finance and ops are reading the same numbers.
+        Invites go out when you finish setting up.
+    </p>
+</div>
+
+{% if errors.invites %}
+<c-lb.alert variant="warning" alertStyle="soft" icon="rmx.user-add">
+    {{ errors.invites }}
+</c-lb.alert>
+{% endif %}
+
+<c-lbr.post to="block_wizard_onboarding:validate" tag="div" on="input__debounce.500ms" class="grid gap-3">
+    {% for invite in invite_slots %}
+    <c-onboarding.invite-row :invite=invite />
+    {% endfor %}
+</c-lbr.post>
+
+<c-onboarding.field label="Invite them as" hint="(you stay the owner)">
+    <c-lb.select class="w-full" :bind=signals.fields.invite_role>
+        {% for value, label in roles %}
+        <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+    </c-lb.select>
+</c-onboarding.field>

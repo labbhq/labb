@@ -1,0 +1,40 @@
+<c-vars :searching="False" />
+
+<div class="rounded-box border border-dashed border-base-300 bg-base-100 px-6 py-16">
+    <div class="mx-auto flex max-w-sm flex-col items-center text-center">
+
+        <c-lb.avatar
+            placeholder
+            icon="{% if searching %}rmx.user-search{% else %}rmx.building{% endif %}"
+            bgColor="neutral"
+            size="lg"
+            rounded="full" />
+
+        {% if searching %}
+        <h3 class="mt-5 text-lg font-semibold tracking-tight">No customers match that filter</h3>
+        <p class="mt-1.5 text-sm text-base-content/60">
+            Nothing in this workspace lines up with what you searched for. Try a company
+            name, a contact, an industry or a country.
+        </p>
+        <div class="mt-5">
+            <c-lbr.get
+                to="block_data_table_customers:index"
+                before="$filters.q=''; $filters.status=''; $page=1">
+                <c-lb.button btnStyle="outline" size="sm" icon="rmx.close-circle">Clear filters</c-lb.button>
+            </c-lbr.get>
+        </div>
+
+        {% else %}
+        <h3 class="mt-5 text-lg font-semibold tracking-tight">No customers yet</h3>
+        <p class="mt-1.5 text-sm text-base-content/60">
+            Arden starts billing the moment a customer lands here. Add the first one, or
+            import the book you already have.
+        </p>
+        <div class="mt-5 flex gap-2">
+            <c-lb.button variant="primary" size="sm" icon="rmx.add">New customer</c-lb.button>
+            <c-lb.button btnStyle="ghost" size="sm">Import from CSV</c-lb.button>
+        </div>
+        {% endif %}
+
+    </div>
+</div>

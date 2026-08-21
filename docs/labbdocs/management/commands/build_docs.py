@@ -77,6 +77,7 @@ class Command(BaseCommand):
                 url_prefix=url_prefix,
                 yaml_output_path=yaml_output_path,
                 seo_config=seo_config,
+                menu_order=doc_config.get("menu_order", "asc"),
             )
 
             # Parse and save the documentation

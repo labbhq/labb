@@ -1,0 +1,41 @@
+steps:
+  - title: Declare the quote state
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: |
+      The signal is the whole quote: seats, plan, the two line items and the total.
+      It arrives as an object in prop mode, so the page renders a correct quote
+      server-side before any JavaScript runs.
+
+  - title: Recalculate when the range changes
+    file: templates/cotton/usage_calc/slider.html
+    match: 'data-on:input="$usage = ardenUsage(el.value, $usage.annual)"'
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: |
+      Every drag step replaces the object with a freshly derived one. The pricing rule
+      lives in one small function above, which keeps the handler a single call — and
+      keeps the network tab empty, because there is no server in this block at all.
+
+  - title: Drive the plan badge from the quote
+    file: templates/cotton/usage_calc/slider.html
+    match: 'variant="$usage.planVariant:primary"'
+    teaches: [reactive-props]
+    docs: [reactivity/reactive-props]
+    body: |
+      The canonical reactive prop. `$usage.planVariant` picks the badge's colour as
+      the recommended plan changes under the slider; `primary` after the colon is the
+      server-rendered fallback. labb recomputes the daisyUI classes client-side — you
+      never write a class string by hand.
+
+  - title: Reuse the quote across the summary
+    file: templates/cotton/usage_calc/slider.html
+    match: 'data-text="$usage.seatCost"'
+    teaches: [reactive-props]
+    docs: [reactivity/reactive-props]
+    body: |
+      Platform fee, seat cost, total, period, plan name — all reading one signal, all
+      updating together. This is opt-in reactivity: one interactive widget on an
+      otherwise static page, and no endpoint behind it.

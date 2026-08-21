@@ -1,0 +1,52 @@
+<c-vars :customer="{}" />
+
+<tr
+    id="expando-row-{{ customer.id }}"
+    class="border-base-300 hover:bg-base-200/40"
+>
+
+    <td class="text-base-content/40">
+        <button
+            id="expando-toggle-{{ customer.id }}"
+            type="button"
+            data-lbb-start
+            class="btn btn-square btn-ghost btn-xs"
+            aria-controls="expando-detail-{{ customer.id }}"
+            aria-label="Toggle details for {{ customer.company }}"
+            data-attr:aria-expanded="$open === {{ customer.id }} ? 'true' : 'false'"
+            data-on:click="$open = $open === {{ customer.id }} ? 0 : {{ customer.id }}">
+            <span data-show="$open !== {{ customer.id }}">
+                <c-lbi.rmx.arrow-right-s w="16" h="16" />
+            </span>
+            <span style="display:none" data-show="$open === {{ customer.id }}">
+                <c-lbi.rmx.arrow-down-s w="16" h="16" />
+            </span>
+        </button>
+    </td>
+
+    <td>
+        <div class="flex items-center gap-3">
+            <c-lb.avatar placeholder initials="{{ customer.initials }}" bgColor="neutral" size="sm" rounded="md" />
+            <div class="min-w-0 leading-tight">
+                <div class="font-medium truncate">{{ customer.company }}</div>
+                <div class="text-xs text-base-content/50 truncate">{{ customer.contact }} · {{ customer.title }}</div>
+            </div>
+        </div>
+    </td>
+
+    <td class="hidden md:table-cell text-base-content/70">{{ customer.plan }}</td>
+
+    <td>
+        <div class="flex items-center gap-1.5">
+            <c-lb.badge variant="{{ customer.status_variant }}" style="soft" size="sm">{{ customer.status }}</c-lb.badge>
+            <c-lb.badge variant="{{ customer.health_variant }}" style="outline" size="xs">{{ customer.health }}</c-lb.badge>
+        </div>
+    </td>
+
+    <td class="text-end tabular-nums font-medium">${{ customer.mrr }}</td>
+
+    <td class="hidden lg:table-cell text-end tabular-nums text-base-content/70">{{ customer.seats_used }} / {{ customer.seats }}</td>
+
+    <td class="hidden md:table-cell text-end tabular-nums text-base-content/60 whitespace-nowrap">{{ customer.renews }}</td>
+
+</tr>

@@ -1,0 +1,4 @@
+{% load lbr_tags %}
+{% lbr_props "aura" attrs=attrs as rx %}
+
+<div class="{{ rx.classes }}" {{ rx.attrs }}>{{ slot }}</div>

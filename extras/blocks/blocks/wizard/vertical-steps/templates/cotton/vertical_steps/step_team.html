@@ -1,0 +1,50 @@
+<c-vars :roles="[]" />
+
+<div class="flex flex-col gap-5">
+
+    <div>
+        <h2 class="text-lg font-semibold tracking-tight">Bring the team</h2>
+        <p class="text-sm text-base-content/60 mt-1">
+            Invites go out when you finish. Roles can be changed by any admin afterwards.
+        </p>
+    </div>
+
+    <div class="grid gap-3">
+        <c-vertical-steps.field label="Teammate">
+            <c-lb.input
+                id="vt-invite1"
+                type="email"
+                placeholder="ingrid@veritylabs.io"
+                class="w-full"
+                bind="$form.invite1" />
+        </c-vertical-steps.field>
+
+        <c-vertical-steps.field label="Teammate" hint="(optional)">
+            <c-lb.input
+                id="vt-invite2"
+                type="email"
+                placeholder="peter.vance@northwind.co"
+                class="w-full"
+                bind="$form.invite2" />
+        </c-vertical-steps.field>
+
+        <c-vertical-steps.field label="They join as">
+            <c-lb.select id="vt-role" class="w-full" bind="$form.role">
+                {% for value, label in roles %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </c-lb.select>
+        </c-vertical-steps.field>
+    </div>
+
+    <div class="rounded-box bg-base-200/60 p-4">
+        <div class="text-xs uppercase tracking-wider text-base-content/40 mb-2">Who usually gets invited first</div>
+        <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-base-content/60">
+            <span>Head of Finance</span>
+            <span>Controller</span>
+            <span>RevOps Manager</span>
+            <span>Account Executives</span>
+        </div>
+    </div>
+
+</div>

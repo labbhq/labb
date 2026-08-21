@@ -1,20 +1,8 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    active
-    disabled
-    size=""
-    :sizeClasses="{
-        'xs': 'btn-xs',
-        'sm': 'btn-sm',
-        'md': 'btn-md',
-        'lg': 'btn-lg',
-        'xl': 'btn-xl'
-    }"
-/>
+{% load lb_tags lbr_tags %}
 {% parse_icon attrs as i %}
+{% lbr_props "pagination.item" attrs=attrs as rx %}
 
-<button class="join-item btn {% if active %}btn-active{% endif %} {% if disabled %}btn-disabled{% endif %} {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs|strip_icon_attrs }}>
+<button class="{{ rx.classes }}" {{ rx.attrs }}>
     {% if i.name and not i.end %}
         <c-component is="lbi" n="{{ i.name }}" w="1em" h="1em" :fill=i.fill class="{{ i.css_class }}" />
     {% endif %}

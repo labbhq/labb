@@ -1,0 +1,24 @@
+name: Onboarding
+ref: lb/wizard/onboarding
+type: fullstack
+labb_version: ">=0.5.0"
+description: "Multi-step workspace onboarding — state carried across steps in signals, per-step validation, one final submit to a real Django view"
+category: wizard
+status: launch
+anchor: true
+thumbnail: thumbnails/onboarding.png
+tags:
+  - reactive
+  - multi-step
+  - validation
+  - form
+  - onboarding
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's wizard anchor"
+
+allow_fixed_colours:
+  - "#312e81"
+  - "#0f766e"
+  - "#65a30d"

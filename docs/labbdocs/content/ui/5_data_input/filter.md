@@ -5,9 +5,10 @@ title: Filter
 description: "Filter component for Django: build radio-based filter groups for content and lists. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django filter component, filter tabs django, daisyui filter django, tailwind filter django, filter django-cotton, django ui filter, content filter django"
 daisy_ui_component_name: filter
+icon: rmx.filter
 ---
 
-Filter renders a group of radio buttons styled as toggle chips. Selecting one chip deselects the others — use it for tag filters, category selectors, or any mutually exclusive filter UI.
+Filter renders a group of radio buttons styled as toggle chips. Selecting one chip deselects the others. Use it for tag filters, category selectors, or any mutually exclusive filter UI.
 
 ## Basic Filter
 <c-lbdocs.component_example path="filter/basic" />

@@ -5,11 +5,11 @@ title: Accordion
 description: "Accordion component for Django: build collapsible content sections and FAQs. Built with django-cotton, Tailwind CSS, and daisyUI 5. Zero JavaScript by default."
 keywords: "django accordion component, accordion django, daisyui accordion django, tailwind accordion django, accordion django-cotton, django ui accordion, collapsible django, django-cotton"
 daisy_ui_component_name: accordion
+icon: rmx.expand-vertical
 ---
 
-Accordion for Django lets you build collapsible content sections using a simple HTML-like syntax.
-Built on django-cotton, Tailwind CSS, and daisyUI 5, it uses pure CSS checkbox state — no JavaScript
-required. Use it to create FAQs, expandable detail panels, and nested navigation in any Django template.
+Accordion builds collapsible content sections out of pure CSS checkbox state, so no JavaScript is
+required. Use it for FAQs, expandable detail panels, and nested navigation.
 
 ## Basic Accordion
 <c-lbdocs.component_example path="accordion/basic" previewStyle="flex-col" />

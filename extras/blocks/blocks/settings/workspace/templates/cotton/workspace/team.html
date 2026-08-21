@@ -1,0 +1,98 @@
+<c-vars :members="[]" :seats_used=0 :seats_total=0 :seats_left=0 :seats_pct=0 :seats_full="False" :plan="None" :signals="{}" :errors="{}" :roles="[]" />
+
+<c-workspace.section
+    title="Team"
+    desc="Who can see your customers, invoices and forecasts.">
+
+    <div class="grid lg:grid-cols-2 gap-6">
+
+        <c-workspace.seats
+            :seats_used=seats_used
+            :seats_total=seats_total
+            :seats_left=seats_left
+            :seats_pct=seats_pct
+            :seats_full=seats_full
+            :plan=plan />
+
+        <c-lb.card class="border border-base-300">
+            <c-lb.card.body class="p-5 gap-4">
+
+                <div>
+                    <h3 class="font-semibold">Invite a teammate</h3>
+                    <p class="text-xs text-base-content/50 mt-1">
+                        They get an email now and a seat when they accept.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <c-workspace.field
+                        label="Work email"
+                        required
+                        :error=errors.email
+                        validateTo="block_settings_workspace:invite_validate">
+                        <c-lb.input
+                            type="email"
+                            class="w-full"
+                            size="sm"
+                            placeholder="name@beaconlabs.com"
+                            autocomplete="off"
+                            :bind=signals.fields.email />
+                    </c-workspace.field>
+
+                    <c-workspace.field
+                        label="Role"
+                        on="change"
+                        validateTo="block_settings_workspace:invite_validate">
+                        <c-lb.select class="w-full" size="sm" :bind=signals.fields.role>
+                            {% for value, label in roles %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </c-lb.select>
+                    </c-workspace.field>
+                </div>
+
+                <c-lbr.post to="block_settings_workspace:invite_save" tag="div" on="click">
+                    <c-lb.button
+                        type="button"
+                        variant="primary"
+                        btnStyle="soft"
+                        size="sm"
+                        modifier="block"
+                        icon="rmx.user-add">
+                        Send invite
+                    </c-lb.button>
+                </c-lbr.post>
+
+            </c-lb.card.body>
+        </c-lb.card>
+
+    </div>
+
+    {% if members %}
+    <div class="overflow-x-auto border border-base-300 rounded-box">
+        <c-lb.table size="sm" class="w-full">
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Last active</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                <c-workspace.member-row :member=member />
+                {% endfor %}
+            </tbody>
+        </c-lb.table>
+    </div>
+    {% else %}
+    <div class="border border-dashed border-base-300 rounded-box p-10 text-center">
+        <p class="font-medium">Nobody here but you.</p>
+        <p class="text-sm text-base-content/60 mt-1">
+            Invite the people who chase renewals — they will see the same numbers you do.
+        </p>
+    </div>
+    {% endif %}
+
+</c-workspace.section>

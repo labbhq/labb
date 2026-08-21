@@ -20,12 +20,41 @@ tasks:
       - cd docs && poetry update
       - cd extras/icons && poetry update
       - cd extras/start && poetry update
+      - cd extras/blocks && poetry update --with local
+
+  blocks:validate:
+    desc: Validate all blocks in extras/blocks conform to spec
+    dir: extras/blocks
+    deps: [install]
+    cmds:
+      - poetry run labb block dev validate
+
+  blocks:build:
+    desc: Regenerate extras/blocks/index.yaml from block.yaml files
+    dir: extras/blocks
+    deps: [install]
+    cmds:
+      - poetry run labb block dev build
+
+  blocks:serve:
+    desc: Start the block renderer for live preview
+    dir: extras/blocks
+    deps: [install]
+    cmds:
+      - poetry run labb block dev serve
+    interactive: true
+
+  blocks:new:
+    desc: Scaffold a new block (usage - task blocks:new -- crud/my-block)
+    dir: extras/blocks
+    deps: [install]
+    cmds:
+      - poetry run labb block dev new {{.CLI_ARGS}}
 
   update:
-    desc: Refresh Python dependencies, Alpine.js CDN bundle, and Chart.js CDN bundle
+    desc: Refresh Python dependencies and the Chart.js CDN bundle
     cmds:
       - task deps:update
-      - task alpine:download
       - task chart:download
 
   venv:
@@ -50,29 +79,54 @@ tasks:
       - poetry run pre-commit run --all-files
 
   test:icons:
-    desc: Run tests for the icons project (parallel execution enabled)
+    desc: Run tests for the icons project
     dir: .
     deps: [install]
     cmds:
       - poetry run pytest extras/icons {{.CLI_ARGS}}
 
   test:
-    desc: Run tests for the main project (parallel execution enabled)
+    desc: Run unit tests and the labbdocs suite
     dir: .
     deps: [install]
     cmds:
       - poetry run pytest {{.CLI_ARGS}}
-    summary: |
-      Run tests for the main project with parallel execution.
+      - task: test:docs
+        vars: {CLI_ARGS: ""}
 
-      Parallel execution is enabled by default (uses all CPU cores).
+  test:docs:
+    desc: Run the labbdocs suite (search tests need PostgreSQL, else they skip)
+    dir: .
+    deps: [install]
+    cmds:
+      # docs/ has its own poetry env without the test deps, so run from the root.
+      - poetry run pytest -c docs/pytest.ini docs {{.CLI_ARGS}}
 
-      Examples:
-        task test                           # Run all tests in parallel (auto-detect CPUs)
-        task test -- -n 4                   # Run with 4 workers
-        task test -- -n 0                   # Disable parallel execution
-        task test -- -k test_button         # Run specific test (with parallelism)
-        task test -- labb/tests/cli         # Run specific directory
+  test:js:
+    desc: Run the browser-script tests (node's built-in runner, no dependencies)
+    dir: .
+    cmds:
+      - node --test js/*.test.js {{.CLI_ARGS}}
+
+  test:all:
+    desc: Run every suite (each in its own session — extras have separate settings)
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run pytest labb
+      - poetry run pytest -c docs/pytest.ini docs
+      - poetry run pytest extras/icons
+      - poetry run pytest extras/start
+      - cd extras/blocks && poetry run pytest
+      - node --test js/*.test.js
+
+
+  lb-schema:generate:
+    desc: Generate lb-schema.js from component YAML schemas
+    dir: .
+    deps: [install]
+    cmds:
+      - poetry run python labb/scripts/generate_lb_schema.py
 
   llms:generate:
     desc: Generate llms.txt file for LLM documentation
@@ -81,34 +135,12 @@ tasks:
     cmds:
       - poetry run python -m labb.llms.generator
 
-  alpine:generate:
-    desc: Generate Alpine.js component JS files from component schemas
-    dir: .
-    deps: [install]
-    cmds:
-      - poetry run python -m labb.components.generators.alpine_components {{.CLI_ARGS}}
-      - poetry run python -m labb.components.generators.alpine_x_templates
-    summary: |
-      Generate Alpine.js component files into labb/static/labb/js/alpine/.
-
-      Examples:
-        task alpine:generate                          # Generate all components
-        task alpine:generate -- button               # Generate specific component(s)
-        task alpine:generate -- button modal badge   # Generate multiple components
-
-  alpine:download:
-    desc: Download the Alpine.js minified bundle from CDN into labb/static/labb/js/alpine/
-    cmds:
-      - mkdir -p labb/static/labb/js/alpine
-      - curl -fsSL https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js -o labb/static/labb/js/alpine/alpine.min.js
-      - echo "Downloaded alpine.min.js"
-
   chart:download:
-    desc: Download the Chart.js UMD bundle from CDN into labb/static/labb/js/chart/
+    desc: Download the Chart.js UMD bundle from CDN into labb/static/labb/js/vendor/
     cmds:
-      - mkdir -p labb/static/labb/js/chart
-      - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js -o labb/static/labb/js/chart/chart.umd.min.js
-      - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js.map -o labb/static/labb/js/chart/chart.umd.min.js.map
+      - mkdir -p labb/static/labb/js/vendor
+      - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js -o labb/static/labb/js/vendor/chart.umd.min.js
+      - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js.map -o labb/static/labb/js/vendor/chart.umd.min.js.map
       - echo "Downloaded chart.umd.min.js"
 
   clean:
@@ -120,10 +152,10 @@ tasks:
       - echo "Cleaned up generated files"
 
   version:
-    desc: Update version numbers across all packages
+    desc: Update version numbers across all packages (labbcd owns this)
     dir: .
     cmds:
-      - poetry run python scripts/version_manager.py {{.CLI_ARGS}}
+      - labbcd release version {{.CLI_ARGS}}
     summary: |
       Update version numbers across all packages.
 

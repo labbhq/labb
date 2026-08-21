@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
+import typer
 import yaml
 from rich.console import Console
 from rich.panel import Panel
@@ -127,6 +128,7 @@ def _show_raw_config(config_path: Optional[str], config: LabbConfig):
         except Exception as e:
             console.print(f"[red]❌ Error reading configuration file: {e}[/red]")
             _show_effective_config(config)
+            raise typer.Exit(1)
     else:
         # Show effective configuration (defaults)
         console.print(
@@ -162,6 +164,7 @@ def _show_effective_config(config: LabbConfig):
 
     except Exception as e:
         console.print(f"[red]❌ Error generating configuration YAML: {e}[/red]")
+        raise typer.Exit(1)
 
 
 def validate_config(config_path: Optional[str] = None):
@@ -170,19 +173,22 @@ def validate_config(config_path: Optional[str] = None):
     console.print("\n[bold blue]🔍 Validating Configuration[/bold blue]")
 
     config, metadata = _load_config_with_metadata(config_path)
-    issues = []
+    # Errors mean the config cannot work and the command exits non-zero;
+    # warnings are reported but do not fail the run.
+    errors = []
+    warnings = []
 
     # Check if files exist
     input_path = Path(config.input_file)
     if not input_path.exists():
-        issues.append(f"❌ Input CSS file does not exist: {config.input_file}")
+        errors.append(f"❌ Input CSS file does not exist: {config.input_file}")
     else:
         console.print(f"[green]✅ Input CSS file found: {config.input_file}[/green]")
 
     # Check if output directory exists
     output_path = Path(config.output_file)
     if not output_path.parent.exists():
-        issues.append(f"⚠️  Output directory does not exist: {output_path.parent}")
+        warnings.append(f"⚠️  Output directory does not exist: {output_path.parent}")
     else:
         console.print(
             f"[green]✅ Output directory exists: {output_path.parent}[/green]"
@@ -191,7 +197,7 @@ def validate_config(config_path: Optional[str] = None):
     # Check if classes output directory exists
     classes_path = Path(config.classes_output)
     if not classes_path.parent.exists():
-        issues.append(
+        warnings.append(
             f"⚠️  Classes output directory does not exist: {classes_path.parent}"
         )
     else:
@@ -209,13 +215,14 @@ def validate_config(config_path: Optional[str] = None):
         template_files_found += len(html_files)
 
     if template_files_found == 0:
-        issues.append(
+        warnings.append(
             "⚠️  No HTML template files found matching the configured patterns"
         )
     else:
         console.print(f"[green]✅ Found {template_files_found} template files[/green]")
 
     # Report issues
+    issues = errors + warnings
     if issues:
         console.print("\n[yellow]Issues found:[/yellow]")
         for issue in issues:
@@ -228,6 +235,9 @@ def validate_config(config_path: Optional[str] = None):
         console.print("\n[bold blue]💡 Suggested actions:[/bold blue]")
         console.print("  • Run 'labb setup' to create missing files and directories")
         console.print("  • Run 'labb init' to create a new configuration file")
+
+    if errors:
+        raise typer.Exit(1)
 
 
 def edit_config(config_path: Optional[str] = None):
@@ -273,3 +283,4 @@ def edit_config(config_path: Optional[str] = None):
     except Exception as e:
         console.print(f"[red]❌ Error opening editor: {e}[/red]")
         console.print(f"[yellow]Please manually edit: {config_file_path}[/yellow]")
+        raise typer.Exit(1)

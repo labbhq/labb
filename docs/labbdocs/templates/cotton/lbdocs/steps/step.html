@@ -1,0 +1,19 @@
+<c-vars
+    number=""
+    title=""
+    last
+    class=""
+/>
+
+<div class="lbdocs-step relative flex gap-4 pb-8 last:pb-0 {{ class }}">
+    {% if not last %}
+    <span class="absolute left-4 top-8 -ml-px h-full w-px bg-base-300" aria-hidden="true"></span>
+    {% endif %}
+    <span class="relative z-10 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-content">{{ number }}</span>
+    <div class="min-w-0 flex-1">
+        {% if title %}
+        <p class="mt-1 mb-2 font-semibold text-base-content">{{ title }}</p>
+        {% endif %}
+        {{ slot }}
+    </div>
+</div>

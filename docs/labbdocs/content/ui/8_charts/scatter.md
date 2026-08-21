@@ -2,12 +2,13 @@
 doc_layout: component
 component: c-lb.chart.scatter
 title: Scatter Chart
-description: "Scatter chart component for Django: plot X/Y data points with Chart.js and daisyUI theming. Server-rendered with django-cotton."
+description: "Plot X/Y points in a Django template to look for correlation or spread. Chart.js scatter plots with daisyUI theming, dropped in as a django-cotton component."
 keywords: "django scatter chart, scatter plot django, chart.js django, daisyui scatter chart django, tailwind chart django, django data visualization, scatter plot django-cotton"
 daisy_ui_component_name: ""
+icon: rmx.area-chart
 ---
 
-Scatter charts plot individual data points on X/Y axes, suited for correlation and distribution analysis. Each point is a `{x, y}` object in the dataset array.
+Use a scatter chart when the shape of the cloud is the point: correlation, clustering, outliers. The dataset array holds one `{x, y}` object per point rather than a flat list of numbers.
 
 ## Basic Scatter Chart
 <c-lbdocs.component_example path="chart/scatter" />

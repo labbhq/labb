@@ -1,0 +1,32 @@
+<c-vars :signals="{}" :plans="[]" :selected_plan="None" :people=1 :errors="{}" />
+
+<div>
+    <h2 class="text-xl font-semibold tracking-tight">Pick a plan</h2>
+    <p class="text-sm text-base-content/60 mt-1">
+        You are starting with <span class="font-medium tabular-nums">{{ people }}</span>
+        {% if people == 1 %}seat{% else %}seats{% endif %}, so the plan has to fit the team you
+        just invited. Free for 14 days either way.
+    </p>
+</div>
+
+{% if errors.plan %}
+<c-lb.alert variant="error" alertStyle="soft" icon="rmx.error-warning">
+    {{ errors.plan }}
+</c-lb.alert>
+{% endif %}
+
+{% if plans %}
+<div class="grid gap-3">
+    {% for plan in plans %}
+    <c-onboarding.plan-card :plan=plan :people=people />
+    {% endfor %}
+</div>
+{% else %}
+<c-lb.alert alertStyle="soft" icon="rmx.price-tag-3">
+    No plans are configured yet. Add one in Arden admin and it will show up here.
+</c-lb.alert>
+{% endif %}
+
+<p class="text-xs text-base-content/50">
+    Change plan or cancel any time from Settings. We email you three days before the trial ends.
+</p>

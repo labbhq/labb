@@ -5,6 +5,7 @@ title: FAB / Speed Dial
 description: "Floating action button (FAB) component for Django: add speed dial menus and prominent actions. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django fab component, floating action button django, speed dial django, daisyui fab django, tailwind fab django, django-cotton fab, django ui fab"
 daisy_ui_component_name: fab
+icon: rmx.add-circle
 ---
 
 <c-lb.alert variant="info" icon="rmx.information" alertStyle="outline">

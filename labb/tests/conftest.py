@@ -195,3 +195,18 @@ def django_project_dir(temp_dir):
 @pytest.fixture(autouse=True)
 def clear_labb_config_cache():
     clear_config_cache()
+
+
+@pytest.fixture(autouse=True)
+def _restore_component_registry():
+    """Undo any test that reloads the component registry with a mocked schema.
+
+    ComponentRegistry is a process-wide singleton, so a test that swaps in a
+    two-component fixture schema silently starves every test that runs after it.
+    """
+    from labb.components.registry import ComponentRegistry
+
+    registry = ComponentRegistry()
+    saved = registry._components
+    yield
+    registry._components = saved

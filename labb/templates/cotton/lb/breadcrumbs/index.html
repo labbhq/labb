@@ -1,17 +1,7 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    size="md"
-    :sizeClasses="{
-        'xs': 'text-xs',
-        'sm': 'text-sm',
-        'md': 'text-base',
-        'lg': 'text-lg',
-        'xl': 'text-xl'
-    }"
-/>
+{% load lbr_tags %}
+{% lbr_props "breadcrumbs" attrs=attrs as rx %}
 
-<div class="breadcrumbs {{ sizeClasses|get_dict_item:size }} {{ class }}" {{ attrs }}>
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     <ul>
         {{ slot }}
     </ul>

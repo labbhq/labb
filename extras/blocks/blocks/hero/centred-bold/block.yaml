@@ -1,0 +1,18 @@
+name: Centred bold
+ref: lb/hero/centred-bold
+type: fe
+labb_version: ">=0.5.0"
+description: "Large centred type with paired CTAs, an avatar-backed social proof row and a one-line customer quote"
+category: hero
+status: launch
+thumbnail: thumbnails/centred-bold.png
+tags:
+  - hero
+  - marketing
+  - static
+  - zero-js
+preview_context: {}
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"

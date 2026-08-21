@@ -1,0 +1,31 @@
+<c-vars :page=1 :total_pages=1 :prev_page=1 :next_page=1 :first_index=0 :last_index=0 :total=0 />
+
+<div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+
+    <p class="text-sm text-base-content/50 tabular-nums">
+        Showing {{ first_index }}–{{ last_index }} of {{ total }} customers
+    </p>
+
+    {% if total_pages > 1 %}
+    <div class="flex items-center gap-1">
+        {% if page > 1 %}
+        <c-lbr.get to="block_data_table_customers:index" before="$page={{ prev_page }}">
+            <c-lb.button btnStyle="ghost" size="sm">Previous</c-lb.button>
+        </c-lbr.get>
+        {% else %}
+        <c-lb.button btnStyle="ghost" size="sm" behavior="disabled">Previous</c-lb.button>
+        {% endif %}
+
+        <span class="px-3 text-sm text-base-content/60 tabular-nums">Page {{ page }} of {{ total_pages }}</span>
+
+        {% if page < total_pages %}
+        <c-lbr.get to="block_data_table_customers:index" before="$page={{ next_page }}">
+            <c-lb.button btnStyle="ghost" size="sm">Next</c-lb.button>
+        </c-lbr.get>
+        {% else %}
+        <c-lb.button btnStyle="ghost" size="sm" behavior="disabled">Next</c-lb.button>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>

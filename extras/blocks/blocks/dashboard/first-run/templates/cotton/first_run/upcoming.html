@@ -1,0 +1,28 @@
+<c-vars :items="[]" />
+
+<c-lb.card border class="bg-base-100">
+    <c-lb.card.body class="gap-4 p-5">
+
+        <div>
+            <h2 class="font-semibold tracking-tight">What lands first</h2>
+            <p class="text-xs text-base-content/50 mt-0.5">
+                In the order Arden can answer them, once the sync finishes.
+            </p>
+        </div>
+
+        <ul id="first-looks" class="flex flex-col gap-4">
+            {% for item in items %}
+            <li class="flex items-start gap-3">
+                <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <c-component is="lbi" n="{{ item.icon }}" w="16" h="16" />
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-medium">{{ item.title }}</p>
+                    <p class="text-xs text-base-content/50 mt-0.5">{{ item.detail }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </c-lb.card.body>
+</c-lb.card>

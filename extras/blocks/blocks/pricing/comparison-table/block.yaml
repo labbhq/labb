@@ -1,0 +1,83 @@
+name: Comparison table
+ref: lb/pricing/comparison-table
+type: fe
+labb_version: ">=0.5.0"
+description: "Full feature matrix across three plans, with a monthly/annual toggle that re-prices the header from one client signal"
+category: pricing
+status: launch
+thumbnail: thumbnails/comparison-table.png
+tags:
+  - pricing
+  - reactive
+  - reactive-props
+  - table
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  period:
+    annual: false
+    monthlyStyle: ""
+    annualStyle: "ghost"
+    suffix: "/month"
+    note: "Billed monthly. Cancel any time."
+  plans:
+    - name: "Starter"
+      tagline: "First hundred customers"
+      monthly: "49"
+      annual: "490"
+      cta: "Start free trial"
+      featured: false
+    - name: "Growth"
+      tagline: "A forecast to hit"
+      monthly: "149"
+      annual: "1,490"
+      cta: "Start free trial"
+      featured: true
+    - name: "Scale"
+      tagline: "Answering to a board"
+      monthly: "449"
+      annual: "4,490"
+      cta: "Talk to sales"
+      featured: false
+  groups:
+    - name: "The revenue graph"
+      rows:
+        - label: "Tracked customers"
+          values: ["1,000", "10,000", "Unlimited"]
+        - label: "Seats included"
+          values: ["3", "10", "25"]
+        - label: "History backfilled on connect"
+          values: ["24 months", "24 months", "Full history"]
+        - label: "MRR, churn and cohort dashboards"
+          values: ["yes", "yes", "yes"]
+    - name: "Forecasting"
+      rows:
+        - label: "Revenue forecasting"
+          values: ["no", "yes", "yes"]
+        - label: "Scenario planning"
+          values: ["no", "yes", "yes"]
+        - label: "Custom revenue models"
+          values: ["no", "no", "yes"]
+    - name: "Alerts and integrations"
+      rows:
+        - label: "Renewal and churn-risk alerts"
+          values: ["no", "yes", "yes"]
+        - label: "Stripe and Chargebee sync"
+          values: ["yes", "yes", "yes"]
+        - label: "Slack and HubSpot sync"
+          values: ["no", "yes", "yes"]
+        - label: "API rate limit"
+          values: ["60 / min", "600 / min", "6,000 / min"]
+    - name: "Governance and support"
+      rows:
+        - label: "SSO, SCIM and audit log"
+          values: ["no", "no", "yes"]
+        - label: "Data residency, EU or US"
+          values: ["no", "no", "yes"]
+        - label: "Support"
+          values: ["Email, 2 days", "Priority, next day", "Dedicated CSM"]
+        - label: "Uptime SLA"
+          values: ["no", "99.5%", "99.9%"]

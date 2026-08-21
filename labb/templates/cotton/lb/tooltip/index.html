@@ -1,28 +1,9 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
     tip=""
-    placement="top"
-    :placementClasses="{
-        'top': 'tooltip-top',
-        'bottom': 'tooltip-bottom',
-        'left': 'tooltip-left',
-        'right': 'tooltip-right'
-    }"
-    variant=""
-    :variantClasses="{
-        'neutral': 'tooltip-neutral',
-        'primary': 'tooltip-primary',
-        'secondary': 'tooltip-secondary',
-        'accent': 'tooltip-accent',
-        'info': 'tooltip-info',
-        'success': 'tooltip-success',
-        'warning': 'tooltip-warning',
-        'error': 'tooltip-error'
-    }"
-    open
 />
+{% lbr_props "tooltip" attrs=attrs as rx %}
 
-<div class="tooltip {{ placementClasses|get_dict_item:placement }} {{ variantClasses|get_dict_item:variant }} {% if open %}tooltip-open{% endif %} {{ class }}" {% if tip %}data-tip="{{ tip }}"{% endif %} {{ attrs }}>
+<div class="{{ rx.classes }}" {% if tip %}data-tip="{{ tip }}"{% endif %} {{ rx.attrs }}>
     {{ slot }}
 </div>

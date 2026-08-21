@@ -1,0 +1,42 @@
+name: Progress minimal
+ref: lb/wizard/progress-minimal
+type: fe
+labb_version: ">=0.5.0"
+description: "A four-question setup with nothing but a bar and a count — the bar's value and its colour are both driven by one client signal, with no server behind it"
+category: wizard
+thumbnail: thumbnails/progress-minimal.png
+status: launch
+tags:
+  - wizard
+  - multi-step
+  - reactive
+  - reactive-props
+  - zero-server
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  step: 1
+  tone: "primary"
+  form:
+    company: ""
+    model: "subscriptions"
+    source: "stripe"
+    invite: ""
+  models:
+    - value: "subscriptions"
+      name: "Subscriptions"
+      note: "Fixed monthly or yearly plans."
+    - value: "usage"
+      name: "Usage-based"
+      note: "Metered billing that varies each cycle."
+    - value: "both"
+      name: "Both"
+      note: "A base plan with metered overage on top."
+  sources:
+    - ["stripe", "Stripe"]
+    - ["chargebee", "Chargebee"]
+    - ["paddle", "Paddle"]
+    - ["csv", "A monthly CSV"]

@@ -1,0 +1,30 @@
+steps:
+  - title: Start with a server-rendered table
+    file: templates/pages/index.html
+    match: "<c-compact-table.table"
+    teaches: [zero-js]
+    docs: [guide/reactivity]
+    body: |
+      Nothing on this page is reactive, so nothing loads. No Datastar, no Alpine, no
+      bundle. The table is rendered by Django and shipped as HTML. Open the network
+      tab: the only script tag on the page is the one you do not find.
+
+  - title: Use table spacing for dense data
+    file: templates/cotton/compact_table/table.html
+    match: '<c-lb.table size="xs"'
+    teaches: [theming]
+    docs: [ui/components/table]
+    body: |
+      The compact treatment is one prop. `size="xs"` tightens every cell, and the row
+      keeps a two-line account cell so the contact still fits without a second column.
+      Everything numeric is tabular so the digits line up down the column.
+
+  - title: Include the table empty state
+    file: templates/cotton/compact_table/attention.html
+    match: "<c-compact-table.empty"
+    teaches: [theming]
+    docs: [ui/components/table]
+    body: |
+      The overdue panel has nothing in it, and it says so on purpose. A table that only
+      knows how to render rows is unfinished. This one is a component with copy, an icon
+      and a next action, and it recolours with the theme like everything else.

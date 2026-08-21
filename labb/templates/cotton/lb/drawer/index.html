@@ -1,21 +1,15 @@
 
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
     drawerId="drawer"
-    class=""
-    end
-    open
     sideClass=""
     overlayClass=""
-    :stateClasses="{
-        'end': 'drawer-end',
-        'open': 'drawer-open'
-    }"
 />
+{% lbr_props "drawer" attrs=attrs as rx %}
 
 <div
-    class="drawer {% if end %}{{ stateClasses|get_dict_item:'end' }}{% endif %} {% if open %}{{ stateClasses|get_dict_item:'open' }}{% endif %} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     {% if not checkbox %}
         <c-lb.drawer.checkbox :id=drawerId />

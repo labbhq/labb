@@ -1,0 +1,45 @@
+<c-vars :groups="[]" q="" />
+
+<div class="flex flex-col gap-7">
+    {% for group in groups %}
+    <section>
+        <div class="mb-1.5 flex items-center justify-between gap-4 px-2">
+            <div class="flex items-baseline gap-2">
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/40">{{ group.label }}</h2>
+                <span class="text-xs tabular-nums text-base-content/30">{{ group.total }}</span>
+            </div>
+            {% if group.capped %}
+            <a href="{% url 'labbdocs_search:page' %}?q={{ q|urlencode }}&type={{ group.type }}" class="text-xs text-base-content/50 transition-colors hover:text-base-content">See all {{ group.total }}</a>
+            {% endif %}
+        </div>
+
+        <div class="rounded-xl bg-base-200/40 p-1">
+            {% if group.type == "guide" %}
+            {% regroup group.results|dictsort:"metadata.page_url" by metadata.page_url as pages %}
+            <div class="flex flex-col gap-1">
+                {% for page in pages %}
+                {% with rows=page.list %}
+                <div class="flex flex-col">
+                    <a href="{{ page.grouper }}" class="block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-base-200">{{ rows.0.metadata.page_title }}</a>
+                    <div class="ml-4 flex flex-col pl-2">
+                        {% for row in rows %}{% if row.metadata.is_heading %}<c-lbdocs.search.cards.guide :doc=row />{% endif %}{% endfor %}
+                    </div>
+                </div>
+                {% endwith %}
+                {% endfor %}
+            </div>
+
+            {% elif group.type == "icon" %}
+            <div class="grid grid-cols-5 gap-1 sm:grid-cols-8">
+                {% for doc in group.results %}<c-lbdocs.search.cards.icon :doc=doc />{% endfor %}
+            </div>
+
+            {% else %}
+            <div class="flex flex-col gap-0.5">
+                {% for doc in group.results %}<c-lbdocs.search.result-card :doc=doc />{% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    {% endfor %}
+</div>

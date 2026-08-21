@@ -1,0 +1,48 @@
+steps:
+  - title: Declare the step and answer state
+    file: templates/pages/index.html
+    match: "<c-lbr.signals"
+    teaches: [signals, multi-step]
+    docs: [reactivity/signals]
+    body: |
+      One signal holds the step, one holds every answer. There is no view behind
+      this block and no session: the wizard is a page that changes what it shows.
+
+  - title: Show the active step
+    file: templates/pages/index.html
+    match: 'data-show="$step === 2"'
+    teaches: [signals, multi-step]
+    docs: [reactivity/patterns]
+    body: |
+      Each step is always in the DOM and only one is visible. That is why going
+      back never loses a keystroke — the inputs were never destroyed, and their
+      values live in the signal bag anyway.
+
+  - title: Keep navigation in sync with the step
+    file: templates/cotton/horizontal_steps/stepper.html
+    match: "data-class=\"{'bg-primary text-primary-content'"
+    teaches: [signals, theming]
+    docs: [reactivity/patterns]
+    body: |
+      Done, current and upcoming are three states of one number. `data-class`
+      swaps theme tokens — no fixed colours, so the stepper is legible in every
+      daisyUI theme.
+
+  - title: Move between steps in the browser
+    file: templates/cotton/horizontal_steps/nav.html
+    match: 'data-on:click="$step = Math.min($step + 1, 3)"'
+    teaches: [signals, multi-step]
+    docs: [reactivity/patterns]
+    body: |
+      Continue adds one to a signal. Open the network tab and click through the
+      whole wizard: nothing is sent. The real submit belongs on a server, and that
+      is what the onboarding anchor is for.
+
+  - title: Bind fields to the answer state
+    file: templates/cotton/horizontal_steps/step_data.html
+    match: 'data-bind="form.source"'
+    teaches: [binding]
+    docs: [reactivity/binding]
+    body: |
+      Radios, selects and text inputs all bind to a path in the same signal
+      object. Nothing saves them between steps, because nothing has to.

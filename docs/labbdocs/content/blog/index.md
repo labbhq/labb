@@ -1,6 +1,6 @@
 ---
 title: labb blog
-description: "labb blog: Django UI tutorials, releases, and opinions on django-cotton, Tailwind CSS, and daisyUI. Updates from the labb.io team."
+description: "The labb blog: release notes, Django UI tutorials, and notes from building a component library on django-cotton, Tailwind CSS, and daisyUI."
 keywords: "labb blog, django ui blog, django components tutorial, labb.io, django-cotton news"
 doc_show_toc: false
 doc_hide_title: true
@@ -26,5 +26,5 @@ doc_hide_drawer: true
     {% endfor %}
   </c-lbdocs.doc_card.grid>
 {% else %}
-  <p class="text-base-content/60">No blog posts yet. Check back soon!</p>
+  <p class="text-base-content/60">No posts yet.</p>
 {% endif %}

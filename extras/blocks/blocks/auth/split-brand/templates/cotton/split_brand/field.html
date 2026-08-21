@@ -1,0 +1,16 @@
+<c-vars label="" hint="" error="" required validateTo="" on="input__debounce.600ms" />
+
+<c-lbr.post :to=validateTo tag="div" on="{{ on }}" before="if ($submitted) return">
+
+    <label class="label label-text text-sm font-medium mb-1">
+        {{ label }}{% if required %} <span class="text-error">*</span>{% endif %}
+        {% if hint %}<span class="text-base-content/40 font-normal">{{ hint }}</span>{% endif %}
+    </label>
+
+    {{ slot }}
+
+    {% if error %}
+    <p class="text-error text-xs mt-1">{{ error }}</p>
+    {% endif %}
+
+</c-lbr.post>

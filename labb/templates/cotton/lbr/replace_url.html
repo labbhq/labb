@@ -1,0 +1,16 @@
+{% load lbr_tags lb_tags %}
+{% lb_push_stack name="components" path="labb/js/vendor/datastar.js" mode="module" %}
+<c-vars
+    to=""
+    pk=""
+    kwargs=""
+    push=""
+/>
+
+{% lbr_resolve_url to kwargs pk as lbr_href %}
+{% lbr_replace_url_js lbr_href push as replace_js %}
+
+<div
+    data-init="{{ replace_js }}"
+    hidden
+></div>

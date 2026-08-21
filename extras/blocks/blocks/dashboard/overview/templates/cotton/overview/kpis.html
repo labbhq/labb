@@ -1,0 +1,46 @@
+<c-vars
+    mrr="" arr="" net_new="" :net_new_up="True"
+    :active_count="0" :customer_count="0"
+    :churn_rate="0" :churned_count="0" />
+
+<c-lb.stat.group class="w-full border border-base-300 bg-base-100">
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="primary" icon="rmx.line-chart" />
+        <c-lb.stat.title>MRR</c-lb.stat.title>
+        <c-lb.stat.value class="tabular-nums">{{ mrr }}</c-lb.stat.value>
+        <c-lb.stat.desc class="flex items-center gap-1">
+            {% if net_new_up %}
+            <c-lb.badge variant="success" style="soft" size="xs" icon="rmx.arrow-up">{{ net_new }}</c-lb.badge>
+            {% else %}
+            <c-lb.badge variant="error" style="soft" size="xs" icon="rmx.arrow-down">{{ net_new }}</c-lb.badge>
+            {% endif %}
+            net new this month
+        </c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="secondary" icon="rmx.building" />
+        <c-lb.stat.title>Paying accounts</c-lb.stat.title>
+        <c-lb.stat.value class="tabular-nums">{{ active_count }}</c-lb.stat.value>
+        <c-lb.stat.desc>of {{ customer_count }} tracked · {{ arr }} ARR</c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="warning" icon="rmx.alert" />
+        <c-lb.stat.title>Logo churn</c-lb.stat.title>
+        <c-lb.stat.value class="tabular-nums">{{ churn_rate }}%</c-lb.stat.value>
+        <c-lb.stat.desc>{{ churned_count }} accounts lost to date</c-lb.stat.desc>
+    </c-lb.stat>
+
+    <c-lb.stat>
+        <c-lb.stat.figure variant="success" icon="rmx.pulse" />
+        <c-lb.stat.title>Collected today</c-lb.stat.title>
+        <c-overview.metric />
+        <c-lb.stat.desc class="flex items-center gap-1">
+            <c-lb.badge variant="success" style="soft" size="xs">live</c-lb.badge>
+            <span class="tabular-nums" data-text="$collected.count"></span> invoices settled
+        </c-lb.stat.desc>
+    </c-lb.stat>
+
+</c-lb.stat.group>

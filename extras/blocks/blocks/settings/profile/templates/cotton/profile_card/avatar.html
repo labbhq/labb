@@ -1,0 +1,66 @@
+<c-vars :member="{}" />
+
+<c-lb.card class="border border-base-300 shadow-sm">
+    <c-lb.card.body class="gap-5 p-6 sm:p-8">
+
+        <div>
+            <h2 class="text-lg font-semibold tracking-tight">Photo</h2>
+            <p class="text-sm text-base-content/60 mt-1">
+                A face makes an approval easier to trust. PNG or JPEG, up to 2 MB.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-6">
+
+            <div class="relative">
+                <div id="avatar-fallback" data-show="!$avatar.url">
+                    <c-lb.avatar
+                        placeholder
+                        initials="{{ member.initials }}"
+                        bgColor="primary"
+                        size="xl"
+                        ring
+                        ringColor="primary" />
+                </div>
+
+                <img
+                    id="avatar-preview"
+                    alt="The photo you just chose"
+                    class="size-20 rounded-full object-cover ring-2 ring-primary ring-offset-base-100 ring-offset-2"
+                    data-show="$avatar.url"
+                    data-attr:src="$avatar.url"
+                    style="display:none"
+                />
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <c-lb.file-input
+                    id="avatar-file"
+                    size="sm"
+                    accept="image/png,image/jpeg"
+                    class="w-64"
+                    data-on:change="$avatar = ardenPickAvatar(evt)" />
+
+                <div class="flex items-center gap-3 text-xs">
+                    <span id="avatar-filename" class="text-base-content/50 truncate max-w-48"
+                          data-text="$avatar.name || 'Nothing chosen yet'">Nothing chosen yet</span>
+
+                    <button
+                        id="avatar-clear"
+                        type="button"
+                        class="link link-hover text-base-content/50"
+                        data-show="$avatar.url"
+                        data-on:click="$avatar = {url: '', name: ''}"
+                        style="display:none"
+                    >Remove</button>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="text-xs text-base-content/45 border-t border-base-300 pt-4">
+            The preview is local to this browser. Nothing is uploaded until you save.
+        </p>
+
+    </c-lb.card.body>
+</c-lb.card>

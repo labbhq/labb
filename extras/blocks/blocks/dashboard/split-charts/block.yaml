@@ -1,0 +1,148 @@
+name: Split charts
+ref: lb/dashboard/split-charts
+type: fe
+labb_version: ">=0.5.0"
+description: "A two-column analytics dashboard whose 7/30/90-day switch redraws every chart from one client signal — no server, no chart endpoint"
+category: dashboard
+status: launch
+thumbnail: thumbnails/split-charts.png
+tags:
+  - dashboard
+  - charts
+  - reactive
+  - reactive-props
+  - zero-server
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's zero-server chart switch"
+
+preview_context:
+  ranges:
+    "7d": &range7
+      key: "7d"
+      label: "Last 7 days"
+      note: "Seven days to 9 July 2026. Weekend movements are usually automatic renewals."
+      d7Style: ""
+      d30Style: "ghost"
+      d90Style: "ghost"
+      netNew: "4,740"
+      netNewDelta: "+1.2%"
+      expansion: "9,180"
+      churn: "4,440"
+      logos: "2"
+      mrr:
+        data:
+          labels: ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"]
+          datasets:
+            - label: "Net MRR"
+              data: [408200, 409100, 409100, 409400, 410800, 411600, 412900]
+              backgroundColor: "primary"
+      movement:
+        data:
+          labels: ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"]
+          datasets:
+            - label: "Expansion"
+              data: [1200, 900, 0, 300, 3400, 1180, 2200]
+              backgroundColor: "success"
+            - label: "Churn and contraction"
+              data: [-400, 0, 0, 0, -3000, -540, -500]
+              backgroundColor: "error"
+      source:
+        data:
+          labels: ["New logos", "Expansion", "Reactivation"]
+          datasets:
+            - label: "Gross new MRR"
+              data: [2300, 9180, 700]
+    "30d": &range30
+      key: "30d"
+      label: "Last 30 days"
+      note: "Thirty days to 9 July 2026. The step on 22 June is the Ironvale Group renewal."
+      d7Style: "ghost"
+      d30Style: ""
+      d90Style: "ghost"
+      netNew: "16,740"
+      netNewDelta: "+4.2%"
+      expansion: "38,100"
+      churn: "21,360"
+      logos: "11"
+      mrr:
+        data:
+          labels: ["9 Jun", "15 Jun", "21 Jun", "27 Jun", "3 Jul", "9 Jul"]
+          datasets:
+            - label: "Net MRR"
+              data: [396160, 399800, 403200, 405900, 409400, 412900]
+              backgroundColor: "primary"
+      movement:
+        data:
+          labels: ["Wk 24", "Wk 25", "Wk 26", "Wk 27", "Wk 28"]
+          datasets:
+            - label: "Expansion"
+              data: [6800, 9400, 7300, 8900, 5700]
+              backgroundColor: "success"
+            - label: "Churn and contraction"
+              data: [-3900, -4200, -5100, -3800, -4360]
+              backgroundColor: "error"
+      source:
+        data:
+          labels: ["New logos", "Expansion", "Reactivation"]
+          datasets:
+            - label: "Gross new MRR"
+              data: [11400, 38100, 2600]
+    "90d": &range90
+      key: "90d"
+      label: "Last 90 days"
+      note: "The full quarter to 9 July 2026, the window the board reviews."
+      d7Style: "ghost"
+      d30Style: "ghost"
+      d90Style: ""
+      netNew: "52,910"
+      netNewDelta: "+14.7%"
+      expansion: "118,400"
+      churn: "65,490"
+      logos: "34"
+      mrr:
+        data:
+          labels: ["Apr", "May", "Jun", "Jul"]
+          datasets:
+            - label: "Net MRR"
+              data: [359990, 378400, 396160, 412900]
+              backgroundColor: "primary"
+      movement:
+        data:
+          labels: ["Apr", "May", "Jun", "Jul"]
+          datasets:
+            - label: "Expansion"
+              data: [31200, 38700, 38100, 10400]
+              backgroundColor: "success"
+            - label: "Churn and contraction"
+              data: [-19800, -22100, -21360, -2230]
+              backgroundColor: "error"
+      source:
+        data:
+          labels: ["New logos", "Expansion", "Reactivation"]
+          datasets:
+            - label: "Gross new MRR"
+              data: [37200, 118400, 6900]
+  view: *range30
+  watchlist:
+    - name: "Kite & Bell"
+      plan: "Growth"
+      mrr: "$5,940"
+      reason: "Seats down 41% in 14 days"
+      tone: "error"
+    - name: "Ironvale Group"
+      plan: "Growth"
+      mrr: "$6,120"
+      reason: "Card expires in 9 days"
+      tone: "warning"
+    - name: "Northwind Co"
+      plan: "Growth"
+      mrr: "$7,480"
+      reason: "Renewal in 21 days, no owner"
+      tone: "warning"
+    - name: "Verity Labs"
+      plan: "Scale"
+      mrr: "$9,650"
+      reason: "Expansion call booked"
+      tone: "success"

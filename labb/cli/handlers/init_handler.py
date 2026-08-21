@@ -10,7 +10,7 @@ from rich.prompt import Confirm, Prompt
 
 import labb.cli
 from labb.cli.handlers.commons import confirm_working_in_django_project
-from labb.config import LabbConfig, save_config
+from labb.config import LabbConfig, PackageSpec, save_config
 
 console = Console()
 
@@ -52,8 +52,12 @@ def init_project(use_defaults: bool = False, force: bool = False):
     else:
         config = _prompt_for_config()
 
+    # A fresh project pulls in labb's themes + component-library classes.
+    if not config.packages:
+        config.packages = {"labb": PackageSpec(groups=["themes", "components"])}
+
     config_path = Path.cwd() / "labb.yaml"
-    save_config(config, config_path)
+    save_config(config, config_path, merge=False)
 
     # Create project structure
     _create_project_structure(config, force)

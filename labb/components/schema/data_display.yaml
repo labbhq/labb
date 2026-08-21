@@ -6,6 +6,80 @@
 #   These classes are not required to be present in all renderings and won't cause test failures
 #
 components:
+  countdown:
+    template: lb/countdown/index.html
+    description: Animated rolling number for timers and counters (values 0-999)
+    base_classes:
+    - countdown
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      value:
+        type: string
+        default: '0'
+        description: Current number to display (0-999); animate by re-rendering with a new value
+        required: false
+      digits:
+        type: string
+        default: ''
+        description: Reserve a fixed width for this many digits (blank = auto-size)
+        required: false
+      ariaLabel:
+        type: string
+        default: ''
+        description: Accessible label for the value (defaults to the value)
+        required: false
+
+  aura:
+    template: lb/aura/index.html
+    description: Animated conic-gradient glow border wrapping any element
+    base_classes:
+    - aura
+    variables:
+      class:
+        type: string
+        default: ''
+        description: Additional CSS classes to apply
+        required: false
+      variant:
+        type: enum
+        values:
+        - ''
+        - dual
+        - rainbow
+        - holo
+        - gold
+        - silver
+        - glow
+        default: ''
+        description: Glow colour style
+        css_mapping:
+          dual: aura-dual
+          rainbow: aura-rainbow
+          holo: aura-holo
+          gold: aura-gold
+          silver: aura-silver
+          glow: aura-glow
+      size:
+        type: enum
+        values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        default: md
+        description: Glow spread size
+        css_mapping:
+          xs: aura-xs
+          sm: aura-sm
+          md: aura-md
+          lg: aura-lg
+          xl: aura-xl
+
   table:
     template: lb/table/index.html
     description: DaisyUI Table component with support for zebra, pinning, and sizes.
@@ -277,18 +351,7 @@ components:
           lg: badge-lg
           xl: badge-xl
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-          end: Place at the end of the text
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill, end]
 
   accordion:
     template: lb/accordion/index.html
@@ -338,8 +401,6 @@ components:
         type: boolean
         default: false
         description: Whether this accordion item is initially open
-        css_mapping:
-          true: checked
       title:
         type: string
         default: ''
@@ -526,17 +587,8 @@ components:
           warning: bg-warning text-warning-content
           error: bg-error text-error-content
       icon:
-        type: string
-        default: ''
         description: Icon name for placeholder avatars (alternative to initials)
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Custom avatar content (overrides automatic image/placeholder rendering)
@@ -747,18 +799,7 @@ components:
         css_mapping:
           true: underline
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-          end: Place at the end of the text
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill, end]
     slots:
       default:
         description: Text content
@@ -1078,17 +1119,7 @@ components:
           warning: bg-warning/15 text-warning border-warning/25
           error: bg-error/15 text-error border-error/25
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Key label text
@@ -1270,7 +1301,7 @@ components:
         description: Description text content
 
   stat.figure:
-    template: lb/stat/figure.html
+    template: lb/stat/figure/index.html
     description: Container for icon or image displayed with the stat
     base_classes:
     - stat-figure
@@ -1281,17 +1312,7 @@ components:
         description: Additional CSS classes to apply
         required: false
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
       variant:
         type: enum
         values:
@@ -1396,7 +1417,7 @@ components:
         description: Timeline items using timeline.item components
 
   timeline.item:
-    template: lb/timeline/item.html
+    template: lb/timeline/item/index.html
     description: Individual timeline event item with automatic hr connectors and convenience props for start, middle, and end
       content
     base_classes: []
@@ -1420,17 +1441,7 @@ components:
         default: false
         description: Mark as the last item (no hr after)
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
       start:
         type: string
         default: ''
@@ -1521,17 +1532,7 @@ components:
         description: Additional CSS classes to apply
         required: false
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
     slots:
       default:
         description: Custom marker content (used alongside or instead of icon)

@@ -1,0 +1,117 @@
+name: Settings with sidebar nav
+ref: lb/settings/sidebar-nav
+type: fe
+labb_version: ">=0.5.0"
+description: "A settings shell with a vertical nav — switching section is one client signal, so the whole page is rendered once and nothing is fetched again"
+category: settings
+thumbnail: thumbnails/sidebar-nav.png
+status: launch
+tags:
+  - settings
+  - reactive
+  - zero-server
+  - navigation
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  section: "profile"
+  workspace:
+    name: "Beacon Labs"
+    slug: "beacon-labs"
+    initials: "BL"
+    plan: "Arden Scale"
+    region: "EU West · Ireland"
+    currency: "USD"
+    billing_email: "billing@beaconlabs.com"
+    seats_used: 12
+    seats_total: 25
+    seats_pct: 48
+  sections:
+    - key: "profile"
+      label: "Workspace"
+      icon: "rmx.building"
+      desc: "Name, address and where the data lives"
+    - key: "team"
+      label: "Team"
+      icon: "rmx.team"
+      desc: "Who is in the workspace and what they can do"
+    - key: "billing"
+      label: "Billing"
+      icon: "rmx.bank-card"
+      desc: "Plan, payment method and invoices"
+    - key: "notifications"
+      label: "Notifications"
+      icon: "rmx.bell"
+      desc: "What Arden emails you about"
+    - key: "security"
+      label: "Security"
+      icon: "rmx.shield-check"
+      desc: "Two-factor, SSO and the audit log"
+  regions:
+    - ["eu-west-1", "EU West · Ireland"]
+    - ["us-east-1", "US East · Virginia"]
+    - ["ap-south-1", "Asia Pacific · Mumbai"]
+  members:
+    - name: "Nadia Kessler"
+      title: "Founder & CEO"
+      email: "nadia.kessler@beaconlabs.com"
+      role: "Owner"
+      initials: "NK"
+      tone: "primary"
+      last_seen: "2 hours ago"
+    - name: "Tom Ainsworth"
+      title: "Head of Revenue"
+      email: "tom.ainsworth@beaconlabs.com"
+      role: "Admin"
+      initials: "TA"
+      tone: "secondary"
+      last_seen: "yesterday"
+    - name: "Priya Raghunathan"
+      title: "Finance Lead"
+      email: "priya.raghunathan@beaconlabs.com"
+      role: "Billing"
+      initials: "PR"
+      tone: "accent"
+      last_seen: "31 minutes ago"
+    - name: "Marcus Oduya"
+      title: "RevOps Manager"
+      email: "marcus.oduya@beaconlabs.com"
+      role: "Admin"
+      initials: "MO"
+      tone: "secondary"
+      last_seen: "3 days ago"
+  notifications:
+    - label: "Weekly revenue digest"
+      note: "Monday, 07:00, in your timezone."
+      on: true
+    - label: "Churn-risk alerts"
+      note: "When a customer's health drops to at risk."
+      on: true
+    - label: "Failed payments"
+      note: "As soon as a charge is declined."
+      on: true
+    - label: "Product updates"
+      note: "Roughly once a month. No launch emails."
+      on: false
+  invoices:
+    - number: "ARD-2026-0013"
+      customer: "Kite & Bell"
+      issued: "02/07/2026"
+      amount: "555.00"
+      status: "Open"
+      tone: "info"
+    - number: "ARD-2026-0026"
+      customer: "Verity Labs"
+      issued: "06/07/2026"
+      amount: "468.00"
+      status: "Open"
+      tone: "info"
+    - number: "ARD-2026-0006"
+      customer: "AtlasForge"
+      issued: "18/06/2026"
+      amount: "2,927.00"
+      status: "Paid"
+      tone: "success"

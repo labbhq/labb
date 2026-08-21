@@ -1,12 +1,14 @@
-<div x-data="{ btnProps: { variant: '', size: 'md', btnStyle: '' } }" class="flex flex-col gap-6 items-start w-full md:w-96">
+<c-lbr.signals $btn.variant="" $btn.size="md" $btn.btnstyle="" />
 
-    <c-lb.button.x x-model="btnProps" size="md">
-        Click me — <span x-text="btnProps.variant || 'default'"></span>
-    </c-lb.button.x>
+<div class="flex flex-col gap-6 items-start w-full md:w-96">
+
+    <c-lb.button variant="$btn.variant" size="$btn.size:md" btnStyle="$btn.btnstyle">
+        Click me — <span data-text="$btn.variant || 'default'"></span>
+    </c-lb.button>
 
     <c-lb.label floating class="w-full">
         <span>Variant</span>
-        <select x-model="btnProps.variant" class="select select-sm">
+        <c-lb.select bind="$btn.variant" size="sm" class="w-full">
             <option value="">Default</option>
             <option value="primary">Primary</option>
             <option value="secondary">Secondary</option>
@@ -14,29 +16,29 @@
             <option value="success">Success</option>
             <option value="warning">Warning</option>
             <option value="error">Error</option>
-        </select>
+        </c-lb.select>
     </c-lb.label>
 
     <c-lb.label floating class="w-full">
         <span>Size</span>
-        <select x-model="btnProps.size" class="select select-sm">
+        <c-lb.select bind="$btn.size" size="sm" class="w-full">
             <option value="xs">xs</option>
             <option value="sm">sm</option>
             <option value="md">md</option>
             <option value="lg">lg</option>
             <option value="xl">xl</option>
-        </select>
+        </c-lb.select>
     </c-lb.label>
 
     <c-lb.label floating class="w-full">
         <span>Style</span>
-        <select x-model="btnProps.btnStyle" class="select select-sm">
+        <c-lb.select bind="$btn.btnstyle" size="sm" class="w-full">
             <option value="">Default</option>
             <option value="outline">Outline</option>
             <option value="soft">Soft</option>
             <option value="ghost">Ghost</option>
             <option value="link">Link</option>
-        </select>
+        </c-lb.select>
     </c-lb.label>
 
 </div>

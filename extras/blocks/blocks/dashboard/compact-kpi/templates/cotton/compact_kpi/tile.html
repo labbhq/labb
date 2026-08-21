@@ -1,0 +1,22 @@
+<c-vars :kpi="{}" />
+
+<article id="kpi-{{ kpi.id }}" class="rounded-lg border border-base-300 bg-base-100 p-4 flex flex-col gap-3">
+
+    <div class="flex items-start justify-between gap-2">
+        <span class="text-xs font-medium uppercase tracking-wide text-base-content/50">{{ kpi.label }}</span>
+        {% if kpi.tone == "error" %}
+        <c-lb.badge variant="error" style="soft" size="xs" icon="rmx.arrow-down" class="tabular-nums">{{ kpi.delta }}</c-lb.badge>
+        {% elif kpi.tone == "success" %}
+        <c-lb.badge variant="success" style="soft" size="xs" icon="rmx.arrow-up" class="tabular-nums">{{ kpi.delta }}</c-lb.badge>
+        {% else %}
+        <c-lb.badge variant="primary" style="soft" size="xs" class="tabular-nums">{{ kpi.delta }}</c-lb.badge>
+        {% endif %}
+    </div>
+
+    <p class="text-2xl font-semibold tracking-tight tabular-nums leading-none">{{ kpi.value }}</p>
+
+    <c-compact-kpi.spark :points=kpi.points :tone=kpi.tone />
+
+    <p class="text-xs text-base-content/50 tabular-nums">{{ kpi.caption }}</p>
+
+</article>

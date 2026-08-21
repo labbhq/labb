@@ -1,0 +1,61 @@
+<div class="w-full max-w-sm mx-auto lg:mx-0 flex flex-col gap-6">
+
+    <div class="flex items-center gap-2">
+        <c-arden.mark size="xs" />
+        <span class="text-base font-semibold tracking-tight">Arden</span>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+        <h1 class="text-3xl font-semibold tracking-tight text-balance">
+            Pick up where the quarter left off
+        </h1>
+        <p class="text-sm text-base-content/60">
+            Four renewals moved while you were away. They are waiting on the other side
+            of this form.
+        </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+
+        <div class="flex flex-col gap-1">
+            <label for="tv-email" class="label label-text text-sm font-medium">Work email</label>
+            <c-lb.input
+                id="tv-email"
+                type="email"
+                name="email"
+                class="w-full"
+                autocomplete="username"
+                placeholder="you@company.com" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <div class="flex items-baseline justify-between">
+                <label for="tv-password" class="label label-text text-sm font-medium">Password</label>
+                <a href="#" class="link link-hover text-xs text-base-content/60">Forgot password?</a>
+            </div>
+            <c-lb.input
+                id="tv-password"
+                type="password"
+                name="password"
+                class="w-full"
+                autocomplete="current-password"
+                placeholder="••••••••" />
+        </div>
+
+        <c-lb.button id="tv-submit" type="button" variant="primary" modifier="block">
+            Sign in
+        </c-lb.button>
+
+    </div>
+
+    <c-lb.divider class="my-0 text-xs text-base-content/40">or continue with</c-lb.divider>
+
+    <c-visual-signin.oauth />
+
+    <p class="text-sm text-base-content/60">
+        No workspace yet?
+        <a href="#" class="link link-primary">Start a 14-day trial</a>
+        — no card, no call.
+    </p>
+
+</div>

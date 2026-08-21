@@ -1,0 +1,110 @@
+<div class="grid border-t border-base-300 bg-base-100 sm:grid-cols-[13rem_1fr]">
+
+    <aside class="hidden flex-col gap-1 border-r border-base-300 bg-base-200/50 p-4 sm:flex">
+        <div class="mb-4 flex items-center gap-2">
+            <c-arden.mark size="xs" />
+            <span class="text-sm font-semibold tracking-tight">Arden</span>
+        </div>
+        <c-lb.menu size="sm" class="w-full p-0">
+            <c-lb.menu.item active>
+                <c-lbi.rmx.line-chart w="16" h="16" />
+                Revenue
+            </c-lb.menu.item>
+            <c-lb.menu.item>
+                <c-lbi.rmx.building w="16" h="16" />
+                Customers
+            </c-lb.menu.item>
+            <c-lb.menu.item>
+                <c-lbi.rmx.file-check w="16" h="16" />
+                Invoices
+            </c-lb.menu.item>
+            <c-lb.menu.item>
+                <c-lbi.rmx.calendar-check w="16" h="16" />
+                Renewals
+            </c-lb.menu.item>
+        </c-lb.menu>
+    </aside>
+
+    <div class="flex flex-col gap-5 p-5">
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h2 class="text-base font-semibold tracking-tight">Revenue · Q3</h2>
+                <p class="text-xs text-base-content/50">1 July – 30 September</p>
+            </div>
+            <c-lb.badge variant="success" style="soft" size="sm">Synced 2m ago</c-lb.badge>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-4">
+            <c-app-screenshot.tile label="Net MRR" value="$412,900" delta="+4.2%" />
+            <c-app-screenshot.tile label="Expansion" value="$38,100" delta="+11.6%" />
+            <c-app-screenshot.tile label="Contraction" value="$9,700" delta="-1.4%" deltaClass="text-error" />
+            <c-app-screenshot.tile label="At risk" value="$21,400" delta="-2.8%" deltaClass="text-error" />
+        </div>
+
+        <div class="rounded-lg border border-base-300 p-4">
+            <div class="flex items-end gap-2 h-28" aria-hidden="true">
+                <c-app-screenshot.bar height="34%" muted />
+                <c-app-screenshot.bar height="42%" muted />
+                <c-app-screenshot.bar height="38%" muted />
+                <c-app-screenshot.bar height="51%" muted />
+                <c-app-screenshot.bar height="47%" muted />
+                <c-app-screenshot.bar height="63%" muted />
+                <c-app-screenshot.bar height="58%" muted />
+                <c-app-screenshot.bar height="72%" />
+                <c-app-screenshot.bar height="69%" />
+                <c-app-screenshot.bar height="88%" />
+                <c-app-screenshot.bar height="81%" />
+                <c-app-screenshot.bar height="100%" />
+            </div>
+            <div class="mt-3 text-xs text-base-content/50">Net revenue, last 12 months</div>
+        </div>
+
+        <c-lb.table size="sm" class="hidden sm:table">
+            <thead>
+                <tr>
+                    <th>Workspace</th>
+                    <th class="text-right">MRR</th>
+                    <th class="text-right">Renews</th>
+                    <th class="text-right">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="font-medium">AtlasForge</td>
+                    <td class="tabular-nums text-right">$128,400</td>
+                    <td class="tabular-nums text-right">12 Oct</td>
+                    <td class="text-right">
+                        <c-lb.badge variant="success" style="soft" size="sm">Renewed</c-lb.badge>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-medium">Kite &amp; Bell</td>
+                    <td class="tabular-nums text-right">$96,200</td>
+                    <td class="tabular-nums text-right">03 Nov</td>
+                    <td class="text-right">
+                        <c-lb.badge variant="warning" style="soft" size="sm">At risk</c-lb.badge>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-medium">Northwind Co</td>
+                    <td class="tabular-nums text-right">$74,800</td>
+                    <td class="tabular-nums text-right">28 Nov</td>
+                    <td class="text-right">
+                        <c-lb.badge variant="info" style="soft" size="sm">Expanding</c-lb.badge>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-medium">Verity Labs</td>
+                    <td class="tabular-nums text-right">$51,300</td>
+                    <td class="tabular-nums text-right">09 Dec</td>
+                    <td class="text-right">
+                        <c-lb.badge style="soft" size="sm">Steady</c-lb.badge>
+                    </td>
+                </tr>
+            </tbody>
+        </c-lb.table>
+
+    </div>
+
+</div>

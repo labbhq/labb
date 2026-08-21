@@ -1,0 +1,63 @@
+<c-vars :steps="[]" />
+
+<aside class="flex flex-col gap-8">
+
+    <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-primary
+                        flex items-center justify-center text-primary-content font-bold text-sm">A</div>
+            <span class="font-semibold tracking-tight">Arden</span>
+        </div>
+        <h1 class="text-xl font-semibold tracking-tight mt-6">Set up your workspace</h1>
+        <p class="text-sm text-base-content/55">
+            Three steps. Your answers stay in the browser until the last one.
+        </p>
+    </div>
+
+    <ol class="flex flex-col gap-1">
+        {% for s in steps %}
+        <li
+            id="rail-step-{{ s.n }}"
+            class="flex items-start gap-3 rounded-box p-3 border border-transparent"
+            data-class="{'bg-primary/5 border-primary/30': $step === {{ s.n }}}"
+        >
+            <div
+                class="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-xs font-semibold tabular-nums bg-base-300 text-base-content/50"
+                data-class="{'bg-primary text-primary-content': $step === {{ s.n }}, 'bg-success text-success-content': $step > {{ s.n }}, 'bg-base-300 text-base-content/50': $step < {{ s.n }}}"
+            >
+                <span data-show="$step > {{ s.n }}" style="display:none">
+                    <c-lbi n="rmx.check" w="14" h="14" />
+                </span>
+                <span data-show="$step <= {{ s.n }}">{{ s.n }}</span>
+            </div>
+
+            <div class="min-w-0">
+                <div
+                    class="text-sm font-medium"
+                    data-class="{'text-base-content': $step >= {{ s.n }}, 'text-base-content/45': $step < {{ s.n }}}"
+                >{{ s.label }}</div>
+                <div class="text-xs text-base-content/45 mt-0.5">{{ s.hint }}</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ol>
+
+    <div class="flex flex-col gap-3 border-t border-base-300 pt-5">
+        <div class="flex items-center gap-2 text-xs text-base-content/55">
+            <c-lbi n="rmx.shield-check" w="1em" h="1em" class="size-4 shrink-0" />
+            <span>SOC 2 Type II. Revenue data never leaves your region.</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-base-content/55">
+            <c-lbi n="rmx.time" w="1em" h="1em" class="size-4 shrink-0" />
+            <span>Median setup: four minutes.</span>
+        </div>
+        <div class="flex items-center gap-3 rounded-box bg-base-200/60 p-3 mt-1">
+            <c-lb.avatar placeholder initials="HI" bgColor="accent" size="sm" />
+            <div class="text-xs">
+                <div class="font-medium">Stuck on something?</div>
+                <div class="text-base-content/50">Hana in onboarding answers in minutes.</div>
+            </div>
+        </div>
+    </div>
+
+</aside>

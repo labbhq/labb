@@ -112,19 +112,7 @@ components:
           square: btn-square
           circle: btn-circle
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-          end: Place at the end of the text
-          # Modifiers combine in the attribute name: icon.fill.end="name"
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill, end]
 
   modal:
     template: lb/modal/index.html
@@ -411,14 +399,10 @@ components:
         type: boolean
         default: false
         description: Whether the checkbox is initially checked
-        css_mapping:
-          true: checked
       disabled:
         type: boolean
         default: false
         description: Whether the swap is disabled
-        css_mapping:
-          true: disabled
       inputClass:
         type: string
         default: ''
@@ -447,17 +431,7 @@ components:
         description: Additional CSS classes to apply
         required: false
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
 
   swap.off:
     template: lb/swap/off.html
@@ -471,17 +445,7 @@ components:
         description: Additional CSS classes to apply
         required: false
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
 
   swap.indeterminate:
     template: lb/swap/indeterminate.html
@@ -495,17 +459,7 @@ components:
         description: Additional CSS classes to apply
         required: false
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
 
   fab:
     template: lb/fab/index.html
@@ -571,17 +525,7 @@ components:
         css_mapping:
           true: fab-flower
       icon:
-        type: string
-        default: ''
-        description: Icon name to display
-        required: false
-        dot_modifiers:
-          fill: Render in filled (solid) style
-      icon.class:
-        type: string
-        default: ''
-        description: Additional CSS classes for the icon
-        required: false
+        dot_modifiers: [fill]
       label:
         type: string
         default: ''

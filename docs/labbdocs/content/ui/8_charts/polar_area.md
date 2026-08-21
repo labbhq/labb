@@ -2,12 +2,13 @@
 doc_layout: component
 component: c-lb.chart.polar-area
 title: Polar Area Chart
-description: "Polar area chart component for Django: render polar visualisations with Chart.js and daisyUI theming. Server-rendered with django-cotton."
+description: "Equal-angle segments sized by radius, for cyclic data like monthly distributions. Chart.js polar area charts for Django, themed by daisyUI, added with one django-cotton tag."
 keywords: "django polar area chart, polar chart django, chart.js django, daisyui polar chart django, tailwind chart django, django data visualization, polar area django-cotton"
 daisy_ui_component_name: ""
+icon: rmx.pie-chart-2
 ---
 
-Polar area charts are similar to pie charts but each segment has an equal angle — magnitude is shown by radius, making comparisons easy at a glance. Useful for cyclic data like monthly distributions or category scoring.
+A polar area chart gives every segment the same angle and varies the radius instead, so magnitude reads as distance from the centre. That suits cyclic data such as monthly distributions, or category scores you want to compare at a glance.
 
 ## Basic Polar Area Chart
 <c-lbdocs.component_example path="chart/polar-area" />

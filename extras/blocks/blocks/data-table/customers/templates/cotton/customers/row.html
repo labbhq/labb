@@ -1,0 +1,68 @@
+<c-vars :customer="{}" />
+
+<tr id="customer-{{ customer.pk }}" class="border-base-300 hover:bg-base-200/40">
+
+    <td>
+        <c-lb.checkbox
+            size="sm"
+            :validate="False"
+            bind="$selected.{{ customer.pk }}" />
+    </td>
+
+    <td>
+        <div class="flex items-center gap-3">
+            <c-lb.avatar placeholder initials="{{ customer.initials }}" bgColor="neutral" size="sm" rounded="lg" />
+            <div class="min-w-0">
+                <div class="font-medium truncate">{{ customer.company }}</div>
+                <div class="text-xs text-base-content/50 truncate">{{ customer.contact_name }} · {{ customer.email }}</div>
+            </div>
+        </div>
+    </td>
+
+    <td class="hidden md:table-cell">
+        <c-lb.badge style="soft" size="sm">{{ customer.plan.name|default:"No plan" }}</c-lb.badge>
+    </td>
+
+    <td>
+        <div class="flex items-center gap-1.5">
+            <c-lb.badge :variant=customer.status_variant style="soft" size="sm">
+                {{ customer.get_status_display }}
+            </c-lb.badge>
+            {% if customer.health != "good" %}
+            <c-lb.badge :variant=customer.health_variant style="outline" size="xs">
+                {{ customer.get_health_display }}
+            </c-lb.badge>
+            {% endif %}
+        </div>
+    </td>
+
+    <td class="text-end tabular-nums font-medium">${{ customer.mrr_display }}</td>
+
+    <td class="hidden lg:table-cell text-end tabular-nums text-base-content/70">{{ customer.seats }}</td>
+
+    <td class="hidden lg:table-cell text-end">
+        <div class="tabular-nums text-base-content/70">${{ customer.billed_display }}</div>
+        {% if customer.overdue %}
+        <div class="text-xs text-error tabular-nums">{{ customer.overdue }} overdue</div>
+        {% endif %}
+    </td>
+
+    <td class="hidden md:table-cell text-end tabular-nums text-base-content/60 whitespace-nowrap">
+        {{ customer.renews_on|date:"j M Y"|default:"—" }}
+    </td>
+
+    <td>
+        <div class="flex justify-end gap-0.5">
+            <c-lbr.get to="block_data_table_customers:index" before="$ui.editingPk={{ customer.pk }}">
+                <c-lb.button btnStyle="ghost" size="xs" icon="rmx.pencil" aria-label="Edit {{ customer.company }}" />
+            </c-lbr.get>
+            <c-lbr.delete
+                to="block_data_table_customers:delete"
+                pk=customer.pk
+                confirm="Remove this customer and every invoice against them?">
+                <c-lb.button variant="error" btnStyle="ghost" size="xs" icon="rmx.delete-bin" aria-label="Delete customer" />
+            </c-lbr.delete>
+        </div>
+    </td>
+
+</tr>

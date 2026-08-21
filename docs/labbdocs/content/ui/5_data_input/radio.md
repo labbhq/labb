@@ -5,9 +5,10 @@ title: Radio
 description: "Radio component for Django: build styled, accessible radio button groups for forms. Built with django-cotton, Tailwind CSS, and daisyUI 5."
 keywords: "django radio component, radio button django, daisyui radio django, tailwind radio django, radio django-cotton, django form radio, styled radio django"
 daisy_ui_component_name: radio
+icon: rmx.radio-button
 ---
 
-Radio renders a styled `<input type='radio'>` that integrates with Django form field groups. Match colour and size variants to adjacent checkboxes and inputs for visual consistency.
+Radio renders a styled `<input type='radio'>` that integrates with Django form field groups. Give every radio in a group the same `name` so the browser handles mutual exclusion.
 
 ## Basic Radio
 <c-lbdocs.component_example path="radio/basic" />

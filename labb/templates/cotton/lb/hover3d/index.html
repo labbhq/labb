@@ -1,6 +1,6 @@
-<c-vars class="" />
-
-<div class="hover-3d {{ class }}" {{ attrs }}>
+{% load lbr_tags %}
+{% lbr_props "hover3d" attrs=attrs as rx %}
+<div class="{{ rx.classes }}" {{ rx.attrs }}>
     {{ slot }}
     <div></div>
     <div></div>

@@ -1,0 +1,4 @@
+vendor: lb
+name: labb Blocks
+description: "Official labb block collection"
+blocks_dir: blocks

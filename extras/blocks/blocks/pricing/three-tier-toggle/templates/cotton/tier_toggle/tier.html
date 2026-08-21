@@ -1,0 +1,54 @@
+<c-vars :plan="{}" />
+
+<c-lb.card
+    border
+    class="h-full {% if plan.featured %}border-primary border-2 shadow-lg{% endif %}"
+>
+    <c-lb.card.body class="gap-5">
+
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex flex-col gap-1">
+                <h2 class="text-lg font-semibold">{{ plan.name }}</h2>
+                <p class="text-sm text-base-content/60 max-w-[22ch]">{{ plan.tagline }}</p>
+            </div>
+            {% if plan.featured %}
+            <c-lb.badge variant="primary" size="sm">Most popular</c-lb.badge>
+            {% endif %}
+        </div>
+
+        <div class="flex items-baseline gap-1">
+            <span class="text-2xl font-semibold text-base-content/70">$</span>
+            <span
+                id="price-{{ plan.name|lower }}"
+                class="text-5xl font-bold tracking-tight tabular-nums"
+                data-text="$period.annual ? '{{ plan.annual }}' : '{{ plan.monthly }}'"
+            >{{ plan.monthly }}</span>
+            <span
+                class="text-sm text-base-content/50"
+                data-text="$period.suffix"
+            >/month</span>
+        </div>
+
+        <p class="text-xs text-base-content/50" data-text="$period.note">
+            Billed monthly. Cancel any time.
+        </p>
+
+        {% if plan.featured %}
+        <c-lb.button variant="primary" modifier="block">{{ plan.cta }}</c-lb.button>
+        {% else %}
+        <c-lb.button btnStyle="outline" modifier="block">{{ plan.cta }}</c-lb.button>
+        {% endif %}
+
+        <c-lb.divider class="my-0 text-xs text-base-content/40">What you get</c-lb.divider>
+
+        <div class="flex flex-col gap-2.5">
+            {% for feature in plan.features %}
+            <c-tier-toggle.feature>{{ feature }}</c-tier-toggle.feature>
+            {% endfor %}
+            {% for feature in plan.excluded %}
+            <c-tier-toggle.feature :included="False">{{ feature }}</c-tier-toggle.feature>
+            {% endfor %}
+        </div>
+
+    </c-lb.card.body>
+</c-lb.card>

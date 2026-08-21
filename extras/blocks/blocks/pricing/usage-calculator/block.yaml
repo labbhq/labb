@@ -1,0 +1,32 @@
+name: Usage calculator
+ref: lb/pricing/usage-calculator
+type: fe
+labb_version: ">=0.5.0"
+description: "A seat slider that reprices the plan live from derived signals — the whole calculation runs in the browser, with no server"
+category: pricing
+status: launch
+thumbnail: thumbnails/usage-calculator.png
+tags:
+  - pricing
+  - reactive
+  - reactive-props
+  - calculator
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — derived signals with zero server"
+
+preview_context:
+  usage:
+    seats: 12
+    annual: false
+    plan: "Growth"
+    planVariant: "primary"
+    platform: "149"
+    seatCost: "108"
+    total: "257"
+    suffix: "/month"
+    monthlyStyle: ""
+    annualStyle: "ghost"
+    note: "Billed monthly. Cancel any time."
+    included: "10,000 tracked customers"

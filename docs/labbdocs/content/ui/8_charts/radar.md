@@ -2,12 +2,13 @@
 doc_layout: component
 component: c-lb.chart.radar
 title: Radar Chart
-description: "Radar chart component for Django: display multi-variable comparisons with Chart.js and daisyUI theming. Server-rendered with django-cotton."
+description: "Compare two or three profiles across the same set of metrics. Chart.js radar (spider) charts for Django, themed by daisyUI, written as a django-cotton component."
 keywords: "django radar chart, radar chart django, chart.js django, daisyui radar chart django, tailwind chart django, django data visualization, spider chart django"
 daisy_ui_component_name: ""
+icon: rmx.radar
 ---
 
-Radar charts plot multiple variables on radial axes, making it straightforward to compare profiles across categories. Multiple datasets overlay as separate polygons — useful for player stats, survey results, or feature comparisons.
+Player stats, survey results, feature comparisons: a radar chart plots several variables on radial axes so you can read a whole profile as one shape. Each dataset overlays as its own polygon, which makes two profiles easy to compare and five of them hard.
 
 ## Basic Radar Chart
 <c-lbdocs.component_example path="chart/radar" />

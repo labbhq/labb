@@ -1,0 +1,36 @@
+<c-vars :block="{}" />
+
+<a href="{{ block.detail_url }}"
+   class="group relative block rounded-xl overflow-hidden bg-base-100 transition hover:shadow-md
+          {% if block.type == 'fullstack' %}lbb-fs-ring{% else %}border border-base-300 hover:border-base-content/40{% endif %}">
+
+    <div class="aspect-[16/10] bg-base-200/40 overflow-hidden border-b border-base-200">
+        {% if block.thumbnail %}
+        <img src="{{ block.thumbnail }}" alt="{{ block.name }} preview" loading="lazy"
+             class="lbb-thumb lbb-thumb-light w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-200" />
+        {% if block.thumbnail_dark %}
+        <img src="{{ block.thumbnail_dark }}" alt="" aria-hidden="true" loading="lazy"
+             class="lbb-thumb lbb-thumb-dark w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-200" />
+        {% endif %}
+        {% else %}
+        <div class="w-full h-full grid place-items-center text-base-content/25">
+            <c-lbi n="rmx.image-2" w="22" h="22" />
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="flex items-center gap-2 px-3.5 py-2.5">
+        {% if block.type == 'fullstack' %}
+        <c-lb.tooltip tip="Fullstack: models, views, urls + templates">
+            <c-lbi n="rmx.stack" w="15" h="15" class="shrink-0 text-base-content/50" />
+        </c-lb.tooltip>
+        {% else %}
+        <c-lb.tooltip tip="Frontend: templates only">
+            <c-lbi n="rmx.html5" w="15" h="15" class="shrink-0 text-base-content/40" />
+        </c-lb.tooltip>
+        {% endif %}
+        <span class="text-sm font-medium truncate">{{ block.name }}</span>
+        <span class="ml-auto shrink-0 text-[10px] font-medium uppercase tracking-wider text-base-content/40">{{ block.type }}</span>
+    </div>
+
+</a>

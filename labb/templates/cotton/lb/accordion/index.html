@@ -1,8 +1,3 @@
-<c-vars
-    class=""
-    join
-/>
-
-<div class="{% if join %}join join-vertical{% endif %} {{ class }}" {{ attrs }}>
-    {{ slot }}
-</div>
+{% load lbr_tags %}
+{% lbr_props "accordion" attrs=attrs as rx %}
+<div class="{{ rx.classes }}" {{ rx.attrs }}>{{ slot }}</div>

@@ -1,31 +1,12 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
-    style=""
-    placement="top"
-    size="md"
     name="tabs"
-    :styleClasses="{
-        'border': 'tabs-border',
-        'lift': 'tabs-lift',
-        'box': 'tabs-box'
-    }"
-    :placementClasses="{
-        'top': '',
-        'bottom': 'tabs-bottom'
-    }"
-    :sizeClasses="{
-        'xs': 'tabs-xs',
-        'sm': 'tabs-sm',
-        'md': 'tabs-md',
-        'lg': 'tabs-lg',
-        'xl': 'tabs-xl'
-    }"
 />
+{% lbr_props "tabs" attrs=attrs as rx %}
 
 <div
-    class="tabs {{ styleClasses|get_dict_item:style }} {{ placementClasses|get_dict_item:placement }} {{ sizeClasses|get_dict_item:size }} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 >
     {% if not content %}
         {{ slot }}

@@ -1,0 +1,18 @@
+<c-lbb.page title="{{ title }}">
+    <c-slot name="head">
+        <script>
+        (function() {
+            if (window === window.parent) return;
+            function notify() {
+                parent.postMessage({type: 'lbb:urlchange', path: location.pathname + location.search}, '*');
+            }
+            var _push = history.pushState;
+            history.pushState = function() { _push.apply(history, arguments); notify(); };
+            var _replace = history.replaceState;
+            history.replaceState = function() { _replace.apply(history, arguments); notify(); };
+            window.addEventListener('popstate', notify);
+        })();
+        </script>
+    </c-slot>
+    {% include lbb_page_tpl %}
+</c-lbb.page>

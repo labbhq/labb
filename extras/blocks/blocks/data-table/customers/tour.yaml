@@ -1,0 +1,30 @@
+steps:
+  - title: Keep table state in one schema
+    file: templates/pages/index.html
+    match: '<c-lbr.signals id="customer-query"'
+    teaches: [signals]
+    docs: [reactivity/signals]
+    body: The page declares search, filters, sorting, and pagination once. The same schema gives the template a starting state and gives the view typed values.
+
+  - title: Send the search to the normal list view
+    file: templates/cotton/customers/toolbar.html
+    match: 'on="input__debounce.300ms"'
+    through: ':bind=signals.fields.q'
+    teaches: [binding, server-actions, morphing]
+    docs: [reactivity/events-and-bindings, reactivity/server-actions]
+    body: The input binds to the search field, then a debounced GET sends that state to Django. The list view filters the queryset and returns HTML for Datastar to update.
+
+  - title: Make a filtered table shareable
+    file: templates/pages/index.html
+    match: '<c-lbr.signals id="customer-query"'
+    through: "syncQuery"
+    teaches: [signals]
+    docs: [reactivity/patterns]
+    body: syncQuery keeps the active filters, sort, and page in the URL. A fresh request restores them through ReactivityMiddleware before the view runs.
+
+  - title: Reuse the same view for row actions
+    file: templates/cotton/customers/row.html
+    match: "<c-lbr.delete"
+    teaches: [server-actions, morphing]
+    docs: [reactivity/server-actions]
+    body: Delete actions call an ordinary Django view and return the updated page. The stable row id lets Datastar update the changed row while the page summary stays in sync.

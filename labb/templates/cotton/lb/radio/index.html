@@ -1,30 +1,8 @@
-{% load lb_tags %}
-<c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'neutral': 'radio-neutral',
-        'primary': 'radio-primary',
-        'secondary': 'radio-secondary',
-        'accent': 'radio-accent',
-        'info': 'radio-info',
-        'success': 'radio-success',
-        'warning': 'radio-warning',
-        'error': 'radio-error'
-    }"
-    size="md"
-    :sizeClasses="{
-        'xs': 'radio-xs',
-        'sm': 'radio-sm',
-        'md': 'radio-md',
-        'lg': 'radio-lg',
-        'xl': 'radio-xl'
-    }"
-    validate
-/>
+{% load lbr_tags %}
+{% lbr_props "radio" attrs=attrs as rx %}
 
 <input
     type="radio"
-    class="radio {{ variantClasses|get_dict_item:variant }} {{ sizeClasses|get_dict_item:size }} {% if validate %}validator{% endif %} {{ class }}"
-    {{ attrs }}
+    class="{{ rx.classes }}"
+    {{ rx.attrs }}
 />

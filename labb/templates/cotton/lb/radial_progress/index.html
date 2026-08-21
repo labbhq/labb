@@ -1,33 +1,14 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
     value="0"
-    variant=""
-    :variantClasses="{
-        'neutral': 'text-neutral',
-        'primary': 'text-primary',
-        'secondary': 'text-secondary',
-        'accent': 'text-accent',
-        'info': 'text-info',
-        'success': 'text-success',
-        'warning': 'text-warning',
-        'error': 'text-error'
-    }"
-    bgVariant=""
-    :bgVariantClasses="{
-        'neutral': 'bg-neutral text-neutral-content border-neutral',
-        'primary': 'bg-primary text-primary-content border-primary',
-        'secondary': 'bg-secondary text-secondary-content border-secondary',
-        'accent': 'bg-accent text-accent-content border-accent',
-        'info': 'bg-info text-info-content border-info',
-        'success': 'bg-success text-success-content border-success',
-        'warning': 'bg-warning text-warning-content border-warning',
-        'error': 'bg-error text-error-content border-error'
-    }"
     progressSize=""
     thickness=""
 />
 
-<div class="radial-progress {{ variantClasses|get_dict_item:variant }} {{ bgVariantClasses|get_dict_item:bgVariant }} {{ class }}" style="--value:{{ value }};{% if progressSize %}--size:{{ progressSize }};{% endif %}{% if thickness %}--thickness:{{ thickness }};{% endif %}" role="progressbar" aria-valuenow="{{ value }}" {{ attrs }}>
+{% lbr_props "radial-progress" attrs=attrs as rx %}
+{% lbr_style_vars value=value size=progressSize thickness=thickness as sv %}
+{% lbr_reactive_attr "aria-valuenow" value as av %}
+
+<div class="{{ rx.classes }}" style="{{ sv.style }}" {{ sv.attrs }} role="progressbar" aria-valuenow="{{ av.text }}" {{ av.attrs }} {{ rx.attrs }}>
     {{ slot }}
 </div>

@@ -1,19 +1,8 @@
-{% load lb_tags %}
+{% load lbr_tags %}
 <c-vars
-    class=""
-    variant=""
-    :variantClasses="{
-        'neutral': 'progress-neutral',
-        'primary': 'progress-primary',
-        'secondary': 'progress-secondary',
-        'accent': 'progress-accent',
-        'info': 'progress-info',
-        'success': 'progress-success',
-        'warning': 'progress-warning',
-        'error': 'progress-error'
-    }"
     value=""
     max="100"
 />
+{% lbr_props "progress" attrs=attrs as rx %}
 
-<progress class="progress {{ variantClasses|get_dict_item:variant }} {{ class }}" {% if value %}value="{{ value }}"{% endif %} max="{{ max }}" {{ attrs }}></progress>
+<progress class="{{ rx.classes }}" {% if value %}value="{{ value }}"{% endif %} max="{{ max }}" {{ rx.attrs }}></progress>

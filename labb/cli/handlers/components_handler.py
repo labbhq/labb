@@ -1,5 +1,6 @@
 from typing import Optional
 
+import typer
 import yaml
 from rich.console import Console
 from rich.panel import Panel
@@ -8,6 +9,7 @@ from rich.table import Table
 from rich.tree import Tree
 
 from ...components import ComponentRegistry
+from ...components.registry import GUIDE_EXAMPLES_DIR
 
 console = Console()
 
@@ -107,7 +109,7 @@ def _inspect_specific_component(
             console.print("\n[yellow]Available components:[/yellow]")
             for name in available:
                 console.print(f"  • {name}")
-        return
+        raise typer.Exit(1)
 
     # Component header
     console.print(f"\n[bold blue]📦 Component: {component}[/bold blue]")
@@ -154,17 +156,16 @@ def _inspect_specific_component(
             # Show dash for empty defaults
             default_display = str(default) if default else "-"
 
-            var_table.add_row(var_name, var_type, default_display, desc)
-
-            # Show dot modifiers as indented sub-rows (e.g. icon.fill, icon.end)
-            dot_modifiers = var_spec.get("dot_modifiers", {})
-            for modifier, modifier_desc in dot_modifiers.items():
+            # Indent dot-notation modifiers under the prop they modify.
+            if var_spec.get("modifier_of"):
                 var_table.add_row(
-                    f"[dim]  {var_name}.{modifier}[/dim]",
+                    f"[dim]  {var_name}[/dim]",
                     "[dim]modifier[/dim]",
-                    "[dim]-[/dim]",
-                    f"[dim]{modifier_desc}[/dim]",
+                    f"[dim]{default_display}[/dim]",
+                    f"[dim]{desc}[/dim]",
                 )
+            else:
+                var_table.add_row(var_name, var_type, default_display, desc)
 
         console.print(var_table)
 
@@ -215,9 +216,26 @@ def _list_all_examples(registry: ComponentRegistry):
             f"  [cyan]{component}[/cyan] - {example_count} example{'s' if example_count != 1 else ''}"
         )
 
+    _print_guide_examples_summary(registry)
+
     console.print(
         "\n[dim]Use 'labb components ex <component>' to see examples for a specific component[/dim]"
     )
+
+
+def _print_guide_examples_summary(registry: ComponentRegistry):
+    """Guide examples are not components, so they get their own line."""
+    topics = registry.get_guide_example_topics()
+    if not topics:
+        return
+
+    total = sum(len(names) for names in topics.values())
+    console.print(
+        f"\n[bold blue]📖 Guide examples ({total})[/bold blue]"
+        f" [dim]not components; reference as guide/<topic>/<name>[/dim]"
+    )
+    for topic, names in topics.items():
+        console.print(f"  [magenta]guide/{topic}[/magenta] - {len(names)}")
 
 
 def _list_component_examples(registry: ComponentRegistry, component: str):
@@ -226,7 +244,15 @@ def _list_component_examples(registry: ComponentRegistry, component: str):
     example_names = registry.get_component_example_names(component)
 
     if not example_names:
-        console.print(f"[yellow]No examples found for component '{component}'[/yellow]")
+        # A real component that simply ships no examples is not a failure; an
+        # unknown name is, otherwise a typo exits 0 and scripts miss it.
+        is_known = registry.get_component(component) is not None
+        if is_known:
+            console.print(
+                f"[yellow]No examples found for component '{component}'[/yellow]"
+            )
+        else:
+            console.print(f"[red]❌ Component '{component}' not found[/red]")
 
         # Suggest available components
         available = registry.get_available_components_with_examples()
@@ -234,6 +260,9 @@ def _list_component_examples(registry: ComponentRegistry, component: str):
             console.print("\n[dim]Components with examples:[/dim]")
             for name in sorted(available):
                 console.print(f"  • {name}")
+
+        if not is_known:
+            raise typer.Exit(1)
         return
 
     console.print(
@@ -281,10 +310,24 @@ def _show_examples_tree(registry: ComponentRegistry):
             title = registry.get_example_title_from_name(example_name)
             component_branch.add(f"[green]{example_name}[/green] - {title}")
 
+    guide_topics = registry.get_guide_example_topics()
+    guide_total = sum(len(names) for names in guide_topics.values())
+    if guide_topics:
+        guide_branch = tree.add(
+            f"[magenta]guide[/magenta] [dim]({guide_total} example"
+            f"{'s' if guide_total != 1 else ''}, not components)[/dim]"
+        )
+        for topic, names in guide_topics.items():
+            topic_branch = guide_branch.add(f"[magenta]{topic}[/magenta]")
+            for name in names:
+                title = registry.get_example_title_from_name(name)
+                topic_branch.add(f"[green]{name}[/green] - {title}")
+
     console.print("\n")
     console.print(tree)
     console.print(
-        f"\n[dim]Total: {total_examples} examples across {len(components_with_examples)} components[/dim]"
+        f"\n[dim]Total: {total_examples} examples across {len(components_with_examples)} components"
+        f"{f', plus {guide_total} guide examples' if guide_total else ''}[/dim]"
     )
     console.print(
         "[dim]Use 'labb components ex <component> <example>' to view specific examples[/dim]"
@@ -298,14 +341,17 @@ def _show_multiple_examples(
 
     # Check if component has examples
     available_components = registry.get_available_components_with_examples()
-    if component not in available_components:
+    is_guide_topic = component.split("/")[0] == GUIDE_EXAMPLES_DIR and bool(
+        registry.get_component_example_names(component)
+    )
+    if component not in available_components and not is_guide_topic:
         console.print(f"[red]❌ Component '{component}' has no examples[/red]")
 
         if available_components:
             console.print("\n[dim]Components with examples:[/dim]")
             for name in sorted(available_components):
                 console.print(f"  • {name}")
-        return
+        raise typer.Exit(1)
 
     # Get available examples for the component
     available_examples = registry.get_component_example_names(component)
@@ -333,11 +379,12 @@ def _show_multiple_examples(
                 console.print(f"  • [cyan]{name}[/cyan] - {title}")
 
         if not valid_examples:
-            return
+            raise typer.Exit(1)
 
         console.print("\n[yellow]Showing valid examples only...[/yellow]")
 
     # Show valid examples
+    unreadable = False
     for i, example in enumerate(valid_examples):
         if i > 0:
             console.print("\n" + "─" * 80 + "\n")  # Separator between examples
@@ -349,6 +396,7 @@ def _show_multiple_examples(
             console.print(
                 f"[red]❌ Could not read example content for '{example_path}'[/red]"
             )
+            unreadable = True
             continue
 
         title = registry.get_example_title_from_name(example)
@@ -364,3 +412,6 @@ def _show_multiple_examples(
         console.print(
             f"\n[dim]Showed {len(valid_examples)} examples for '{component}'[/dim]"
         )
+
+    if unreadable:
+        raise typer.Exit(1)

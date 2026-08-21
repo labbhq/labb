@@ -136,6 +136,17 @@ def llms():
     display_llms_txt()
 
 
+@app.command()
+def migrate(
+    path: str = typer.Argument(".", help="Project directory (contains labb.yaml)"),
+    yes: bool = typer.Option(False, "--yes", "-y", help="Apply without prompting"),
+):
+    """Migrate a legacy css.scan.apps config to the new css.packages schema."""
+    from .handlers.migrate_handler import migrate_config
+
+    migrate_config(path=path, assume_yes=yes)
+
+
 # Create icons subcommand group
 if LABBICONS_AVAILABLE:
     app.add_typer(icons_app, name="icons")
@@ -215,6 +226,218 @@ def scan(
 ):
     """Scan templates for labb components and extract CSS classes"""
     scan_templates(watch, output, patterns, verbose)
+
+
+# Block subcommand group
+block_app = typer.Typer(
+    help="Block management commands",
+    no_args_is_help=True,
+)
+app.add_typer(block_app, name="block")
+
+
+@block_app.command("init")
+def block_init_cmd(
+    name: str = typer.Option("blocks", "--name", "-n", help="Collection name"),
+    path: str = typer.Option(
+        None, "--path", "-p", help="Path to create collection (default: ./{name})"
+    ),
+):
+    """Initialise a block collection as a Django app"""
+    from .handlers.blocks import block_init
+
+    block_init(name=name, path=path)
+
+
+@block_app.command("add")
+def block_add_cmd(
+    ref: str = typer.Argument(..., help="Block ref (vendor/category/slug)"),
+    collection: Optional[str] = typer.Option(
+        None, "--collection", "-c", help="Target collection name"
+    ),
+):
+    """Add a block from a configured source into a collection"""
+    from .handlers.blocks import block_add
+
+    block_add(ref=ref, collection_name=collection)
+
+
+@block_app.command("remove")
+def block_remove_cmd(
+    ref: str = typer.Argument(..., help="Block ref (vendor/category/slug)"),
+    collection: Optional[str] = typer.Option(
+        None, "--collection", "-c", help="Target collection name"
+    ),
+):
+    """Remove a block from a collection"""
+    from .handlers.blocks import block_remove
+
+    block_remove(ref=ref, collection_name=collection)
+
+
+@block_app.command("sync")
+def block_sync_cmd(
+    vendor: str = typer.Argument(..., help="Vendor key to sync (e.g. lb)"),
+    collection: Optional[str] = typer.Option(
+        None, "--collection", "-c", help="Target collection name"
+    ),
+    models_only: bool = typer.Option(
+        False, "--models-only", help="Sync only model files"
+    ),
+    fixtures_only: bool = typer.Option(
+        False, "--fixtures-only", help="Sync only fixtures"
+    ),
+    templates_only: bool = typer.Option(
+        False, "--templates-only", help="Sync only templates"
+    ),
+):
+    """Re-fetch and overwrite vendor models, fixtures, templates and block code from source"""
+    from .handlers.blocks import block_sync
+
+    block_sync(
+        vendor=vendor,
+        collection_name=collection,
+        models_only=models_only,
+        fixtures_only=fixtures_only,
+        templates_only=templates_only,
+    )
+
+
+@block_app.command("list")
+def block_list_cmd(
+    source: Optional[str] = typer.Option(
+        None, "--source", "-s", help="Filter to a specific source"
+    ),
+):
+    """List all available blocks from configured sources"""
+    from .handlers.blocks import block_list
+
+    block_list(source_name=source)
+
+
+@block_app.command("search")
+def block_search_cmd(
+    query: str = typer.Argument(
+        ..., help="Search query (matches ref, name, description)"
+    ),
+):
+    """Search for blocks by name or description"""
+    from .handlers.blocks import block_search
+
+    block_search(query=query)
+
+
+# Block dev subcommand group
+block_dev_app = typer.Typer(
+    help="Block authoring and development tools",
+    no_args_is_help=True,
+)
+block_app.add_typer(block_dev_app, name="dev")
+
+
+@block_dev_app.command("start")
+def block_dev_start_cmd(
+    name: Optional[str] = typer.Option(
+        None, "--name", "-n", help="Directory name for the source repo"
+    ),
+    vendor: Optional[str] = typer.Option(
+        None, "--vendor", "-v", help="Vendor key (e.g. lb)"
+    ),
+    package_manager: Optional[str] = typer.Option(
+        None, "--package-manager", "-p", help="Package manager (poetry, pip, uv)"
+    ),
+):
+    """Bootstrap a new block source repo with package manager setup"""
+    from .handlers.blocks_dev import start
+
+    start(name=name, vendor=vendor, package_manager=package_manager)
+
+
+@block_dev_app.command("new")
+def block_dev_new_cmd(
+    ref: str = typer.Argument(..., help="Block ref as category/slug (e.g. crud/todos)"),
+    block_type: str = typer.Option(
+        "fullstack", "--type", "-t", help="Block type: fe or fullstack"
+    ),
+):
+    """Scaffold a new block skeleton in the current source repo"""
+    from .handlers.blocks_dev import new_block
+
+    new_block(ref=ref, block_type=block_type)
+
+
+@block_dev_app.command("build")
+def block_dev_build_index(
+    path: str = typer.Option(
+        ".",
+        "--path",
+        "-p",
+        help="Path to block source repo (default: current directory)",
+    ),
+):
+    """Regenerate index.yaml from all block.yaml files in a source repo"""
+    from .handlers.blocks_dev import build_index
+
+    build_index(path=path)
+
+
+@block_dev_app.command("validate")
+def block_dev_validate_cmd(
+    path: str = typer.Option(
+        ".",
+        "--path",
+        "-p",
+        help="Path to block source repo (default: current directory)",
+    ),
+):
+    """Check all blocks in a source repo conform to the spec"""
+    from .handlers.blocks_dev import validate
+
+    validate(path=path)
+
+
+@block_dev_app.command("serve")
+def block_dev_serve_cmd(
+    path: str = typer.Option(".", "--path", "-p", help="Path to block source repo"),
+    port: int = typer.Option(8765, "--port", help="Port to serve on"),
+):
+    """Boot a live block renderer for the source repo"""
+    from .handlers.blocks_dev import serve
+
+    serve(path=path, port=port)
+
+
+# Source subcommand group
+source_app = typer.Typer(
+    help="Manage block sources",
+    no_args_is_help=True,
+)
+block_app.add_typer(source_app, name="source")
+
+
+@source_app.command("add")
+def source_add_cmd(
+    name: str = typer.Argument(..., help="Source name"),
+    url: Optional[str] = typer.Argument(None, help="Remote git URL"),
+    path: Optional[str] = typer.Option(
+        None, "--path", "-p", help="Local filesystem path"
+    ),
+    subdir: Optional[str] = typer.Option(
+        None, "--subdir", help="Blocks directory inside the repo, for a monorepo source"
+    ),
+):
+    """Add a block source (remote git repo or local path) to labb.yaml"""
+    from .handlers.blocks import source_add
+
+    source_add(name=name, url=url, path=path, subdir=subdir)
+
+
+@source_app.command("list")
+def source_list_cmd():
+    """List all configured block sources"""
+    from .handlers.blocks import source_list
+
+    source_list()
 
 
 if __name__ == "__main__":

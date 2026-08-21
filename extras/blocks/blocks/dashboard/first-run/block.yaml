@@ -1,0 +1,76 @@
+name: First run
+ref: lb/dashboard/first-run
+type: fe
+labb_version: ">=0.5.0"
+description: "The empty dashboard, designed on purpose — a day-one workspace with a setup path instead of a wall of zeroes"
+category: dashboard
+status: launch
+thumbnail: thumbnails/first-run.png
+tags:
+  - dashboard
+  - empty-state
+  - onboarding
+  - zero-js
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release — the catalogue's empty state"
+
+preview_context:
+  workspace: "Beacon Labs"
+  progress: "25"
+  steps_done: "1"
+  steps_total: "4"
+  steps:
+    - id: workspace
+      title: "Workspace created"
+      detail: "Beacon Labs, EU region, billing in USD."
+      state: "done"
+      cta: ""
+    - id: billing
+      title: "Connect your billing source"
+      detail: "Stripe, Chargebee or Recurly. The first sync backfills 24 months of invoices."
+      state: "next"
+      cta: "Connect billing"
+    - id: start-date
+      title: "Set your revenue start date"
+      detail: "Tell Arden when to start counting, so a migration year does not read as churn."
+      state: "todo"
+      cta: "Choose a date"
+    - id: team
+      title: "Invite your finance team"
+      detail: "Analysts get read-only access; only owners can touch billing."
+      state: "todo"
+      cta: "Send invites"
+  placeholders:
+    - id: mrr
+      label: "MRR"
+      caption: "Ready after the first sync"
+    - id: net-new
+      label: "Net new MRR"
+      caption: "Needs one full billing period"
+    - id: churn
+      label: "Logo churn"
+      caption: "Needs 30 days of history"
+    - id: accounts
+      label: "Paying accounts"
+      caption: "Ready after the first sync"
+  first_looks:
+    - icon: "rmx.line-chart"
+      title: "Your MRR curve, backfilled"
+      detail: "Two years of it, from the invoices you already have. Nothing to enter by hand."
+    - icon: "rmx.alert"
+      title: "The accounts about to leave"
+      detail: "Usage and payment signals, scored the night the data lands."
+    - icon: "rmx.refresh"
+      title: "Renewals in the next 90 days"
+      detail: "With the owner, the amount and the last thing that happened on the account."
+  sources:
+    - icon: "rmx.bank-card"
+      name: "Stripe"
+    - icon: "rmx.bank-card-2"
+      name: "Chargebee"
+    - icon: "rmx.file-upload"
+      name: "CSV import"
+    - icon: "rmx.database-2"
+      name: "Postgres"

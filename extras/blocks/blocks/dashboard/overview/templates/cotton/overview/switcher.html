@@ -1,0 +1,19 @@
+<c-vars :choices="{}" active="" />
+
+<div class="flex items-center gap-1 rounded-field bg-base-200 p-1">
+    {% for key, label in choices.items %}
+    <c-lbr.get
+        to="block_dashboard_overview:index"
+        tag="span"
+        before="$series = '{{ key }}'">
+        <c-lb.button
+            data-lbb-start
+            id="series-{{ key }}"
+            size="xs"
+            btnStyle="ghost"
+            behavior="{% if key == active %}active{% endif %}">
+            {{ label }}
+        </c-lb.button>
+    </c-lbr.get>
+    {% endfor %}
+</div>

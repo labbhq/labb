@@ -1,0 +1,31 @@
+<c-vars :events="[]" />
+
+{% if events %}
+<ul class="flex flex-col divide-y divide-base-200">
+    {% for event in events %}
+    <li id="movement-{{ event.pk }}" class="flex items-center gap-3 py-2.5">
+        <c-lb.avatar
+            placeholder
+            size="xs"
+            rounded="lg"
+            bgColor="{% if event.mrr_delta > 0 %}success{% else %}error{% endif %}"
+            initials="{{ event.customer.company|slice:':2'|upper }}" />
+
+        <div class="min-w-0 flex-1 leading-tight">
+            <p class="truncate text-sm">{{ event.label }}</p>
+            <p class="text-xs text-base-content/50">
+                {{ event.get_kind_display }} · {{ event.occurred_at|date:"j M Y" }}
+            </p>
+        </div>
+
+        {% if event.mrr_delta > 0 %}
+        <span class="tabular-nums text-sm font-medium text-success">+{{ event.delta_display }}</span>
+        {% else %}
+        <span class="tabular-nums text-sm font-medium text-error">−{{ event.delta_display }}</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="py-8 text-center text-sm text-base-content/50">No movements in this period.</p>
+{% endif %}

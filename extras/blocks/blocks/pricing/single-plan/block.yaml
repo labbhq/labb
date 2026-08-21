@@ -1,0 +1,45 @@
+name: Single plan
+ref: lb/pricing/single-plan
+type: fe
+labb_version: ">=0.5.0"
+description: "One plan, everything included, with an FAQ underneath — a static page that ships zero JavaScript"
+category: pricing
+status: launch
+thumbnail: thumbnails/single-plan.png
+tags:
+  - pricing
+  - static
+  - zero-js
+  - faq
+changelog:
+  - date: "2026-07-14"
+    notes:
+      - "Initial release"
+
+preview_context:
+  plan:
+    name: "Arden Growth"
+    monthly: "149"
+    annual: "1,490"
+    tagline: "One plan. Every feature. Priced per workspace, not per surprise."
+    cta: "Start 14-day trial"
+    features:
+      - "10 seats, unlimited read-only viewers"
+      - "10,000 tracked customers"
+      - "MRR, churn and cohort dashboards"
+      - "Revenue forecasting and scenario planning"
+      - "Renewal and churn-risk alerts"
+      - "Stripe, Chargebee, Slack and HubSpot sync"
+      - "CSV and API export, no retention hold"
+      - "Priority support, next business day"
+  faqs:
+    - q: "What counts as a tracked customer?"
+      a: "Any customer with a live subscription at some point in the month. Churned customers stay in your history and stop counting the month after they leave, so a bad quarter never raises your bill."
+    - q: "What happens past 10,000 customers?"
+      a: "Nothing breaks and nothing gets throttled. We email you, and you either stay put or move to Scale — a flat platform fee with unlimited volume. We will never bill you for an overage you did not agree to first."
+    - q: "Is there a free tier?"
+      a: "No. There is a 14-day trial with no card, and Arden backfills 24 months of your real revenue history in about four minutes, so you evaluate it on your own numbers rather than a sandbox."
+    - q: "Can I pay annually?"
+      a: "Yes — $1,490 a year, which is two months free. Upgrades are prorated to the day and you can leave at renewal with a full export."
+    - q: "Who needs a seat?"
+      a: "Anyone who edits models, sets alerts or connects a source. Board members, auditors and accountants read for free on every plan."

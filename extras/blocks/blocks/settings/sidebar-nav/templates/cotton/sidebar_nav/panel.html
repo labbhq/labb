@@ -1,0 +1,19 @@
+<c-vars title="" desc="" actions="" />
+
+<c-lb.card class="border border-base-300 shadow-sm">
+    <c-lb.card.body class="gap-6 p-6 sm:p-8">
+
+        <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <h2 class="text-xl font-semibold tracking-tight">{{ title }}</h2>
+                {% if desc %}<p class="text-sm text-base-content/60 mt-1">{{ desc }}</p>{% endif %}
+            </div>
+            {% if actions %}
+            <div class="flex items-center gap-2">{{ actions }}</div>
+            {% endif %}
+        </div>
+
+        {{ slot }}
+
+    </c-lb.card.body>
+</c-lb.card>

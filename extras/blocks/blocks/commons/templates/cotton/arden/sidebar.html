@@ -1,0 +1,33 @@
+<c-vars active="overview" drawerId="" />
+
+<div class="flex h-full flex-col bg-base-100 border-r border-base-300 transition-[width] is-drawer-close:w-16 is-drawer-open:w-60">
+    {% if drawerId %}
+    <c-lb.drawer.toggle
+        for="{{ drawerId }}"
+        class="btn btn-square btn-sm fixed top-16 z-50 hidden -translate-x-1/2 border border-base-300 bg-base-100 shadow-sm transition-[left] duration-200 lg:flex is-drawer-close:left-16 is-drawer-open:left-60"
+        aria-label="Toggle sidebar">
+        <c-lbi n="rmx.sidebar-unfold" w="18" h="18" />
+    </c-lb.drawer.toggle>
+    {% endif %}
+
+    <div class="flex h-16 items-center gap-3 px-4">
+        <c-arden.mark size="xs" />
+        <span class="font-semibold tracking-tight is-drawer-close:hidden">Arden</span>
+    </div>
+
+    <nav class="grow px-2 py-3">
+        <ul class="menu gap-1 p-0">
+            <li><a href="#" class="{% if active == 'overview' %}active {% endif %}is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Overview"><c-lbi n="rmx.pie-chart-2" w="18" h="18" class="shrink-0" /><span class="is-drawer-close:hidden">Overview</span></a></li>
+            <li><a href="#" class="{% if active == 'customers' %}active {% endif %}is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Customers"><c-lbi n="rmx.group-2" w="18" h="18" class="shrink-0" /><span class="is-drawer-close:hidden">Customers</span></a></li>
+            <li><a href="#" class="{% if active == 'activity' %}active {% endif %}is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Activity"><c-lbi n="rmx.pulse" w="18" h="18" class="shrink-0" /><span class="is-drawer-close:hidden">Activity</span></a></li>
+            <li><a href="#" class="{% if active == 'reports' %}active {% endif %}is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Reports"><c-lbi n="rmx.bar-chart-2" w="18" h="18" class="shrink-0" /><span class="is-drawer-close:hidden">Reports</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="border-t border-base-300 p-2">
+        <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-base-content/60 hover:bg-base-200 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
+            <c-lbi n="rmx.settings-3" w="18" h="18" class="shrink-0" />
+            <span class="is-drawer-close:hidden">Settings</span>
+        </a>
+    </div>
+</div>

@@ -5,6 +5,8 @@ This module tests the modal component implementation using HTML dialog element,
 schema compliance, and all its variants including placement, sizes, and sub-components.
 """
 
+import re
+
 from .test_base import ComponentTestBase, ComponentTestTemplate
 
 
@@ -140,17 +142,22 @@ class TestModalComponent(ComponentTestTemplate):
         for size in sizes:
             html = self.render_component("modal", id="test-modal", size=size)
 
-            # Should include size classes based on the size
+            # Sizes are fluid below the sm breakpoint so a modal never
+            # overflows a phone; the fixed width applies from sm up.
             if size == "xs":
-                self.assert_classes_present(html, {"w-72", "max-w-xs"})
+                self.assert_classes_present(html, {"w-11/12", "sm:w-72", "max-w-xs"})
             elif size == "sm":
-                self.assert_classes_present(html, {"w-80", "max-w-sm"})
+                self.assert_classes_present(html, {"w-11/12", "sm:w-80", "max-w-sm"})
             elif size == "md":
-                self.assert_classes_present(html, {"w-96", "max-w-md"})
+                self.assert_classes_present(html, {"w-11/12", "sm:w-96", "max-w-md"})
             elif size == "lg":
-                self.assert_classes_present(html, {"w-[32rem]", "max-w-lg"})
+                self.assert_classes_present(
+                    html, {"w-11/12", "sm:w-[32rem]", "max-w-lg"}
+                )
             elif size == "xl":
-                self.assert_classes_present(html, {"w-[36rem]", "max-w-xl"})
+                self.assert_classes_present(
+                    html, {"w-11/12", "sm:w-[36rem]", "max-w-xl"}
+                )
             elif size == "screen":
                 self.assert_classes_present(html, {"w-11/12", "max-w-5xl"})
 
@@ -176,7 +183,9 @@ class TestModalComponent(ComponentTestTemplate):
         )
 
         # Should include all the mapped features
-        self.assert_classes_present(html, {"w-[32rem]", "max-w-lg"})  # size
+        self.assert_classes_present(
+            html, {"w-11/12", "sm:w-[32rem]", "max-w-lg"}
+        )  # size
         assert "modal-backdrop" in html  # withBackdrop
         assert "btn-circle" in html  # withCloseBtn
         self.assert_classes_present(html, {"left-2", "top-2"})  # closeBtnPosition
@@ -200,11 +209,11 @@ class TestModalBoxComponent(ComponentTestTemplate):
     def test_modal_box_size_variants(self):
         """Test all modal box size variants"""
         sizes = {
-            "xs": ["w-72", "max-w-xs"],
-            "sm": ["w-80", "max-w-sm"],
-            "md": ["w-96", "max-w-md"],
-            "lg": ["w-[32rem]", "max-w-lg"],
-            "xl": ["w-[36rem]", "max-w-xl"],
+            "xs": ["w-11/12", "sm:w-72", "max-w-xs"],
+            "sm": ["w-11/12", "sm:w-80", "max-w-sm"],
+            "md": ["w-11/12", "sm:w-96", "max-w-md"],
+            "lg": ["w-11/12", "sm:w-[32rem]", "max-w-lg"],
+            "xl": ["w-11/12", "sm:w-[36rem]", "max-w-xl"],
             "screen": ["w-11/12", "max-w-5xl"],
         }
 
@@ -502,3 +511,33 @@ class TestModalIntegration(ComponentTestBase):
         assert "w-11/12" in html
         assert "max-w-5xl" in html
         assert "Wide Modal" in html
+
+
+class TestModalBoxResponsiveSizing(ComponentTestBase):
+    """Every non-screen size is fluid below sm and fixed from sm up.
+
+    A fixed width alone overflowed the viewport on a phone.
+    """
+
+    def test_every_size_is_fluid_on_small_screens(self):
+        for size in ("xs", "sm", "md", "lg", "xl", "screen"):
+            html = self.render_component("modal.box", size=size)
+            assert "w-11/12" in html, f"{size} is not fluid below sm"
+
+    def test_fixed_width_is_breakpoint_scoped(self):
+        # The bare token must not be present — only its sm: variant.
+        html = self.render_component("modal.box", size="md")
+        self.assert_classes_present(html, {"sm:w-96"})
+        classes = set()
+        for match in re.findall(r'class="([^"]*)"', html):
+            classes.update(match.split())
+        assert "w-96" not in classes
+
+    def test_screen_has_no_breakpoint_width(self):
+        html = self.render_component("modal.box", size="screen")
+        self.assert_classes_present(html, {"w-11/12", "max-w-5xl"})
+
+    def test_size_is_reactive(self):
+        html = self.render_component("modal.box", size="$ui.size:md")
+        assert "sm:w-96" in html
+        assert "data-attr:class" in html

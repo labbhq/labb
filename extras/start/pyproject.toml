@@ -1,6 +1,6 @@
 [project]
 name = "labbstart"
-version = "0.4.4"
+version = "0.5.0a1"
 description = "CLI tool to kickstart Django projects with labb"
 authors = [
     {name = "zadiq", email = "dev@zadiq.com"}
@@ -35,8 +35,8 @@ keywords = [
 requires-python = ">=3.10,<4"
 packages = [{include = "labbstart"}]
 dependencies = [
-    "typer (>=0.19.2,<0.20.0)",
-    "rich (>=14.2.0,<15.0.0)",
+    "typer (>=0.19.2,<1.0.0)",
+    "rich (>=14.2.0,<16.0.0)",
     "questionary (>=2.0.0,<3.0.0)",
 ]
 
@@ -53,6 +53,7 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
+addopts = "-n auto"
 markers = [
     "integration: marks tests as integration tests (require full environment with poetry, uv, node)",
 ]

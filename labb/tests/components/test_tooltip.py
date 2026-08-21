@@ -31,6 +31,22 @@ class TestTooltip(ComponentTestBase):
         )
         assert "tooltip-top" in html
 
+    def test_tooltip_alignment(self):
+        """Test tooltip alignment modifiers"""
+        for align in ["start", "center", "end"]:
+            html = self.render_component(
+                "tooltip", tip="Tip", align=align, slot_content="<button>Btn</button>"
+            )
+            assert f"tooltip-{align}" in html
+
+    def test_tooltip_no_alignment_by_default(self):
+        """Test that no alignment class is applied by default (centered)"""
+        html = self.render_component(
+            "tooltip", tip="Tip", slot_content="<button>Btn</button>"
+        )
+        assert "tooltip-start" not in html
+        assert "tooltip-end" not in html
+
     def test_tooltip_variants(self):
         """Test tooltip color variants"""
         variants = [

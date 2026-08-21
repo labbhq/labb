@@ -1,0 +1,39 @@
+steps:
+  - title: Start with a server-rendered page
+    file: templates/pages/index.html
+    match: "<main"
+    teaches: [zero-js]
+    docs: [guide/getting-started]
+    body: |
+      No signals, no actions, no bundle. Reactivity in labb is opt-in, and this
+      treatment opts out entirely — the browser gets HTML and CSS and stops there.
+
+  - title: Extract the proof section
+    file: templates/cotton/social_signin/proof.html
+    match: '<div id="proof-rating"'
+    teaches: [zero-js]
+    docs: [ui/components/avatar]
+    body: |
+      The rating strip and the logo cloud sit above the fields on purpose: this is
+      the treatment you reach for when the visitor still needs a reason. Both are
+      plain markup and icons, so neither costs a request.
+
+  - title: Use theme tokens for the rating
+    file: templates/cotton/social_signin/proof.html
+    match: 'class="flex items-center gap-0.5 text-warning"'
+    teaches: [theming]
+    docs: [ui/theming]
+    body: |
+      `text-warning` rather than a fixed amber. The stars follow the daisyUI theme
+      like everything else on the page, which is what keeps the block usable in a
+      theme nobody has picked yet.
+
+  - title: Keep the supporting content reusable
+    file: templates/cotton/social_signin/quote.html
+    match: '<c-lb.card id="proof-quote"'
+    teaches: [zero-js]
+    docs: [ui/components/card]
+    body: |
+      A named customer, a number and a role. It is the same claim the logo cloud
+      makes, at a resolution a visitor can check — and it is what separates this
+      from a login form with a border.
