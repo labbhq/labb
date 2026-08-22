@@ -120,6 +120,12 @@ def docs_view(request, doc_name, path=""):
     # Get document info (without rendering)
     doc_info = renderer.get_doc_info(url_path)
 
+    if doc_info.get("error") and not serve_raw_markdown:
+        index_info = renderer.get_doc_info(f"{url_path}index/")
+        if not index_info.get("error"):
+            url_path = f"{url_path}index/"
+            doc_info = index_info
+
     # If there's an error loading the document, raise 404
     if doc_info.get("error"):
         raise Http404(f"Document not found: {doc_info['error']}")
