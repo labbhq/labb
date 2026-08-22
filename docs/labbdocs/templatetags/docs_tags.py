@@ -202,18 +202,15 @@ def doc_url(context, file_path, doc_name=None):
     """
     doc_name = doc_name or context.get("doc_name")
 
-    url_prefix_map = {
-        "ui": "/docs/ui",
-        "guide": "/docs/guide",
-        "icons": "/docs/icons",
-    }
+    doc_types = getattr(settings, "LABB_DOCS", {}).get("types", {})
 
-    if doc_name not in url_prefix_map:
+    if doc_name not in doc_types:
         raise ValueError(
             f"Invalid doc_name: {doc_name} when resolving doc_url for {file_path}"
         )
 
-    return resolve_file_path_to_url(file_path, url_prefix_map[doc_name])
+    url_prefix = doc_types[doc_name].get("url_prefix", f"/docs/{doc_name}")
+    return resolve_file_path_to_url(file_path, url_prefix)
 
 
 @register.simple_tag
