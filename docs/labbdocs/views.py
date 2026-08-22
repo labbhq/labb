@@ -71,7 +71,7 @@ def _build_docs_context(
     return context
 
 
-@cache_control(max_age=1000, public=True)
+@cache_control(max_age=1000, private=True)
 def docs_view(request, doc_name, path=""):
     """
     Generic documentation view that handles documentation based on LABB_DOCS settings.
