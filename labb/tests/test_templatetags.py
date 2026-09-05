@@ -202,7 +202,7 @@ class TestLbTags:
         context = Context({"request": request})
 
         result = template.render(context)
-        assert result == "data-theme=&quot;labb-dark&quot;"
+        assert result == 'data-theme="labb-dark"'
 
     def test_labb_theme_tag_fallback(self):
         """Test labb_theme tag fallback when no request."""
@@ -210,4 +210,37 @@ class TestLbTags:
         context = Context({})
 
         result = template.render(context)
-        assert result == "data-theme=&quot;labb-light&quot;"
+        assert result == 'data-theme="labb-light"'
+
+
+class TestLabbThemeTagRendering:
+    """`{% labb_theme %}` must emit a usable data-theme attribute.
+
+    Regression: it returned a plain str, which Django autoescaped into
+    data-theme=&quot;x&quot;. The attribute value then carried literal quote
+    characters and [data-theme="x"] never matched, so a persisted theme
+    silently failed to apply on page load.
+    """
+
+    def _request(self):
+        request = RequestFactory().get("/")
+        SessionMiddleware(lambda req: None).process_request(request)
+        request.session.save()
+        return request
+
+    def _render(self, request):
+        return Template("{% load lb_tags %}<html {% labb_theme %}>").render(
+            Context({"request": request})
+        )
+
+    def test_theme_attribute_is_not_escaped(self):
+        request = self._request()
+        set_labb_theme(request, "labb-dark")
+        html = self._render(request)
+        assert 'data-theme="labb-dark"' in html
+        assert "&quot;" not in html
+
+    def test_theme_value_is_still_escaped(self):
+        request = self._request()
+        set_labb_theme(request, 'x" onload="alert(1)')
+        assert 'onload="alert(1)' not in self._render(request)
