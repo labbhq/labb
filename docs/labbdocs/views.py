@@ -71,7 +71,7 @@ def _build_docs_context(
     return context
 
 
-@cache_control(max_age=1000, public=True)
+@cache_control(max_age=1000, private=True)
 def docs_view(request, doc_name, path=""):
     """
     Generic documentation view that handles documentation based on LABB_DOCS settings.
@@ -119,6 +119,12 @@ def docs_view(request, doc_name, path=""):
 
     # Get document info (without rendering)
     doc_info = renderer.get_doc_info(url_path)
+
+    if doc_info.get("error") and not serve_raw_markdown:
+        index_info = renderer.get_doc_info(f"{url_path}index/")
+        if not index_info.get("error"):
+            url_path = f"{url_path}index/"
+            doc_info = index_info
 
     # If there's an error loading the document, raise 404
     if doc_info.get("error"):

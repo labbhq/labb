@@ -5,6 +5,7 @@ title: Icons
 description: "Remix Icon pack for labbicons: 2000+ django-cotton icon components for Django, Tailwind CSS, and labb templates on labb.io."
 keywords: "remix icons django, labbicons rmx, django icon component, c-lbi remix"
 doc_show_toc: false
+doc_hide_drawer: true
 doc_links:
     - title: Icon guide
       url: /docs/guide/building-uis/icons/

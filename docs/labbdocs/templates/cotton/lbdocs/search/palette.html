@@ -9,7 +9,7 @@
     placement="middle"
     withBackdrop
     :withCloseBtn=False
-    boxClass="w-full max-w-xl p-0 overflow-hidden rounded-xl border border-base-300 shadow-none"
+    boxClass="max-w-xl p-0 overflow-hidden rounded-xl border border-base-300 shadow-none"
 >
     <div
         data-on:keydown="evt.key==='ArrowDown' ? (evt.preventDefault(), $palette.cursor=palClamp($palette.cursor+1)) : evt.key==='ArrowUp' ? (evt.preventDefault(), $palette.cursor=palClamp($palette.cursor-1)) : evt.key==='Enter' ? (evt.preventDefault(), palGo($palette.cursor)) : null"
