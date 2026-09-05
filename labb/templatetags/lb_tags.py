@@ -15,6 +15,7 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.templatetags.static import static as django_static
 from django.urls import NoReverseMatch, reverse
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from labb.config import load_config
@@ -577,7 +578,7 @@ def labb_theme(context):
         return ""
 
     # Return data-theme attribute with theme value
-    return f'data-theme="{theme}"'
+    return format_html('data-theme="{}"', theme)
 
 
 @register.simple_tag(takes_context=True)
