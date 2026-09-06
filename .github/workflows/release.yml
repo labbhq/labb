@@ -169,13 +169,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref }}
           fetch-depth: 0
-
-      - name: Pull latest changes (including changelog)
-        run: |
-          git pull origin main
-          echo "✅ Pulled latest changes from main"
 
       - name: Set up Python
         uses: actions/setup-python@v5
