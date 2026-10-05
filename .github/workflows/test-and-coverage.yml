@@ -137,9 +137,9 @@ jobs:
 
       - name: Upload coverage reports
         if: inputs.upload-coverage == true
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
