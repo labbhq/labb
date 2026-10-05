@@ -7,9 +7,9 @@ keywords: "labb changelog, labbui release notes, django labb versions"
 {% load docs_tags %}
 
 
-## 0.5.0a1 <c-lb.badge size="sm">latest</c-lb.badge>
+## 0.5.0 <c-lb.badge size="sm">latest</c-lb.badge>
 
-**Sep 08, 2026**
+**Oct 05, 2026**
 
 0.5.0 introduces Datastar-based reactivity and removes the Alpine `.x` variants. See [Migrating to 0.5](/docs/guide/about/migrating-to-0-5) if your project uses the old API.
 
