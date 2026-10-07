@@ -86,6 +86,8 @@ def lb_push_stack(name, path, mode="inline"):
     mode="inline" (default) — file content is inlined in a <script> tag.
     mode="src"              — served as <script src="{% static path %}"> for
                               browser caching; use for large chart bundles.
+    mode="defer"            — as mode="src" but non-blocking; runs before any
+                              module script, so helpers stay available.
 
     Duplicate paths are silently ignored; first push wins.
 
@@ -179,12 +181,12 @@ def lb_load_stack(name):
     src_paths = sorted(
         p
         for p, m in path_modes.items()
-        if m in ("src", "module") and p not in helper_set
+        if m in ("src", "module", "defer") and p not in helper_set
     )
     inline_paths = sorted(
         p
         for p, m in path_modes.items()
-        if m not in ("src", "module") and p not in helper_set
+        if m not in ("src", "module", "defer") and p not in helper_set
     )
 
     script_tags = []
@@ -197,6 +199,8 @@ def lb_load_stack(name):
     for path in src_paths:
         mode = path_modes[path]
         type_attr = ' type="module"' if mode == "module" else ""
+        if mode == "defer":
+            type_attr = " defer"
         if path.startswith(("http://", "https://")):
             script_tags.append(f'<script{type_attr} src="{path}"></script>')
         else:
