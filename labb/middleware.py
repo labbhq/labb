@@ -1,6 +1,8 @@
 import base64
 import json
 
+from asgiref.sync import iscoroutinefunction, markcoroutinefunction
+
 from labb.django_settings import get_reactivity_setting
 
 # Datastar always uses "datastar" as its own GET/POST parameter for request signals.
@@ -67,10 +69,28 @@ def _decode_signals(raw: str, encoding: str) -> dict:
 
 
 class ReactivityMiddleware:
+    sync_capable = True
+    async_capable = True
+
     def __init__(self, get_response):
         self.get_response = get_response
+        self.async_mode = iscoroutinefunction(get_response)
+        if self.async_mode:
+            markcoroutinefunction(self)
 
     def __call__(self, request):
+        if self.async_mode:
+            return self.__acall__(request)
+        self._attach_signals(request)
+        return self.get_response(request)
+
+    async def __acall__(self, request):
+        self._attach_signals(request)
+        return await self.get_response(request)
+
+    def _attach_signals(self, request):
+        """Set request.is_datastar and request.signals. Reads headers and the
+        already-buffered body only, so it is safe on the async path."""
         request.is_datastar = request.headers.get("Datastar-Request") == "true"
 
         # 1. Datastar's own GET/POST parameter (always raw JSON, hardcoded in Datastar)
@@ -79,7 +99,7 @@ class ReactivityMiddleware:
         )
         if raw:
             request.signals = _decode_signals(raw, "json")
-            return self.get_response(request)
+            return
 
         # 2. lbr syncQuery URL persistence (configurable key + encoding)
         key = get_reactivity_setting("QUERY_KEY")
@@ -92,21 +112,20 @@ class ReactivityMiddleware:
                 signals = {}
             if signals:
                 request.signals = signals
-                return self.get_response(request)
+                return
         else:
             raw = request.GET.get(key) or _form_post(request).get(key, "")
             if raw:
                 request.signals = _decode_signals(raw, encoding)
-                return self.get_response(request)
+                return
 
         # 3. JSON request body — Datastar @post without contentType:'form'
         if (request.content_type or "").startswith("application/json"):
             try:
                 raw = request.body.decode("utf-8")
                 request.signals = _decode_signals(raw, "json")
-                return self.get_response(request)
+                return
             except Exception:
                 pass
 
         request.signals = {}
-        return self.get_response(request)
