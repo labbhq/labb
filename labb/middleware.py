@@ -1,9 +1,16 @@
 import base64
 import json
+import re
 
 from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 
 from labb.django_settings import get_reactivity_setting
+from labb.templatetags.lb_tags import (
+    _get_drained,
+    _get_stacks,
+    _set_late_fill,
+    render_stack_tags,
+)
 
 # Datastar always uses "datastar" as its own GET/POST parameter for request signals.
 # lbr syncQuery uses a configurable key (LABB_SETTINGS["REACTIVITY"]["QUERY_KEY"]) with a
@@ -129,3 +136,63 @@ class ReactivityMiddleware:
                 pass
 
         request.signals = {}
+
+
+_STACK_MARKER_RE = re.compile(rb"<!--labb-stack:([a-zA-Z0-9_-]+)-->")
+
+
+class StackFillMiddleware:
+    """Fill lb_load_stack markers after the template has rendered.
+
+    lb_load_stack emits where it sits, so a script pushed by a body component
+    never reaches a stack loaded in <head>. With this installed the tag leaves a
+    marker and anything pushed later is injected into it, which makes the
+    documented <head> placement work for reactive pages.
+    """
+
+    sync_capable = True
+    async_capable = True
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.async_mode = iscoroutinefunction(get_response)
+        if self.async_mode:
+            markcoroutinefunction(self)
+
+    def __call__(self, request):
+        if self.async_mode:
+            return self.__acall__(request)
+        _set_late_fill(True)
+        return self._fill(self.get_response(request))
+
+    async def __acall__(self, request):
+        _set_late_fill(True)
+        return self._fill(await self.get_response(request))
+
+    def _fill(self, response):
+        if getattr(response, "streaming", False):
+            return response
+        if not response.get("Content-Type", "").startswith("text/html"):
+            return response
+        if b"<!--labb-stack:" not in response.content:
+            return response
+
+        stacks = _get_stacks()
+        drained = _get_drained()
+
+        def replace(match):
+            name = match.group(1).decode()
+            late = {
+                path: mode
+                for path, mode in stacks.get(name, {}).items()
+                if path not in drained.get(name, set())
+            }
+            if not late:
+                return b""
+            drained.setdefault(name, set()).update(late)
+            return "\n".join(render_stack_tags(late)).encode()
+
+        response.content = _STACK_MARKER_RE.sub(replace, response.content)
+        if response.has_header("Content-Length"):
+            response["Content-Length"] = str(len(response.content))
+        return response

@@ -56,6 +56,7 @@ tasks:
     cmds:
       - task deps:update
       - task chart:download
+      - task datastar:download
 
   venv:
     desc: Show poetry virtual environment activation instructions
@@ -142,6 +143,16 @@ tasks:
       - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js -o labb/static/labb/js/vendor/chart.umd.min.js
       - curl -fsSL https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js.map -o labb/static/labb/js/vendor/chart.umd.min.js.map
       - echo "Downloaded chart.umd.min.js"
+
+  datastar:download:
+    desc: Download the Datastar bundle from CDN into labb/static/labb/js/vendor/
+    vars:
+      DATASTAR_VERSION: '{{.DATASTAR_VERSION | default "v1.0.4"}}'
+    cmds:
+      - mkdir -p labb/static/labb/js/vendor
+      - curl -fsSL https://cdn.jsdelivr.net/gh/starfederation/datastar@{{.DATASTAR_VERSION}}/bundles/datastar.js -o labb/static/labb/js/vendor/datastar.js
+      - curl -fsSL https://cdn.jsdelivr.net/gh/starfederation/datastar@{{.DATASTAR_VERSION}}/bundles/datastar.js.map -o labb/static/labb/js/vendor/datastar.js.map
+      - echo "Downloaded datastar.js {{.DATASTAR_VERSION}}"
 
   clean:
     desc: Clean up generated files and caches
