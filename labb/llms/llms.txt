@@ -168,7 +168,7 @@ MIDDLEWARE = [
     ...
 ]
 ```
-Ensure `<c-lb.m.dependencies />` is in your base `<head>`. The `lb-schema.js` bundle loads automatically when `c-lbr.signals` is present on the page.
+Ensure `<c-lb.m.dependencies />` is in your base `<head>`. The `lb-schema.js` bundle loads automatically when a component prop is bound to a signal (`variant="$status:primary"`), which is the only thing that needs it.
 
 ### Signal props
 Signal props bind any labb component prop to a Datastar signal at the client level. Prefix a prop value with `$` to enable the binding; the `:fallback` value is server-rendered on first paint.

@@ -45,6 +45,22 @@ class TestDropdown(ComponentTestBase):
         assert 'role="button"' in html
         assert "test-trigger" in html
 
+    def test_dropdown_trigger_omits_tabindex_on_anchors(self):
+        """daisyUI sets pointer-events:none on a focused dropdown's first
+        [tabindex] child, so an <a href> trigger would never navigate."""
+        assert "tabindex" not in self.render_component(
+            "dropdown.trigger", **{"as": "a"}
+        )
+
+    def test_dropdown_trigger_keeps_tabindex_on_buttons(self):
+        """Pins pre-change behaviour. daisyUI's own trigger examples carry
+        tabindex="0", and WebKit is documented not to focus a button on a mouse
+        click, which would leave the focus-based dropdown unable to open. Not
+        verified against WebKit here, which is the reason to keep it."""
+        for element in ("div", "button", "label"):
+            html = self.render_component("dropdown.trigger", **{"as": element})
+            assert 'tabindex="0"' in html
+
     def test_dropdown_trigger_with_different_elements(self):
         """Test dropdown.trigger with different HTML elements"""
         elements = ["button", "label"]

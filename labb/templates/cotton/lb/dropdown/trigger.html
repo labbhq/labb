@@ -1,5 +1,5 @@
 <c-vars class="" as="div" />
 
-<{{ as }} tabindex="0" role="button" class="{{ class }}" {{ attrs }}>
+<{{ as }}{% if as != "a" %} tabindex="0"{% endif %} role="button" class="{{ class }}" {{ attrs }}>
     {{ slot }}
 </{{ as }}>

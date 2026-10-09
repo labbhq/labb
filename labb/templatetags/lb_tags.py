@@ -1,5 +1,6 @@
 import logging
 import re
+import warnings
 from functools import lru_cache
 from pathlib import Path
 from threading import local
@@ -61,10 +62,38 @@ def _get_stacks():
     return _local.stacks
 
 
+class LabbStackWarning(RuntimeWarning):
+    """A script was pushed to a stack that had already rendered."""
+
+
+def _stack_marker(name):
+    """Inert HTML comment that StackFillMiddleware replaces after rendering."""
+    return f"<!--labb-stack:{name}-->"
+
+
+def _get_drained():
+    """name → set of paths a lb_load_stack has already emitted this request."""
+    if not hasattr(_local, "drained"):
+        _local.drained = {}
+    return _local.drained
+
+
+def _set_late_fill(enabled):
+    """Record that something will fill stack markers after the template renders."""
+    _local.late_fill = enabled
+
+
+def _late_fill_available():
+    return getattr(_local, "late_fill", False)
+
+
 def _clear_stacks():
     """Clear all stacks (called at end of each request)."""
     if hasattr(_local, "stacks"):
         _local.stacks.clear()
+    if hasattr(_local, "drained"):
+        _local.drained.clear()
+    _local.late_fill = False
 
 
 @receiver(request_finished)
@@ -86,6 +115,8 @@ def lb_push_stack(name, path, mode="inline"):
     mode="inline" (default) — file content is inlined in a <script> tag.
     mode="src"              — served as <script src="{% static path %}"> for
                               browser caching; use for large chart bundles.
+    mode="defer"            — as mode="src" but non-blocking; runs before any
+                              module script, so helpers stay available.
 
     Duplicate paths are silently ignored; first push wins.
 
@@ -97,6 +128,18 @@ def lb_push_stack(name, path, mode="inline"):
     if name not in stacks:
         stacks[name] = {}
     if path not in stacks[name]:
+        emitted = _get_drained().get(name)
+        if emitted is not None and path not in emitted and not _late_fill_available():
+            warnings.warn(
+                f"{path!r} was pushed to the {name!r} stack after "
+                f'{{% lb_load_stack name="{name}" %}} had already rendered, so it '
+                "is dropped from the page and whatever needs it fails silently in "
+                "the browser. Move the stack load to the end of <body>, wrap the "
+                "page in <c-lb.m.page> (its slot renders before the head drains), "
+                "or add 'labb.middleware.StackFillMiddleware' to MIDDLEWARE.",
+                LabbStackWarning,
+                stacklevel=2,
+            )
         stacks[name][path] = mode
     return ""
 
@@ -151,52 +194,26 @@ def lb_stack_has(name, path):
     return path in _get_stacks().get(name, {})
 
 
-@register.simple_tag
-def lb_load_stack(name):
-    """
-    Emit all scripts registered to a named stack.
-
-    Pre-helpers defined in LABB_SETTINGS["STACK_HELPERS"][name] are inlined first,
-    then src/module paths as cacheable <script> tags, then inline paths.
-
-    Emission order:
-      1. Pre-helpers (inline)
-      2. mode="src" / mode="module" paths as <script> tags (sorted)
-      3. mode="inline" paths (sorted)
-
-    Usage: {% lb_load_stack name="components" %}
-    """
-    stacks = _get_stacks()
-    path_modes = stacks.get(name, {})
-
-    if not path_modes:
-        return ""
-
-    stack_helpers_config = get_labb_setting("STACK_HELPERS", {})
-    inline_helpers = stack_helpers_config.get(name, [])
-    helper_set = set(inline_helpers)
-
+def render_stack_tags(path_modes, helper_set=frozenset()):
+    """Render <script> tags for a {path: mode} mapping, in the stack's order:
+    src/module/defer paths first (sorted), then inlined files."""
     src_paths = sorted(
         p
         for p, m in path_modes.items()
-        if m in ("src", "module") and p not in helper_set
+        if m in ("src", "module", "defer") and p not in helper_set
     )
     inline_paths = sorted(
         p
         for p, m in path_modes.items()
-        if m not in ("src", "module") and p not in helper_set
+        if m not in ("src", "module", "defer") and p not in helper_set
     )
 
     script_tags = []
-
-    for path in inline_helpers:
-        content = _read_static_file(path)
-        if content is not None:
-            script_tags.append(f"<script>\n{content}\n</script>")
-
     for path in src_paths:
         mode = path_modes[path]
         type_attr = ' type="module"' if mode == "module" else ""
+        if mode == "defer":
+            type_attr = " defer"
         if path.startswith(("http://", "https://")):
             script_tags.append(f'<script{type_attr} src="{path}"></script>')
         else:
@@ -210,7 +227,50 @@ def lb_load_stack(name):
         content = _read_static_file(path)
         if content is not None:
             script_tags.append(f"<script>\n{content}\n</script>")
+    return script_tags
 
+
+@register.simple_tag
+def lb_load_stack(name):
+    """
+    Emit all scripts registered to a named stack.
+
+    Pre-helpers defined in LABB_SETTINGS["STACK_HELPERS"][name] are inlined first,
+    then src/module paths as cacheable <script> tags, then inline paths.
+
+    Emission order:
+      1. Pre-helpers (inline)
+      2. mode="src" / mode="module" / mode="defer" paths as <script> tags (sorted)
+      3. mode="inline" paths (sorted)
+
+    Anything pushed after this renders would be dropped. StackFillMiddleware, when
+    installed, leaves a marker here and fills those late pushes in afterwards;
+    without it, a late push raises instead of failing silently in the browser.
+
+    Usage: {% lb_load_stack name="components" %}
+    """
+    stacks = _get_stacks()
+    path_modes = stacks.get(name, {})
+
+    _get_drained().setdefault(name, set()).update(path_modes)
+
+    if not path_modes:
+        return mark_safe(_stack_marker(name)) if _late_fill_available() else ""
+
+    stack_helpers_config = get_labb_setting("STACK_HELPERS", {})
+    inline_helpers = stack_helpers_config.get(name, [])
+    helper_set = set(inline_helpers)
+
+    script_tags = []
+    for path in inline_helpers:
+        content = _read_static_file(path)
+        if content is not None:
+            script_tags.append(f"<script>\n{content}\n</script>")
+
+    script_tags.extend(render_stack_tags(path_modes, helper_set))
+
+    if _late_fill_available():
+        script_tags.append(_stack_marker(name))
     return mark_safe("\n".join(script_tags))
 
 
