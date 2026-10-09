@@ -715,7 +715,7 @@ def lbr_props(component_name, attrs=None, extra="", **override_kwargs):
     # A reactive prop emits data-attr:class="lb.classes(...)" — that needs
     # lb.classes (lb-schema.js) and Datastar to evaluate it. Self-declare the
     # runtime so a lone $-prop works with zero config under opt-in loading.
-    lb_push_stack("components", "labb/js/lb-schema.js", "src")
+    lb_push_stack("components", "labb/js/lb-schema.js", "defer")
     lb_push_stack("components", "labb/js/vendor/datastar.js", "module")
 
     def _js_str(s):
