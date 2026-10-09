@@ -29,7 +29,7 @@ jobs:
       POSTGRES_PASSWORD: postgres
     services:
       postgres:
-        image: postgres:16
+        image: public.ecr.aws/docker/library/postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
