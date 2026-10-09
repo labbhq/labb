@@ -29,7 +29,7 @@ jobs:
       POSTGRES_PASSWORD: postgres
     services:
       postgres:
-        image: postgres:16
+        image: public.ecr.aws/docker/library/postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -79,12 +79,7 @@ jobs:
           key: venv-${{ runner.os }}-${{ inputs.python-version }}-dj${{ inputs.django-version || 'lock' }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --with dev
-
-      - name: Install dependencies (cached)
-        if: steps.cached-poetry-dependencies.outputs.cache-hit == 'true'
-        run: poetry install --with dev --no-root
 
       - name: Override Django version
         if: inputs.django-version != ''
@@ -137,9 +132,9 @@ jobs:
 
       - name: Upload coverage reports
         if: inputs.upload-coverage == true
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false

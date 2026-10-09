@@ -47,7 +47,7 @@ jobs:
 
       - name: Check all packages have the same version
         run: |
-          MAIN_VERSION="${{ steps.version.outputs.version }}"
+          ROOT_VERSION="${{ steps.version.outputs.version }}"
 
           # Extract version from docs package
           DOCS_VERSION=$(grep -E '^version = ' docs/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
@@ -58,28 +58,28 @@ jobs:
           # Extract version from start package
           START_VERSION=$(grep -E '^version = ' extras/start/pyproject.toml | sed 's/version = "\(.*\)"/\1/')
 
-          echo "Main package version: $MAIN_VERSION"
+          echo "Root package version: $ROOT_VERSION"
           echo "Docs package version: $DOCS_VERSION"
           echo "Icons package version: $ICONS_VERSION"
           echo "Start package version: $START_VERSION"
 
           # Check if all versions match
-          if [ "$MAIN_VERSION" != "$DOCS_VERSION" ]; then
-            echo "❌ Version mismatch: main ($MAIN_VERSION) != docs ($DOCS_VERSION)"
+          if [ "$ROOT_VERSION" != "$DOCS_VERSION" ]; then
+            echo "❌ Version mismatch: root ($ROOT_VERSION) != docs ($DOCS_VERSION)"
             exit 1
           fi
 
-          if [ "$MAIN_VERSION" != "$ICONS_VERSION" ]; then
-            echo "❌ Version mismatch: main ($MAIN_VERSION) != icons ($ICONS_VERSION)"
+          if [ "$ROOT_VERSION" != "$ICONS_VERSION" ]; then
+            echo "❌ Version mismatch: root ($ROOT_VERSION) != icons ($ICONS_VERSION)"
             exit 1
           fi
 
-          if [ "$MAIN_VERSION" != "$START_VERSION" ]; then
-            echo "❌ Version mismatch: main ($MAIN_VERSION) != start ($START_VERSION)"
+          if [ "$ROOT_VERSION" != "$START_VERSION" ]; then
+            echo "❌ Version mismatch: root ($ROOT_VERSION) != start ($START_VERSION)"
             exit 1
           fi
 
-          echo "✅ All packages have matching version: $MAIN_VERSION"
+          echo "✅ All packages have matching version: $ROOT_VERSION"
 
       - name: Check if tag already exists
         run: |
@@ -169,13 +169,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref }}
           fetch-depth: 0
-
-      - name: Pull latest changes (including changelog)
-        run: |
-          git pull origin main
-          echo "✅ Pulled latest changes from main"
 
       - name: Set up Python
         uses: actions/setup-python@v5
