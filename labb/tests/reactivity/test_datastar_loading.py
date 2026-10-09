@@ -50,7 +50,9 @@ class TestDatastarOptInLoading(ComponentTestBase):
 
     def test_schema_is_not_render_blocking(self):
         html = self.render_template_string(
-            '{% load lb_tags %}<c-lb.m.page><c-lbr.signals $count="1" /></c-lb.m.page>'
+            "{% load lb_tags %}<c-lb.m.page>"
+            '<c-lb.badge variant="$status:neutral">Hi</c-lb.badge>'
+            "</c-lb.m.page>"
         )
         assert '<script defer src="labb/js/lb-schema.js">' in html
 
@@ -59,7 +61,8 @@ class TestDatastarOptInLoading(ComponentTestBase):
             '{% load lb_tags %}<c-lb.m.page><c-lbr.signals $count="1" /></c-lb.m.page>'
         )
         assert _has_datastar(html)
-        assert _has_schema(html)
+        # Signals never evaluate lb.classes; only a reactive $-prop does.
+        assert not _has_schema(html)
 
     def test_reactive_prop_auto_loads_runtime(self):
         # A lone reactive $-prop on a plain component, no signals, no flag.
