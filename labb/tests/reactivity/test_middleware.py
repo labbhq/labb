@@ -14,6 +14,7 @@ import json
 from urllib.parse import urlencode
 
 import pytest
+from asgiref.sync import async_to_sync, iscoroutinefunction
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.test import RequestFactory
@@ -250,3 +251,49 @@ class TestDoesNotConsumeRequestBody:
             )
             mw(request)
         assert request.signals == {"page": 2}
+
+
+class TestAsyncCapability:
+    """Under ASGI, a sync-only middleware makes Django run it, and every
+    middleware inside it, through sync_to_async on every request. The flags
+    plus markcoroutinefunction are what let Django skip that thread hop."""
+
+    def test_declares_both_modes(self):
+        assert ReactivityMiddleware.sync_capable is True
+        assert ReactivityMiddleware.async_capable is True
+
+    def test_sync_stack_stays_sync(self, factory):
+        mw = _make_middleware("ok")
+        assert not iscoroutinefunction(mw)
+        request = factory.get("/")
+        assert mw(request) == "ok"
+        assert request.signals == {}
+
+    def test_async_stack_is_detected_as_coroutine(self):
+        async def get_response(request):
+            return "ok"
+
+        mw = ReactivityMiddleware(get_response)
+        # This is the check Django itself makes; False here means it wraps the
+        # middleware in sync_to_async and the thread hop comes back.
+        assert iscoroutinefunction(mw)
+
+    def test_async_path_attaches_signals(self, factory):
+        async def get_response(request):
+            return "ok"
+
+        mw = ReactivityMiddleware(get_response)
+        signals = {"count": 3}
+        request = factory.get("/", {"datastar": json.dumps(signals)})
+        assert async_to_sync(mw)(request) == "ok"
+        assert request.signals == signals
+        assert request.is_datastar is False
+
+    def test_async_path_reads_the_datastar_header(self, factory):
+        async def get_response(request):
+            return "ok"
+
+        mw = ReactivityMiddleware(get_response)
+        request = factory.get("/", HTTP_DATASTAR_REQUEST="true")
+        async_to_sync(mw)(request)
+        assert request.is_datastar is True
