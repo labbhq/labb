@@ -79,12 +79,7 @@ jobs:
           key: venv-${{ runner.os }}-${{ inputs.python-version }}-dj${{ inputs.django-version || 'lock' }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --with dev
-
-      - name: Install dependencies (cached)
-        if: steps.cached-poetry-dependencies.outputs.cache-hit == 'true'
-        run: poetry install --with dev --no-root
 
       - name: Override Django version
         if: inputs.django-version != ''
